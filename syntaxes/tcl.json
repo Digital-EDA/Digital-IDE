@@ -1,0 +1,888 @@
+{
+    "name": "tcl",
+    "scopeName": "source.tcl",
+    "fileTypes": [
+        "tcl",
+        "fdc",
+        "xdc",
+        "sdc"
+    ],
+    "uuid": "45aff42e-4fcd-4717-829b-4cdaf9d707aa",
+    "patterns": [
+        {
+            "include": "#comment"
+        },
+        {
+            "include": "#command"
+        }
+    ],
+    "repository": {
+        "comment": {
+            "patterns": [
+                {
+                    "name": "comment.line.tcl",
+                    "match": "\\s*\\#.*"
+                }
+            ]
+        },
+        "command": {
+            "patterns": [
+                {
+                    "include": "#tcl_commands"
+                },
+                {
+                    "include": "#default_command"
+                }
+            ]
+        },
+        "expression": {
+            "patterns": [
+                {
+                    "include": "#variable"
+                },
+                {
+                    "include": "#brackets"
+                },
+                {
+                    "name": "constant.numeric.tcl",
+                    "match": "(?:0(?:x|o|b))?\\d+(?!\\.)"
+                },
+                {
+                    "name": "constant.numeric.tcl",
+                    "match": "\\d+\\.(?:\\d+(?:[eE][+-]?\\d+)?)?"
+                },
+                {
+                    "name": "keyword.operator.tcl",
+                    "match": "(?:\\+|\\-|\\~|\\!|\\*\\*|\\*|\\%|\\<\\<|\\>\\>|\\<\\=|\\>\\=|\\<|\\>|\\=\\=|\\!\\=|eq|ne|in|ni|\\&\\&|\\&|\\|\\||\\||\\^|\\?|\\:)"
+                }
+            ]
+        },
+        "double_quotes": {
+            "patterns": [
+                {
+                    "name": "string.quoted.double.tcl",
+                    "begin": "\"",
+                    "end": "\"",
+                    "patterns": [
+                        {
+                            "include": "#variable"
+                        }
+                    ]
+                }
+            ]
+        },
+        "variable": {
+            "patterns": [
+                {
+                    "begin": "(\\$(?:(?:\\:\\:)?[a-zA-Z0-9_]+)+)\\(",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "variable.other.tcl"
+                        }
+                    },
+                    "end": "\\)",
+                    "patterns": [
+                        {
+                            "include": "#brackets"
+                        },
+                        {
+                            "include": "#variable"
+                        }
+                    ]
+                },
+                {
+                    "name": "variable.other.tcl",
+                    "match": "\\$(?:(?:\\:\\:)?[a-zA-Z0-9_]+)+"
+                },
+                {
+                    "name": "variable.other.tcl",
+                    "begin": "\\$\\{",
+                    "end": "\\}"
+                }
+            ]
+        },
+        "braces": {
+            "patterns": [
+                {
+                    "name": "meta.word.generic.tcl",
+                    "begin": "\\{",
+                    "end": "\\}",
+                    "patterns": [
+                        {
+                            "include": "#braces"
+                        }
+                    ]
+                }
+            ]
+        },
+        "tcl_braces": {
+            "patterns": [
+                {
+                    "name": "meta.word.tcl.tcl",
+                    "begin": "\\{",
+                    "end": "\\}",
+                    "patterns": [
+                        {
+                            "include": "#comment"
+                        },
+                        {
+                            "include": "#command"
+                        }
+                    ]
+                }
+            ]
+        },
+        "expr_braces": {
+            "patterns": [
+                {
+                    "name": "meta.word.expr.tcl",
+                    "begin": "\\{",
+                    "end": "\\}",
+                    "patterns": [
+                        {
+                            "include": "#expression"
+                        }
+                    ]
+                }
+            ]
+        },
+        "brackets": {
+            "patterns": [
+                {
+                    "begin": "\\[",
+                    "end": "\\]",
+                    "patterns": [
+                        {
+                            "include": "#comment"
+                        },
+                        {
+                            "include": "#command"
+                        }
+                    ]
+                }
+            ]
+        },
+        "proc": {
+            "patterns": [
+                {
+                    "name": "meta.command.proc.tcl",
+                    "begin": "\\b(proc)\\b",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "storage.type.function.tcl"
+                        }
+                    },
+                    "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                    "endCaptures": {
+                        "1": {
+                            "name": "punctuation.end.semicolon.tcl"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "begin": "(?<=proc)(?:\\s+|\\\\)",
+                            "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                            "patterns": [
+                                {
+                                    "name": "entity.name.function.tcl",
+                                    "match": "[^\\\"\\$\\[\\s]+"
+                                },
+                                {
+                                    "include": "#double_quotes"
+                                },
+                                {
+                                    "include": "#brackets"
+                                },
+                                {
+                                    "include": "#braces"
+                                },
+                                {
+                                    "begin": "(?:\\s+|\\\\)",
+                                    "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                                    "patterns": [
+                                        {
+                                            "include": "#double_quotes"
+                                        },
+                                        {
+                                            "include": "#brackets"
+                                        },
+                                        {
+                                            "include": "#braces"
+                                        },
+                                        {
+                                            "begin": "(?:\\s+|\\\\)",
+                                            "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                                            "patterns": [
+                                                {
+                                                    "include": "#double_quotes"
+                                                },
+                                                {
+                                                    "include": "#brackets"
+                                                },
+                                                {
+                                                    "include": "#tcl_braces"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "for": {
+            "patterns": [
+                {
+                    "name": "meta.command.for.tcl",
+                    "begin": "\\b(for)\\b",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "keyword.control.for.tcl"
+                        }
+                    },
+                    "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                    "endCaptures": {
+                        "1": {
+                            "name": "punctuation.end.semicolon.tcl"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "begin": "(?:\\s+|\\\\)",
+                            "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                            "patterns": [
+                                {
+                                    "include": "#double_quotes"
+                                },
+                                {
+                                    "include": "#brackets"
+                                },
+                                {
+                                    "include": "#tcl_braces"
+                                },
+                                {
+                                    "begin": "(?:\\s+|\\\\)",
+                                    "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                                    "patterns": [
+                                        {
+                                            "include": "#double_quotes"
+                                        },
+                                        {
+                                            "include": "#brackets"
+                                        },
+                                        {
+                                            "include": "#expr_braces"
+                                        },
+                                        {
+                                            "begin": "(?:\\s+|\\\\)",
+                                            "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                                            "patterns": [
+                                                {
+                                                    "include": "#double_quotes"
+                                                },
+                                                {
+                                                    "include": "#brackets"
+                                                },
+                                                {
+                                                    "include": "#tcl_braces"
+                                                },
+                                                {
+                                                    "begin": "(?:\\s+|\\\\)",
+                                                    "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                                                    "patterns": [
+                                                        {
+                                                            "include": "#double_quotes"
+                                                        },
+                                                        {
+                                                            "include": "#brackets"
+                                                        },
+                                                        {
+                                                            "include": "#tcl_braces"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "foreach": {
+            "patterns": [
+                {
+                    "name": "meta.command.foreach.tcl",
+                    "begin": "\\b(foreach)\\b",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "keyword.control.foreach.tcl"
+                        }
+                    },
+                    "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                    "endCaptures": {
+                        "1": {
+                            "name": "punctuation.end.semicolon.tcl"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "begin": "(?:\\s+|\\\\)",
+                            "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                            "patterns": [
+                                {
+                                    "name": "variable.parameter.tcl",
+                                    "match": "\\S+"
+                                },
+                                {
+                                    "include": "#double_quotes"
+                                },
+                                {
+                                    "include": "#brackets"
+                                },
+                                {
+                                    "include": "#braces"
+                                },
+                                {
+                                    "begin": "(?:\\s+|\\\\)",
+                                    "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                                    "patterns": [
+                                        {
+                                            "include": "#variable"
+                                        },
+                                        {
+                                            "include": "#double_quotes"
+                                        },
+                                        {
+                                            "include": "#brackets"
+                                        },
+                                        {
+                                            "include": "#braces"
+                                        },
+                                        {
+                                            "begin": "(?:\\s+|\\\\)",
+                                            "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                                            "patterns": [
+                                                {
+                                                    "include": "#double_quotes"
+                                                },
+                                                {
+                                                    "include": "#brackets"
+                                                },
+                                                {
+                                                    "include": "#tcl_braces"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "if": {
+            "patterns": [
+                {
+                    "name": "meta.command.if.tcl",
+                    "begin": "\\b(if)\\b",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "keyword.control.if.tcl"
+                        }
+                    },
+                    "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                    "endCaptures": {
+                        "1": {
+                            "name": "punctuation.end.semicolon.tcl"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "begin": "(?:\\s+|\\\\)",
+                            "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                            "patterns": [
+                                {
+                                    "include": "#double_quotes"
+                                },
+                                {
+                                    "include": "#brackets"
+                                },
+                                {
+                                    "include": "#expr_braces"
+                                },
+                                {
+                                    "begin": "(?:\\s+|\\\\)",
+                                    "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                                    "endCaptures": {
+                                        "1": {
+                                            "name": "punctuation.end.semicolon.tcl"
+                                        }
+                                    },
+                                    "patterns": [
+                                        {
+                                            "include": "#double_quotes"
+                                        },
+                                        {
+                                            "include": "#brackets"
+                                        },
+                                        {
+                                            "include": "#tcl_braces"
+                                        },
+                                        {
+                                            "begin": "(?:\\s+|\\\\)",
+                                            "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                                            "endCaptures": {
+                                                "1": {
+                                                    "name": "punctuation.end.semicolon.tcl"
+                                                }
+                                            },
+                                            "patterns": [
+                                                {
+                                                    "begin": "\\b(else)\\b",
+                                                    "beginCaptures": {
+                                                        "1": {
+                                                            "name": "keyword.control.else.tcl"
+                                                        }
+                                                    },
+                                                    "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                                                    "endCaptures": {
+                                                        "1": {
+                                                            "name": "punctuation.end.semicolon.tcl"
+                                                        }
+                                                    },
+                                                    "patterns": [
+                                                        {
+                                                            "begin": "(?:\\s+|\\\\)",
+                                                            "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                                                            "endCaptures": {
+                                                                "1": {
+                                                                    "name": "punctuation.end.semicolon.tcl"
+                                                                }
+                                                            },
+                                                            "patterns": [
+                                                                {
+                                                                    "include": "#double_quotes"
+                                                                },
+                                                                {
+                                                                    "include": "#brackets"
+                                                                },
+                                                                {
+                                                                    "include": "#tcl_braces"
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "while": {
+            "patterns": [
+                {
+                    "name": "meta.command.while.tcl",
+                    "begin": "\\b(while)\\b",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "keyword.control.while.tcl"
+                        }
+                    },
+                    "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                    "endCaptures": {
+                        "1": {
+                            "name": "punctuation.end.semicolon.tcl"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "begin": "(?:\\s+|\\\\)",
+                            "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                            "patterns": [
+                                {
+                                    "include": "#double_quotes"
+                                },
+                                {
+                                    "include": "#brackets"
+                                },
+                                {
+                                    "include": "#expr_braces"
+                                },
+                                {
+                                    "begin": "(?:\\s+|\\\\)",
+                                    "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                                    "patterns": [
+                                        {
+                                            "include": "#double_quotes"
+                                        },
+                                        {
+                                            "include": "#brackets"
+                                        },
+                                        {
+                                            "include": "#tcl_braces"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "break": {
+            "patterns": [
+                {
+                    "name": "meta.command.break.tcl",
+                    "begin": "\\b(break)\\b",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "keyword.control.break.tcl"
+                        }
+                    },
+                    "end": "(?:\\s+|\\\\)",
+                    "endCaptures": {
+                        "1": {
+                            "name": "punctuation.end.semicolon.tcl"
+                        }
+                    }
+                }
+            ]
+        },
+        "continue": {
+            "patterns": [
+                {
+                    "name": "meta.command.continue.tcl",
+                    "begin": "\\b(continue)\\b",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "keyword.control.continue.tcl"
+                        }
+                    },
+                    "end": "(?:\\s+|\\\\)",
+                    "endCaptures": {
+                        "1": {
+                            "name": "punctuation.end.semicolon.tcl"
+                        }
+                    }
+                }
+            ]
+        },
+        "namespace": {
+            "patterns": [
+                {
+                    "name": "meta.command.namespace.tcl",
+                    "begin": "\\b(namespace)\\b",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "support.function.namespace.tcl"
+                        }
+                    },
+                    "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                    "endCaptures": {
+                        "1": {
+                            "name": "punctuation.end.semicolon.tcl"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "begin": "(eval)",
+                            "beginCaptures": {
+                                "1": {
+                                    "name": "support.constant.eval.tcl"
+                                }
+                            },
+                            "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                            "patterns": [
+                                {
+                                    "include": "#tcl_braces"
+                                },
+                                {
+                                    "include": "#variable"
+                                },
+                                {
+                                    "include": "#double_quotes"
+                                },
+                                {
+                                    "include": "#brackets"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "expr": {
+            "patterns": [
+                {
+                    "name": "meta.command.expr.tcl",
+                    "begin": "\\b(expr)\\b",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "support.function.expr.tcl"
+                        }
+                    },
+                    "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                    "endCaptures": {
+                        "1": {
+                            "name": "punctuation.end.semicolon.tcl"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#expr_braces"
+                        },
+                        {
+                            "include": "#expression"
+                        }
+                    ]
+                }
+            ]
+        },
+        "dict": {
+            "patterns": [
+                {
+                    "name": "meta.command.dict.tcl",
+                    "begin": "\\b(dict)\\b",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "support.function.dict.tcl"
+                        }
+                    },
+                    "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                    "endCaptures": {
+                        "1": {
+                            "name": "punctuation.end.semicolon.tcl"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "begin": "\\b(?:for)\\b",
+                            "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                            "endCaptures": {
+                                "1": {
+                                    "name": "punctuation.end.semicolon.tcl"
+                                }
+                            },
+                            "patterns": [
+                                {
+                                    "begin": "(?:\\s+|\\\\)",
+                                    "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                                    "endCaptures": {
+                                        "1": {
+                                            "name": "punctuation.end.semicolon.tcl"
+                                        }
+                                    },
+                                    "patterns": [
+                                        {
+                                            "include": "#double_quotes"
+                                        },
+                                        {
+                                            "include": "#braces"
+                                        },
+                                        {
+                                            "begin": "(?:\\s+|\\\\)",
+                                            "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                                            "endCaptures": {
+                                                "1": {
+                                                    "name": "punctuation.end.semicolon.tcl"
+                                                }
+                                            },
+                                            "patterns": [
+                                                {
+                                                    "include": "#variable"
+                                                },
+                                                {
+                                                    "include": "#double_quotes"
+                                                },
+                                                {
+                                                    "include": "#braces"
+                                                },
+                                                {
+                                                    "begin": "(?:\\s+|\\\\)",
+                                                    "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                                                    "endCaptures": {
+                                                        "1": {
+                                                            "name": "punctuation.end.semicolon.tcl"
+                                                        }
+                                                    },
+                                                    "patterns": [
+                                                        {
+                                                            "include": "#double_quotes"
+                                                        },
+                                                        {
+                                                            "include": "#brackets"
+                                                        },
+                                                        {
+                                                            "include": "#tcl_braces"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "begin": "\\b(?:map)\\b",
+                            "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                            "endCaptures": {
+                                "1": {
+                                    "name": "punctuation.end.semicolon.tcl"
+                                }
+                            },
+                            "patterns": [
+                                {
+                                    "begin": "(?:\\s+|\\\\)",
+                                    "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                                    "endCaptures": {
+                                        "1": {
+                                            "name": "punctuation.end.semicolon.tcl"
+                                        }
+                                    },
+                                    "patterns": [
+                                        {
+                                            "include": "#double_quotes"
+                                        },
+                                        {
+                                            "include": "#braces"
+                                        },
+                                        {
+                                            "begin": "(?:\\s+|\\\\)",
+                                            "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                                            "endCaptures": {
+                                                "1": {
+                                                    "name": "punctuation.end.semicolon.tcl"
+                                                }
+                                            },
+                                            "patterns": [
+                                                {
+                                                    "include": "#variable"
+                                                },
+                                                {
+                                                    "include": "#double_quotes"
+                                                },
+                                                {
+                                                    "include": "#braces"
+                                                },
+                                                {
+                                                    "begin": "(?:\\s+|\\\\)",
+                                                    "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                                                    "endCaptures": {
+                                                        "1": {
+                                                            "name": "punctuation.end.semicolon.tcl"
+                                                        }
+                                                    },
+                                                    "patterns": [
+                                                        {
+                                                            "include": "#double_quotes"
+                                                        },
+                                                        {
+                                                            "include": "#brackets"
+                                                        },
+                                                        {
+                                                            "include": "#tcl_braces"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "include": "#variable"
+                        },
+                        {
+                            "include": "#double_quotes"
+                        },
+                        {
+                            "include": "#brackets"
+                        },
+                        {
+                            "include": "#braces"
+                        }
+                    ]
+                }
+            ]
+        },
+        "default_command": {
+            "patterns": [
+                {
+                    "begin": "(?:([^\\{\\}\\[\\]\\$\\;\\s]+)|(?=\\{|\\[|\\$|\\\"))",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "entity.name.function.tcl"
+                        }
+                    },
+                    "end": "(?:(;)|(?=\\})|(?=\\])|$)",
+                    "endCaptures": {
+                        "1": {
+                            "name": "punctuation.end.semicolon.tcl"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#variable"
+                        },
+                        {
+                            "include": "#double_quotes"
+                        },
+                        {
+                            "include": "#brackets"
+                        },
+                        {
+                            "include": "#braces"
+                        }
+                    ]
+                }
+            ]
+        },
+        "tcl_commands": {
+            "patterns": [
+                {
+                    "include": "#proc"
+                },
+                {
+                    "include": "#for"
+                },
+                {
+                    "include": "#foreach"
+                },
+                {
+                    "include": "#if"
+                },
+                {
+                    "include": "#while"
+                },
+                {
+                    "include": "#break"
+                },
+                {
+                    "include": "#continue"
+                },
+                {
+                    "include": "#namespace"
+                },
+                {
+                    "include": "#expr"
+                },
+                {
+                    "include": "#dict"
+                }
+            ]
+        }
+    }
+}

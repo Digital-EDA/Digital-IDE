@@ -1,0 +1,319 @@
+{
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+    "scopeName": "source.arm",
+    "name": "ARM",
+    "fileTypes": [
+        "s",
+        "S",
+        "asm",
+        "sx"
+    ],
+    "patterns": [
+        {
+            "match": "^\\s*[#\\.](define|include|(end|el|else)?if|if(def|ndef)?|else)(\\s(defined\\([a-zA-Z_]+\\)|[a-zA-Z_]+))?$",
+            "name": "meta.preprocessor"
+        },
+        {
+            "match": "^\\s*\\.?\\w+:\\s*(?=$|;)",
+            "name": "routine.arm"
+        },
+        {
+            "match": "\\b(?i)(?:v?(?:add|cvt|bic|sub|trn|cmp|div|qdmulh|mrs|mul|ld1|qadd|qshrun|st[1234]|addw|mull|mlal|rshrn|swp|qmovunand|m(?:rs|sr)|eor|sub|rsb|adc|sbc|rsc|and|tst|teq|cmp|cmn|orr|mov|bic|mvn|neg|lsr|lsl|ror|asr)|mul|mla|mull|smlabb|rev(?:8|16)?|pld|adr|adrl|vswp)(?:(?:(?=s)s(\\w{2})?)|(\\w{2})s?)?(?-i)\\b",
+            "name": "support.function.mnemonic.arithmetic.arm",
+            "captures": {
+                "1": {
+                    "patterns": [
+                        {
+                            "include": "#conditions",
+                            "name": "support.function.mnemonic.arithmetic.arm"
+                        },
+                        {
+                            "match": "\\w{2}",
+                            "name": "invalid.illegal.condition.arm"
+                        }
+                    ]
+                },
+                "2": {
+                    "patterns": [
+                        {
+                            "include": "#conditions",
+                            "name": "support.function.mnemonic.arithmetic.arm"
+                        },
+                        {
+                            "match": "\\w{2}",
+                            "name": "invalid.illegal.condition.arm"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "match": "\\b(?i)v?(?:ldr|str)(?:d(\\w{2})?|(?:(?:s?b|s?h)(\\w{2})?|(\\w{2})(?:s?b|s?h)?))(?-i)\\b",
+            "name": "support.function.mnemonic.memory.arm",
+            "captures": {
+                "1": {
+                    "patterns": [
+                        {
+                            "include": "#conditions",
+                            "name": "support.function.mnemonic.memory.arm"
+                        },
+                        {
+                            "match": "\\w{2}",
+                            "name": "invalid.illegal.condition.arm"
+                        }
+                    ]
+                },
+                "2": {
+                    "patterns": [
+                        {
+                            "include": "#conditions",
+                            "name": "support.function.mnemonic.memory.arm"
+                        },
+                        {
+                            "match": "\\w{2}",
+                            "name": "invalid.illegal.condition.arm"
+                        }
+                    ]
+                },
+                "3": {
+                    "patterns": [
+                        {
+                            "include": "#conditions",
+                            "name": "support.function.mnemonic.memory.arm"
+                        },
+                        {
+                            "match": "\\w{2}",
+                            "name": "invalid.illegal.condition.arm"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "match": "\\b(?i)(?:mov(?:w|t)?|pac(?:dz?[a|b]|ga|i(?:[a|b](?:1716|sp|z)?)|z[a|b])|swi|svc|wfi|dmb|clrex|dsb|isb|v?(?:push|pop)|b(?:l|l?x|l?r)?|(?:i|e)?ret(?:aa|ab)?|(?:st|ld)(?:p|r(?:ex|s?(?:h|b)|d)?|m(?:(?:f|e)(?:d|a)|(?:d|i)(?:b|a))?))(?:(?:(?=s)s(\\w{2})?)|(\\w{2})s?)?(?-i)\\b",
+            "name": "support.function.mnemonic.memory.arm",
+            "captures": {
+                "1": {
+                    "patterns": [
+                        {
+                            "include": "#conditions",
+                            "name": "support.function.mnemonic.memory.arm"
+                        },
+                        {
+                            "match": "\\w{2}",
+                            "name": "invalid.illegal.condition.arm"
+                        }
+                    ]
+                },
+                "2": {
+                    "patterns": [
+                        {
+                            "include": "#conditions",
+                            "name": "support.function.mnemonic.memory.arm"
+                        },
+                        {
+                            "match": "\\w{2}",
+                            "name": "invalid.illegal.condition.arm"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "match": "\\b(?i)(def(b|w|s)|equ|align\\s.+\\.s)(?-i)\\b",
+            "name": "keyword.control.define.arm"
+        },
+        {
+            "name": "keyword.control.directive.arm",
+            "match": "\\.(?i)(globl|global|extern|weak|macro|endm|purgem|section|text|data|bss|arm|align|balign|irp|rept|endr|(un)?req|error|short|(end)?func|hidden|type|cpu|fpu|arch|code|syntax|altmacro|object_arch|word|int|string|thumb(_set)?|set|pragma|undef|line|get)(?-i)\\b"
+        },
+        {
+            "match": "\\b\\=",
+            "name": "keyword.control.evaluation"
+        },
+        {
+            "match": "\\b(?i)nop(\\w+)?(?-i)\\b",
+            "name": "comment.nop.arm",
+            "captures": {
+                "1": {
+                    "patterns": [
+                        {
+                            "include": "#conditions",
+                            "name": "comment.nop.arm"
+                        },
+                        {
+                            "match": "\\w+",
+                            "name": "invalid.illegal.condition.arm"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "storage.memaddress.arm",
+            "match": "\\[[ \\t]*(\\w+),[ \\t]*([a-zA-Z0-9#-]+)[ \\t]*\\]!?",
+            "captures": {
+                "1": {
+                    "patterns": [
+                        {
+                            "include": "#registers"
+                        }
+                    ]
+                },
+                "2": {
+                    "patterns": [
+                        {
+                            "include": "#numerics"
+                        },
+                        {
+                            "include": "#registers"
+                        },
+                        {
+                            "include": "#variables"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "storage.stack.arm",
+            "begin": "\\{\\h*",
+            "end": "\\h*\\}\\^?",
+            "patterns": [
+                {
+                    "include": "#registers_list"
+                }
+            ]
+        },
+        {
+            "include": "#registers"
+        },
+        {
+            "include": "#variables"
+        },
+        {
+            "include": "#numerics"
+        },
+        {
+            "include": "#strings"
+        },
+        {
+            "include": "#comments"
+        }
+    ],
+    "repository": {
+        "comments": {
+            "patterns": [
+                {
+                    "match": "([;@]|//|#).*$",
+                    "name": "comment.arm"
+                },
+                {
+                    "begin": "\\/\\*",
+                    "beginCaptures": {
+                        "0": {
+                            "name": "comment.begin.arm"
+                        }
+                    },
+                    "endCaptures": {
+                        "0": {
+                            "name": "comment.end.arm"
+                        }
+                    },
+                    "end": "\\*\\/",
+                    "name": "comment.arm"
+                }
+            ]
+        },
+        "conditions": {
+            "patterns": [
+                {
+                    "match": "ne|eq|cs|hs|cc|lo|mi|pl|vs|vc|hi|ls|lt|le|gt|ge|al"
+                }
+            ]
+        },
+        "numerics": {
+            "patterns": [
+                {
+                    "match": "#?-?(0x|&)[0-9a-fA-F_]+\\b",
+                    "name": "constant.numeric.hex.arm"
+                },
+                {
+                    "match": "#?[0-9]+\\b",
+                    "name": "constant.numeric.dec.arm"
+                },
+                {
+                    "match": "#?0b[01]+\\b",
+                    "name": "constant.numeric.bin.arm"
+                }
+            ]
+        },
+        "registers": {
+            "patterns": [
+                {
+                    "match": "\\b(?i)([rcp]([0-9]|1[0-5])|[xwbhsdq]([0-9]|1[0-9]|2[0-9]|3[0-1])|wzr|xzr|wsp|fpsr|fpcr|a[1-4]|v([0-9]|1[0-9]|2[0-9]|3[0-1])\\.(16b|8[b|h]|4[s|h]|2[s|d])|sl|sb|fp|ip|sp|lr|(c|s)psr(_c)?|pc|fpsid|fpscr|fpexc|APSR_nzcv|sy)(?-i)(!|\\b)",
+                    "name": "storage.register.arm"
+                }
+            ]
+        },
+        "registers_list": {
+            "patterns": [
+                {
+                    "match": "(\\w+)(?:\\h*\\-\\h*(\\w+))?(?:,\\h*([a-zA-Z0-9,\\-\\h]+))?",
+                    "captures": {
+                        "1": {
+                            "patterns": [
+                                {
+                                    "include": "#registers"
+                                }
+                            ]
+                        },
+                        "2": {
+                            "patterns": [
+                                {
+                                    "include": "#registers"
+                                }
+                            ]
+                        },
+                        "3": {
+                            "patterns": [
+                                {
+                                    "include": "#registers_list"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        "strings": {
+            "patterns": [
+                {
+                    "name": "string.quoted.arm",
+                    "begin": "\"",
+                    "end": "\""
+                },
+                {
+                    "match": "\\'\\S\\'",
+                    "name": "string.char.arm"
+                },
+                {
+                    "name": "invalid.illegal.string.arm",
+                    "match": "\"[^\"]+$"
+                },
+                {
+                    "name": "invalid.illegal.char.arm",
+                    "match": "\\'\\S{2,}\\'"
+                }
+            ]
+        },
+        "variables": {
+            "patterns": [
+                {
+                    "match": "(?<!^)\\b#?-?[a-zA-Z_][0-9a-zA-Z_]*\\b",
+                    "name": "variable.named.arm"
+                }
+            ]
+        }
+    }
+}

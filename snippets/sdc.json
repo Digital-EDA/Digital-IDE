@@ -1,0 +1,35 @@
+{  
+    "ILA_CORE": {
+        "prefix": "create_ILA_CORE",
+        "body": [
+            "set_property C_CLK_INPUT_FREQ_HZ  ${1:100000000} [get_debug_cores dbg_hub]",
+            "set_property C_ENABLE_CLK_DIVIDER false     [get_debug_cores dbg_hub]",
+            "set_property C_USER_SCAN_CHAIN    1         [get_debug_cores dbg_hub]",
+            "connect_debug_port dbg_hub/clk              [get_nets [list CLK_Global_u/clk_out${2:3}]]"
+        ]
+    },
+    "Debug_CORE": {
+        "prefix": "create_Debug_CORE",
+        "body": [
+            "create_debug_core u_ila_${1:0} ila",
+            "set_property ALL_PROBE_SAME_MU true  [get_debug_cores u_ila_$1]",
+            "set_property ALL_PROBE_SAME_MU_CNT 4 [get_debug_cores u_ila_$1]",
+            "set_property C_ADV_TRIGGER true      [get_debug_cores u_ila_$1]",
+            "set_property C_DATA_DEPTH       ${2:1024} [get_debug_cores u_ila_$1]",
+            "set_property C_EN_STRG_QUAL true     [get_debug_cores u_ila_$1]",
+            "set_property C_INPUT_PIPE_STAGES  0  [get_debug_cores u_ila_$1]",
+            "set_property C_TRIGIN_EN false       [get_debug_cores u_ila_$1]",
+            "set_property C_TRIGOUT_EN false      [get_debug_cores u_ila_$1]",
+            "set_property port_width           1  [get_debug_ports u_ila_$1/clk]",
+            "connect_debug_port u_ila_$1/clk       [get_nets [list CLK_Global_u/clk_out${3:3}]]"
+        ]
+    },
+    "Debug_add_port": {
+        "prefix": "add_port",
+        "body": [
+            "set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_${1:0}/probe0]",
+            "set_property port_width         12       [get_debug_ports u_ila_$1/probe0]",
+            "connect_debug_port u_ila_$1/probe${2:0}        [get_nets [list ${3:}]]"
+        ]
+    }
+}

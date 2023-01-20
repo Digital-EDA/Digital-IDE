@@ -1,0 +1,906 @@
+{
+    "IDDR": {
+        "prefix": "iddr",
+        "body" : [
+            "IDDR #(",
+            "    // \"OPPOSITE_EDGE\", \"SAME_EDGE\" or \"SAME_EDGE_PIPELINED\" ",
+            "    .DDR_CLK_EDGE(\"SAME_EDGE\"), ",
+            "    .INIT_Q1(1'b0),      // Initial value of Q1: 1'b0 or 1'b1",
+            "    .INIT_Q2(1'b0),      // Initial value of Q2: 1'b0 or 1'b1",
+            "    .SRTYPE(\"SYNC\"))     // Set/Reset type: \"SYNC\" or \"ASYNC\" ",
+            "IDDR_inst (",
+            "IDDR #(",
+            "    .Q1(rx_data_pos),    // 1-bit output for positive edge of clock ",
+            "    .Q2(rx_data_neg),    // 1-bit output for negative edge of clock",
+            "    .C(data_clk),        // 1-bit clock input",
+            "    .CE(1'b1),           // 1-bit clock enable input",
+            "    .D(rx_data_dly),     // 1-bit DDR data input",
+            "    .R(1'b0),            // 1-bit reset",
+            "    .S(1'b0)             // 1-bit set",
+            ");"
+        ]
+    },
+
+    "ODDR": {
+        "prefix": "oddr",
+        "body" : [
+            "ODDR #(",
+            "    .DDR_CLK_EDGE(\"SAME_EDGE\"), // \"OPPOSITE_EDGE\" or \"SAME_EDGE\" ",
+            "    .INIT(1'b0),        // Initial value of Q: 1'b0 or 1'b1",
+            "    .SRTYPE(\"SYNC\"))    // Set/Reset type: \"SYNC\" or \"ASYNC\" ",
+            "ODDR_inst (",
+            "    .Q(odata),          // 1-bit DDR output",
+            "    .C(data_clk),       // 1-bit clock input",
+            "    .CE(1'b1),          // 1-bit clock enable input",
+            "    .D1(data_p),        // 1-bit data input (positive edge)",
+            "    .D2(data_n),        // 1-bit data input (negative edge)",
+            "    .R(1'b0),           // 1-bit reset",
+            "    .S(1'b0)            // 1-bit set",
+            ");"
+        ]
+    },
+
+    "OBUFDS": {
+        "prefix": "obuf",
+        "body" : [
+            "OBUFDS #(",
+            "    .IOSTANDARD(\"LVDS18\"), // Specify the output I/O standard",
+            "    .SLEW(\"SLOW\"))         // Specify the output slew rate",
+            "OBUFDS_inst (",
+            "    .O(tx_frame_p),  // Diff_p output (connect directly to top-level port)",
+            "    .OB(tx_frame_n), // Diff_n output (connect directly to top-level port)",
+            "    .I(tx_frame)     // Buffer input ",
+            ");"
+        ]
+    },
+
+    "IBUFDS": {
+        "prefix": "ibuf",
+        "body" : [
+            "IBUFDS #(",
+            "    .DIFF_TERM(\"FALSE\"),       // Differential Termination",
+            "    .IBUF_LOW_PWR(\"TRUE\"),     // Low power=\"TRUE\", Highest performance=\"FALSE\" ",
+            "    .IOSTANDARD(\"DEFAULT\"))    // Specify the input I/O standard",
+            "IBUFDS_inst (",
+            "    .O(data_clk_tmp),   // Buffer output",
+            "    .I(data_clk_p),     // Diff_p buffer input (connect directly to top-level port)",
+            "    .IB(data_clk_n)     // Diff_n buffer input (connect directly to top-level port)",
+            ");"
+        ]
+    },
+
+    "OSERDESE2": {
+        "prefix": "oserd",
+        "body" : [
+        "OSERDESE2 #(",
+        "    .DATA_RATE_OQ(\"DDR\"),   // DDR, SDR",
+        "    .DATA_RATE_TQ(\"DDR\"),   // DDR, BUF, SDR",
+        "    .DATA_WIDTH(4),         // Parallel data width (2-8,10,14)",
+        "    .INIT_OQ(1'b0),         // Initial value of OQ output (1'b0,1'b1)",
+        "    .INIT_TQ(1'b0),         // Initial value of TQ output (1'b0,1'b1)",
+        "    .SERDES_MODE(\"MASTER\"), // MASTER, SLAVE",
+        "    .SRVAL_OQ(1'b0),        // OQ output value when SR is used (1'b0,1'b1)",
+        "    .SRVAL_TQ(1'b0),        // TQ output value when SR is used (1'b0,1'b1)",
+        "    .TBYTE_CTL(\"FALSE\"),    // Enable tristate byte operation (FALSE, TRUE)",
+        "    .TBYTE_SRC(\"FALSE\"),    // Tristate byte source (FALSE, TRUE)",
+        "    .TRISTATE_WIDTH(4)      // 3-state converter width (1,4)",
+        ")",
+        "OSERDESE2_inst (",
+        "    .OFB(OFB),             // 1-bit output: Feedback path for data",
+        "    .OQ(OQ),               // 1-bit output: Data path output",
+        "    // SHIFTOUT1 / SHIFTOUT2: 1-bit (each) output: Data output expansion (1-bit each)",
+        "    .SHIFTOUT1(SHIFTOUT1),",
+        "    .SHIFTOUT2(SHIFTOUT2),",
+        "    .TBYTEOUT(TBYTEOUT),   // 1-bit output: Byte group tristate",
+        "    .TFB(TFB),             // 1-bit output: 3-state control",
+        "    .TQ(TQ),               // 1-bit output: 3-state control",
+        "    .CLK(CLK),             // 1-bit input: High speed clock",
+        "    .CLKDIV(CLKDIV),       // 1-bit input: Divided clock",
+        "    // D1 - D8: 1-bit (each) input: Parallel data inputs (1-bit each)",
+        "    .D1(D1),",
+        "    .D2(D2),",
+        "    .D3(D3),",
+        "    .D4(D4),",
+        "    .D5(D5),",
+        "    .D6(D6),",
+        "    .D7(D7),",
+        "    .D8(D8),",
+        "    .OCE(OCE),             // 1-bit input: Output data clock enable",
+        "    .RST(RST),             // 1-bit input: Reset",
+        "    // SHIFTIN1 / SHIFTIN2: 1-bit (each) input: Data input expansion (1-bit each)",
+        "    .SHIFTIN1(SHIFTIN1),",
+        "    .SHIFTIN2(SHIFTIN2),",
+        "    // T1 - T4: 1-bit (each) input: Parallel 3-state inputs",
+        "    .T1(T1),",
+        "    .T2(T2),",
+        "    .T3(T3),",
+        "    .T4(T4),",
+        "    .TBYTEIN(TBYTEIN),     // 1-bit input: Byte group tristate",
+        "    .TCE(TCE)              // 1-bit input: 3-state clock enable",
+        ");"
+        ]
+    },
+
+    "ISERDESE2": {
+        "prefix": "iserd",
+        "body" : [
+        "ISERDESE2 #(",
+        "    .DATA_RATE(\"DDR\"),           // DDR, SDR",
+        "    .DATA_WIDTH(4),              // Parallel data width (2-8,10,14)",
+        "    .DYN_CLKDIV_INV_EN(\"FALSE\"), // Enable DYNCLKDIVINVSEL inversion (FALSE, TRUE)",
+        "    .DYN_CLK_INV_EN(\"FALSE\"),    // Enable DYNCLKINVSEL inversion (FALSE, TRUE)",
+        "    // INIT_Q1 - INIT_Q4: Initial value on the Q outputs (0/1)",
+        "    .INIT_Q1(1'b0),",
+        "    .INIT_Q2(1'b0),",
+        "    .INIT_Q3(1'b0),",
+        "    .INIT_Q4(1'b0),",
+        "    .INTERFACE_TYPE(\"MEMORY\"),   // MEMORY, MEMORY_DDR3, MEMORY_QDR, NETWORKING, OVERSAMPLE",
+        "    .IOBDELAY(\"NONE\"),           // NONE, BOTH, IBUF, IFD",
+        "    .NUM_CE(2),                  // Number of clock enables (1,2)",
+        "    .OFB_USED(\"FALSE\"),          // Select OFB path (FALSE, TRUE)",
+        "    .SERDES_MODE(\"MASTER\"),      // MASTER, SLAVE",
+        "    // SRVAL_Q1 - SRVAL_Q4: Q output values when SR is used (0/1)",
+        "    .SRVAL_Q1(1'b0),",
+        "    .SRVAL_Q2(1'b0),",
+        "    .SRVAL_Q3(1'b0),",
+        "    .SRVAL_Q4(1'b0))",
+        "ISERDESE2_inst (",
+        "    .O(O),                       // 1-bit output: Combinatorial output",
+        "    // Q1 - Q8: 1-bit (each) output: Registered data outputs",
+        "    .Q1(Q1),",
+        "    .Q2(Q2),",
+        "    .Q3(Q3),",
+        "    .Q4(Q4),",
+        "    .Q5(Q5),",
+        "    .Q6(Q6),",
+        "    .Q7(Q7),",
+        "    .Q8(Q8),",
+        "    // SHIFTOUT1, SHIFTOUT2: 1-bit (each) output: Data width expansion output ports",
+        "    .SHIFTOUT1(SHIFTOUT1),",
+        "    .SHIFTOUT2(SHIFTOUT2),",
+        "\n",    
+        "    // 1-bit input: The BITSLIP pin performs a Bitslip operation synchronous to",
+        "    // CLKDIV when asserted (active High). Subsequently, the data seen on the Q1",
+        "    // to Q8 output ports will shift, as in a barrel-shifter operation, one",
+        "    // position every time Bitslip is invoked (DDR operation is different from",
+        "    // SDR).",
+        "    .BITSLIP(BITSLIP), ",     
+        "\n",
+        "    // CE1, CE2: 1-bit (each) input: Data register clock enable inputs",
+        "    .CE1(CE1),",
+        "    .CE2(CE2),",
+        "    .CLKDIVP(CLKDIVP),           // 1-bit input: TBD",
+        "    // Clocks: 1-bit (each) input: ISERDESE2 clock input ports",
+        "    .CLK(CLK),                   // 1-bit input: High-speed clock",
+        "    .CLKB(CLKB),                 // 1-bit input: High-speed secondary clock",
+        "    .CLKDIV(CLKDIV),             // 1-bit input: Divided clock",
+        "    .OCLK(OCLK),                 // 1-bit input: High speed output clock used when INTERFACE_TYPE=\"MEMORY\" ",
+        "    // Dynamic Clock Inversions: 1-bit (each) input: Dynamic clock inversion pins to switch clock polarity",
+        "    .DYNCLKDIVSEL(DYNCLKDIVSEL), // 1-bit input: Dynamic CLKDIV inversion",
+        "    .DYNCLKSEL(DYNCLKSEL),       // 1-bit input: Dynamic CLK/CLKB inversion",
+        "    // Input Data: 1-bit (each) input: ISERDESE2 data input ports",
+        "    .D(D),                       // 1-bit input: Data input",
+        "    .DDLY(DDLY),                 // 1-bit input: Serial data from IDELAYE2",
+        "    .OFB(OFB),                   // 1-bit input: Data feedback from OSERDESE2",
+        "    .OCLKB(OCLKB),               // 1-bit input: High speed negative edge output clock",
+        "    .RST(RST),                   // 1-bit input: Active high asynchronous reset",
+        "    // SHIFTIN1, SHIFTIN2: 1-bit (each) input: Data width expansion input ports",
+        "    .SHIFTIN1(SHIFTIN1),",
+        "    .SHIFTIN2(SHIFTIN2)",
+        ");"
+        ]
+    },
+    
+    "count": {
+        "prefix": "count",
+        "body": [
+            "//define the time counter",
+            "reg [${1:32}:0]      cnt$2 = 0;",
+            "reg             ${3:impulse};",
+            "parameter       SET_TIME = $1'd$4;",
+            "always@(posedge clk) begin",
+            "    if (cnt$2 == SET_TIME) begin",
+            "        cnt$2 <= $1'd0;",
+            "        $3 <= 1'd1;",
+            "    end",
+            "    else begin",
+            "        cnt$2 <= cnt$2 + 1'd1;",
+            "        $3 <= 1'd0;",
+            "    end",
+            "end"
+        ]
+    },
+
+    "divclk": {
+        "prefix": "div",
+        "body": [
+            "reg [${1:3}:0]      cnt$2 = 0;",
+            "reg                 clk_div$2;",
+            "always@(posedge ${3:clk}) begin",
+            "    if (cnt$2 == ${4:3}) begin",
+            "        cnt$2 <= $1'd0;",
+            "        clk_div$2 <= ~clk_div$2;",
+            "    end",
+            "    else begin",
+            "        cnt$2 <= cnt$2 + 1'd1;",
+            "    end",
+            "end"
+        ]
+    },
+
+    "lock": {
+        "prefix": "lock",
+        "body": [
+            "reg  gate$2;",
+            "reg  gate$2_buf;",
+    
+            "wire gate$2_pose =  gate$2 & ~gate$2_buf;",
+            "wire gate$2_nege =  ~gate$2 & gate$2_buf;",
+    
+            "always@(posedge clk) begin",
+            "   gate$2 <= ${1:signal};",
+            "   gate$2_buf <= gate$2;",
+            "end"
+        ]
+    },
+
+    "posedge": {
+        "prefix": "pos",
+        "body": [
+            "posedge"
+        ]
+    },
+
+    "negedge": {
+        "prefix": "neg",
+        "body": [
+            "negedge"
+        ]
+    },
+
+    "resetn": {
+        "prefix": "resetn",
+        "body": [
+            "reg  rst_n_s1, rst_n_s2;",
+            "wire rst_n",
+            "always @ (posedge clk or negedge sys_rst_n) begin",
+            "    if (sys_rst_n) begin",
+            "        rst_n_s2 <= 1'b0;",
+            "        rst_n_s1 <= 1'b0;",
+            "    end",
+            "        rst_n_s1 <= 1'b1;",
+            "        rst_n_s2 <= rst_n_s1;",
+            "    end",
+            "end",
+            "assign rst_n = rst_n_s2;"
+        ],
+        "description" : "Asynchronous sys_rst_n synchronous release (intel device)"
+    },
+
+    "reset": {
+        "prefix": "reset",
+        "body": [
+            "reg  rst_s1, rst_s2;",
+            "wire rst",
+            "always @ (posedge clk or posedge sys_rst) begin",
+            "    if (sys_rst) begin",
+            "        rst_s2 <= 1'b0;",
+            "        rst_s1 <= 1'b0;",
+            "    end",
+            "        rst_s1 <= 1'b1;",
+            "        rst_s2 <= rst_s1;",
+            "    end",
+            "end",
+            "assign rst = rst_s2;"
+        ],
+        "description" : "Asynchronous sys_rst synchronous release (xilinx device)"
+    },
+        
+    "initial sim": {
+        "prefix": "inits",
+        "body": [
+            "initial begin",
+            "   \\$dumpfile(\"wave.vcd\");",
+            "   \\$dumpvars(0, ${1:testbench});",                     
+            "   #6000 \\$finish;",                      
+            "end"
+        ],
+        "description": "initial for simulation"
+    },
+
+    "initial array": {
+        "prefix": "inita",
+        "body": [
+            "integer ${1:i};",
+            "initial begin",
+            "   for ($1 = 0; $1<${2:range}; $1=$1+1) begin",
+            "        ${3:data}[$1] = 0;",
+            "    end",   
+            "end"
+        ],
+        "description": "initial for a array"
+    },
+
+    "debug": {
+        "prefix": "debug",
+        "body": ["(* mark_debug = \"true\" *)"]
+    },
+
+    "time": {
+        "prefix": "time",
+        "body": ["`timescale 1ns / 1ps"]
+    },
+
+    "assign": {
+        "prefix": "assign",
+        "body": ["assign $1 = $2;"]
+    },
+
+    "always_ff block": {
+        "prefix": "ff",
+        "body": [
+            "always_ff @( ${1:clock} ) begin : ${2:blockName}",
+            "    $0;",
+            "end"
+        ],
+        "description": "Insert an always_ff block"
+    },
+
+    "always_comb block": {
+        "prefix": "comb",
+        "body": [
+            "always_comb begin : ${1:blockName}",
+            "    $0;",
+            "end"
+        ],
+        "description": "Insert an always_comb block"
+    },
+
+    "always": {
+        "prefix": "alw",
+        "body": [
+            "always @(*) begin",
+            "    $1;",
+            "end"
+        ],
+        "description": "always @(*)"
+    },
+
+    "alwaysposclk": {
+        "prefix": "alclk",
+        "body": [
+            "always @(posedge clk) begin",
+            "    $1;",
+            "end"
+        ],
+        "description": "always @(posedge clk) directly"
+    },
+
+    "alwayssyncrst": {
+        "prefix": "alsync",
+        "body": [
+            "always @(posedge clk) begin",
+            "    if(rst) begin",
+            "        $1 <= 0;",
+            "    end",
+            "    else begin",
+            "        $2 <= $3;",
+            "    end",
+            "end"
+        ],
+        "description": "synchronous rst (xilinx device)"
+    },
+
+    "alwaysasyncrst": {
+        "prefix": "alasync",
+        "body": [
+            "always @(posedge clk or posedge rst) begin",
+            "    if(rst) begin",
+            "        $1 <= 0;",
+            "    end",
+            "    else begin",
+            "        $2 <= $3;",
+            "    end",
+            "end"
+        ],
+        "description": "asynchronous rst (xilinx device)"
+    },
+
+    "alwayssyncrstn": {
+        "prefix": "alsyncn",
+        "body": [
+            "always @(posedge clk) begin",
+            "    if(!rst_n) begin",
+            "        $1 <= 0;",
+            "    end",
+            "    else begin",
+            "        $2 <= $3;",
+            "    end",
+            "end"
+        ],
+        "description": "synchronous rst_n (intel device)"
+    },
+
+    "alwaysasyncrstn": {
+        "prefix": "alasyncn",
+        "body": [
+            "always @(posedge clk or negedge rst_n) begin",
+            "    if(!rst_n) begin",
+            "        $1 <= 0;",
+            "    end",
+            "    else begin",
+            "        $2 <= $3;",
+            "    end",
+            "end"
+        ],
+        "description": "asynchronous rst_n (intel device)"
+    },
+
+    "beginend": {
+        "prefix": "beginend",
+        "body": [
+            "begin",
+            "    $1",
+            "end"
+        ],
+        "description": "begin ... end"
+    },
+
+    "case": {
+        "prefix": "case",
+        "body": [
+            "case (${1:conditions})",
+            "    $2: $3",
+            "\tdefault: $4",
+            "endcase"
+        ],
+        "description": "case () ... endcase"
+    },
+
+    "module with parameters": {
+        "prefix": "modp",
+        "body": [
+            "module ${1:name} #(",
+            "    parameter    INPUT_WIDTH  = ${2:12},",
+            "    parameter    OUTPUT_WIDTH = $2",
+            ") (",
+            "    input      clk,",
+            "    input      RST,",
+            "    input  [INPUT_WIDTH - 1 : 0]    ${3:data_i},",
+            "    output [OUTPUT_WIDTH - 1 : 0]   ${4:data_o}",
+            ");",
+            "    $5",
+            "endmodule  //$1\n"
+        ],
+        "description": "Insert a module with parameter"
+    },
+
+    "module without parameters": {
+        "prefix": "mod",
+        "body": [
+            "module ${1:moduleName} (",
+            "    input      clk,",
+            "    input      rst,",
+            "    $2",
+            ");",
+            "    $3",
+            "endmodule //$1\n"
+        ],
+        "description": "Insert a module without parameter"
+    },
+    "simple module": {
+        "prefix": "module",
+        "body": [
+            "module ${1:moduleName}($2);",
+            "    $3",
+            "endmodule //$1\n"
+        ],
+        "description": "Insert a common module"
+    },
+    "generate_for": {
+        "prefix": "genfor",
+        "body": [
+            "genvar ${1:i};",
+            "generate for($1 = 0 ; $1 < $2; $1 = $1 + 1) begin : ${3:U}",
+            "    $4",
+            "end",
+            "endgenerate"
+        ]
+    },
+    
+    "generate_if": {
+        "prefix": "genif",
+        "body": [
+            "generate if(${1:conditional}) begin : ${2:U}",
+            "    ${3:}",
+            "end",
+            "endgenerate"
+        ]
+    },
+    
+    "generate_case": {
+        "prefix": "gencase",
+        "body": [
+            "generate",
+            "case (${1:NUM})",
+            "32'd1 : begin : ${2:case1_name}",
+            "$3",
+            "        end",
+            "32'd2 : begin : ${4:case1_name}",
+            "$5",
+            "        end",
+            "default : begin : NOP end",
+            "endcase",
+            "endgenerate"
+        ]
+    },    
+
+    "if block": {
+        "prefix": "if",
+        "body": [
+            "if (${1:conditions}) begin",
+            "    $0",
+            "end"
+        ],
+        "description": "Insert a if block"
+    },
+
+    "include": {
+		"prefix": "inc",
+		"body": [
+			"`include \"$1\""
+		],
+		"description": "`include \"..\""
+	},
+
+    "define": {
+		"prefix": "def",
+		"body": [
+			"`def $1 = $2"
+		],
+		"description": "`define var = val"
+	},
+
+	"parameter": {
+		"prefix": "param",
+		"body": [
+			"parameter $1 = $2;"
+		],
+		"description": "paramter var = val;"
+	},
+
+    "localparam": {
+		"prefix": "param",
+		"body": [
+			"localparam $1 = $2;"
+		],
+		"description": "localparam var = val;"
+	},
+
+	"ifelse": {
+		"prefix": "ifelse",
+		"body": [
+			"if (${1:conditions}) begin",
+			"    $2",
+			"end",
+            "else begin",
+			"    $3",
+            "end"
+		],
+		"description": "if (...) begin ... end else begin ... end"
+	},
+
+    "else": {
+		"prefix": "else",
+		"body": [
+            "else begin",
+			"    $1",
+            "end"
+		],
+		"description": "else begin ... end"
+	},
+
+    "elseif": {
+		"prefix": "elif",
+		"body": [
+            "else if(${1:conditions}) begin",
+			"    $2",
+            "end"
+		],
+		"description": "else if(conditions) begin ... end"
+	},
+
+    "for loop": {
+		"prefix": "for",
+		"body": [
+			"for ($1 = $2; $3; $4) begin",
+			"    $0",
+			"end"
+		],
+		"description": "for (...) begin ... end"
+	},
+
+	"while loop": {
+		"prefix": "while",
+		"body": [
+			"while ($1) begin",
+			"    $2",
+			"end"
+		],
+		"description": "while (...) begin ... end"
+	},
+
+	"function": {
+		"prefix": "function",
+		"body": [
+			"function $1;",
+			"    $2;",
+			"    $3",
+			"endfunction"
+		],
+		"description": "function (...) ... endfunction"
+	},
+
+	"bit":{
+		"prefix":"bit",
+		"body":"bit"
+	},
+
+	"int":{
+		"prefix":"int",
+		"body":"int"
+	},
+
+	"byte":{
+		"prefix":"byte",
+		"body":"byte"
+	},
+
+	"logic":{
+		"prefix":"logic",
+		"body":"logic"
+	},
+
+    "reg": {
+        "prefix": "reg",
+        "body": [
+            "reg $1;"
+        ],
+        "description": "reg reg_name;"
+    },
+    
+    "regarray": {
+        "prefix": "rega",
+        "body": [
+            "reg [$1:$2] $3;"
+        ],
+        "description": "reg [N:0] reg_name;"
+    },
+    
+    "regmemory": {
+        "prefix": "regm",
+        "body": [
+            "reg [$1:$2] $3 [$4:$5];"
+        ],
+        "description": "reg [N:0] reg_name [0:M];"
+    },
+    
+    "wire": {
+        "prefix": "wire",
+        "body": [
+            "wire $1;"
+        ],
+        "description": "wire wire_name;"
+    },
+    
+    "wirearray": {
+        "prefix": "wirea",
+        "body": [
+            "wire [$1:$2] $3;"
+        ],
+        "description": "wire [N:0] wire_name;"
+    },
+
+	"packed":{
+		"prefix":"packed",
+		"body":"packed"
+	},
+
+	"this":{
+		"prefix": "this",
+		"body": "this"
+	},
+
+	"array":{
+		"prefix":"array",
+		"body":"[${1:8}:${2:0}]$0",
+		"description":"insert [x:y]"
+	},
+
+	"typedef struct packed":{
+		"prefix":"typedefstructpacked",
+		"body":[
+			"typedef struct packed {",
+			"    $0",
+			"} ${1:struct_name};"
+		],
+		"description":"typedef struct packed { ... } name"
+	},
+
+	"class":{
+		"prefix":"class",
+		"body":[
+			"class ${1:className};",
+			"\tfunction new();",
+			"        $0",
+			"\tendfunction //new()",
+			"endclass //${1}"
+		],
+		"description":"class name; ... endclass"
+	},
+
+	"class extends":{
+		"prefix":"classextends",
+		"body":[
+			"class ${1:className} extends ${2:superClass};",
+			"\tfunction new();",
+			"        $0",
+			"\tendfunction //new()",
+			"endclass //${1} extends ${2}"
+		],
+		"description":"class name extends super; ... endclass"
+	},
+
+	"task":{
+		"prefix":"task",
+		"body":[
+			"task ${1:automatic} ${2:taskName}(${3:arguments});",
+			"    $0",
+			"endtask //${1}"
+		],
+		"description":"task name; ... endtask"
+	},
+
+	"interface":{
+		"prefix":"interface",
+		"body":[
+			"interface ${1:interfacename};",
+			"    $0",
+			"endinterface //${1}"
+		],
+		"description":"interface name; ... endinterface"
+	},
+
+	"display":{
+		"prefix":"$display",
+		"body":[
+			"$$display(\"${1}\"$2);$0"
+		],
+		"description":"$display(\"...\", params...)"
+	},
+
+	"set Module":{
+		"prefix":"setmodule",
+		"body":[
+			"${1:mod_name} ${2:instance_name} (${3:.*}$0);"
+		],
+		"description":"set module, mod i0 (.*);"
+	},
+
+	"typedef enum":{
+		"prefix":"typedefenum",
+		"body":[
+			"typedef enum ${1:data_type} { $0 } ${2:name};"
+		],
+		"description":"typedef enum (data_type) { ... } name"
+	},
+
+	"enum":{
+		"prefix":"enum",
+		"body":[
+			"enum ${1:data_type} { $0 } ${2:name}"
+		],
+		"description":"enum (data_type) { ... } name"
+	},
+
+	"queue":{
+		"prefix":"queue",
+		"body":"${1:data_type} ${2:queue_name}[$];",
+		"description":"insert queue."
+	},
+
+	"mailbox":{
+		"prefix":"mailbox",
+		"body":[
+			"mailbox mbx",
+			"${1:mbx = new();}"
+		],
+		"description":"insert mailbox instance"
+	},
+
+	"Associative array":{
+		"prefix":"AA",
+		"body":"${1:data_type} ${2:name}[${3:index_type}];$0",
+		"description":"insert Associative array(AA)."
+	},
+
+	"assert":{
+		"prefix": "assert",
+		"body": [
+			"assert (${1:condition}) ${2}",
+			"else   ${3:error_process}"
+		],
+		"description": "insert assert() ... else ..."
+	},
+
+	"fork-join":{
+		"prefix": "forkjoin",
+		"body": [
+			"fork",
+			"    $0",
+			"join"
+		],
+		"description": "fork ... join"
+	},
+
+	"forever":{
+		"prefix": "forever",
+		"body": [
+			"forever begin",
+			"    $0",
+			"end"
+		],
+		"description": "forever begin ... end"
+	},
+
+    "write":{
+		"prefix": "$write",
+		"body": [
+			"\\$write($1)"
+		],
+		"description": ""
+	},
+
+    "clog2":{
+		"prefix": "$clog2",
+		"body": [
+			"\\$clog2($1)"
+		],
+		"description": ""
+	},
+
+    "signed":{
+		"prefix": "$signed",
+		"body": [
+			"\\$signed($1)"
+		],
+		"description": ""
+	},
+
+    "unsigned":{
+		"prefix": "$unsigned",
+		"body": [
+			"\\$unsigned($1)"
+		],
+		"description": ""
+	},
+
+    "random" : {
+		"prefix": "$random",
+		"body": [
+			"\\$random($1)"
+		],
+		"description": ""
+	},
+
+    "wavedrom comment": {
+        "prefix" : "wavedrom",
+        "body": [
+            "/* @wavedrom",
+            "{",
+            "    $1",
+            "}",
+            "*/"
+        ]
+    }
+}

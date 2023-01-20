@@ -1,0 +1,196 @@
+{
+    "name": "digital-ide",
+    "displayName": "digital-ide",
+    "description": "all in one vscode plugin for Verilog/VHDL development",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.72.0"
+    },
+    "main": "./out/extension.js",
+    "categories": [
+        "Extension Packs",
+        "Programming Languages",
+        "Snippets"
+    ],
+    "activationEvents": [
+        "onLanguage:verilog",
+        "onLanguage:vhdl",
+        "onLanguage:systemverilog",
+        "onCommand:TOOL.generate.property",
+        "workspaceContains:.vscode/property.json"
+    ],
+    "contributes": {
+        "commands": [
+            {
+                "command": "digital-ide.helloWorld",
+                "title": "Hello World"
+            }
+        ],
+        "languages": [
+			{
+				"id": "tcl",
+				"aliases": [
+					"TCL",
+					"Xilinx Constraints File",
+					"Synopsis Constraints File"
+				],
+				"extensions": [
+					".tcl",
+					".sdc",
+					".xdc",
+					".fdc"
+				],
+				"configuration": "./config/tcl.configuration.json"
+			},
+			{
+				"id": "bd",
+				"extensions": [
+					".bd"
+				]
+			},
+			{
+				"id": "vhdl",
+				"aliases": [
+					"VHDL",
+					"vhdl"
+				],
+				"extensions": [
+					".vhd",
+					".vhdl",
+					".vho",
+					".vht"
+				],
+				"configuration": "./config/vhdl.configuration.json"
+			},
+			{
+				"id": "verilog",
+				"aliases": [
+					"Verilog",
+					"verilog"
+				],
+				"extensions": [
+					".v",
+					".V",
+					".vh",
+					".vl"
+				],
+				"configuration": "./config/verilog.configuration.json"
+			},
+			{
+				"id": "systemverilog",
+				"aliases": [
+					"System Verilog",
+					"systemverilog"
+				],
+				"extensions": [
+					".sv",
+					".SV"
+				],
+				"configuration": "./config/systemverilog.configuration.json"
+			},
+			{
+				"id": "arm",
+				"aliases": [
+					"ARM",
+					"arm"
+				],
+				"extensions": [
+					".s",
+					".S",
+					".asm",
+					".sx"
+				],
+				"configuration": "./config/arm.configuration.json"
+			},
+			{
+				"id": "linkerscript",
+				"aliases": [
+					"LinkerScript",
+					"linkerscript"
+				],
+				"extensions": [
+					".ld",
+					".dld"
+				],
+				"configuration": "./config/link.configuration.json"
+			}
+		],
+		"jsonValidation": [
+			{
+				"fileMatch": "property.json",
+				"url": "./validation/property-schema.json"
+			}
+		],
+		"grammars": [
+			{
+				"language": "linkerscript",
+				"scopeName": "source.ld",
+				"path": "./syntaxes/link.json"
+			},
+			{
+				"language": "arm",
+				"scopeName": "source.arm",
+				"path": "./syntaxes/arm.json"
+			},
+			{
+				"language": "tcl",
+				"scopeName": "source.tcl",
+				"path": "./syntaxes/tcl.json"
+			},
+			{
+				"language": "vhdl",
+				"scopeName": "source.vhdl",
+				"path": "./syntaxes/vhdl.json"
+			},
+			{
+				"language": "verilog",
+				"scopeName": "source.verilog",
+				"path": "./syntaxes/verilog.json"
+			},
+			{
+				"language": "systemverilog",
+				"scopeName": "source.systemverilog",
+				"path": "./syntaxes/systemverilog.json"
+			}
+		],
+		"snippets": [
+			{
+				"language": "tcl",
+				"path": "snippets/tcl.json"
+			},
+			{
+				"language": "vhdl",
+				"path": "snippets/vhdl.json"
+			},
+			{
+				"language": "verilog",
+				"path": "snippets/svlog.json"
+			},
+			{
+				"language": "systemverilog",
+				"path": "snippets/svlog.json"
+			}
+		]
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "pretest": "npm run compile && npm run lint",
+        "lint": "eslint src --ext ts",
+        "test": "node ./out/test/runTest.js"
+    },
+    "devDependencies": {
+        "@types/vscode": "^1.74.0",
+        "@types/glob": "^8.0.0",
+        "@types/mocha": "^10.0.0",
+        "@types/node": "16.x",
+        "@typescript-eslint/eslint-plugin": "^5.42.0",
+        "@typescript-eslint/parser": "^5.42.0",
+        "eslint": "^8.26.0",
+        "glob": "^8.0.3",
+        "mocha": "^10.1.0",
+        "typescript": "^4.8.4",
+        "@vscode/test-electron": "^2.2.0"
+    }
+}

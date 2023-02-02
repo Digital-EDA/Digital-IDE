@@ -2,7 +2,7 @@
     "name": "digital-ide",
     "displayName": "digital-ide",
     "description": "all in one vscode plugin for Verilog/VHDL development",
-    "version": "0.0.1",
+    "version": "0.3.0",
     "engines": {
         "vscode": "^1.72.0"
     },
@@ -20,6 +20,17 @@
         "workspaceContains:.vscode/property.json"
     ],
     "contributes": {
+        "configuration": {
+            "title": "Digital-IDE",
+            "properties": {
+                "lib.custom.path": {
+                    "scope": "window",
+                    "type": "string",
+                    "default": "",
+                    "description": "path of the dictionary of \"custom\" in library"
+                }
+            }
+        },
         "commands": [
             {
                 "command": "digital-ide.helloWorld",
@@ -118,7 +129,7 @@
 		"jsonValidation": [
 			{
 				"fileMatch": "property.json",
-				"url": "./validation/property-schema.json"
+				"url": "./project/property-schema.json"
 			}
 		],
 		"grammars": [

@@ -3,14 +3,14 @@
 	"description": "A property file for project of DIDE",
 	"type": "object",
 	"properties": {
-		"TOOL_CHAIN": {
+		"toolChain": {
 			"type": "string",
 			"description": "The tool chain you need",
 			"enum": [
 				"xilinx"
 			]
 		},
-		"PRJ_NAME": {
+		"prjName": {
 			"type": "object",
 			"default": {
 				"PL": "template"
@@ -28,13 +28,13 @@
 				}
 			}
 		},
-		"ARCH": {
+		"arch": {
 			"type": "object",
 			"properties": {
-				"PRJ_Path": {
+				"prjPath": {
 					"type": "string"
 				},
-				"Hardware": {
+				"hardware": {
 					"type": "object",
 					"properties": {
 						"src": {
@@ -48,7 +48,7 @@
 						}
 					}
 				},
-				"Software": {
+				"software": {
 					"type": "object",
 					"properties": {
 						"src": {
@@ -71,7 +71,7 @@
 						"remote"
 					]
 				},
-				"Hardware": {
+				"hardware": {
 					"type": "object",
 					"properties": {
 						"common": {
@@ -87,13 +87,7 @@
 		"IP_REPO": {
 			"type": "array"
 		},
-		"INSIDE_BOOT_TYPE": {
-			"type": "string",
-			"enum": [
-				"microphase"
-			]
-		},
-		"SOC": {
+		"soc": {
 			"type": "object",
 			"default": {
 				"core": "none"
@@ -185,7 +179,7 @@
 				]
 			}
 		},
-		"enableShowlog": {
+		"enableShowLog": {
 			"type": "boolean",
 			"description": "Whether to display logs during compilation",
 			"default": false,
@@ -194,7 +188,7 @@
 				false
 			]
 		},
-		"Device": {
+		"device": {
 			"type": "string",
 			"description": "The device type",
 			"enum": [
@@ -208,8 +202,8 @@
 		}
 	},
 	"required": [
-		"TOOL_CHAIN",
-		"SOC",
-		"Device"
+		"toolChain",
+		"soc",
+		"device"
 	]
 }

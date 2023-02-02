@@ -772,9 +772,9 @@
 	},
 
 	"display":{
-		"prefix":"$display",
+		"prefix":"display",
 		"body":[
-			"$$display(\"${1}\"$2);$0"
+			"\\$display($0);"
 		],
 		"description":"$display(\"...\", params...)"
 	},

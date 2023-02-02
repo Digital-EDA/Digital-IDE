@@ -2,7 +2,7 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const HDLFile = require('./src/HDLfilesys/operation/files');
-const HDLPath = require('./src/HDLfilesys/operation/path');
+const hdlPath = require('./src/HDLfilesys/operation/path');
 
 const PACKAGE_PATH = './package.json';
 const SAVE_FOLDER = 'dist';
@@ -37,8 +37,8 @@ execSync('code --uninstall-extension sterben.digital-ide');
 const vsix = findVsix();
 const targetPath = path.join(SAVE_FOLDER, vsix);
 HDLFile.moveFile(vsix, targetPath, true);
-HDLPath.deleteFolder(WEBPACK_OUT_FOLDER);
+hdlPath.deleteFolder(WEBPACK_OUT_FOLDER);
 
-const vsixPath = HDLPath.join(SAVE_FOLDER, vsix);
+const vsixPath = hdlPath.join(SAVE_FOLDER, vsix);
 // install new one
 execSync('code --install-extension ' + vsixPath);

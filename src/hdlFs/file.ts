@@ -74,15 +74,14 @@ function isHDLFile(path: AbsPath): boolean {
 }
 
 
-function getHDLFiles(path: AbsPath, ignores?: AbsPath[]) {
-    return pickFileRecursive(path, ignores, (filePath) => {
-        return isHDLFile(filePath);
-    });
+function getHDLFiles(path: AbsPath | AbsPath[] | Set<AbsPath>, ignores?: AbsPath[]) {
+    return pickFileRecursive(path, ignores, filePath => isHDLFile(filePath));
 }
 
 
-function pickFileRecursive(path: AbsPath | AbsPath[], ignores?: AbsPath[], condition?: (filePath: string) => boolean | undefined | void): AbsPath[] {
-    if (path instanceof Array) {
+function pickFileRecursive(path: AbsPath | AbsPath[] | Set<AbsPath>, ignores?: AbsPath[], condition?: (filePath: string) => boolean | undefined | void): AbsPath[] {
+    if ((path instanceof Array) ||
+        (path instanceof Set)) {
         const hdlFiles: AbsPath[] = [];
         path.forEach(p => hdlFiles.push(...pickFileRecursive(p)));
         return hdlFiles;

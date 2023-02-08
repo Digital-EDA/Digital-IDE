@@ -13,7 +13,7 @@ import { XilinxIP } from '../../global/enum';
 import { MainOutput } from '../../global/outputChannel';
 
 interface XilinxCustom {
-    ip_repo: AbsPath, 
+    ipRepo: AbsPath, 
     bdRepo: AbsPath
 };
 
@@ -49,88 +49,77 @@ interface BootInfo {
  * xilinx operation under PL
  */
 class XilinxOperation {
-    public setting: vscode.WorkspaceConfiguration;
-    public xipRepo: XilinxIP[];
-    public xipPath: AbsPath;
-    public xbdPath: AbsPath;
-    public xilinxPath: AbsPath;
-    public prjPath: AbsPath;
-    public srcPath: AbsPath;
-    public simPath: AbsPath;
-    public datPath: AbsPath;
-    public softSrc: AbsPath;
-    public HWPath: AbsPath;
-    public extensionPath: AbsPath;
-    public prjConfig: PrjInfo;
+    public get xipRepo(): XilinxIP[] {
+        return opeParam.prjInfo.IP_REPO; 
+    }
 
-    public custom: XilinxCustom;
-    public topMod: TopMod;
-    public prjInfo: PLPrjInfo;
+    public get xipPath(): AbsPath {
+        return hdlPath.join(opeParam.extensionPath, 'IP_repo');
+    }
 
-    constructor() {
-        this.setting  = vscode.workspace.getConfiguration();
+    public get xbdPath(): AbsPath {
+        return hdlPath.join(opeParam.extensionPath, 'lib', 'xilinx', 'bd');
+    }
 
-        this.xipRepo = opeParam.prjInfo.IP_REPO;
-        this.xipPath = hdlPath.join(opeParam.extensionPath, 'IP_repo');
-        this.xbdPath = hdlPath.join(opeParam.extensionPath, 'lib', 'xilinx', 'bd');
-        this.xilinxPath = hdlPath.join(opeParam.extensionPath, 'resources', 'script', 'xilinx');
-        
-        this.prjPath = opeParam.prjInfo.arch.prjPath;
-        this.srcPath = opeParam.prjInfo.arch.hardware.src;
-        this.simPath = opeParam.prjInfo.arch.hardware.sim;
-        this.datPath = opeParam.prjInfo.arch.hardware.data;
+    public get xilinxPath(): AbsPath {
+        return hdlPath.join(opeParam.extensionPath, 'resources', 'script', 'xilinx');
+    }
 
-        this.softSrc = opeParam.prjInfo.arch.software.src;
-        this.HWPath = fspath.dirname(this.srcPath);
-        this.extensionPath  = opeParam.extensionPath;
-        this.prjConfig = opeParam.prjInfo;
+    public get prjPath(): AbsPath {
+        return opeParam.prjInfo.arch.prjPath;
+    }
 
-        this.custom = {
-            ip_repo : this.setting.get('PRJ.xilinx.IP.repo.path', ''),
-            bdRepo : this.setting.get('PRJ.xilinx.BD.repo.path', ''),
+    public get srcPath(): AbsPath {
+        return opeParam.prjInfo.arch.hardware.src;
+    }
+
+    public get simPath(): AbsPath {
+        return opeParam.prjInfo.arch.hardware.sim;
+    }
+
+    public get datPath(): AbsPath {
+        return opeParam.prjInfo.arch.hardware.data;
+    }
+
+    public get softSrc(): AbsPath {
+        return opeParam.prjInfo.arch.software.src;
+    }
+
+    public get HWPath(): AbsPath {
+        return fspath.dirname(this.srcPath);
+    }
+
+    public get extensionPath(): AbsPath {
+        return opeParam.extensionPath;
+    }
+
+    public get prjConfig(): PrjInfo {
+        return opeParam.prjInfo;
+    }
+
+    public get custom(): XilinxCustom {
+        return {
+            ipRepo: vscode.workspace.getConfiguration().get('PRJ.xilinx.IP.repo.path', ''),
+            bdRepo: vscode.workspace.getConfiguration().get('PRJ.xilinx.BD.repo.path', '')
         };
+    }
+    
 
-        this.topMod = {
+    public get topMod(): TopMod {
+        return {
             src : opeParam.firstSrcTopModule.name,
             sim : opeParam.firstSimTopModule.name,
         };
+    }
 
-        this.prjInfo = {
+    public get prjInfo(): PLPrjInfo {
+        return {
             path : hdlPath.join(this.prjPath, 'xilinx'),
             name : opeParam.prjInfo.prjName.PL,
             device : opeParam.prjInfo.device
         };
-
-        const _this = this;
-        vscode.workspace.onDidChangeConfiguration(e => _this.getConfig());
     }
 
-    getConfig() {
-        this.xipRepo = opeParam.prjInfo.IP_REPO;
-        this.xipPath = hdlPath.join(opeParam.extensionPath, 'IP_repo');
-        this.xbdPath = hdlPath.join(opeParam.extensionPath, 'lib', 'xilinx', 'bd');
-        this.xilinxPath = hdlPath.join(opeParam.extensionPath, 'resources', 'script', 'xilinx');
-        
-        this.prjPath = opeParam.prjInfo.arch.prjPath;
-        this.srcPath = opeParam.prjInfo.arch.hardware.src;
-        this.simPath = opeParam.prjInfo.arch.hardware.sim;
-        this.datPath = opeParam.prjInfo.arch.hardware.data;
-
-        this.softSrc = opeParam.prjInfo.arch.software.src;
-        this.HWPath = fspath.dirname(this.srcPath);
-        this.extensionPath  = opeParam.extensionPath;
-        this.prjConfig = opeParam.prjInfo;
-
-        this.custom = {
-            ip_repo : this.setting.get('PRJ.xilinx.IP.repo.path', ''),
-            bdRepo : this.setting.get('PRJ.xilinx.BD.repo.path', ''),
-        };
-
-        this.topMod = {
-            src : opeParam.firstSrcTopModule.name,
-            sim : opeParam.firstSimTopModule.name,
-        };
-    }
 
     /**
      * xilinx下的launch运行，打开存在的工程或者再没有工程时进行新建
@@ -196,8 +185,8 @@ class XilinxOperation {
         // 导入 IP_repo_paths
         scripts.push(`set xip_repo_paths {}`);
 
-        if (fs.existsSync(this.custom.ip_repo)) {
-            scripts.push(`lappend xip_repo_paths ${this.custom.ip_repo}`);
+        if (fs.existsSync(this.custom.ipRepo)) {
+            scripts.push(`lappend xip_repo_paths ${this.custom.ipRepo}`);
         }
 
         this.xipRepo.forEach(

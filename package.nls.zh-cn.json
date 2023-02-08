@@ -1,0 +1,4 @@
+{
+    "digital-ide.property-json.generate.title": "生成 property.json 配置文件",
+    "digital-ide.property-json.overwrite.title": "修改默认的 property.json 模板文件"
+}

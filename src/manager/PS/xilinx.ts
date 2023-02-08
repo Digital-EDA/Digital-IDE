@@ -26,9 +26,8 @@ interface PSConfig {
  * @descriptionCn xilinx工具链下PS端的操作类
  */
 class XilinxOperation {
-    config: XilinxOperationConfig;
-    constructor() {
-        this.config = {
+    public get config(): XilinxOperationConfig {
+        return {
             path : hdlPath.join(opeParam.extensionPath, 'resources', 'script', 'xilinx', 'soft'),
             hw : "SDK_Platform",
             bsp: "BSP_package",
@@ -41,35 +40,9 @@ class XilinxOperation {
                 os: "standalone"
             }
         };
-    }
-
-    getConfig() {
-        this.config = {
-            path : hdlPath.join(opeParam.extensionPath, 'resources', 'script', 'xilinx', 'soft'),
-            hw : "SDK_Platform",
-            bsp: "BSP_package",
-            dat: opeParam.prjInfo.arch.software.data,
-            src: opeParam.prjInfo.arch.software.src,
-            soc: {
-                core: "ps7_cortexa9_0",
-                bd: "template",
-                app: "Hello World",
-                os: "standalone"
-            }
-        };
-
-        if (hdlFile.isHasAttr(opeParam.prjInfo, "soc")) {
-            this.config.soc = opeParam.prjInfo.soc;
-        }
-
-        if (hdlFile.isHasAttr(opeParam.prjInfo, "prjName.PS")) {
-            this.config.soc.bd = opeParam.prjInfo.prjName.PS;
-        }
     }
 
     launch(config: PSConfig) {
-        this.getConfig();
-
         const hdfs = hdlFile.pickFileRecursive(this.config.dat, [], 
             p => p.endsWith('.hdf'));
 
@@ -110,9 +83,7 @@ file delete ${scriptPath} -force\n`;
         config.terminal?.sendText(`${config.path} ${scriptPath}`);
     }
 
-    build(config: PSConfig) {
-        this.getConfig();
-        
+    build(config: PSConfig) {        
         const scriptPath = `${this.config.path}/build.tcl`;
         const script = `
 setws ${this.config.src}
@@ -124,9 +95,7 @@ file delete ${scriptPath} -force\n`;
         config.terminal?.sendText(`${config.path} ${scriptPath}`);
     }
 
-    program(config: PSConfig) {
-        this.getConfig();
-        
+    program(config: PSConfig) {        
         const len = this.config.soc.core.length;
         const index = this.config.soc.core.slice(len-1, len);
         const scriptPath = `${this.config.path}/program.tcl`;

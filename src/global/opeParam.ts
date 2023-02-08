@@ -1,7 +1,7 @@
 import * as assert from 'assert';
 import * as fs from 'fs';
 
-import { Arch, PrjInfo, RawPrjInfo, PrjInfoDefaults } from './prjInfo';
+import { Arch, PrjInfo, RawPrjInfo, resolve, toSlash } from './prjInfo';
 
 type AbsPath = string;
 type RelPath = string;
@@ -124,6 +124,22 @@ class OpeParam {
 
     public mergePrjInfo(rawPrjInfo: RawPrjInfo) {
         this.prjInfo.merge(rawPrjInfo);
+    }
+
+    /**
+     * return the absolute path based on workspacePath
+     * @param relPath 
+     */
+    public resolvePathWorkspace(relPath: RelPath): AbsPath {
+        return resolve(this._workspacePath, relPath);
+    }
+
+    /**
+     * return the absolute path based on extensionPath
+     * @param relPath 
+     */
+    public resolvePathExtension(relPath: RelPath): AbsPath {
+        return resolve(this._extensionPath, relPath);
     }
 };
 

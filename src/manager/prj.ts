@@ -3,17 +3,12 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 
 import { AbsPath, opeParam } from '../global';
+import { PathSet } from '../global/util';
 import { RawPrjInfo } from '../global/prjInfo';
-import { ToolChainType } from '../global/enum'; 
-
-import { hdlFile, hdlDir, hdlPath } from '../hdlFs';
+import { hdlFile, hdlPath } from '../hdlFs';
 
 class PrjManage {
-    setting: vscode.WorkspaceConfiguration;
-
-    constructor() {
-        this.setting = vscode.workspace.getConfiguration();
-
+    constructor() {        
         vscode.commands.registerCommand('digital-ide.property-json.generate', 
                                         this.generatePropertyJson);
         vscode.commands.registerCommand('digital-ide.property-json.overwrite', 
@@ -31,7 +26,6 @@ class PrjManage {
     }
 
     // overwrite content in current property.json to property-init.json
-    // TODO test me :D
     private async overwritePropertyJson() {
         const options = {
             preview: false,
@@ -77,6 +71,26 @@ class PrjManage {
             const rawPrjInfo = hdlFile.readJSON(propertyJsonPath) as RawPrjInfo;
             opeParam.mergePrjInfo(rawPrjInfo);
         }
+    }
+
+    public getPrjHardwareFiles(): AbsPath[] {
+        const searchPathSet = new PathSet();
+        const hardwareInfo = opeParam.prjInfo.arch.hardware;
+
+        // TODO : make something like .gitignore
+
+        // search src
+        searchPathSet.checkAdd(hardwareInfo.src);
+
+        // search sim
+        searchPathSet.checkAdd(hardwareInfo.sim);
+        
+        const searchPaths = searchPathSet.files;
+        return hdlFile.getHDLFiles(searchPaths, []);
+    }
+
+    public initialise() {
+        
     }
 
 }

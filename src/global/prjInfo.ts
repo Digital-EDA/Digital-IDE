@@ -7,6 +7,7 @@ import * as fspath from 'path';
 import { ToolChainType, LibraryState, XilinxIP,
          validToolChainType, validXilinxIP, validLibraryState } from './enum';
 import { PrjInfoSchema } from './propertySchema';
+import assert = require('assert');
 
 type AbsPath = string;
 type RelPath = string;
@@ -101,34 +102,43 @@ interface RawPrjInfo extends RawPrjInfoMeta {
 
 function toSlash(path: Path): Path {
     return path.replace(/\\/g,"\/");
-} 
+}
+
+function resolve(...paths: Path[]): AbsPath {
+    const absPath = fspath.resolve(...paths);
+    return toSlash(absPath);
+}
+
+function join(...paths: string[]): AbsPath {
+    const joinedPath = fspath.join(...paths);
+    return toSlash(joinedPath);
+}
+
 
 class PrjInfo implements PrjInfoMeta {
     private _extensionPath: AbsPath = '';
     private _workspacePath: AbsPath = '';
-    private _libCommonPath: AbsPath = '';
-    private _libCustomPath: AbsPath = '';
 
     // toolChain is the tool chain used in the project
     // which is supposed to support xilinx, intel, custom
     private _toolChain: ToolChainType = PrjInfoDefaults.toolChain;
 
     // project name, include pl and ps
-    private _prjName: PrjName = PrjInfoDefaults.prjName;
+    private readonly _prjName: PrjName = PrjInfoDefaults.prjName;
 
     private _IP_REPO: XilinxIP[] = PrjInfoDefaults.IP_REPO;
     
-    private _soc: Soc = PrjInfoDefaults.soc;
+    private readonly _soc: Soc = PrjInfoDefaults.soc;
 
     private _enableShowLog: boolean = PrjInfoDefaults.enableShowLog;
     
     private _device: string = PrjInfoDefaults.device;
 
     // structure of the project, including path of source of hardware design, testBench
-    private _arch: Arch = PrjInfoDefaults.arch;
+    private readonly _arch: Arch = PrjInfoDefaults.arch;
 
     // library to manage
-    private _library: Library = PrjInfoDefaults.library;
+    private readonly _library: Library = PrjInfoDefaults.library;
 
     public get toolChain(): ToolChainType {
         return this._toolChain;
@@ -166,7 +176,41 @@ class PrjInfo implements PrjInfoMeta {
         return 'microphase';
     }
 
-    // resolve path with workspacePath as root
+    /**
+     * replace token like ${workspace} in path
+     * @param path 
+     */
+    private replacePathToken(path: AbsPath): AbsPath {
+        const workspacePath = this._workspacePath;
+        assert(workspacePath);
+        this.setDefaultValue(this.prjName, 'PL', 'template');
+        this.setDefaultValue(this.prjName, 'PS', 'template');
+        const plname = this.prjName.PL;
+        const psname = this.prjName.PS;
+
+        // TODO : packaging the replacer
+        return path.replace(new RegExp('${workspace}', 'g'), workspacePath)
+                   .replace(new RegExp('${plname}', 'g'), plname)
+                   .replace(new RegExp('${psname}', 'g'), psname);
+    }
+
+    /**
+     * uniform a absolute path
+     * @param path 
+     */
+    public uniformisePath(path: AbsPath): AbsPath {
+        const slashPath = toSlash(path);
+        const replacedPath = this.replacePathToken(path);
+        return replacedPath;
+    }
+
+    /**
+     * resolve path with workspacePath as root
+     * @param path 
+     * @param check if true, check the existence of path
+     * @param root root of path, root and path will be joined
+     * @returns 
+     */
     private resolvePath(path: Path, check: boolean = false, root?: AbsPath): AbsPath | undefined {
         let uniformPath = '';
         if (fspath.isAbsolute(path)) {
@@ -177,6 +221,7 @@ class PrjInfo implements PrjInfoMeta {
         }
         
         uniformPath = toSlash(uniformPath);
+
 
         if (check) {
             if (fs.existsSync(uniformPath)) {
@@ -278,7 +323,29 @@ class PrjInfo implements PrjInfoMeta {
         }
     }
 
+
+    /**
+     * assign defaultValue to obj[attr] if boolean of obj[attr] is false or 'none'
+     * @param obj 
+     * @param attr 
+     * @param defaultValue 
+     */
+    private setDefaultValue<T extends string, K>(obj: Record<T, K>, 
+                                                 attr: T, 
+                                                 defaultValue: K) {
+        const value: K = obj[attr];
+        let isNull = !Boolean(value);
+        if (typeof value === 'string') {
+            isNull &&= value === 'none';
+        }
+        if (isNull) {
+            obj[attr] = defaultValue;
+        }
+    }
+
     public updateArch(arch?: Arch) {
+        const workspacePath = this._workspacePath;
+
         if (arch) {
             this.updatePathWisely(this.arch, 'prjPath', arch.prjPath);
             if (arch.hardware) {
@@ -291,7 +358,30 @@ class PrjInfo implements PrjInfoMeta {
                 this.updatePathWisely(this.arch.software, 'src', arch.software.src);
                 this.updatePathWisely(this.arch.software, 'data', arch.software.data);
             }
+        } else {
+            let hardwarePath: AbsPath = join(workspacePath, 'user');
+            let softwarePath: AbsPath = join(workspacePath, 'user', 'Software');
+            const socCore = this._soc.core;
+            if (socCore && socCore !== 'none') {
+                hardwarePath = join(hardwarePath, 'Hardware');
+            }
+            this.arch.prjPath = join(workspacePath, 'prj');
+            this.arch.hardware.src = join(hardwarePath, 'src');
+            this.arch.hardware.sim = join(hardwarePath, 'sim');
+            this.arch.hardware.data = join(hardwarePath, 'data');
+
+            this.arch.software.src = join(softwarePath, 'src');
+            this.arch.software.data = join(softwarePath, 'data');
         }
+
+
+        // if path is '', set as workspace
+        this.setDefaultValue(this.arch.hardware, 'src', workspacePath);
+        this.setDefaultValue(this.arch.hardware, 'sim', workspacePath);
+        this.setDefaultValue(this.arch.hardware, 'data', workspacePath);
+
+        this.setDefaultValue(this.arch.software, 'src', workspacePath);
+        this.setDefaultValue(this.arch.software, 'data', workspacePath);
     }
 
     public updateLibrary(library?: Library) {
@@ -306,8 +396,8 @@ class PrjInfo implements PrjInfoMeta {
             }
             if (library.hardware) {
                 // TODO : finish this when you can require root of common and custom
-                const commonPath = this._libCommonPath;
-                const customPath = this._libCustomPath;
+                const commonPath = this.libCommonPath;
+                const customPath = this.libCustomPath;
                 this.updatePathWisely(this.library.hardware, 'common', library.hardware.common, commonPath);
                 this.updatePathWisely(this.library.hardware, 'custom', library.hardware.custom, customPath);
             }
@@ -339,9 +429,14 @@ class PrjInfo implements PrjInfoMeta {
     public initContextPath(extensionPath: AbsPath, workspacePath: AbsPath) {
         this._extensionPath = toSlash(extensionPath);
         this._workspacePath = toSlash(workspacePath);
+    }
 
-        this._libCommonPath = toSlash(fspath.join(extensionPath, 'lib', 'common'));
-        this._libCustomPath = vscode.workspace.getConfiguration().get('lib.custom.path', this._workspacePath);
+    public get libCommonPath(): AbsPath {
+        return join(this._extensionPath, 'lib', 'common');
+    }
+
+    public get libCustomPath(): AbsPath {
+        return vscode.workspace.getConfiguration().get('lib.custom.path', this._workspacePath);
     }
 };
 
@@ -355,5 +450,7 @@ export {
     Arch,
     Soc,
     Library,
-    RawPrjInfo
+    RawPrjInfo,
+    toSlash,
+    resolve
 };

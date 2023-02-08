@@ -16,7 +16,8 @@
         "onLanguage:verilog",
         "onLanguage:vhdl",
         "onLanguage:systemverilog",
-        "onCommand:TOOL.generate.property",
+        "onCommand:digital-ide.property-json.generate",
+        "onCommand:digital-ide.property-json.overwrite",
         "workspaceContains:.vscode/property.json"
     ],
     "contributes": {
@@ -33,155 +34,161 @@
         },
         "commands": [
             {
-                "command": "digital-ide.helloWorld",
-                "title": "Hello World"
+                "command": "digital-ide.property-json.generate",
+                "title": "%digital-ide.property-json.generate.title%",
+                "category": "Digital-IDE"
+            },
+            {
+                "command": "digital-ide.property-json.overwrite",
+                "title": "%digital-ide.property-json.overwrite.title%",
+                "category": "Digital-IDE"
             }
         ],
         "languages": [
-			{
-				"id": "tcl",
-				"aliases": [
-					"TCL",
-					"Xilinx Constraints File",
-					"Synopsis Constraints File"
-				],
-				"extensions": [
-					".tcl",
-					".sdc",
-					".xdc",
-					".fdc"
-				],
-				"configuration": "./config/tcl.configuration.json"
-			},
-			{
-				"id": "bd",
-				"extensions": [
-					".bd"
-				]
-			},
-			{
-				"id": "vhdl",
-				"aliases": [
-					"VHDL",
-					"vhdl"
-				],
-				"extensions": [
-					".vhd",
-					".vhdl",
-					".vho",
-					".vht"
-				],
-				"configuration": "./config/vhdl.configuration.json"
-			},
-			{
-				"id": "verilog",
-				"aliases": [
-					"Verilog",
-					"verilog"
-				],
-				"extensions": [
-					".v",
-					".V",
-					".vh",
-					".vl"
-				],
-				"configuration": "./config/verilog.configuration.json"
-			},
-			{
-				"id": "systemverilog",
-				"aliases": [
-					"System Verilog",
-					"systemverilog"
-				],
-				"extensions": [
-					".sv",
-					".SV"
-				],
-				"configuration": "./config/systemverilog.configuration.json"
-			},
-			{
-				"id": "arm",
-				"aliases": [
-					"ARM",
-					"arm"
-				],
-				"extensions": [
-					".s",
-					".S",
-					".asm",
-					".sx"
-				],
-				"configuration": "./config/arm.configuration.json"
-			},
-			{
-				"id": "linkerscript",
-				"aliases": [
-					"LinkerScript",
-					"linkerscript"
-				],
-				"extensions": [
-					".ld",
-					".dld"
-				],
-				"configuration": "./config/link.configuration.json"
-			}
-		],
-		"jsonValidation": [
-			{
-				"fileMatch": "property.json",
-				"url": "./project/property-schema.json"
-			}
-		],
-		"grammars": [
-			{
-				"language": "linkerscript",
-				"scopeName": "source.ld",
-				"path": "./syntaxes/link.json"
-			},
-			{
-				"language": "arm",
-				"scopeName": "source.arm",
-				"path": "./syntaxes/arm.json"
-			},
-			{
-				"language": "tcl",
-				"scopeName": "source.tcl",
-				"path": "./syntaxes/tcl.json"
-			},
-			{
-				"language": "vhdl",
-				"scopeName": "source.vhdl",
-				"path": "./syntaxes/vhdl.json"
-			},
-			{
-				"language": "verilog",
-				"scopeName": "source.verilog",
-				"path": "./syntaxes/verilog.json"
-			},
-			{
-				"language": "systemverilog",
-				"scopeName": "source.systemverilog",
-				"path": "./syntaxes/systemverilog.json"
-			}
-		],
-		"snippets": [
-			{
-				"language": "tcl",
-				"path": "snippets/tcl.json"
-			},
-			{
-				"language": "vhdl",
-				"path": "snippets/vhdl.json"
-			},
-			{
-				"language": "verilog",
-				"path": "snippets/svlog.json"
-			},
-			{
-				"language": "systemverilog",
-				"path": "snippets/svlog.json"
-			}
-		]
+            {
+                "id": "tcl",
+                "aliases": [
+                    "TCL",
+                    "Xilinx Constraints File",
+                    "Synopsis Constraints File"
+                ],
+                "extensions": [
+                    ".tcl",
+                    ".sdc",
+                    ".xdc",
+                    ".fdc"
+                ],
+                "configuration": "./config/tcl.configuration.json"
+            },
+            {
+                "id": "bd",
+                "extensions": [
+                    ".bd"
+                ]
+            },
+            {
+                "id": "vhdl",
+                "aliases": [
+                    "VHDL",
+                    "vhdl"
+                ],
+                "extensions": [
+                    ".vhd",
+                    ".vhdl",
+                    ".vho",
+                    ".vht"
+                ],
+                "configuration": "./config/vhdl.configuration.json"
+            },
+            {
+                "id": "verilog",
+                "aliases": [
+                    "Verilog",
+                    "verilog"
+                ],
+                "extensions": [
+                    ".v",
+                    ".V",
+                    ".vh",
+                    ".vl"
+                ],
+                "configuration": "./config/verilog.configuration.json"
+            },
+            {
+                "id": "systemverilog",
+                "aliases": [
+                    "System Verilog",
+                    "systemverilog"
+                ],
+                "extensions": [
+                    ".sv",
+                    ".SV"
+                ],
+                "configuration": "./config/systemverilog.configuration.json"
+            },
+            {
+                "id": "arm",
+                "aliases": [
+                    "ARM",
+                    "arm"
+                ],
+                "extensions": [
+                    ".s",
+                    ".S",
+                    ".asm",
+                    ".sx"
+                ],
+                "configuration": "./config/arm.configuration.json"
+            },
+            {
+                "id": "linkerscript",
+                "aliases": [
+                    "LinkerScript",
+                    "linkerscript"
+                ],
+                "extensions": [
+                    ".ld",
+                    ".dld"
+                ],
+                "configuration": "./config/link.configuration.json"
+            }
+        ],
+        "jsonValidation": [
+            {
+                "fileMatch": "property.json",
+                "url": "./project/property-schema.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "linkerscript",
+                "scopeName": "source.ld",
+                "path": "./syntaxes/link.json"
+            },
+            {
+                "language": "arm",
+                "scopeName": "source.arm",
+                "path": "./syntaxes/arm.json"
+            },
+            {
+                "language": "tcl",
+                "scopeName": "source.tcl",
+                "path": "./syntaxes/tcl.json"
+            },
+            {
+                "language": "vhdl",
+                "scopeName": "source.vhdl",
+                "path": "./syntaxes/vhdl.json"
+            },
+            {
+                "language": "verilog",
+                "scopeName": "source.verilog",
+                "path": "./syntaxes/verilog.json"
+            },
+            {
+                "language": "systemverilog",
+                "scopeName": "source.systemverilog",
+                "path": "./syntaxes/systemverilog.json"
+            }
+        ],
+        "snippets": [
+            {
+                "language": "tcl",
+                "path": "snippets/tcl.json"
+            },
+            {
+                "language": "vhdl",
+                "path": "snippets/vhdl.json"
+            },
+            {
+                "language": "verilog",
+                "path": "snippets/svlog.json"
+            },
+            {
+                "language": "systemverilog",
+                "path": "snippets/svlog.json"
+            }
+        ]
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",

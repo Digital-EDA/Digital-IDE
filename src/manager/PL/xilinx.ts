@@ -5,7 +5,7 @@ import * as fspath from 'path';
 import * as fs from 'fs';
 
 import { AbsPath, opeParam, PrjInfo } from '../../global';
-import { hdlParam } from '../../hdlParser/base/core';
+import { hdlParam } from '../../hdlParser/core';
 import { hdlFile, hdlDir, hdlPath } from '../../hdlFs';
 import { PropertySchema } from '../../global/propertySchema';
 

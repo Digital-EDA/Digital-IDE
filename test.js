@@ -2,7 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const sysvlog_build = require('./src/hdlParser/parser/parser');
+const sysvlog_build = require('./wasm/hdlParser/parser');
 
 const COMMON_PATH = path.resolve('./lib/common/Driver');
 

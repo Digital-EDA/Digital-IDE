@@ -100,6 +100,7 @@ interface RawPrjInfo extends RawPrjInfoMeta {
     library?: Library
 };
 
+
 function toSlash(path: Path): Path {
     return path.replace(/\\/g,"\/");
 }

@@ -1,0 +1,201 @@
+{
+    "content": {
+      "error": [],
+      "modules": [
+        {
+          "instances": [
+            {
+              "instparams": null,
+              "instports": {
+                "end": {
+                  "character": 10,
+                  "line": 21
+                },
+                "start": {
+                  "character": 4,
+                  "line": 18
+                }
+              },
+              "name": "dependence_1",
+              "range": {
+                "end": {
+                  "character": 0,
+                  "line": 22
+                },
+                "start": {
+                  "character": 13,
+                  "line": 17
+                }
+              },
+              "type": "dependence_1"
+            },
+            {
+              "instparams": null,
+              "instports": {
+                "end": {
+                  "character": 9,
+                  "line": 28
+                },
+                "start": {
+                  "character": 4,
+                  "line": 25
+                }
+              },
+              "name": "dependence_2",
+              "range": {
+                "end": {
+                  "character": 0,
+                  "line": 29
+                },
+                "start": {
+                  "character": 13,
+                  "line": 24
+                }
+              },
+              "type": "dependence_2"
+            }
+          ],
+          "name": "Main",
+          "params": [],
+          "ports": [
+            {
+              "name": "a",
+              "range": {
+                "end": {
+                  "character": 17,
+                  "line": 11
+                },
+                "start": {
+                  "character": 16,
+                  "line": 11
+                }
+              },
+              "type": "input",
+              "width": "[3:0]"
+            },
+            {
+              "name": "b",
+              "range": {
+                "end": {
+                  "character": 17,
+                  "line": 12
+                },
+                "start": {
+                  "character": 16,
+                  "line": 12
+                }
+              },
+              "type": "input",
+              "width": "[2:0]"
+            },
+            {
+              "name": "c",
+              "range": {
+                "end": {
+                  "character": 11,
+                  "line": 13
+                },
+                "start": {
+                  "character": 10,
+                  "line": 13
+                }
+              },
+              "type": "input",
+              "width": "Unknown"
+            },
+            {
+              "name": "Qus",
+              "range": {
+                "end": {
+                  "character": 14,
+                  "line": 14
+                },
+                "start": {
+                  "character": 11,
+                  "line": 14
+                }
+              },
+              "type": "output",
+              "width": "Unknown"
+            },
+            {
+              "name": "Qs",
+              "range": {
+                "end": {
+                  "character": 18,
+                  "line": 14
+                },
+                "start": {
+                  "character": 16,
+                  "line": 14
+                }
+              },
+              "type": "output",
+              "width": "Unknown"
+            },
+            {
+              "name": "`main_o",
+              "range": {
+                "end": {
+                  "character": 27,
+                  "line": 14
+                },
+                "start": {
+                  "character": 20,
+                  "line": 14
+                }
+              },
+              "type": "output",
+              "width": "Unknown"
+            }
+          ],
+          "range": {
+            "end": {
+              "character": 0,
+              "line": 31
+            },
+            "start": {
+              "character": 0,
+              "line": 10
+            }
+          }
+        }
+      ]
+    },
+    "languageId": "verilog",
+    "macro": {
+      "defines": [
+        {
+          "name": "main_o",
+          "range": {
+            "end": {
+              "character": 19,
+              "line": 9
+            },
+            "start": {
+              "character": 1,
+              "line": 9
+            }
+          },
+          "value": "out"
+        }
+      ],
+      "error": [],
+      "includes": [
+        {
+          "path": "child_1.v",
+          "range": {
+            "end": {
+              "character": 9,
+              "line": 8
+            },
+            "start": {
+              "character": 1,
+              "line": 8
+            }
+          }
+        }
+      ],
+      "invalid": []
+    }
+  }

@@ -1,0 +1,169 @@
+{
+    "content": {
+      "error": [],
+      "symbols": [
+        {
+          "name": "Main",
+          "range": {
+            "end": {
+              "character": 0,
+              "line": 31
+            },
+            "start": {
+              "character": 0,
+              "line": 10
+            }
+          },
+          "type": "module"
+        },
+        {
+          "name": "a",
+          "range": {
+            "end": {
+              "character": 17,
+              "line": 11
+            },
+            "start": {
+              "character": 16,
+              "line": 11
+            }
+          },
+          "type": "input"
+        },
+        {
+          "name": "b",
+          "range": {
+            "end": {
+              "character": 17,
+              "line": 12
+            },
+            "start": {
+              "character": 16,
+              "line": 12
+            }
+          },
+          "type": "input"
+        },
+        {
+          "name": "c",
+          "range": {
+            "end": {
+              "character": 11,
+              "line": 13
+            },
+            "start": {
+              "character": 10,
+              "line": 13
+            }
+          },
+          "type": "input"
+        },
+        {
+          "name": "Qus",
+          "range": {
+            "end": {
+              "character": 14,
+              "line": 14
+            },
+            "start": {
+              "character": 11,
+              "line": 14
+            }
+          },
+          "type": "output"
+        },
+        {
+          "name": "Qs",
+          "range": {
+            "end": {
+              "character": 18,
+              "line": 14
+            },
+            "start": {
+              "character": 16,
+              "line": 14
+            }
+          },
+          "type": "output"
+        },
+        {
+          "name": "`main_o",
+          "range": {
+            "end": {
+              "character": 27,
+              "line": 14
+            },
+            "start": {
+              "character": 20,
+              "line": 14
+            }
+          },
+          "type": "output"
+        },
+        {
+          "name": "dependence_1",
+          "range": {
+            "end": {
+              "character": 1,
+              "line": 22
+            },
+            "start": {
+              "character": 0,
+              "line": 17
+            }
+          },
+          "type": "dependence_1"
+        },
+        {
+          "name": "dependence_2",
+          "range": {
+            "end": {
+              "character": 1,
+              "line": 29
+            },
+            "start": {
+              "character": 0,
+              "line": 24
+            }
+          },
+          "type": "dependence_2"
+        }
+      ]
+    },
+    "languageId": "verilog",
+    "macro": {
+      "defines": [
+        {
+          "name": "main_o",
+          "range": {
+            "end": {
+              "character": 19,
+              "line": 9
+            },
+            "start": {
+              "character": 1,
+              "line": 9
+            }
+          },
+          "value": "out"
+        }
+      ],
+      "error": [],
+      "includes": [
+        {
+          "path": "child_1.v",
+          "range": {
+            "end": {
+              "character": 9,
+              "line": 8
+            },
+            "start": {
+              "character": 1,
+              "line": 8
+            }
+          }
+        }
+      ],
+      "invalid": []
+    }
+  }

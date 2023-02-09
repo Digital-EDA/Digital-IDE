@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
-import { AbsPath, RelPath } from '../../global';
+import { AbsPath, RelPath } from '../global';
 
 interface Position {
     // row/line of the cursor, index from 0
@@ -32,6 +32,11 @@ enum HdlFileType {
     RemoteLib = 'remote_lib' 
 };
 enum InstModPathStatus {Current, Include, Others, Unknown};
+enum SymbolType {
+    Module = 'module',
+    Input = 'input',
+    Output = 'output'
+};
 
 interface Error {
     severity: number
@@ -95,6 +100,13 @@ interface RawHdlModule {
     range: Range
 };
 
+
+interface RawSymbol {
+    name: string
+    type: SymbolType
+    range: Range
+};
+
 interface InstModPathSearchResult {
     path: AbsPath
     status: InstModPathStatus
@@ -123,5 +135,6 @@ export {
     RawHdlInstance,
     RawHdlModule,
     InstModPathSearchResult,
-    HdlDependence
+    HdlDependence,
+    RawSymbol
 };

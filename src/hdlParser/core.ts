@@ -1,8 +1,8 @@
-import { AbsPath } from '../../global';
-import { HdlLangID } from '../../global/enum';
+import { AbsPath } from '../global';
+import { HdlLangID } from '../global/enum';
 
 import * as common from './common';
-import { hdlFile, hdlPath } from '../../hdlFs';
+import { hdlFile, hdlPath } from '../hdlFs';
 
 class HdlParam {
     private readonly topModules : Set<HdlModule> = new Set<HdlModule>();

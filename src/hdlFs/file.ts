@@ -5,7 +5,7 @@ import { AbsPath, RelPath } from '../global';
 import { HdlLangID } from '../global/enum';
 import { verilogExts, vhdlExts, systemVerilogExts, hdlExts } from '../global/lang';
 import * as hdlPath from './path';
-import { HdlFileType } from '../hdlParser/base/common';
+import { HdlFileType } from '../hdlParser/common';
 import { opeParam } from '../global';
 
 /**
@@ -62,7 +62,7 @@ function isSystemVerilogFile(path: AbsPath): boolean {
         return false;
     }
     const ext = hdlPath.extname(path, false);
-    return systemVerilogExts.includes(path);
+    return systemVerilogExts.includes(ext);
 }
 
 function isHDLFile(path: AbsPath): boolean {
@@ -101,18 +101,12 @@ function pickFileRecursive(path: AbsPath | AbsPath[] | Set<AbsPath>, ignores?: A
                 if (subHdlFiles.length > 0) {
                     hdlFiles.push(...subHdlFiles);
                 }
-            } else if (
-                (condition && condition(filePath))
-                || (condition === undefined)
-            ) {
+            } else if (!condition || condition(filePath)) {
                 hdlFiles.push(filePath);
             }
         }
         return hdlFiles;
-    } else if (
-        (condition && condition(path))
-        || (condition === undefined)
-    ) {
+    } else if (!condition || condition(path)) {
         return [path];
     } else {
         return [];
@@ -344,6 +338,27 @@ function isHasValue(obj: any, attr: string, value: any): boolean{
     return true;
 }
 
+function* walk(path: AbsPath | RelPath, condition?: (filePath: AbsPath) => boolean): Generator<AbsPath> {
+    if (isFile(path)) {
+        if (!condition || condition(path)) {
+            yield path;
+        }
+    } else {
+        for (const file of fs.readdirSync(path)) {
+            const filePath = hdlPath.join(path, file);
+            if (isDir(filePath)) {
+                for (const targetPath of walk(filePath, condition)) {
+                    yield targetPath;
+                }
+            } else if (isFile(filePath)) {
+                if (!condition || condition(filePath)) {
+                    yield filePath;
+                }
+            }
+        }
+    }
+}
+
 export {
     isFile,
     isDir,
@@ -364,5 +379,6 @@ export {
     isHasValue,
     copyFile,
     removeFile,
-    moveFile
+    moveFile,
+    walk
 };

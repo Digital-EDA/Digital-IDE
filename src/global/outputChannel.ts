@@ -24,7 +24,7 @@ class Output {
         return this._ignoreTypes.includes(type);
     }
 
-    report(message: string, type: ReportType = ReportType.Debug) {
+    report(message: string | unknown, type: ReportType = ReportType.Info) {
         if (!this.skipMessage(type) && message) {
             this._output.show(true);
             this._output.appendLine('[' + type + '] ' + message);

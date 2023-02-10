@@ -29,6 +29,71 @@
                     "type": "string",
                     "default": "",
                     "description": "path of the dictionary of \"custom\" in library"
+                },
+                "function.doc.webview.backgroundImage": {
+                    "type": "string",
+                    "default": "",
+                    "description": "url of the background image"
+                },
+                "function.doc.pdf.scale": {
+                    "type": "number",
+                    "default": 1,
+                    "description": "scale of the exported pdf"
+                },
+                "function.doc.pdf.printBackground": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "whether print background"
+                },
+                "function.doc.pdf.landscape": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "whether export pdf as a landscape style"
+                },
+                "function.doc.pdf.format": {
+                    "type": "string",
+                    "default": "A4",
+                    "description": "format of pdf size"
+                },
+                "function.doc.pdf.displayHeaderFooter": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "display header and footer in the exported pdf"
+                },
+                "function.doc.pdf.browserPath": {
+                    "type": "string",
+                    "default": "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
+                    "description": "the absolute path of edge or chrome, we need browser to render pdf"
+                },
+                "function.doc.pdf.margin.top": {
+                    "type": "number",
+                    "default": 0.5,
+                    "description": "top margin of exported pdf, unit cm"
+                },
+                "function.doc.pdf.margin.right": {
+                    "type": "number",
+                    "default": 0.5,
+                    "description": "top margin of exported pdf, unit cm"
+                },
+                "function.doc.pdf.margin.bottom": {
+                    "type": "number",
+                    "default": 0.5,
+                    "description": "top margin of exported pdf, unit cm"
+                },
+                "function.doc.pdf.margin.left": {
+                    "type": "number",
+                    "default": 0.5,
+                    "description": "top margin of exported pdf, unit cm"
+                },
+                "function.doc.pdf.headerTemplate": {
+                    "type": "string",
+                    "default": "<div style=\"font-size: 9px; margin-left: 1cm;\"> <span class='title'></span></div> <div style=\"font-size: 9px; margin-left: auto; margin-right: 1cm; \"> <span class='date'></span></div>",
+                    "description": "html template of header, if displayHeaderFooter is set to false, this setting will be ignored"
+                },
+                "function.doc.pdf.footerTemplate": {
+                    "type": "string",
+                    "default": "<div style=\"font-size: 9px; margin-left: 1cm;\"> <span class='title'></span></div> <div style=\"font-size: 9px; margin-left: auto; margin-right: 1cm; \"> <span class='date'></span></div>",
+                    "description": "<div style=\"font-size: 9px; margin: 0 auto;\"> <span class='pageNumber'></span> / <span class='totalPages'></span></div>"
                 }
             }
         },
@@ -42,7 +107,59 @@
                 "command": "digital-ide.property-json.overwrite",
                 "title": "%digital-ide.property-json.overwrite.title%",
                 "category": "Digital-IDE"
+            },
+            {
+                "command": "digital-ide.hdlDoc.exportFile",
+                "title": "%digital-ide.hdlDoc.exportFile.title%",
+                "category": "Digital-IDE"
+            },
+            {
+                "command": "digital-ide.hdlDoc.exportProject",
+                "title": "%digital-ide.hdlDoc.exportProject.title%",
+                "category": "Digital-IDE"
+            },
+            {
+                "command": "digital-ide.hdlDoc.showWebview",
+                "title": "%digital-ide.hdlDoc.showWebview.title%",
+                "category": "Digital-IDE",
+                "icon": {
+                    "light": "images/svg/light/documentation.svg",
+                    "dark": "images/svg/dark/documentation.svg"
+                }
+            },
+            {
+                "command": "digital-ide.tool.instance",
+                "title": "%digital-ide.tool.instance.title%",
+                "category": "Digital-IDE"
+            },
+            {
+                "command": "digital-ide.tool.testbench",
+                "title": "%digital-ide.tool.testbench.title%",
+                "category": "Digital-IDE"
             }
+        ],
+        "menus": {
+            "editor/title": [
+                {
+                    "when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
+                    "command": "digital-ide.hdlDoc.showWebview",
+                    "group": "navigation@4"
+                }
+            ]
+        },
+        "keybindings": [
+            {
+				"command": "digital-ide.tool.instance",
+				"key": "alt+i",
+				"mac": "alt+i",
+				"when": "editorTextFocus"
+			},
+            {
+				"command": "digital-ide.tool.testbench",
+				"key": "alt+t",
+				"mac": "alt+t",
+				"when": "editorTextFocus"
+			}
         ],
         "languages": [
             {
@@ -188,7 +305,128 @@
                 "language": "systemverilog",
                 "path": "snippets/svlog.json"
             }
-        ]
+        ],
+        "icons": {
+            "instance-verilog": {
+                "description": "icon of verilog in TOOL.instance",
+                "default": {
+                    "fontPath": "./images/icons/iconfont.woff2",
+                    "fontCharacter": "\\e7a8"
+                }
+            },
+            "instance-vhdl": {
+                "description": "icon of verilog in TOOL.instance",
+                "default": {
+                    "fontPath": "./images/icons/iconfont.woff2",
+                    "fontCharacter": "\\e6b3"
+                }
+            },
+            "instance-port": {
+                "description": "port of verilog in TOOL.instance",
+                "default": {
+                    "fontPath": "./images/icons/iconfont.woff2",
+                    "fontCharacter": "\\e638"
+                }
+            },
+            "instance-param": {
+                "description": "param of verilog in TOOL.instance",
+                "default": {
+                    "fontPath": "./images/icons/iconfont.woff2",
+                    "fontCharacter": "\\e655"
+                }
+            },
+            "instance-module": {
+                "description": "module of verilog in TOOL.instance",
+                "default": {
+                    "fontPath": "./images/icons/iconfont.woff2",
+                    "fontCharacter": "\\e60b"
+                }
+            },
+            "instance-input": {
+                "description": "input",
+                "default": {
+                    "fontPath": "./images/icons/iconfont.woff2",
+                    "fontCharacter": "\\e908"
+                }
+            },
+            "instance-output": {
+                "description": "output",
+                "default": {
+                    "fontPath": "./images/icons/iconfont.woff2",
+                    "fontCharacter": "\\e7b0"
+                }
+            },
+            "instance-inout": {
+                "description": "inout",
+                "default": {
+                    "fontPath": "./images/icons/iconfont.woff2",
+                    "fontCharacter": "\\ea19"
+                }
+            },
+            "export-html": {
+                "description": "export html",
+                "default": {
+                    "fontPath": "./images/icons/iconfont.woff2",
+                    "fontCharacter": "\\e633"
+                }
+            },
+            "export-markdown": {
+                "description": "export markdown",
+                "default": {
+                    "fontPath": "./images/icons/iconfont.woff2",
+                    "fontCharacter": "\\ee68"
+                }
+            },
+            "export-pdf": {
+                "description": "export pdf",
+                "default": {
+                    "fontPath": "./images/icons/iconfont.woff2",
+                    "fontCharacter": "\\e684"
+                }
+            },
+            "libpick-folder": {
+                "description": "libpick folder",
+                "default": {
+                    "fontPath": "./images/icons/iconfont.woff2",
+                    "fontCharacter": "\\e600"
+                }
+            },
+            "libpick-verilog": {
+                "description": "libpick verilog",
+                "default": {
+                    "fontPath": "./images/icons/iconfont.woff2",
+                    "fontCharacter": "\\e7a8"
+                }
+            },
+            "libpick-vhdl": {
+                "description": "libpick vhdl",
+                "default": {
+                    "fontPath": "./images/icons/iconfont.woff2",
+                    "fontCharacter": "\\e6b3"
+                }
+            },
+            "libpick-common": {
+                "description": "libpick common",
+                "default": {
+                    "fontPath": "./images/icons/iconfont.woff2",
+                    "fontCharacter": "\\e622"
+                }
+            },
+            "libpick-custom": {
+                "description": "libpick custom",
+                "default": {
+                    "fontPath": "./images/icons/iconfont.woff2",
+                    "fontCharacter": "\\e623"
+                }
+            },
+            "libpick-unknown": {
+                "description": "libpick unknown",
+                "default": {
+                    "fontPath": "./images/icons/iconfont.woff2",
+                    "fontCharacter": "\\e62a"
+                }
+            }
+        }
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
@@ -199,16 +437,25 @@
         "test": "node ./out/test/runTest.js"
     },
     "devDependencies": {
-        "@types/vscode": "^1.74.0",
         "@types/glob": "^8.0.0",
         "@types/mocha": "^10.0.0",
         "@types/node": "16.x",
+        "@types/showdown": "^2.0.0",
+        "@types/vscode": "^1.74.0",
         "@typescript-eslint/eslint-plugin": "^5.42.0",
         "@typescript-eslint/parser": "^5.42.0",
+        "@vscode/test-electron": "^2.2.0",
         "eslint": "^8.26.0",
         "glob": "^8.0.3",
         "mocha": "^10.1.0",
-        "typescript": "^4.8.4",
-        "@vscode/test-electron": "^2.2.0"
+        "typescript": "^4.8.4"
+    },
+    "dependencies": {
+        "chokidar": "^3.5.3",
+        "puppeteer-core": "^19.4.1",
+        "showdown": "^2.1.0",
+        "state-machine-cat": "^9.2.5",
+        "temp": "^0.9.4",
+        "wavedrom": "^2.9.1"
     }
 }

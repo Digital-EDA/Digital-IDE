@@ -72,6 +72,7 @@ interface HdlModulePort {
     type: HdlModulePortType
     width: string
     range: Range
+    desc?: string
 };
 
 interface HdlModuleParam {
@@ -80,6 +81,7 @@ interface HdlModuleParam {
     type: string
     init: string
     range: Range
+    desc?: string
 };
 
 type InstRange = Range | null;

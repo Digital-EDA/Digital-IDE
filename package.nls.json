@@ -1,4 +1,9 @@
 {
     "digital-ide.property-json.generate.title": "generate property.json",
-    "digital-ide.property-json.overwrite.title": "overwrite property.json template"
+    "digital-ide.property-json.overwrite.title": "overwrite property.json template",
+    "digital-ide.hdlDoc.exportFile.title": "export the document of current file",
+    "digital-ide.hdlDoc.exportProject.title": "export the document of current project",
+    "digital-ide.hdlDoc.showWebview.title": "show the document of current file in a webview",
+    "digital-ide.tool.instance.title": "generate instance template from selected module",
+    "digital-ide.tool.testbench.title": "generate testbench template from current file"
 }

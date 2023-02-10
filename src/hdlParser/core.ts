@@ -1,8 +1,10 @@
 import { AbsPath } from '../global';
 import { HdlLangID } from '../global/enum';
+import { MainOutput, ReportType } from '../global/outputChannel';
 
 import * as common from './common';
 import { hdlFile, hdlPath } from '../hdlFs';
+import { HdlSymbol } from './util';
 
 class HdlParam {
     private readonly topModules : Set<HdlModule> = new Set<HdlModule>();
@@ -57,6 +59,12 @@ class HdlParam {
         return hdlFile.getHdlModule(name);
     }
 
+    public getAllHdlModules(): HdlModule[] {
+        const hdlModules: HdlModule[] = [];
+        this.modules.forEach(m => hdlModules.push(m));
+        return hdlModules;
+    }
+
     public addHdlModule(hdlModule: HdlModule) {
         this.modules.add(hdlModule);
     }
@@ -71,6 +79,30 @@ class HdlParam {
 
     public deleteTopModule(hdlModule: HdlModule) {
         this.topModules.delete(hdlModule);
+    }
+
+    public getAllTopModules(global :boolean = false): HdlModule[] {
+        const topModules: HdlModule[] = [];
+        if (global) {
+            this.topModules.forEach(m => topModules.push(m));
+        } else {
+            this.srcTopModules.forEach(m => topModules.push(m));
+            this.simTopModules.forEach(m => topModules.push(m));
+        }
+        return topModules;
+    }
+
+    public isTopModule(path: AbsPath, name: string, global = false): boolean {
+        const module = this.getHdlModule(path, name);
+        if (!module) {
+            return false;
+        }
+        if (global) {
+            return this.topModules.has(module);
+        } else {
+            const sourceTopModule = this.selectTopModuleSourceByFileType(module);
+            return sourceTopModule.has(module);
+        }
     }
 
     public selectTopModuleSourceByFileType(hdlModule: HdlModule): Set<HdlModule> {
@@ -147,6 +179,29 @@ class HdlParam {
 
     public deleteUnhandleInstance(inst: HdlInstance) {
         this.unhandleInstances.delete(inst);
+    }
+
+    public async initHdlFiles(hdlFiles: AbsPath[] | Generator<AbsPath>) {
+        for (const path of hdlFiles) {
+            // TODO : only support verilog now
+            const langID = hdlFile.getLanguageId(path);            
+            if (langID === HdlLangID.Verilog) {
+                const fast = await HdlSymbol.fast(path);                
+                if (fast) {
+                    new HdlFile(path,
+                                fast.languageId,
+                                fast.macro,
+                                fast.content.modules);
+                }
+            }
+        }
+    }
+
+    public async initialize(hdlFiles: AbsPath[] | Generator<AbsPath>) {
+        await this.initHdlFiles(hdlFiles);
+        for (const hdlFile of this.getAllHdlFiles()) {
+            hdlFile.makeInstance();
+        }
     }
     
 };
@@ -226,7 +281,7 @@ class HdlModule {
     range: common.Range;
     params: common.HdlModuleParam[];
     ports: common.HdlModulePort[];
-    private rawInstances: common.RawHdlInstance[];
+    private rawInstances: common.RawHdlInstance[] | undefined;
     private nameToInstances: Map<string, HdlInstance>;
     private unhandleInstances: Set<HdlInstance>;
     private globalRefers: Set<HdlInstance>;
@@ -272,6 +327,10 @@ class HdlModule {
         return this.file.path;
     }
 
+    public get languageId(): HdlLangID {
+        return this.file.languageId;
+    }
+
     public getInstance(name: string): HdlInstance | undefined {
         return this.nameToInstances.get(name);
     }
@@ -307,6 +366,19 @@ class HdlModule {
             this.nameToInstances.set(rawHdlInstance.name, hdlInstance);
         }
         return hdlInstance;
+    }
+
+    public makeNameToInstances() {
+        if (this.rawInstances) {
+            this.nameToInstances.clear();
+            for (const inst of this.rawInstances) {
+                this.createHdlInstance(inst);
+            }
+            this.rawInstances = undefined;
+        } else {
+            MainOutput.report('call makeNameToInstances but this.rawInstances is undefined', 
+                              ReportType.Warn);
+        }
     }
 
     public deleteInstanceByName(name: string) {
@@ -518,9 +590,17 @@ class HdlFile {
         }
     }
     
+    public makeInstance() {
+        for (const module of this.getAllHdlModules()) {
+            module.makeNameToInstances();
+        }
+    }
 }
 
 
 export {
-    hdlParam
+    hdlParam,
+    HdlModule,
+    HdlInstance,
+    hdlFile
 };

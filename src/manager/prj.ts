@@ -86,6 +86,7 @@ class PrjManage {
         searchPathSet.checkAdd(hardwareInfo.sim);
         
         const searchPaths = searchPathSet.files;
+        
         return hdlFile.getHDLFiles(searchPaths, []);
     }
 

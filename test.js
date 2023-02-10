@@ -1,20 +1,36 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 const fs = require('fs');
-const path = require('path');
+const fspath = require('path');
 
-const sysvlog_build = require('./wasm/hdlParser/parser');
+const { vlogFast } = require('./resources/hdlParser');
 
-const COMMON_PATH = path.resolve('./lib/common/Driver');
+const COMMON_PATH = fspath.resolve('./lib/common/Driver');
 
 const TEST_FILE = './parser_stuck.v';
 const TEST_FILE2 = './src/test/vlog/dependence_test/parent.v';
 const TEST_FILE3 = './src/test/vlog/formatter_test.v';
 
+
+function isFile(path) {
+    if (!fs.existsSync(path)) {
+        return false;
+    }
+    const state = fs.statSync(path);
+    if (state.isDirectory()) {
+        return false;
+    }
+    return true;
+}
+
+/**
+ * judge if the path represent a Dir
+ * @param path
+ * @returns
+ */
 function isDir(path) {
     if (!fs.existsSync(path)) {
         return false;
     }
-
     const state = fs.statSync(path);
     if (state.isDirectory()) {
         return true;
@@ -22,38 +38,38 @@ function isDir(path) {
     return false;
 }
 
-function getHDLFiles(path) {
-    if (isDir(path)) {
-        const hdlFiles = [];
+function* walk(path, condition) {
+    if (isFile(path)) {
+        if (!condition || condition(path)) {
+            yield path;
+        }
+    }
+    else {
         for (const file of fs.readdirSync(path)) {
-            const filePath = path + '/' + file;
+            const filePath = fspath.join(path, file);
             if (isDir(filePath)) {
-                const subHdlFiles = getHDLFiles(filePath);
-                if (subHdlFiles.length > 0) {
-                    hdlFiles.push(...subHdlFiles);
+                for (const targetPath of walk(filePath, condition)) {
+                    yield targetPath;
                 }
-            } else if (filePath.endsWith('.v')) {
-                hdlFiles.push(filePath);
+            }
+            else if (isFile(filePath)) {
+                if (!condition || condition(filePath)) {
+                    yield filePath;
+                }
             }
         }
-        return hdlFiles;
-    } else if (path.endsWith('.v')) {
-        return [path];
-    } else {
-        return [];
     }
 }
 
 (async() => {
-    const Module = await sysvlog_build();
-    console.log(Object.keys(Module).filter(name => name.startsWith('_') && !name.startsWith('__')));
-    const source = fs.readFileSync(TEST_FILE2, 'utf-8') + '\n';
-    Module.FS.writeFile('/sysvlog_build', source, { encoding: 'utf8' });    
-
-    const start = Date.now();
-
-    const fast = Module.ccall('vlog_fast', 'string', ['string'], ['/sysvlog_build']);
-    const costTime = (Date.now() - start) / 1000;
-    console.log(JSON.stringify(JSON.parse(fast), null, '  '));
-    console.log('cost time', costTime);
+    console.time('test');
+    for (const file of walk('./lib', f => f.endsWith('.v'))) {
+        console.log(file);
+        try {
+            await vlogFast(file);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+    console.timeEnd('test');
 })();

@@ -23,5 +23,9 @@ interface All {
     macro: Macro
 }
 
-export function vlogFast(path: AbsPath): Promise<Fast>;
-export function vlogAll(path: AbsPath): Promise<All>;
+export function vlogFast(path: AbsPath): Promise<Fast | undefined>;
+export function vlogAll(path: AbsPath): Promise<All | undefined>;
+export function vhdlFast(path: AbsPath): Promise<Fast | undefined>;
+export function vhdlAll(path: AbsPath): Promise<All | undefined>;
+export function svFast(path: AbsPath): Promise<Fast | undefined>;
+export function svAll(path: AbsPath): Promise<All | undefined>;

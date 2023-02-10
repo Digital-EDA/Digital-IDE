@@ -75,7 +75,8 @@ function isHDLFile(path: AbsPath): boolean {
 
 
 function getHDLFiles(path: AbsPath | AbsPath[] | Set<AbsPath>, ignores?: AbsPath[]) {
-    return pickFileRecursive(path, ignores, filePath => isHDLFile(filePath));
+    return pickFileRecursive(path, ignores, 
+        filePath => isHDLFile(filePath));
 }
 
 
@@ -83,7 +84,7 @@ function pickFileRecursive(path: AbsPath | AbsPath[] | Set<AbsPath>, ignores?: A
     if ((path instanceof Array) ||
         (path instanceof Set)) {
         const hdlFiles: AbsPath[] = [];
-        path.forEach(p => hdlFiles.push(...pickFileRecursive(p)));
+        path.forEach(p => hdlFiles.push(...pickFileRecursive(p, ignores, condition)));
         return hdlFiles;
     }
 
@@ -124,11 +125,11 @@ function getLanguageId(path: AbsPath | RelPath): HdlLangID {
         return HdlLangID.Unknown;
     }
     const ext = hdlPath.extname(path, false);
-    if (verilogExts.includes(path)) {
+    if (verilogExts.includes(ext)) {
         return HdlLangID.Verilog;
-    } else if (vhdlExts.includes(path)) {
+    } else if (vhdlExts.includes(ext)) {
         return HdlLangID.Vhdl;
-    } else if (systemVerilogExts.includes(path)) {
+    } else if (systemVerilogExts.includes(ext)) {
         return HdlLangID.SystemVerilog;
     } else {
         return HdlLangID.Unknown;

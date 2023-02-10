@@ -1,16 +1,17 @@
+import * as vscode from 'vscode';
 import { opeParam, AbsPath, Enum } from '../global';
 import * as hdlPath from './path';
 
 interface IconConfig {
-    light: AbsPath
-    dark: AbsPath
+    readonly light: vscode.Uri
+    readonly dark: vscode.Uri
 };
 
-function getIconPath(themeType: Enum.ThemeType, iconName: string): AbsPath {
+function getIconPath(themeType: Enum.ThemeType, iconName: string): vscode.Uri {
     const iconFile = iconName + '.svg';
     const svgDir = hdlPath.join(opeParam.extensionPath, 'images', 'svg');
     const iconPath = hdlPath.join(svgDir, themeType, iconFile);
-    return iconPath;
+    return vscode.Uri.file(iconPath);
 }
 
 function getIconConfig(iconName: string): IconConfig {
@@ -20,7 +21,7 @@ function getIconConfig(iconName: string): IconConfig {
     };
 }
 
-module.exports = {
+export {
     getIconPath,
     getIconConfig
 };

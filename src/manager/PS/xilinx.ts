@@ -23,7 +23,7 @@ interface PSConfig {
 
 /**
  * @state finish-untest
- * @descriptionCn xilinx工具链下PS端的操作类
+ * @description xilinx工具链下PS端的操作类
  */
 class XilinxOperation {
     public get config(): XilinxOperationConfig {

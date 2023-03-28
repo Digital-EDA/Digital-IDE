@@ -41,7 +41,7 @@ function generateTestbenchFile(module: HdlModule) {
     }
     try {
         hdlFile.writeFile(tbDisPath, content);
-        MainOutput.report("Generate testbench successed");
+        MainOutput.report("Generate testbench to " + tbDisPath);
     } catch (err) {
         vscode.window.showErrorMessage("Generate testbench failed:" + err);
     }

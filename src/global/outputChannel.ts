@@ -8,7 +8,8 @@ enum ReportType {
     PathCheck = 'Path Check',
     Info = 'Info',
     Warn = 'Warn',
-    Error = 'Error'
+    Error = 'Error',
+    Run = 'Run'
 };
 
 class Output {
@@ -20,14 +21,30 @@ class Output {
         this._ignoreTypes = ignoreType;
     }
 
-    skipMessage(type: ReportType) : boolean {
+    private alignTime(s: number): string {
+        const sstr: string = s + '';
+        if (sstr.length === 1) {
+            return '0' + sstr;
+        } else {
+            return sstr;
+        }
+    }
+
+    private getCurrentTime() {
+        const date = new Date();
+        const hms = [date.getHours(), date.getMinutes(), date.getSeconds()];
+        return hms.map(this.alignTime).join(':');
+    }
+
+    private skipMessage(type: ReportType) : boolean {
         return this._ignoreTypes.includes(type);
     }
 
-    report(message: string | unknown, type: ReportType = ReportType.Info) {
+    public report(message: string | unknown, type: ReportType = ReportType.Info) {
         if (!this.skipMessage(type) && message) {
             this._output.show(true);
-            this._output.appendLine('[' + type + '] ' + message);
+            const currentTime = this.getCurrentTime();
+            this._output.appendLine('[' + type + ' - ' + currentTime + '] ' + message);
         }
     }
 }

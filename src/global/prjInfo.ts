@@ -337,10 +337,16 @@ class PrjInfo implements PrjInfoMeta {
         const value: K = obj[attr];
         let isNull = !Boolean(value);
         if (typeof value === 'string') {
-            isNull &&= value === 'none';
+            isNull ||= value === 'none';
         }
         if (isNull) {
             obj[attr] = defaultValue;
+        }
+    }
+
+    private checkDirExist(dir: AbsPath) {
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
         }
     }
 
@@ -375,14 +381,21 @@ class PrjInfo implements PrjInfoMeta {
             this.arch.software.data = join(softwarePath, 'data');
         }
 
-
         // if path is '', set as workspace
         this.setDefaultValue(this.arch.hardware, 'src', workspacePath);
         this.setDefaultValue(this.arch.hardware, 'sim', workspacePath);
         this.setDefaultValue(this.arch.hardware, 'data', workspacePath);
-
         this.setDefaultValue(this.arch.software, 'src', workspacePath);
         this.setDefaultValue(this.arch.software, 'data', workspacePath);
+        this.setDefaultValue(this.arch, 'prjPath', workspacePath);
+
+        // check existence
+        this.checkDirExist(this.arch.hardware.sim);
+        this.checkDirExist(this.arch.hardware.src);
+        this.checkDirExist(this.arch.hardware.data);
+        this.checkDirExist(this.arch.software.src);
+        this.checkDirExist(this.arch.software.data);
+        this.checkDirExist(this.arch.prjPath);
     }
 
     public updateLibrary(library?: Library) {

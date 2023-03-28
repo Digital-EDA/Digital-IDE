@@ -3,7 +3,8 @@
     "digital-ide.property-json.overwrite.title": "修改默认的 property.json 模板文件",
     "digital-ide.hdlDoc.exportFile.title": "导出当前文件的文档",
     "digital-ide.hdlDoc.exportProject.title": "导出当前项目的文档",
-    "digital-ide.hdlDoc.showWebview.title": "在webview中展示文档",
-    "digital-ide.tool.instance.title": "生成选中module的例化模板",
-    "digital-ide.tool.testbench.title": "从当前文件中选择module生成testbench"
+    "digital-ide.hdlDoc.showWebview.title": "在 webview 中展示文档",
+    "digital-ide.tool.instance.title": "生成选中 module 的例化模板",
+    "digital-ide.tool.testbench.title": "从当前文件中选择 module 生成 testbench",
+    "digital-ide.tool.icarus.simulateFile.title": "对当前文件进行仿真"
 }

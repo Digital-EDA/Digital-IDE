@@ -16,7 +16,7 @@ function filterIncludeFiles(folderPath, currentPath) {
         const suggestFiles = [];
         for (const fileName of fs.readdirSync(folderPath)) {
             const filePath = HDLPath.join(folderPath, fileName);
-            if (filePath == currentPath) {
+            if (filePath === currentPath) {
                 continue;
             }
 

@@ -1,5 +1,6 @@
 const hdlParser = require('./parser');
 const fs = require('fs');
+const { exit } = require('process');
 
 const _hdlParser = {
     module: null,
@@ -25,7 +26,15 @@ async function vlogFast(path) {
     const source = fs.readFileSync(path, 'utf-8') + '\n';
     wasmModule.FS.writeFile(_hdlParser.tempPath, source, { encoding: 'utf8' });
     const res = wasmModule.ccall('vlog_fast', 'string', ['string'], [_hdlParser.tempPath]);
-    return JSON.parse(res);
+    try {
+        return JSON.parse(res);
+    } catch (err) {
+        console.log(res);
+        fs.writeFileSync('./draft.json', res);
+        console.log('error happen when parse ' + path);
+        console.log(err);
+        exit(-1);
+    }
 }
 
 async function vlogAll(path) {

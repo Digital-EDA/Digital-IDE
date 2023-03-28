@@ -93,7 +93,29 @@
                 "function.doc.pdf.footerTemplate": {
                     "type": "string",
                     "default": "<div style=\"font-size: 9px; margin-left: 1cm;\"> <span class='title'></span></div> <div style=\"font-size: 9px; margin-left: auto; margin-right: 1cm; \"> <span class='date'></span></div>",
-                    "description": "<div style=\"font-size: 9px; margin: 0 auto;\"> <span class='pageNumber'></span> / <span class='totalPages'></span></div>"
+                    "description": "html template of footer, if displayHeaderFooter is set to false, this setting will be ignored"
+                },
+                "function.simulate.icarus.installPath": {
+                    "type": "string",
+                    "description": "Path of install path of iverilog components, if set to \"\", then iverilog and vvp in environment will be used for simulation. Otherwise, ones that in the install path will be used."
+                },
+                "function.simulate.simulationHome": {
+                    "type": "string",
+                    "description": "Path of simulation folder, .vvp and other file during simulation will be generated here"
+                },
+                "function.simulate.gtkwavePath": {
+                    "type": "string",
+                    "default": "gtkwave",
+                    "description": "Absolute path of launch path of gtkwave software"
+                },
+                "function.simulate.xilinxLibPath": {
+                    "type": "string",
+                    "description": "Path of Xilinx library for simulation"
+                },
+                "function.simulate.runInTerminal": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "run the simulation command in terminal instead of output"
                 }
             }
         },
@@ -136,10 +158,24 @@
                 "command": "digital-ide.tool.testbench",
                 "title": "%digital-ide.tool.testbench.title%",
                 "category": "Digital-IDE"
+            },
+            {
+                "command": "digital-ide.tool.icarus.simulateFile",
+                "title": "%digital-ide.tool.icarus.simulateFile.title%",
+                "category": "Digital-IDE",
+                "icon": {
+                    "light": "images/svg/light/debug.svg",
+                    "dark": "images/svg/dark/debug.svg"
+                }
             }
         ],
         "menus": {
             "editor/title": [
+                {
+					"when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
+					"command": "digital-ide.tool.icarus.simulateFile",
+					"group": "navigation@1"
+				},
                 {
                     "when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
                     "command": "digital-ide.hdlDoc.showWebview",
@@ -149,17 +185,17 @@
         },
         "keybindings": [
             {
-				"command": "digital-ide.tool.instance",
-				"key": "alt+i",
-				"mac": "alt+i",
-				"when": "editorTextFocus"
-			},
+                "command": "digital-ide.tool.instance",
+                "key": "alt+i",
+                "mac": "alt+i",
+                "when": "editorTextFocus"
+            },
             {
-				"command": "digital-ide.tool.testbench",
-				"key": "alt+t",
-				"mac": "alt+t",
-				"when": "editorTextFocus"
-			}
+                "command": "digital-ide.tool.testbench",
+                "key": "alt+t",
+                "mac": "alt+t",
+                "when": "editorTextFocus"
+            }
         ],
         "languages": [
             {
@@ -248,7 +284,13 @@
                     ".dld"
                 ],
                 "configuration": "./config/link.configuration.json"
-            }
+            },
+            {
+				"id": "digital-ide-output",
+				"mimetypes": [
+					"text/x-code-output"
+				]
+			}
         ],
         "jsonValidation": [
             {
@@ -286,7 +328,12 @@
                 "language": "systemverilog",
                 "scopeName": "source.systemverilog",
                 "path": "./syntaxes/systemverilog.json"
-            }
+            },
+            {
+				"language": "digital-ide-output",
+				"scopeName": "digital-ide.output",
+				"path": "./syntaxes/digital-ide-output.json"
+			}
         ],
         "snippets": [
             {

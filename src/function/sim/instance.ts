@@ -216,6 +216,11 @@ function selectInsert(content: string, editor: vscode.TextEditor): boolean {
     return true;
 }
 
+/**
+ * @description make item for vscode.window.showQuickPick from hdlModules
+ * @param modules 
+ * @returns 
+ */
 function getSelectItem(modules: HdlModule[]) {
     // make ModuleInfoList
     const items = [];

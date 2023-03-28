@@ -63,10 +63,12 @@ function* walk(path, condition) {
 
 (async() => {
     console.time('test');
-    for (const file of walk('./lib', f => f.endsWith('.v'))) {
-        console.log(file);
+    // await vlogFast('./lib/common/Apply/DSP/Advance/FFT/Flow_FFT_IFFT/BF_op.v');
+    for (const file of walk('./src/test/vlog/dependence_test', f => f.endsWith('.v'))) {
+        console.log('[file] ', file);
         try {
-            await vlogFast(file);
+            const res = await vlogFast(file);
+            console.log(res);
         } catch (err) {
             console.log(err);
         }

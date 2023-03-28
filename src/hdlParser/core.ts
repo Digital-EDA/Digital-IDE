@@ -186,12 +186,17 @@ class HdlParam {
             // TODO : only support verilog now
             const langID = hdlFile.getLanguageId(path);            
             if (langID === HdlLangID.Verilog) {
-                const fast = await HdlSymbol.fast(path);                
-                if (fast) {
-                    new HdlFile(path,
-                                fast.languageId,
-                                fast.macro,
-                                fast.content.modules);
+                try {
+                    const fast = await HdlSymbol.fast(path);
+                    if (fast) {
+                        new HdlFile(path,
+                                    fast.languageId,
+                                    fast.macro,
+                                    fast.content.modules);
+                    }
+                } catch (error) {
+                    MainOutput.report('Error happen when parse ' + path, ReportType.Error);
+                    MainOutput.report('Reason: ' + error, ReportType.Error);
                 }
             }
         }

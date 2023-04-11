@@ -77,66 +77,66 @@ class HardwareTreeProvider extends BaseCommandTreeProvider {
     constructor() {
         const config: CommandConfig = {
             Launch: {
-                cmd: 'HARD.Launch',
+                cmd: 'digital-ide.hard.launch',
                 icon: 'cmd',
                 tip: 'Launch FPGA development assist function'
             },
             Simulate: {
-                cmd: 'HARD.Simulate',
+                cmd: 'digital-ide.hard.simulate',
                 icon: 'toolBox',
                 tip: 'Launch the manufacturer Simulation',
                 children: {
                     CLI: {
-                        cmd: 'HARD.simCLI',
+                        cmd: 'digital-ide.hard.simulate.cli',
                         icon: 'branch',
                         tip: 'Launch the manufacturer Simulation in CLI'
                     },
                     GUI: {
-                        cmd: 'HARD.simGUI',
+                        cmd: 'digital-ide.hard.simulate.gui',
                         icon: 'branch',
                         tip: 'Launch the manufacturer Simulation in GUI'
                     },
                 }
             },
             Refresh: {
-                cmd: 'HARD.Refresh',
+                cmd: 'digital-ide.hard.refresh',
                 icon: 'cmd',
                 tip: 'Refresh the current project file'
             },
             Build: {
-                cmd: 'HARD.Build',
+                cmd: 'digital-ide.hard.build',
                 icon: 'toolBox',
                 tip: 'Build the current fpga project',
                 children: {
                     Synth: {
-                        cmd: 'HARD.Synth',
+                        cmd: 'digital-ide.hard.build.synth',
                         icon: 'branch',
                         tip: 'Synth the current project'
                     },
                     Impl: {
-                        cmd: 'HARD.Impl',
+                        cmd: 'digital-ide.hard.build.impl',
                         icon: 'branch',
-                        tip: 'Impl  the current project'
+                        tip: 'Impl the current project'
                     },
                     BitStream: {
-                        cmd: 'HARD.Bit',
+                        cmd: 'digital-ide.hard.build.bitstream',
                         icon: 'branch',
                         tip: 'Generate the BIT File'
                     },
                 }
             },
             Program: {
-                cmd: 'HARD.Program',
+                cmd: 'digital-ide.hard.program',
                 icon: 'cmd',
                 tip: 'Download the bit file into the device'
             },
             GUI: {
-                cmd: 'HARD.GUI',
+                cmd: 'digital-ide.hard.gui',
                 icon: 'cmd',
                 tip: 'Open the GUI'
             },
             Exit: {
-                cmd: 'HARD.Exit',
+                cmd: 'digital-ide.hard.exit',
                 icon: 'cmd',
                 tip: 'Exit the current project'
             }
@@ -150,17 +150,17 @@ class SoftwareTreeProvider extends BaseCommandTreeProvider {
     constructor() {
         const config: CommandConfig = {
             Launch: {
-                cmd: 'SOFT.Launch',
+                cmd: 'digital-ide.soft.launch',
                 icon: 'cmd',
                 tip: 'Launch SDK development assist function'
             },
             Build: {
-                cmd: 'SOFT.Launch',
+                cmd: 'digital-ide.soft.build',
                 icon: 'cmd',
                 tip: 'Build the current SDK project'
             },
             Download: {
-                cmd: 'SOFT.Launch',
+                cmd: 'digital-ide.soft.download',
                 icon: 'cmd',
                 tip: 'Download the boot file into the device'
             },
@@ -174,7 +174,7 @@ class ToolTreeProvider extends BaseCommandTreeProvider {
     constructor() {
         const config: CommandConfig = {
             Clean: {
-                cmd: 'TOOL.Clean',
+                cmd: 'digital-ide.tool.tool.clean',
                 icon: 'clean',
                 tip: 'Clean the current project'
             }

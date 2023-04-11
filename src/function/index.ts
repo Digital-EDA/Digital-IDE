@@ -33,6 +33,11 @@ function registerTreeView(context: vscode.ExtensionContext) {
     // constant used in tree
     vscode.commands.executeCommand('setContext', 'TOOL-tree-expand', false);
 
+    // register command in tree
+    vscode.commands.registerCommand('digital-ide.treeView.arch.expand', treeView.expandTreeView);
+    vscode.commands.registerCommand('digital-ide.treeView.arch.collapse', treeView.collapseTreeView);
+    vscode.commands.registerCommand('digital-ide.treeView.arch.refresh', treeView.refreshArchTree);
+    vscode.commands.registerCommand('digital-ide.treeView.arch.openFile', treeView.openFileByUri);
 
 }
 

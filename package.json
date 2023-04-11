@@ -167,15 +167,118 @@
                     "light": "images/svg/light/debug.svg",
                     "dark": "images/svg/dark/debug.svg"
                 }
+            },
+            {
+                "command": "digital-ide.treeView.arch.expand",
+                "category": "tool",
+                "icon": "$(expand-all)",
+                "title": "%digital-ide.treeView.arch.expand.title%"
+            },
+            {
+                "command": "digital-ide.treeView.arch.collapse",
+                "category": "tool",
+                "icon": "$(collapse-all)",
+                "title": "%digital-ide.treeView.arch.collapse.title%"
+            },
+            {
+                "command": "digital-ide.treeView.arch.refresh",
+                "category": "tool",
+                "icon": "$(refresh)",
+                "title": "%digital-ide.treeView.arch.refresh.title%"
+            },
+            {
+                "command": "digital-ide.treeView.arch.openFile",
+                "category": "tool",
+                "title": "%digital-ide.treeView.arch.openFile.title%"
+            },
+            {
+                "command": "digital-ide.tool.tool.clean",
+                "category": "tool",
+                "title": "%digital-ide.tool.tool.clean.title%"
+            },
+            {
+                "command": "digital-ide.soft.launch",
+                "category": "tool",
+                "title": "%digital-ide.soft.launch.title%"
+            },
+            {
+                "command": "digital-ide.soft.build",
+                "category": "tool",
+                "title": "%digital-ide.soft.build.title%"
+            },
+            {
+                "command": "digital-ide.soft.download",
+                "category": "tool",
+                "title": "%digital-ide.soft.download.title%"
+            },
+            {
+                "command": "digital-ide.hard.launch",
+                "category": "tool",
+                "title": "%digital-ide.hard.launch.title%"
+            },
+            {
+                "command": "digital-ide.hard.simulate",
+                "category": "tool",
+                "title": "%digital-ide.hard.simulate.title%"
+            },
+            {
+                "command": "digital-ide.hard.simulate.cli",
+                "category": "tool",
+                "title": "%digital-ide.hard.simulate.cli.title%"
+            },
+            {
+                "command": "digital-ide.hard.simulate.gui",
+                "category": "tool",
+                "title": "%digital-ide.hard.simulate.gui.title%"
+            },
+            {
+                "command": "digital-ide.hard.refresh",
+                "category": "tool",
+                "title": "%digital-ide.hard.refresh.title%"
+            },
+            {
+                "command": "digital-ide.hard.build",
+                "category": "tool",
+                "title": "%digital-ide.hard.build.title%"
+            },
+            {
+                "command": "digital-ide.hard.build.synth",
+                "category": "tool",
+                "title": "%digital-ide.hard.build.synth.title%"
+            },
+            {
+                "command": "digital-ide.hard.build.impl",
+                "category": "tool",
+                "title": "%digital-ide.hard.build.impl.title%"
+            },
+            {
+                "command": "digital-ide.hard.build.bitstream",
+                "category": "tool",
+                "title": "%digital-ide.hard.build.bitstream.title%"
+            },
+            {
+                "command": "digital-ide.hard.program",
+                "category": "tool",
+                "title": "%digital-ide.hard.program.title%"
+            },
+            {
+                "command": "digital-ide.hard.gui",
+                "category": "tool",
+                "title": "%digital-ide.hard.gui.title%"
+            },
+            {
+                "command": "digital-ide.hard.exit",
+                "category": "tool",
+                "title": "%digital-ide.hard.exit.title%"
             }
         ],
         "menus": {
             "editor/title": [
                 {
-					"when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
-					"command": "digital-ide.tool.icarus.simulateFile",
-					"group": "navigation@1"
-				},
+                    "when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
+                    "command": "digital-ide.tool.icarus.simulateFile",
+                    "group": "navigation@1"
+                },
                 {
                     "when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
                     "command": "digital-ide.hdlDoc.showWebview",
@@ -286,11 +389,11 @@
                 "configuration": "./config/link.configuration.json"
             },
             {
-				"id": "digital-ide-output",
-				"mimetypes": [
-					"text/x-code-output"
-				]
-			}
+                "id": "digital-ide-output",
+                "mimetypes": [
+                    "text/x-code-output"
+                ]
+            }
         ],
         "jsonValidation": [
             {
@@ -330,10 +433,10 @@
                 "path": "./syntaxes/systemverilog.json"
             },
             {
-				"language": "digital-ide-output",
-				"scopeName": "digital-ide.output",
-				"path": "./syntaxes/digital-ide-output.json"
-			}
+                "language": "digital-ide-output",
+                "scopeName": "digital-ide.output",
+                "path": "./syntaxes/digital-ide-output.json"
+            }
         ],
         "snippets": [
             {

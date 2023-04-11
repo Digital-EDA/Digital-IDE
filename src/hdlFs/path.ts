@@ -1,4 +1,5 @@
 import * as fspath from 'path';
+import * as fs from 'fs';
 
 import { AbsPath, RelPath } from '../global';
 
@@ -76,6 +77,13 @@ function filename(path: AbsPath | RelPath): string {
     return fspath.basename(path, ext);
 }
 
+function exist(path: AbsPath | undefined): boolean {
+    if (!path) {
+        return false;
+    }
+    return fs.existsSync(path);
+}
+
 export {
     toSlash,
     rel2abs,
@@ -83,5 +91,6 @@ export {
     resolve,
     filename,
     extname,
-    basename
+    basename,
+    exist
 };

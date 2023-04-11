@@ -43,9 +43,16 @@ const xilinx = new Set<string>([
 ]);
 
 
-enum ItemMode { vhdl, systemverilog, verilog, remote, cells };
+const itemModes = new Set<string>([
+    'vhdl', 'systemverilog', 'verilog', 'remote', 'cells'
+]);
 
+const otherModes = new Set<string>([
+    'src', 'sim', 'File Error', 'cells'
+]);
 
 export {
-    xilinx
+    xilinx,
+    itemModes,
+    otherModes
 };

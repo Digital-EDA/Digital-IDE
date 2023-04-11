@@ -1,7 +1,8 @@
 import * as vscode from 'vscode';
 
 import * as hdlDoc from './hdlDoc';
-import * as Sim from './sim';
+import * as sim from './sim';
+import * as treeView from './treeView';
 
 function registerDocumentation(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('digital-ide.hdlDoc.showWebview', hdlDoc.showDocWebview);
@@ -11,14 +12,28 @@ function registerDocumentation(context: vscode.ExtensionContext) {
 
 
 function registerSimulation(context: vscode.ExtensionContext) {
-    vscode.commands.registerCommand('digital-ide.tool.instance', Sim.instantiation);
-    vscode.commands.registerCommand('digital-ide.tool.testbench', Sim.testbench);
-    vscode.commands.registerCommand('digital-ide.tool.icarus.simulateFile', Sim.Icarus.simulateFile);
+    vscode.commands.registerCommand('digital-ide.tool.instance', sim.instantiation);
+    vscode.commands.registerCommand('digital-ide.tool.testbench', sim.testbench);
+    vscode.commands.registerCommand('digital-ide.tool.icarus.simulateFile', sim.Icarus.simulateFile);
 }
 
 function registerAllCommands(context: vscode.ExtensionContext) {
     registerDocumentation(context);
     registerSimulation(context);
+    registerTreeView(context);
+}
+
+function registerTreeView(context: vscode.ExtensionContext) {
+    // register normal tree
+    vscode.window.registerTreeDataProvider('digital-ide.treeView.arch', treeView.moduleTreeProvider);
+    vscode.window.registerTreeDataProvider('digital-ide.treeView.tool', treeView.toolTreeProvider);
+    vscode.window.registerTreeDataProvider('digital-ide.treeView.hardware', treeView.hardwareTreeProvider);
+    vscode.window.registerTreeDataProvider('digital-ide.treeView.software', treeView.softwareTreeProvider);
+
+    // constant used in tree
+    vscode.commands.executeCommand('setContext', 'TOOL-tree-expand', false);
+
+
 }
 
 

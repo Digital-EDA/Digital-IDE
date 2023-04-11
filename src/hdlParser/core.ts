@@ -1,4 +1,4 @@
-import { AbsPath } from '../global';
+import { AbsPath, opeParam } from '../global';
 import { HdlLangID } from '../global/enum';
 import { MainOutput, ReportType } from '../global/outputChannel';
 
@@ -39,7 +39,10 @@ class HdlParam {
         this.pathToHdlFiles.set(path, hdlFile);
     }
 
-    public hasHdlModule(path: AbsPath, name: string): boolean {
+    public hasHdlModule(path: AbsPath | undefined, name: string): boolean {
+        if (!path) {
+            return false;
+        }
         const hdlFile = this.getHdlFile(path);
         if (!hdlFile) {
             return false;
@@ -208,7 +211,43 @@ class HdlParam {
             hdlFile.makeInstance();
         }
     }
-    
+
+    public getTopModulesByType(type: string): HdlModule[] {
+        const hardware = opeParam.prjInfo.arch.hardware;
+        if (hardware.sim === hardware.src) {
+            return this.getAllTopModules();
+        }
+
+        switch (type) {
+            case common.HdlFileType.Src: return this.getSrcTopModules();
+            case common.HdlFileType.Sim: return this.getSimTopModules();
+            default: return [];
+        }
+    }
+
+    public getSrcTopModules(): HdlModule[] {
+        const srcTopModules = this.srcTopModules;
+        if (!srcTopModules) {
+            return [];
+        }
+        const moduleFiles = [];
+        for (const module of srcTopModules) {
+            moduleFiles.push(module);
+        }
+        return moduleFiles;
+    }
+
+    public getSimTopModules(): HdlModule[] {
+        const simTopModules = this.simTopModules;
+        if (!simTopModules) {
+            return [];
+        }
+        const moduleFiles = [];
+        for (const module of simTopModules) {
+            moduleFiles.push(module);
+        }
+        return moduleFiles;
+    }
 };
 
 const hdlParam = new HdlParam();

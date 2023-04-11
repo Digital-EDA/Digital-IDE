@@ -1,53 +1,38 @@
 import * as vscode from 'vscode';
-import { AbsPath } from '../../global';
+import { hdlPath } from '../../hdlFs';
 
-interface ModuleDataItem {
-    icon: string,           // 图标
-    name: string,           // module name
-    type: string,           
-    path: AbsPath,                // path of the file
-    parent: ModuleDataItem | null   // parent file
-}
-
-interface SelectTop {
-    src: any,
-    sim: any
-}
+import { hardwareTreeProvider, softwareTreeProvider, toolTreeProvider } from './command';
+import { moduleTreeProvider, ModuleDataItem  } from './tree';
 
 
-class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
-    treeEventEmitter: vscode.EventEmitter<ModuleDataItem>;
-    treeEvent: vscode.Event<ModuleDataItem>;
-
-    constructor() {
-        this.treeEventEmitter = new vscode.EventEmitter<ModuleDataItem>();
-        this.treeEvent = this.treeEventEmitter.event;
-
-        
-    }
-
-
-    getTreeItem(element: ModuleDataItem): vscode.TreeItem | Thenable<vscode.TreeItem> {
-        
-    }
-
-    getChildren(element?: ModuleDataItem | undefined): vscode.ProviderResult<ModuleDataItem[]> {
-        if (element) {
-            const name = element.name;
-            if (name === 'sim' || name === 'src') {
-                element.parent = null;
-
-            }
-        } else {
-
-        }
-    }
-
-    getParent(element: ModuleDataItem): vscode.ProviderResult<ModuleDataItem> {
-        
-    }
-
-    getTopModuleItemList(element: ModuleDataItem): ModuleDataItem[] {
-        
+function openFileByUri(uri: string) {
+    if (hdlPath.exist(uri)) {
+        vscode.window.showTextDocument(vscode.Uri.file(uri));
     }
 }
+
+function refreshArchTree(element: ModuleDataItem) {
+    // TODO : diff and optimize
+    moduleTreeProvider.refresh(element);
+}
+
+function expandTreeView() {
+    vscode.commands.executeCommand('setContext', 'TOOL-tree-expand', false);
+}
+
+function collapseTreeView() {
+    vscode.commands.executeCommand('workbench.actions.treeView.TOOL-tree-arch.collapseAll');
+    vscode.commands.executeCommand('setContext', 'TOOL-tree-expand', true);
+}
+
+
+export {
+    hardwareTreeProvider,
+    softwareTreeProvider,
+    toolTreeProvider,
+    moduleTreeProvider,
+    expandTreeView,
+    collapseTreeView,
+    openFileByUri,
+    refreshArchTree
+};

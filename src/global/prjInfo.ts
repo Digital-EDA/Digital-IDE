@@ -466,5 +466,8 @@ export {
     Library,
     RawPrjInfo,
     toSlash,
-    resolve
+    resolve,
+    SimPath,
+    SrcPath,
+    DataPath
 };

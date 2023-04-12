@@ -21,7 +21,7 @@ function expandTreeView() {
 }
 
 function collapseTreeView() {
-    vscode.commands.executeCommand('workbench.actions.treeView.TOOL-tree-arch.collapseAll');
+    vscode.commands.executeCommand('workbench.actions.treeView.digital-ide-treeView-arch.collapseAll');
     vscode.commands.executeCommand('setContext', 'TOOL-tree-expand', true);
 }
 

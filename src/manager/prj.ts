@@ -8,15 +8,8 @@ import { RawPrjInfo } from '../global/prjInfo';
 import { hdlFile, hdlPath } from '../hdlFs';
 
 class PrjManage {
-    constructor() {        
-        vscode.commands.registerCommand('digital-ide.property-json.generate', 
-                                        this.generatePropertyJson);
-        vscode.commands.registerCommand('digital-ide.property-json.overwrite', 
-                                        this.overwritePropertyJson);
-    }
-
     // generate property template and write it to .vscode/property.json
-    private async generatePropertyJson() {
+    public async generatePropertyJson() {
         if (fs.existsSync(opeParam.propertyJsonPath)) {
             vscode.window.showWarningMessage('property file already exists !!!');
             return;
@@ -26,7 +19,7 @@ class PrjManage {
     }
 
     // overwrite content in current property.json to property-init.json
-    private async overwritePropertyJson() {
+    public async overwritePropertyJson() {
         const options = {
             preview: false,
             viewColumn: vscode.ViewColumn.Active

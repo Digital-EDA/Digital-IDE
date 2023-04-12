@@ -2,12 +2,12 @@ import * as vscode from 'vscode';
 
 import { opeParam, MainOutput, ReportType } from './global';
 import { hdlParam } from './hdlParser';
-import { prjManage } from './manager';
-
-import { registerAllCommands } from './function';
+import { prjManage, registerManagerCommands } from './manager';
+import { registerFunctionCommands } from './function';
 
 async function registerCommand(context: vscode.ExtensionContext) {
-    registerAllCommands(context);
+    registerFunctionCommands(context);
+    registerManagerCommands(context);
 }
 
 async function launch(context: vscode.ExtensionContext) {

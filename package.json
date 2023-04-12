@@ -273,6 +273,23 @@
             }
         ],
         "menus": {
+            "view/title": [
+				{
+					"command": "digital-ide.treeView.arch.collapse",
+					"group": "navigation",
+					"when": "view == digital-ide-treeView-arch"
+				},
+				{
+					"command": "TOOL.libPick",
+					"group": "navigation",
+					"when": "view == digital-ide-treeView-arch"
+				},
+				{
+					"command": "digital-ide.treeView.arch.refresh",
+					"group": "navigation",
+					"when": "view == digital-ide-treeView-arch"
+				}
+			],
             "editor/title": [
                 {
                     "when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
@@ -286,6 +303,26 @@
                 }
             ]
         },
+        "views": {
+			"TOOL": [
+				{
+					"id": "digital-ide-treeView-arch",
+					"name": "architecture"
+				},
+				{
+					"id": "digital-ide-treeView-tool",
+					"name": "TOOL"
+				},
+				{
+					"id": "digital-ide-treeView-hardware",
+					"name": "HARD Options"
+				},
+				{
+					"id": "digital-ide-treeView-software",
+					"name": "SOFT Options"
+				}
+			]
+		},
         "keybindings": [
             {
                 "command": "digital-ide.tool.instance",

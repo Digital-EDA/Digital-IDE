@@ -17,7 +17,7 @@ function registerSimulation(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('digital-ide.tool.icarus.simulateFile', sim.Icarus.simulateFile);
 }
 
-function registerAllCommands(context: vscode.ExtensionContext) {
+function registerFunctionCommands(context: vscode.ExtensionContext) {
     registerDocumentation(context);
     registerSimulation(context);
     registerTreeView(context);
@@ -25,10 +25,10 @@ function registerAllCommands(context: vscode.ExtensionContext) {
 
 function registerTreeView(context: vscode.ExtensionContext) {
     // register normal tree
-    vscode.window.registerTreeDataProvider('digital-ide.treeView.arch', treeView.moduleTreeProvider);
-    vscode.window.registerTreeDataProvider('digital-ide.treeView.tool', treeView.toolTreeProvider);
-    vscode.window.registerTreeDataProvider('digital-ide.treeView.hardware', treeView.hardwareTreeProvider);
-    vscode.window.registerTreeDataProvider('digital-ide.treeView.software', treeView.softwareTreeProvider);
+    vscode.window.registerTreeDataProvider('digital-ide-treeView-arch', treeView.moduleTreeProvider);
+    vscode.window.registerTreeDataProvider('digital-ide-treeView-tool', treeView.toolTreeProvider);
+    vscode.window.registerTreeDataProvider('digital-ide-treeView-hardware', treeView.hardwareTreeProvider);
+    vscode.window.registerTreeDataProvider('digital-ide-treeView-software', treeView.softwareTreeProvider);
 
     // constant used in tree
     vscode.commands.executeCommand('setContext', 'TOOL-tree-expand', false);
@@ -43,5 +43,5 @@ function registerTreeView(context: vscode.ExtensionContext) {
 
 
 export {
-    registerAllCommands
+    registerFunctionCommands
 };

@@ -10,7 +10,7 @@ PACKAGE_FILE = './package.json'
 LANG_PACKGE_FILES = {
     'en': './package.nls.json',
     'zh-cn': './package.nls.zh-cn.json',
-    'zh-tw': './package.nls.zh-tw.json'
+    'zh-tw': './package.nls.zh-tw.json',
 }
 
 def generate_title_token(command_name: str) -> str:

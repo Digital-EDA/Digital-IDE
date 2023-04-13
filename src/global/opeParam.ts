@@ -1,5 +1,6 @@
 import * as assert from 'assert';
 import * as fs from 'fs';
+import { hdlFile } from '../hdlFs';
 
 import { Arch, PrjInfo, RawPrjInfo, resolve, toSlash } from './prjInfo';
 
@@ -140,6 +141,22 @@ class OpeParam {
      */
     public resolvePathExtension(relPath: RelPath): AbsPath {
         return resolve(this._extensionPath, relPath);
+    }
+
+    /**
+     * get User's property.json
+     */
+    public getUserPrjInfo() {
+        const propertyJsonPath = this.propertyJsonPath;
+        const userPrjInfo = new PrjInfo();
+        if (fs.existsSync(propertyJsonPath)) {
+            const rawPrjInfo = hdlFile.readJSON(propertyJsonPath);
+            userPrjInfo.merge(rawPrjInfo);
+        } else {
+            // use default config instead
+            const rawPrjInfo = hdlFile.readJSON(this.propertyInitPath);
+            userPrjInfo.merge(rawPrjInfo);
+        }
     }
 };
 

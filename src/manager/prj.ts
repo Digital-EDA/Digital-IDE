@@ -86,7 +86,6 @@ class PrjManage {
     public initialise() {
         
     }
-
 }
 
 const prjManage = new PrjManage();

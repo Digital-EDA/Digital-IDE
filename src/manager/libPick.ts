@@ -145,6 +145,8 @@ class LibPick {
 
             if (selectedPath && hdlPath.exist(selectedPath)) {
                 const ppyPath = hdlPath.join(opeParam.workspacePath, '.vscode', 'property.json');
+
+                // 抽象这块
                 let prjInfo = null;
                 // 如果存在，则读取用户的配置文件，否则使用默认的
                 if (!hdlPath.exist(ppyPath)) {
@@ -152,11 +154,10 @@ class LibPick {
                 } else {
                     prjInfo = hdlFile.readJSON(ppyPath);
                 }
-                
+
                 if (selectedPath.includes(this.commonQuickPickItem.path!)) {
                     // this is a module import from common, use relative path
-                    const relPath = selectedPath.replace(this.commonQuickPickItem.path + '/', '');
-                    
+                    const relPath = selectedPath.replace(this.commonQuickPickItem.path + '/', '');                    
                     appendLibraryCommonPath(relPath, prjInfo);
                 } else {
                     // this is a module import from custom, use absolute path

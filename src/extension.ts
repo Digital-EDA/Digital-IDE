@@ -20,7 +20,7 @@ async function launch(context: vscode.ExtensionContext) {
     
     console.timeLog('launch');
     
-    await registerCommand(context);
+    await registerCommand(context);    
     MainOutput.report('Digital-IDE has launched, Version: 0.3.0');
     MainOutput.report('OS: ' + opeParam.os);
 }

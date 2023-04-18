@@ -16,7 +16,7 @@ class PrjManage {
             return;
         }
         const template = hdlFile.readJSON(opeParam.propertyInitPath) as RawPrjInfo;
-        template.arch?.hardware.
+
         hdlFile.writeJSON(opeParam.propertyJsonPath, template);
     }
 

@@ -322,7 +322,7 @@
             "activitybar": [
 				{
 					"id": "TreeView",
-					"title": "Digital-IDE",
+					"title": "Digital-IDE: TreeView",
 					"icon": "images/svg/view.svg"
 				}
 			]

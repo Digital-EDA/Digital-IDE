@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 import { AbsPath, MainOutput, opeParam, ReportType } from '../../global';
 import { SimPath, SrcPath } from '../../global/prjInfo';
 import { HdlInstance, hdlParam } from '../../hdlParser/core';
-import { HdlFileType } from '../../hdlParser/common';
+import { HdlFileType, Range } from '../../hdlParser/common';
 import { hdlFile, hdlPath } from '../../hdlFs';
 import { xilinx, itemModes, otherModes } from './common';
 import { getIconConfig } from '../../hdlFs/icons';
@@ -13,7 +13,8 @@ let needExpand = true;
 interface ModuleDataItem {
     icon: string,           // 图标
     name: string,           // module name
-    type: string,           
+    type: string,
+    range: Range | null,   
     path: AbsPath | undefined,      // path of the file
     parent: ModuleDataItem | null   // parent file
 }
@@ -64,8 +65,8 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
             src: null,
             sim: null,
         };
-        this.srcRootItem = {icon: 'src', type: HdlFileType.Src, name: 'src', path: '', parent: null};
-        this.simRootItem = {icon: 'sim', type: HdlFileType.Sim, name: 'sim', path: '', parent: null};
+        this.srcRootItem = {icon: 'src', type: HdlFileType.Src, name: 'src', range: null, path: '', parent: null};
+        this.simRootItem = {icon: 'sim', type: HdlFileType.Sim, name: 'sim', range: null, path: '', parent: null};
 
     }
 
@@ -120,13 +121,12 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
 
         // set iconPath
         treeItem.iconPath = getIconConfig(element.icon);
-
+        
         // set command
         treeItem.command = {
             title: "Open this HDL File",
-            // TODO : 修改这里的指令前缀
-            command: 'TOOL.tree.arch.openFile',
-            arguments: [element.path],
+            command: 'digital-ide.treeView.arch.openFile',
+            arguments: [element.path, element.range],
         };
 
         return treeItem;
@@ -164,6 +164,7 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
             icon: 'top',
             type: moduleType,
             name: module.name,
+            range: module.range,
             path: module.path,
             parent: element,
         }));
@@ -178,6 +179,7 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
             const name = this.firstTop[type]!.name;
             const path = this.firstTop[type]!.path;
             const icon = this.makeFirstTopIconName(type);
+            const range = firstTop.range;
             const parent = element;
 
             const tops = topModuleItemList.filter(item => item.path === path && item.name === name);
@@ -197,7 +199,7 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
             } else {
                 // mean the selected top is not an original top module
                 // create it and add it to the head of *topModuleItemList*
-                const selectedTopItem: ModuleDataItem = {icon, type, name, path, parent};
+                const selectedTopItem: ModuleDataItem = {icon, type, name, range, path, parent};
                 adjustItemList.push(selectedTopItem);
                 adjustItemList.push(...topModuleItemList);
             }
@@ -222,6 +224,7 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
                     icon: 'file',
                     type: instance.name,
                     name: instance.type,
+                    range: instance.module ? instance.module.range : null,
                     path: instance.instModPath,
                     parent: element
                 };

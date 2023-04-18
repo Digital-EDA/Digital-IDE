@@ -44,15 +44,15 @@ const PrjInfoDefaults: PrjInfoMeta = {
     device: 'none',
 
     arch: {
-        prjPath: '',
+        prjPath: './prj',
         hardware: {
-            src: '',
-            sim: '',
-            data: ''
+            src: './user/src',
+            sim: './user/sim',
+            data: './user/data'
         },
         software: {
-            src: '',
-            data: ''
+            src: './user/software/src',
+            data: './user/software/data'
         }
     },
 
@@ -436,8 +436,13 @@ class PrjInfo implements PrjInfoMeta {
     }
 
     public getLibraryCustomPaths(absolute: boolean = true): Path[] {
+        const libCustomPath = this.libCustomPath;
+        if (libCustomPath === '') {
+            return [];
+        }
+
         if (absolute) {
-            const configFolder = hdlPath.join(this.libCustomPath, 'Empty');
+            const configFolder = hdlPath.join(libCustomPath, 'Empty');
             return this._library.hardware.custom.map<Path>(relPath => hdlPath.rel2abs(configFolder, relPath));
         }
         return this._library.hardware.custom;
@@ -481,7 +486,7 @@ class PrjInfo implements PrjInfoMeta {
     public get libCustomPath(): AbsPath {
         const libPath = vscode.workspace.getConfiguration().get('prj.lib.custom.path', this._workspacePath);
         if (!fs.existsSync(libPath)) {                      
-            vscode.window.showErrorMessage('property "prj.lib.custom.path" is empty or is an invalid path');
+            return '';
         }
         return libPath;
     }

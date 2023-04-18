@@ -67,10 +67,6 @@ class LibManage {
         return hdlPath.join(opeParam.extensionPath, 'lib');
     }
 
-    public get libCustomPath(): AbsPath {
-        return opeParam.prjInfo.libCustomPath;
-    }
-
     public processLibFiles(library: Library): LibFileChange {
         // 在不设置state属性的时候默认为remote
         this.next.list = this.getLibFiles(library);

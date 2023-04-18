@@ -3,11 +3,21 @@ import { hdlPath } from '../../hdlFs';
 
 import { hardwareTreeProvider, softwareTreeProvider, toolTreeProvider } from './command';
 import { moduleTreeProvider, ModuleDataItem  } from './tree';
+import { Range } from '../../hdlParser/common';
 
+async function openFileAtPosition(uri: vscode.Uri, line: number, character: number) {
+    const document = await vscode.workspace.openTextDocument(uri);
+    const editor = await vscode.window.showTextDocument(document);
+    const position = new vscode.Position(line, character);
+    editor.selection = new vscode.Selection(position, position);
+    editor.revealRange(new vscode.Range(position, position));
+}
 
-function openFileByUri(uri: string) {
-    if (hdlPath.exist(uri)) {
-        vscode.window.showTextDocument(vscode.Uri.file(uri));
+function openFileByUri(path: string, range: Range) {
+    if (hdlPath.exist(path)) {
+        const uri = vscode.Uri.file(path);
+        const start = range.start;
+        openFileAtPosition(uri, start.line - 1, start.character);
     }
 }
 

@@ -22,8 +22,8 @@ class LibPick {
     selectedQuickPickItem: LibPickItem | undefined;
 
     constructor () {
-        this.commonPath = hdlPath.join(opeParam.extensionPath, 'lib', 'common');
-        this.customPath = hdlPath.toSlash(vscode.workspace.getConfiguration('PRJ.custom.Lib.repo').get('path', '')); 
+        this.commonPath = opeParam.prjInfo.libCommonPath;
+        this.customPath = opeParam.prjInfo.libCustomPath;
         
         this.commonQuickPickItem = {
             label: "$(libpick-common) common", 
@@ -72,6 +72,18 @@ class LibPick {
         return `$(libpick-${prompt})`;
     }
 
+    private getReadmeText(path: AbsPath, fileName: string): string | undefined {
+        const mdPath1 = hdlPath.join(path, fileName, 'readme.md');
+        if (fs.existsSync(mdPath1)) {
+            return hdlFile.readFile(mdPath1);
+        }
+        const mdPath2 = hdlPath.join(path, fileName, 'README.md');
+        if (fs.existsSync(mdPath2)) {
+            return hdlFile.readFile(mdPath2);
+        }
+        return undefined;
+    }
+
     private makeQuickPickItemsByPath(path: AbsPath, back: boolean=true): LibPickItem[] {
         const items: LibPickItem[] = [];
         if (!hdlPath.exist(path)) {
@@ -85,8 +97,7 @@ class LibPick {
             const filePath = hdlPath.join(path, fileName);
             const themeIcon = this.getPathIcon(filePath);
             const label = themeIcon + " " + fileName;
-            const mdPath = hdlPath.join(path, fileName, 'readme.md');
-            const mdText = hdlFile.readFile(mdPath);
+            const mdText = this.getReadmeText(path, fileName);
             const description = mdText ? mdText : '';
             const buttons = [{iconPath: getIconConfig('import'), tooltip: 'import everything in ' + fileName}];
             items.push({label, description, path: filePath, buttons});
@@ -125,14 +136,12 @@ class LibPick {
         pickWidget.items = this.provideQuickPickItem();
         
         pickWidget.onDidChangeSelection(items => {
-            console.log('enter onDidChangeSelection');
             if (items[0]) {
                 this.selectedQuickPickItem = items[0];
             }
         });
 
         pickWidget.onDidAccept(() => {
-            console.log('enter onDidAccept');
             if (this.selectedQuickPickItem) {
                 const childernItems = this.provideQuickPickItem(this.selectedQuickPickItem);
                 if (childernItems && childernItems.length > 0) {

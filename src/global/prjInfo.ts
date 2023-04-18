@@ -225,7 +225,6 @@ class PrjInfo implements PrjInfoMeta {
         
         uniformPath = toSlash(uniformPath);
 
-
         if (check) {
             if (fs.existsSync(uniformPath)) {
                 return uniformPath;
@@ -472,11 +471,19 @@ class PrjInfo implements PrjInfoMeta {
     }
 
     public get libCommonPath(): AbsPath {
-        return join(this._extensionPath, 'lib', 'common');
+        const libPath = join(this._extensionPath, 'lib', 'common');
+        if (!fs.existsSync(libPath)) {
+            vscode.window.showErrorMessage('common lib path in extension is invalid, maybe extension has been corrupted, reinstall the extension');
+        }
+        return libPath;
     }
 
     public get libCustomPath(): AbsPath {
-        return vscode.workspace.getConfiguration().get('prj.lib.custom.path', this._workspacePath);
+        const libPath = vscode.workspace.getConfiguration().get('prj.lib.custom.path', this._workspacePath);
+        if (!fs.existsSync(libPath)) {                      
+            vscode.window.showErrorMessage('property "prj.lib.custom.path" is empty or is an invalid path');
+        }
+        return libPath;
     }
 
     public json(): RawPrjInfo {

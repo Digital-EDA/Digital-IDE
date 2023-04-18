@@ -49,10 +49,16 @@ class BaseCommandTreeProvider implements vscode.TreeDataProvider<CommandDataItem
         }
     }
 
+    private getElementChildrenNum(element: CommandDataItem): number {
+        if (element.children) {
+            return Object.keys(element.children).length;
+        }
+        return 0;
+    }
 
     // 根据输入的CommandDataItem转化为vscode.TreeItem
     getTreeItem(element: CommandDataItem): vscode.TreeItem | Thenable<vscode.TreeItem> {
-        const childNum = Object.keys(element.children).length;
+        const childNum = this.getElementChildrenNum(element);
         const treeItem = new vscode.TreeItem(
             element.name,
             childNum === 0 ?

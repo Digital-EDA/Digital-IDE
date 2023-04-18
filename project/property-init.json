@@ -6,6 +6,18 @@
     "soc": {
         "core": "none"
     },
+    "arch": {
+        "prjPath": "./prj",
+        "hardware": {
+            "src": "./user/src",
+            "sim": "./user/sim",
+            "data": "./user/data"
+        },
+        "software": {
+            "src": "./user/software/src",
+            "data": "./user/software/data"
+        }
+    },
     "enableShowLog": false,
     "device": "none"
 }

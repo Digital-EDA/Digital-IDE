@@ -318,15 +318,24 @@
                 }
             ]
         },
+        "viewsContainers": {
+            "activitybar": [
+				{
+					"id": "TreeView",
+					"title": "Digital-IDE",
+					"icon": "images/svg/view.svg"
+				}
+			]
+        },
         "views": {
-			"TOOL": [
+			"TreeView": [
 				{
 					"id": "digital-ide-treeView-arch",
 					"name": "architecture"
 				},
 				{
 					"id": "digital-ide-treeView-tool",
-					"name": "TOOL"
+					"name": "TOOL Options"
 				},
 				{
 					"id": "digital-ide-treeView-hardware",

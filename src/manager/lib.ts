@@ -168,13 +168,19 @@ class LibManage {
     }
 
     remote2Local(remotes: Path[], callback: (src: AbsPath, dist: AbsPath) => void) {
+        const localLibPath = this.localLibPath;
+        const sourceLibPath = this.sourceLibPath;
+        const customerPath = this.customerPath;
+        const customerPathValid = hdlFile.isDir(customerPath);
+
         for (const src of remotes) {
             let dist;
-            if (src.includes(this.customerPath)) {
-                dist = src.replace(this.customerPath, this.localLibPath);
+            if (customerPathValid && src.includes(customerPath)) {
+                dist = src.replace(customerPath, localLibPath);
             } else {
-                dist = src.replace(this.sourceLibPath, this.localLibPath);
+                dist = src.replace(sourceLibPath, localLibPath);
             }
+            
             callback(src, dist);
         }
     }

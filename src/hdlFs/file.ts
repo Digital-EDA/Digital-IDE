@@ -248,7 +248,7 @@ function copyFile(src: AbsPath, dest: AbsPath, cover: boolean = true): boolean {
     }
 
     try {
-        let parent = fspath.dirname(dest);
+        const parent = fspath.dirname(dest);
         fs.mkdirSync(parent, {recursive: true});
         if (!fs.existsSync(dest) || cover) {
             fs.copyFileSync(src, dest);
@@ -297,8 +297,8 @@ function isHasAttr(obj: any, attr: string): boolean{
     attr = attr.replace(/\[(\w+)\]/g, '.$1');
     attr = attr.replace(/^\./, '');
     
-    let keyArr = attr.split('.');
-    for (let i = 0; i < keyArr.length; i++) {
+    const keyArr = attr.split('.');
+    for (let i = 0; i < keyArr.length; ++ i) {
         const element = keyArr[i];
         if (!tempObj) {
             return false;
@@ -321,8 +321,8 @@ function isHasValue(obj: any, attr: string, value: any): boolean{
     attr = attr.replace(/\[(\w+)\]/g, '.$1');
     attr = attr.replace(/^\./, '');
   
-    let keyArr = attr.split('.');
-    for (let i = 0; i < keyArr.length; i++) {
+    const keyArr = attr.split('.');
+    for (let i = 0; i < keyArr.length; ++ i) {
         const element = keyArr[i];
         if (!tempObj) {
             return false;

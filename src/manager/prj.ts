@@ -6,6 +6,7 @@ import { AbsPath, opeParam } from '../global';
 import { PathSet } from '../global/util';
 import { RawPrjInfo } from '../global/prjInfo';
 import { hdlFile, hdlPath } from '../hdlFs';
+import { libManage } from './lib';
 
 class PrjManage {
     // generate property template and write it to .vscode/property.json
@@ -66,21 +67,30 @@ class PrjManage {
         }
     }
 
+    public getIgnoreFiles(): AbsPath[] {
+        return [];
+    }
+
     public getPrjHardwareFiles(): AbsPath[] {
         const searchPathSet = new PathSet();
-        const hardwareInfo = opeParam.prjInfo.arch.hardware;
+        const prjInfo = opeParam.prjInfo;
+        const hardwareInfo = prjInfo.arch.hardware;
+        
+        // handle library first
+        libManage.processLibFiles(prjInfo.library);
+
+        // add possible folder to search
+        searchPathSet.checkAdd(hardwareInfo.src);
+        searchPathSet.checkAdd(hardwareInfo.sim);
+        searchPathSet.checkAdd(prjInfo.getLibraryCommonPaths());
+        searchPathSet.checkAdd(prjInfo.getLibraryCustomPaths());
 
         // TODO : make something like .gitignore
+        const ignores = this.getIgnoreFiles();
 
-        // search src
-        searchPathSet.checkAdd(hardwareInfo.src);
-
-        // search sim
-        searchPathSet.checkAdd(hardwareInfo.sim);
-        
+        // do search
         const searchPaths = searchPathSet.files;
-        
-        return hdlFile.getHDLFiles(searchPaths, []);
+        return hdlFile.getHDLFiles(searchPaths, ignores);
     }
 
     public initialise() {
@@ -91,5 +101,6 @@ class PrjManage {
 const prjManage = new PrjManage();
 
 export {
-    prjManage
+    prjManage,
+    PrjManage
 };

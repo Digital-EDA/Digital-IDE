@@ -14,8 +14,10 @@ async function launch(context: vscode.ExtensionContext) {
     console.time('launch');
     prjManage.initOpeParam(context);
     console.log(opeParam.prjInfo);
+
     const hdlFiles = prjManage.getPrjHardwareFiles();
     await hdlParam.initialize(hdlFiles);
+    
     console.timeLog('launch');
     
     await registerCommand(context);

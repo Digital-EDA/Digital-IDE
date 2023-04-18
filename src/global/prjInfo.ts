@@ -8,6 +8,8 @@ import { ToolChainType, LibraryState, XilinxIP,
          validToolChainType, validXilinxIP, validLibraryState } from './enum';
 import { PrjInfoSchema } from './propertySchema';
 import assert = require('assert');
+import * as hdlPath from '../hdlFs/path';
+
 
 type AbsPath = string;
 type RelPath = string;
@@ -409,7 +411,7 @@ class PrjInfo implements PrjInfoMeta {
                 }
             }
             if (library.hardware) {
-                // TODO : finish this when you can require root of common and custom
+                // TODO : finish this when you can acquire root of common and custom
                 const commonPath = this.libCommonPath;
                 const customPath = this.libCustomPath;
                 this.updatePathWisely(this.library.hardware, 'common', library.hardware.common, commonPath);
@@ -417,7 +419,31 @@ class PrjInfo implements PrjInfoMeta {
             }
         }
     }
-    
+
+    public appendLibraryCommonPath(relPath: RelPath) {
+        this._library.hardware.common.push(relPath);
+    }
+
+    public appendLibraryCustomPath(relPath: RelPath) {
+        this._library.hardware.custom.push(relPath);
+    }
+
+    public getLibraryCommonPaths(absolute: boolean = true): Path[] {
+        if (absolute) {
+            const commonFolder = hdlPath.join(this.libCommonPath, 'Empty');
+            return this._library.hardware.common.map<Path>(relPath => hdlPath.rel2abs(commonFolder, relPath));
+        }
+        return this._library.hardware.common;
+    }
+
+    public getLibraryCustomPaths(absolute: boolean = true): Path[] {
+        if (absolute) {
+            const configFolder = hdlPath.join(this.libCustomPath, 'Empty');
+            return this._library.hardware.custom.map<Path>(relPath => hdlPath.rel2abs(configFolder, relPath));
+        }
+        return this._library.hardware.custom;
+    }
+
     /**
      * merge the input uncomplete prjInfo into this
      * cover the value that exist in rawPrjInfo recursively
@@ -450,7 +476,20 @@ class PrjInfo implements PrjInfoMeta {
     }
 
     public get libCustomPath(): AbsPath {
-        return vscode.workspace.getConfiguration().get('lib.custom.path', this._workspacePath);
+        return vscode.workspace.getConfiguration().get('prj.lib.custom.path', this._workspacePath);
+    }
+
+    public json(): RawPrjInfo {
+        return {
+            toolChain: this._toolChain,
+            prjName: this._prjName,
+            IP_REPO: this._IP_REPO,
+            soc: this._soc,
+            enableShowLog: this._enableShowLog,
+            device: this._device,
+            arch: this._arch,
+            library: this._library,
+        };
     }
 };
 

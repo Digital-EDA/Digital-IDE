@@ -74,7 +74,7 @@ function isHDLFile(path: AbsPath): boolean {
 }
 
 
-function getHDLFiles(path: AbsPath | AbsPath[] | Set<AbsPath>, ignores?: AbsPath[]) {
+function getHDLFiles(path: AbsPath | AbsPath[] | Set<AbsPath>, ignores?: AbsPath[]): AbsPath[] {
     return pickFileRecursive(path, ignores, 
         filePath => isHDLFile(filePath));
 }
@@ -98,7 +98,7 @@ function pickFileRecursive(path: AbsPath | AbsPath[] | Set<AbsPath>, ignores?: A
         for (const file of fs.readdirSync(path)) {
             const filePath = hdlPath.join(path, file);
             if (isDir(filePath)) {
-                const subHdlFiles = getHDLFiles(filePath, ignores);
+                const subHdlFiles = pickFileRecursive(filePath, ignores);
                 if (subHdlFiles.length > 0) {
                     hdlFiles.push(...subHdlFiles);
                 }

@@ -24,12 +24,18 @@
         "configuration": {
             "title": "Digital-IDE",
             "properties": {
-                "lib.custom.path": {
+                "prj.lib.custom.path": {
                     "scope": "window",
                     "type": "string",
                     "default": "",
                     "description": "path of the dictionary of \"custom\" in library"
                 },
+                "prj.file.structure.notice": {
+					"scope": "window",
+					"type": "boolean",
+					"default": true,
+					"description": "notice when change file structure"
+				},
                 "function.doc.webview.backgroundImage": {
                     "type": "string",
                     "default": "",
@@ -169,6 +175,15 @@
                 }
             },
             {
+				"command": "digital-ide.pickLibrary",
+				"title": "import library",
+				"icon": {
+					"light": "images/svg/light/library.svg",
+					"dark": "images/svg/dark/library.svg"
+				},
+				"category": "Digital-IDE"
+			},
+            {
                 "command": "digital-ide.treeView.arch.expand",
                 "category": "tool",
                 "icon": "$(expand-all)",
@@ -280,7 +295,7 @@
 					"when": "view == digital-ide-treeView-arch"
 				},
 				{
-					"command": "TOOL.libPick",
+					"command": "digital-ide.pickLibrary",
 					"group": "navigation",
 					"when": "view == digital-ide-treeView-arch"
 				},

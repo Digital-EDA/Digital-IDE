@@ -3,8 +3,9 @@ import * as fspath from 'path';
 import * as fs from 'fs';
 
 import { AbsPath, opeParam } from '../global';
+import { PrjInfo, RawPrjInfo } from '../global/prjInfo';
 import { HdlLangID } from '../global/enum';
-import { hdlDir, hdlFile, hdlPath } from '../hdlFs';
+import { hdlFile, hdlPath } from '../hdlFs';
 import { getIconConfig } from '../hdlFs/icons';
 
 type MissPathType = { path?: string };
@@ -144,30 +145,35 @@ class LibPick {
             const selectedPath = event.item.path;
 
             if (selectedPath && hdlPath.exist(selectedPath)) {
-                const ppyPath = hdlPath.join(opeParam.workspacePath, '.vscode', 'property.json');
-
-                // 抽象这块
-                let prjInfo = null;
-                // 如果存在，则读取用户的配置文件，否则使用默认的
-                if (!hdlPath.exist(ppyPath)) {
-                    prjInfo = hdlFile.readJSON(opeParam.propertyInitPath);
-                } else {
-                    prjInfo = hdlFile.readJSON(ppyPath);
-                }
-
+                const userPrjInfo = opeParam.getUserPrjInfo();
                 if (selectedPath.includes(this.commonQuickPickItem.path!)) {
                     // this is a module import from common, use relative path
-                    const relPath = selectedPath.replace(this.commonQuickPickItem.path + '/', '');                    
-                    appendLibraryCommonPath(relPath, prjInfo);
+                    const relPath = selectedPath.replace(this.commonQuickPickItem.path + '/', '');
+                    userPrjInfo.appendLibraryCommonPath(relPath);
                 } else {
                     // this is a module import from custom, use absolute path
                     const relPath = selectedPath.replace(this.customQuickPickItem.path + '/', '');
-                    appendLibraryCustomPath(relPath, prjInfo);
+                    userPrjInfo.appendLibraryCustomPath(relPath);
                 }
-                hdlFile.writeJSON(ppyPath, prjInfo);
+
+                // acquire raw and replace it
+                const rawUserPrjInfo = opeParam.getRawUserPrjInfo();
+                rawUserPrjInfo.library = userPrjInfo.library;
+                hdlFile.writeJSON(opeParam.propertyJsonPath, rawUserPrjInfo);
             }
         });
 
         pickWidget.show();
     }
 }
+
+function pickLibrary() {
+    const picker = new LibPick();
+    picker.pickItems();
+}
+
+export {
+    LibPick,
+    LibPickItem,
+    pickLibrary
+};

@@ -1,6 +1,5 @@
 import * as assert from 'assert';
 import * as fs from 'fs';
-import { hdlFile } from '../hdlFs';
 
 import { Arch, PrjInfo, RawPrjInfo, resolve, toSlash } from './prjInfo';
 
@@ -23,6 +22,16 @@ interface FirstTopModuleDesc {
     name: string
     path: AbsPath
 };
+
+function readJSON(path: AbsPath): object {
+    try {
+        const context = fs.readFileSync(path, 'utf-8');
+        return JSON.parse(context);
+    } catch (err) {
+        console.log('fail to read JSON: ', err);
+    }
+    return {};
+}
 
 
 class OpeParam {
@@ -146,18 +155,32 @@ class OpeParam {
     /**
      * get User's property.json
      */
-    public getUserPrjInfo() {
+    public getUserPrjInfo(): PrjInfo {
         const propertyJsonPath = this.propertyJsonPath;
         const userPrjInfo = new PrjInfo();
         if (fs.existsSync(propertyJsonPath)) {
-            const rawPrjInfo = hdlFile.readJSON(propertyJsonPath);
+            const rawPrjInfo = readJSON(propertyJsonPath);
             userPrjInfo.merge(rawPrjInfo);
         } else {
             // use default config instead
-            const rawPrjInfo = hdlFile.readJSON(this.propertyInitPath);
+            const rawPrjInfo = readJSON(this.propertyInitPath);
             userPrjInfo.merge(rawPrjInfo);
         }
+        return userPrjInfo;
     }
+
+    public getRawUserPrjInfo(): RawPrjInfo {
+        const propertyJsonPath = this.propertyJsonPath;
+        if (fs.existsSync(propertyJsonPath)) {
+            const rawPrjInfo = readJSON(propertyJsonPath);
+            return rawPrjInfo;
+        } else {
+            // use default config instead
+            const rawPrjInfo = readJSON(this.propertyInitPath);
+            return rawPrjInfo;
+        }
+    }
+
 };
 
 const opeParam: OpeParam = new OpeParam();

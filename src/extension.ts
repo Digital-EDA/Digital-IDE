@@ -11,16 +11,9 @@ async function registerCommand(context: vscode.ExtensionContext) {
 }
 
 async function launch(context: vscode.ExtensionContext) {
-    console.time('launch');
-    prjManage.initOpeParam(context);
-    console.log(opeParam.prjInfo);
+    await prjManage.initialise(context);
+    await registerCommand(context);
 
-    const hdlFiles = prjManage.getPrjHardwareFiles();
-    await hdlParam.initialize(hdlFiles);
-    
-    console.timeLog('launch');
-    
-    await registerCommand(context);    
     MainOutput.report('Digital-IDE has launched, Version: 0.3.0');
     MainOutput.report('OS: ' + opeParam.os);
 }

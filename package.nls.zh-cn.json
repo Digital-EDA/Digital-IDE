@@ -11,7 +11,7 @@
     "digital-ide.treeView.arch.collapse.title": "崩溃树视图中的所有项目",
     "digital-ide.treeView.arch.refresh.title": "刷新树视图",
     "digital-ide.treeView.arch.openFile.title": "在树视图打开相应的文件",
-    "digital-ide.tool.tool.clean.title": "干净的当前项目",
+    "digital-ide.tool.clean.title": "干净的当前项目",
     "digital-ide.soft.launch.title": "启动SDK开发辅助功能",
     "digital-ide.soft.build.title": "建立项目当前的SDK",
     "digital-ide.soft.download.title": "下载文件到设备引导",
@@ -26,5 +26,14 @@
     "digital-ide.hard.build.bitstream.title": "生成一些文件",
     "digital-ide.hard.program.title": "下载文件到设备",
     "digital-ide.hard.gui.title": "打开界面",
-    "digital-ide.hard.exit.title": "退出当前项目"
+    "digital-ide.hard.exit.title": "退出当前项目",
+    "digital-ide.pickLibrary.title": "从自定义选择自由和普遍",
+    "digital-ide.pl.setSrcTop.title": "设置为src的top",
+    "digital-ide.pl.setSimTop.title": "设置为sim的top",
+    "digital-ide.pl.addDevice.title": "添加device",
+    "digital-ide.pl.delDevice.title": "删除device",
+    "digital-ide.pl.addFile.title": "添加文件",
+    "digital-ide.pl.delFile.title": "d删除文件",
+    "digital-ide.netlist.title": "netlist",
+    "digital-ide.fsm.title": "有限状态机"
 }

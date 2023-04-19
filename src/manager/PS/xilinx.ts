@@ -15,10 +15,10 @@ interface XilinxOperationConfig {
 }
 
 interface PSConfig {
-    terminal? : vscode.Terminal | null,
+    terminal : vscode.Terminal,
     tool? : string,                  // 工具类型
     path? : string,                  // 第三方工具运行路径
-    ope? : XilinxOperation,
+    ope : XilinxOperation,
 }
 
 /**
@@ -120,5 +120,6 @@ file delete ${scriptPath} -force\n`;
 }
 
 export {
-    XilinxOperation
+    XilinxOperation,
+    PSConfig
 };

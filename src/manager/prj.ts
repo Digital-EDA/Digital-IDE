@@ -2,13 +2,19 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 
-import { AbsPath, opeParam } from '../global';
+import { AbsPath, MainOutput, opeParam, ReportType } from '../global';
 import { PathSet } from '../global/util';
 import { RawPrjInfo } from '../global/prjInfo';
 import { hdlFile, hdlPath } from '../hdlFs';
 import { libManage } from './lib';
+import { hdlParam } from '../hdlParser';
+import { PlManage } from './PL';
+import { PsManage } from './PS';
 
 class PrjManage {
+    pl?: PlManage;
+    ps?: PsManage;
+
     // generate property template and write it to .vscode/property.json
     public async generatePropertyJson() {
         if (fs.existsSync(opeParam.propertyJsonPath)) {
@@ -78,7 +84,8 @@ class PrjManage {
         const hardwareInfo = prjInfo.arch.hardware;
         
         // handle library first
-        libManage.processLibFiles(prjInfo.library);
+        const fileChange = libManage.processLibFiles(prjInfo.library);
+        MainOutput.report(`libManage finish process, add ${fileChange.add.length} files, del ${fileChange.del.length} files`, ReportType.Info);
 
         // add possible folder to search
         searchPathSet.checkAdd(hardwareInfo.src);
@@ -94,8 +101,30 @@ class PrjManage {
         return hdlFile.getHDLFiles(searchPaths, ignores);
     }
 
-    public initialise() {
+    public async initialise(context: vscode.ExtensionContext, countTimeCost: boolean = true) {
+        if (countTimeCost) {
+            console.time('launch');
+        }
         
+        this.initOpeParam(context);
+        MainOutput.report('finish initialise opeParam', ReportType.Info);
+        
+        const hdlFiles = this.getPrjHardwareFiles();
+        MainOutput.report(`finish collect ${hdlFiles.length} hdl files`, ReportType.Info);
+        
+        await hdlParam.initialize(hdlFiles);
+        const unhandleNum = hdlParam.getUnhandleInstanceNumber();
+        MainOutput.report(`finish analyse ${hdlFiles.length} hdl files, find ${unhandleNum} unsolved instances`, ReportType.Info);
+
+        this.pl = new PlManage();
+        this.ps = new PsManage();
+        MainOutput.report('create pl and ps', ReportType.Info);
+
+        
+
+        if (countTimeCost) {
+            console.timeLog('launch');
+        }
     }
 }
 

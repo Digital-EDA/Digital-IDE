@@ -11,7 +11,7 @@
     "digital-ide.treeView.arch.collapse.title": "collapse all the items in tree view",
     "digital-ide.treeView.arch.refresh.title": "refresh the tree view",
     "digital-ide.treeView.arch.openFile.title": "Open the corresponding file in tree view",
-    "digital-ide.tool.tool.clean.title": "Clean the current project",
+    "digital-ide.tool.clean.title": "Clean the current project",
     "digital-ide.soft.launch.title": "Launch SDK development assist function",
     "digital-ide.soft.build.title": "Build the current SDK project",
     "digital-ide.soft.download.title": "Download the boot file into the device",
@@ -26,5 +26,14 @@
     "digital-ide.hard.build.bitstream.title": "Generate the BIT File",
     "digital-ide.hard.program.title": "Download the bit file into the device",
     "digital-ide.hard.gui.title": "Open the GUI",
-    "digital-ide.hard.exit.title": "Exit the current project"
+    "digital-ide.hard.exit.title": "Exit the current project",
+    "digital-ide.pickLibrary.title": "select lib from custom & common",
+    "digital-ide.pl.setSrcTop.title": "set as top file of src",
+    "digital-ide.pl.setSimTop.title": "set as top file of sim",
+    "digital-ide.pl.addDevice.title": "add device",
+    "digital-ide.pl.delDevice.title": "del device",
+    "digital-ide.pl.addFile.title": "add file",
+    "digital-ide.pl.delFile.title": "del file",
+    "digital-ide.netlist.title": "netlist",
+    "digital-ide.fsm.title": "finite state machine"
 }

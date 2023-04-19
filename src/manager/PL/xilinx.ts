@@ -23,10 +23,10 @@ interface TopMod {
 };
 
 interface PLConfig {
-    terminal? : vscode.Terminal | null,
+    terminal : vscode.Terminal | null,
     tool? : string,                  // 工具类型
     path? : string,                  // 第三方工具运行路径
-    ope? : XilinxOperation,
+    ope : XilinxOperation,
 };
 
 interface PLPrjInfo {
@@ -152,7 +152,7 @@ class XilinxOperation {
         }
 
         const tclPath = hdlPath.join(this.xilinxPath, 'launch.tcl');
-        scripts.push(this.refresh({terminal: null}));
+        scripts.push(this.refresh());
         scripts.push(`file delete ${tclPath} -force`);
         const tclCommands = scripts.join('\n') + '\n';
 
@@ -177,7 +177,7 @@ class XilinxOperation {
         scripts.push(`open_project ${path} -quiet`);
     }
 
-    refresh(config: PLConfig): string {
+    refresh(terminal?: vscode.Terminal): string {
         const scripts: string[] = [];
         // 清除所有源文件
         scripts.push(`remove_files -quiet [get_files]`);
@@ -284,7 +284,7 @@ class XilinxOperation {
         hdlFile.writeFile(scriptPath, script);
         const cmd = `source ${scriptPath} -quiet`;
 
-        config.terminal?.sendText(cmd);
+        terminal?.sendText(cmd);
         return cmd;
     }
 
@@ -561,7 +561,10 @@ class XilinxBd {
         this.extensionPath = opeParam.extensionPath;
         this.xbdPath = hdlPath.join(this.extensionPath, 'lib', 'bd', 'xilinx');
         this.schemaPath = opeParam.propertySchemaPath;
+
+
         this.schemaCont = hdlFile.readJSON(this.schemaPath) as PropertySchema;
+        
         this.bdEnum = this.schemaCont.properties.soc.properties.bd.enum;
         this.bdRepo = this.setting.get('PRJ.xilinx.BD.repo.path', '');
     }
@@ -630,9 +633,7 @@ class XilinxBd {
         hdlFile.writeJSON(this.schemaPath, this.schemaCont);
     }
 
-    /**
-     * 
-     */
+    
     delete() {
         this.getConfig();
         vscode.window.showQuickPick(this.bdEnum).then(select => {
@@ -810,10 +811,9 @@ const tools = {
 };
 
 
-const xilinxBd = new XilinxBd();
-
-module.exports = {
+export {
     XilinxOperation,
     tools,
-    xilinxBd
+    XilinxBd,
+    PLConfig
 };

@@ -167,6 +167,10 @@ class HdlParam {
         return dependencies;
     }
 
+    public getUnhandleInstanceNumber(): number {
+        return this.unhandleInstances.size;
+    }
+
     public getUnhandleInstanceByType(typeName: string): HdlInstance | undefined {
         for (const inst of this.unhandleInstances) {
             if (inst.type === typeName) {

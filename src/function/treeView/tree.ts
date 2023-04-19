@@ -82,6 +82,8 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
 
     public refreshSrc() {
         this.treeEventEmitter.fire(this.srcRootItem);
+        console.log('enter');
+        
     }
 
     public refreshSim() {
@@ -134,6 +136,8 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
 
     public getChildren(element?: ModuleDataItem | undefined): vscode.ProviderResult<ModuleDataItem[]> {
         if (element) {
+            console.log(element);
+            
             const name = element.name;
             if (name === 'sim' || name === 'src') {
                 element.parent = null;
@@ -181,6 +185,8 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
             const icon = this.makeFirstTopIconName(type);
             const range = firstTop.range;
             const parent = element;
+
+            
 
             const tops = topModuleItemList.filter(item => item.path === path && item.name === name);
             const adjustItemList = [];
@@ -270,6 +276,17 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
                 return 'File Error';
             }
         }
+    }
+
+    public getItemType(item: ModuleDataItem): string | null {
+        if (!item) {
+            return null;
+        }
+        let currentLevel = item;
+        while (currentLevel.parent) {
+            currentLevel = currentLevel.parent;
+        }
+        return currentLevel.type;
     }
 }
 

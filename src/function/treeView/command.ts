@@ -180,7 +180,7 @@ class ToolTreeProvider extends BaseCommandTreeProvider {
     constructor() {
         const config: CommandConfig = {
             Clean: {
-                cmd: 'digital-ide.tool.tool.clean',
+                cmd: 'digital-ide.tool.clean',
                 icon: 'clean',
                 tip: 'Clean the current project'
             }

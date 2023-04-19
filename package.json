@@ -31,11 +31,18 @@
                     "description": "path of the dictionary of \"custom\" in library"
                 },
                 "prj.file.structure.notice": {
-					"scope": "window",
-					"type": "boolean",
-					"default": true,
-					"description": "notice when change file structure"
-				},
+                    "scope": "window",
+                    "type": "boolean",
+                    "default": true,
+                    "description": "notice when change file structure"
+                },
+                "prj.vivado.install.path": {
+                    "scope": "window",
+                    "type": "string",
+                    "default": "",
+                    "description": "set the xilinx install path. \n e.g. : D:/APP/vivado_18_3/Vivado/2018.3/bin \n This applies only to WIN For other systems, add it to environment variables"
+                },
+                "prj.xsdk.install.path": {},
                 "function.doc.webview.backgroundImage": {
                     "type": "string",
                     "default": "",
@@ -175,14 +182,14 @@
                 }
             },
             {
-				"command": "digital-ide.pickLibrary",
-				"title": "import library",
-				"icon": {
-					"light": "images/svg/light/library.svg",
-					"dark": "images/svg/dark/library.svg"
-				},
-				"category": "Digital-IDE"
-			},
+                "command": "digital-ide.pickLibrary",
+                "title": "%digital-ide.pickLibrary.title%",
+                "icon": {
+                    "light": "images/svg/light/library.svg",
+                    "dark": "images/svg/dark/library.svg"
+                },
+                "category": "Digital-IDE"
+            },
             {
                 "command": "digital-ide.treeView.arch.expand",
                 "category": "tool",
@@ -207,9 +214,9 @@
                 "title": "%digital-ide.treeView.arch.openFile.title%"
             },
             {
-                "command": "digital-ide.tool.tool.clean",
+                "command": "digital-ide.tool.clean",
                 "category": "tool",
-                "title": "%digital-ide.tool.tool.clean.title%"
+                "title": "%digital-ide.tool.clean.title%"
             },
             {
                 "command": "digital-ide.soft.launch",
@@ -285,26 +292,101 @@
                 "command": "digital-ide.hard.exit",
                 "category": "tool",
                 "title": "%digital-ide.hard.exit.title%"
+            },
+            {
+                "command": "digital-ide.pl.setSrcTop",
+                "category": "pl",
+                "title": "%digital-ide.pl.setSrcTop.title%"
+            },
+            {
+                "command": "digital-ide.pl.setSimTop",
+                "category": "pl",
+                "title": "%digital-ide.pl.setSimTop.title%"
+            },
+            {
+                "command": "digital-ide.pl.addDevice",
+                "category": "pl",
+                "title": "%digital-ide.pl.addDevice.title%"
+            },
+            {
+                "command": "digital-ide.pl.delDevice",
+                "category": "pl",
+                "title": "%digital-ide.pl.delDevice.title%"
+            },
+            {
+                "command": "digital-ide.pl.addFile",
+                "category": "pl",
+                "title": "%digital-ide.pl.addFile.title%"
+            },
+            {
+                "command": "digital-ide.pl.delFile",
+                "category": "pl",
+                "title": "%digital-ide.pl.delFile.title%"
+            },
+            {
+                "command": "digital-ide.netlist",
+                "icon": {
+                    "light": "images/svg/light/netlist.svg",
+                    "dark": "images/svg/dark/netlist.svg"
+                },
+                "category": "tool",
+                "title": "%digital-ide.netlist.title%"
+            },
+            {
+                "command": "digital-ide.fsm",
+                "icon": {
+                    "light": "images/svg/light/fsm.svg",
+                    "dark": "images/svg/dark/fsm.svg"
+                },
+                "category": "tool",
+                "title": "%digital-ide.fsm.title%"
             }
         ],
         "menus": {
             "view/title": [
-				{
-					"command": "digital-ide.treeView.arch.collapse",
-					"group": "navigation",
-					"when": "view == digital-ide-treeView-arch"
-				},
-				{
-					"command": "digital-ide.pickLibrary",
-					"group": "navigation",
-					"when": "view == digital-ide-treeView-arch"
-				},
-				{
-					"command": "digital-ide.treeView.arch.refresh",
-					"group": "navigation",
-					"when": "view == digital-ide-treeView-arch"
-				}
-			],
+                {
+                    "command": "digital-ide.treeView.arch.collapse",
+                    "group": "navigation",
+                    "when": "view == digital-ide-treeView-arch"
+                },
+                {
+                    "command": "digital-ide.pickLibrary",
+                    "group": "navigation",
+                    "when": "view == digital-ide-treeView-arch"
+                },
+                {
+                    "command": "digital-ide.treeView.arch.refresh",
+                    "group": "navigation",
+                    "when": "view == digital-ide-treeView-arch"
+                }
+            ],
+            "view/item/context": [
+                {
+                    "command": "digital-ide.tool.icarus.simulateFile",
+                    "group": "inline@1",
+                    "when": "view == digital-ide-treeView-arch && viewItem == file"
+                },
+                {
+                    "command": "digital-ide.netlist",
+                    "group": "inline@3",
+                    "when": "view == digital-ide-treeView-arch && viewItem == file"
+                },
+                {
+                    "command": "digital-ide.pl.setSrcTop",
+                    "group": "navigation@1",
+                    "when": "view == digital-ide-treeView-arch && viewItem == file"
+                },
+                {
+                    "command": "digital-ide.pl.setSimTop",
+                    "group": "navigation@2",
+                    "when": "view == digital-ide-treeView-arch && viewItem == file"
+                },
+                {
+                    "command": "digital-ide.tool.icarus.simulateFile",
+                    "group": "navigation@3",
+                    "when": "view == digital-ide-treeView-arch && viewItem == file"
+                }
+            ],
             "editor/title": [
                 {
                     "when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
@@ -320,33 +402,33 @@
         },
         "viewsContainers": {
             "activitybar": [
-				{
-					"id": "TreeView",
-					"title": "Digital-IDE: TreeView",
-					"icon": "images/svg/view.svg"
-				}
-			]
+                {
+                    "id": "TreeView",
+                    "title": "Digital-IDE: TreeView",
+                    "icon": "images/svg/view.svg"
+                }
+            ]
         },
         "views": {
-			"TreeView": [
-				{
-					"id": "digital-ide-treeView-arch",
-					"name": "architecture"
-				},
-				{
-					"id": "digital-ide-treeView-tool",
-					"name": "TOOL Options"
-				},
-				{
-					"id": "digital-ide-treeView-hardware",
-					"name": "HARD Options"
-				},
-				{
-					"id": "digital-ide-treeView-software",
-					"name": "SOFT Options"
-				}
-			]
-		},
+            "TreeView": [
+                {
+                    "id": "digital-ide-treeView-arch",
+                    "name": "architecture"
+                },
+                {
+                    "id": "digital-ide-treeView-tool",
+                    "name": "TOOL Options"
+                },
+                {
+                    "id": "digital-ide-treeView-hardware",
+                    "name": "HARD Options"
+                },
+                {
+                    "id": "digital-ide-treeView-software",
+                    "name": "SOFT Options"
+                }
+            ]
+        },
         "keybindings": [
             {
                 "command": "digital-ide.tool.instance",

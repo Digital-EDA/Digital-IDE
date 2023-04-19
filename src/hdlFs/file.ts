@@ -179,6 +179,8 @@ function writeFile(path: AbsPath, content: string): boolean {
 
 function readJSON(path: AbsPath): object {
     try {
+        console.log(path);
+        
         const context = fs.readFileSync(path, 'utf-8');
         return JSON.parse(context);
     } catch (err) {

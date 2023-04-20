@@ -58,7 +58,6 @@ async function testbench() {
         placeHolder: 'Select a Module to generate testbench'
     };
     const path = hdlPath.toSlash(uri.fsPath);
-    console.log(path);
     
     if (!hdlFile.isHDLFile(path)) {
         return;

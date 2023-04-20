@@ -44,15 +44,15 @@ const PrjInfoDefaults: PrjInfoMeta = {
     device: 'none',
 
     arch: {
-        prjPath: './prj',
+        prjPath: '',
         hardware: {
-            src: './user/src',
-            sim: './user/sim',
-            data: './user/data'
+            src: '',
+            sim: '',
+            data: ''
         },
         software: {
-            src: './user/software/src',
-            data: './user/software/data'
+            src: '',
+            data: ''
         }
     },
 
@@ -355,7 +355,7 @@ class PrjInfo implements PrjInfoMeta {
         const workspacePath = this._workspacePath;
 
         if (arch) {
-            this.updatePathWisely(this.arch, 'prjPath', arch.prjPath);
+            this.updatePathWisely(this.arch, 'prjPath', arch.prjPath);            
             if (arch.hardware) {
                 this.updatePathWisely(this.arch.hardware, 'src', arch.hardware.src);
                 this.updatePathWisely(this.arch.hardware, 'sim', arch.hardware.sim);

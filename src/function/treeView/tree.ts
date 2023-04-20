@@ -52,27 +52,26 @@ function canExpandable(element: ModuleDataItem) {
 
 
 class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
-    treeEventEmitter: vscode.EventEmitter<ModuleDataItem>;
-    treeEvent: vscode.Event<ModuleDataItem>;
+    _onDidChangeTreeData: vscode.EventEmitter<ModuleDataItem>;
+    onDidChangeTreeData: vscode.Event<ModuleDataItem>;
     firstTop: FirstTop;
     srcRootItem: ModuleDataItem;
     simRootItem: ModuleDataItem;
 
     constructor() {
-        this.treeEventEmitter = new vscode.EventEmitter<ModuleDataItem>();
-        this.treeEvent = this.treeEventEmitter.event;
+        this._onDidChangeTreeData = new vscode.EventEmitter<ModuleDataItem>();
+        this.onDidChangeTreeData = this._onDidChangeTreeData.event;
         this.firstTop = { 
             src: null,
             sim: null,
         };
         this.srcRootItem = {icon: 'src', type: HdlFileType.Src, name: 'src', range: null, path: '', parent: null};
         this.simRootItem = {icon: 'sim', type: HdlFileType.Sim, name: 'sim', range: null, path: '', parent: null};
-
     }
 
     public refresh(element?: ModuleDataItem) {
         if (element) {
-            this.treeEventEmitter.fire(element);
+            this._onDidChangeTreeData.fire(element);
         } else {
             // refresh all the root in default
             this.refreshSim();
@@ -81,13 +80,11 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
     }
 
     public refreshSrc() {
-        this.treeEventEmitter.fire(this.srcRootItem);
-        console.log('enter');
-        
+        this._onDidChangeTreeData.fire(this.srcRootItem);
     }
 
     public refreshSim() {
-        this.treeEventEmitter.fire(this.simRootItem);
+        this._onDidChangeTreeData.fire(this.simRootItem);
     }
 
 
@@ -134,10 +131,8 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
         return treeItem;
     }
 
-    public getChildren(element?: ModuleDataItem | undefined): vscode.ProviderResult<ModuleDataItem[]> {
+    public getChildren(element?: ModuleDataItem | undefined): vscode.ProviderResult<ModuleDataItem[]> {                
         if (element) {
-            console.log(element);
-            
             const name = element.name;
             if (name === 'sim' || name === 'src') {
                 element.parent = null;

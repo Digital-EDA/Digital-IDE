@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import * as fs from 'fs';
 import * as child_process from 'child_process';
 
 import { hdlParam } from '../../hdlParser';
@@ -53,7 +54,7 @@ class Simulate {
         };
         let code = hdlFile.readFile(path);
         if (!code) {
-            MainOutput.report('error when read ' + path, ReportType.Error);
+            MainOutput.report('error when read ' + path, ReportType.Error, true);
             return;
         }
 
@@ -69,11 +70,14 @@ class Simulate {
         // make simulation dir
         const defaultSimulationDir = hdlPath.join(opeParam.prjInfo.arch.prjPath, 'simulation', 'icarus');
         simConfig.simulationHome = setting.get('function.simulate.simulationHome', '');
-        if (!simConfig.simulationHome) {
+        if (!fs.existsSync(simConfig.simulationHome)) {
             simConfig.simulationHome = defaultSimulationDir;
         }
         
+        
+        
         if (!hdlFile.isDir(simConfig.simulationHome)) {
+            MainOutput.report('create dir ' + simConfig.simulationHome, ReportType.Info);
             hdlDir.mkdir(simConfig.simulationHome);
         }
 
@@ -91,7 +95,7 @@ class Simulate {
 
         simConfig.installPath = setting.get('function.simulate.icarus.installPath', '');
         if (simConfig.installPath !== '' && !hdlFile.isDir(simConfig.installPath)) {
-            MainOutput.report(`install path ${simConfig.installPath} is illegal`, ReportType.Error);
+            MainOutput.report(`install path ${simConfig.installPath} is illegal`, ReportType.Error, true);
             return;
         }
 
@@ -183,7 +187,7 @@ class IcarusSimulate extends Simulate {
         const iverilogPath = simConfig.iverilogPath;
         const argu = '-g2012';
         const outVvpPath = '"' + hdlPath.join(simConfig.simulationHome, 'out.vvp') + '"';      
-        const mainPath = '"' + path + '"';  
+        const mainPath = '"' + path + '"';
 
         const cmd = `${iverilogPath} ${argu} -o ${outVvpPath} -s ${name} ${mainPath} ${dependenceArgs} ${thirdLibPath}`;
         MainOutput.report(cmd, ReportType.Run);
@@ -255,7 +259,6 @@ class IcarusSimulate extends Simulate {
         }
 
         const runInTerminal = vscode.workspace.getConfiguration().get('function.simulate.runInTerminal');
-        console.log(runInTerminal);
         
         if (runInTerminal) {
             this.execInTerminal(command, cwd);
@@ -267,8 +270,6 @@ class IcarusSimulate extends Simulate {
     private getAllOtherDependences(path: AbsPath, name: string): AbsPath[] {
         const deps = hdlParam.getAllDependences(path, name);
         if (deps) {
-            console.log(deps);
-            
             return deps.others;
         } else {
             MainOutput.report('Fail to get dependences of path: ' + path + ' name: ' + name, ReportType.Warn);
@@ -280,7 +281,8 @@ class IcarusSimulate extends Simulate {
         const name = hdlModule.name;
         const path = hdlModule.path;
         if (!hdlParam.isTopModule(path, name, false)) {
-            MainOutput.report('path: ' + path + ' name: ' + name + ' is not top module');
+            const warningMsg = name + ' in ' + path + ' is not top module';
+            MainOutput.report(warningMsg, ReportType.Warn, true);
             return;
         }
         const dependences = this.getAllOtherDependences(path, name);
@@ -289,7 +291,8 @@ class IcarusSimulate extends Simulate {
             const cwd = hdlPath.resolve(hdlModule.path, '..');
             this.exec(simulationCommand, cwd);
         } else {
-            MainOutput.report('Fail to generate command', ReportType.Error);
+            const errorMsg = 'Fail to generate command';
+            MainOutput.report(errorMsg, ReportType.Error, true);
             return;
         }
     }
@@ -309,7 +312,7 @@ class IcarusSimulate extends Simulate {
 
         const currentFile = hdlParam.getHdlFile(path);
         if (!currentFile) {
-            MainOutput.report('path ' + path + ' is not a hdlFile', ReportType.Error);
+            MainOutput.report('path ' + path + ' is not a hdlFile', ReportType.Error, true);
             return;
         }
         const items = getSelectItem(currentFile.getAllHdlModules());

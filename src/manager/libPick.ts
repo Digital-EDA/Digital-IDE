@@ -155,7 +155,6 @@ class LibPick {
 
             if (selectedPath && hdlPath.exist(selectedPath)) {
                 const userPrjInfo = opeParam.getUserPrjInfo();
-                console.log(userPrjInfo);
                 
                 if (selectedPath.includes(this.commonQuickPickItem.path!)) {
                     // this is a module import from common, use relative path

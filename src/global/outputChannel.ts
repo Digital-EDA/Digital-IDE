@@ -40,11 +40,31 @@ class Output {
         return this._ignoreTypes.includes(type);
     }
 
-    public report(message: string | unknown, type: ReportType = ReportType.Info) {
+    private showInWindows(message: string, type: ReportType = ReportType.Info) {
+        if (type === ReportType.Warn) {
+            vscode.window.showWarningMessage(message);
+        } else if (type === ReportType.Error) {
+            vscode.window.showErrorMessage(message);
+        } else {
+            vscode.window.showInformationMessage(message);
+        }
+    }
+
+    /**
+     * 
+     * @param message message
+     * @param type report type
+     * @param reportInWindows whether use vscode.windows.<api> to show info
+     */
+    public report(message: string | unknown, type: ReportType = ReportType.Info, reportInWindows: boolean = false) {
         if (!this.skipMessage(type) && message) {
             this._output.show(true);
             const currentTime = this.getCurrentTime();
             this._output.appendLine('[' + type + ' - ' + currentTime + '] ' + message);
+
+            if (reportInWindows) {
+                this.showInWindows('' + message, type);
+            }
         }
     }
 }

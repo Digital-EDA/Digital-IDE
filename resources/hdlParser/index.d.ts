@@ -6,10 +6,7 @@ type RelPath = string;
 type Path = AbsPath | RelPath;
 
 interface Fast {
-    content: {
-        error : string[]
-        modules: RawHdlModule[]
-    }
+    content: RawHdlModule[]
     languageId: HdlLangID
     macro: Macro
 }

@@ -289,10 +289,10 @@ class XilinxOperation {
     }
 
     simulate(config: PLConfig) {
-        this.simcli(config);
+        this.simulateCli(config);
     }
 
-    simgui(config: PLConfig) {
+    simulateGui(config: PLConfig) {
         const scriptPath = `${this.xilinxPath}/simulate.tcl`;
         const script = `
         if {[current_sim] != ""} {
@@ -319,7 +319,7 @@ class XilinxOperation {
         config.terminal?.sendText(cmd);
     }
 
-    simcli(config: PLConfig) {
+    simulateCli(config: PLConfig) {
         const scriptPath = hdlPath.join(this.xilinxPath, 'simulate.tcl');
         const script = `
         if {[current_sim] != ""} {

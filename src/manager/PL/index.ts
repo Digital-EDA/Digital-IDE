@@ -40,43 +40,42 @@ class PlManage extends BaseManage {
     }
 
 
-    launch() {
+    public launch() {
         this.config.ope.launch(this.config);
     }
 
-    refresh() {
+    public simulate() {
         if (!this.config.terminal) {
-            return null;
+            return;
         }
-
-        this.config.ope.refresh(this.config.terminal);
-    }
-
-    simulate() {
-        if (!this.config.terminal) {
-            return null;
-        }
-
         this.config.ope.simulate(this.config);
     }
 
-    build() {
-        if (!this.config.terminal) {
-            return null;
-        }
+    public simulateCli() {
+        this.config.ope.simulateCli(this.config);
+    }
 
+    public simulateGui() {
+        this.config.ope.simulateGui(this.config);
+    }
+
+    public refresh() {
+        if (!this.config.terminal) {
+            return;
+        }
+        this.config.ope.refresh(this.config.terminal);
+    }
+
+    public build() {
         this.config.ope.build(this.config);
     }
 
-    synth() {
-        if (!this.config.terminal) {
-            return null;
-        }
 
+    public synth() {
         this.config.ope.synth(this.config);
     }
 
-    impl() {
+    public impl() {
         if (!this.config.terminal) {
             return null;
         }
@@ -84,27 +83,19 @@ class PlManage extends BaseManage {
         this.config.ope.impl(this.config);
     }
 
-    bit() {
-        if (!this.config.terminal) {
-            return null;
-        }
-
+    public bitstream() {
         this.config.ope.generateBit(this.config);
     }
 
-    program() {
-        if (!this.config.terminal) {
-            return null;
-        }
-
+    public program() {
         this.config.ope.program(this.config);
     }
 
-    gui() {
+    public gui() {
         this.config.ope.gui(this.config);
     }
 
-    exit() {
+    public exit() {
         if (!this.config.terminal) {
             return null;
         }

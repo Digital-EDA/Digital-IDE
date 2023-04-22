@@ -188,24 +188,24 @@ class HdlParam {
         this.unhandleInstances.delete(inst);
     }
 
-    public async initHdlFiles(hdlFiles: AbsPath[] | Generator<AbsPath>) {
-        for (const path of hdlFiles) {
-            // TODO : only support verilog now
-            const langID = hdlFile.getLanguageId(path);            
-            if (langID === HdlLangID.Verilog) {
-                try {
-                    const fast = await HdlSymbol.fast(path);
-                    if (fast) {
-                        new HdlFile(path,
-                                    fast.languageId,
-                                    fast.macro,
-                                    fast.content.modules);
-                    }
-                } catch (error) {
-                    MainOutput.report('Error happen when parse ' + path, ReportType.Error);
-                    MainOutput.report('Reason: ' + error, ReportType.Error);
-                }
+    private async doHdlFast(path: AbsPath) {
+        try {
+            const fast = await HdlSymbol.fast(path);
+            if (fast) {
+                new HdlFile(path,
+                            fast.languageId,
+                            fast.macro,
+                            fast.content);
             }
+        } catch (error) {
+            MainOutput.report('Error happen when parse ' + path, ReportType.Error);
+            MainOutput.report('Reason: ' + error, ReportType.Error);
+        }
+    }
+
+    public async initHdlFiles(hdlFiles: AbsPath[] | Generator<AbsPath>) {
+        for (const path of hdlFiles) {        
+            this.doHdlFast(path);
         }
     }
 

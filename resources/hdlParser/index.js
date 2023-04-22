@@ -18,62 +18,40 @@ const _hdlParser = {
     }
 };
 
-async function vlogFast(path) {
-    if (!fs.existsSync(path)) {
-        return undefined;
-    }
-    const wasmModule = await _hdlParser.acquire();
-    const source = fs.readFileSync(path, 'utf-8') + '\n';
-    wasmModule.FS.writeFile(_hdlParser.tempPath, source, { encoding: 'utf8' });
-    const res = wasmModule.ccall('vlog_fast', 'string', ['string'], [_hdlParser.tempPath]);
-    try {
-        return JSON.parse(res);
-    } catch (err) {
-        console.log(res);
-        fs.writeFileSync('./draft.json', res);
-        console.log('error happen when parse ' + path);
-        console.log(err);
-        exit(-1);
-    }
-}
 
-async function vlogAll(path) {
-    if (!fs.existsSync(path)) {
-        return undefined;
-    }
+async function callParser(path, func) {
     const wasmModule = await _hdlParser.acquire();
+    const file = _hdlParser.tempPath;
+    const fileLength = file.length;
     const source = fs.readFileSync(path, 'utf-8') + '\n';
     wasmModule.FS.writeFile(_hdlParser.tempPath, source, { encoding: 'utf8' });
-    const res = wasmModule.ccall('vlog_all', 'string', ['string'], [_hdlParser.tempPath]);
+    const res = wasmModule.ccall('call_parser', 'string', ['string', 'int', 'int'], [file, fileLength, func]);
     return JSON.parse(res);
 }
 
+
 async function vhdlFast(path) {
-    if (!fs.existsSync(path)) {
-        return undefined;
-    }
-    return {};
+    return await callParser(path, 1);
 }
 
 async function vhdlAll(path) {
-    if (!fs.existsSync(path)) {
-        return undefined;
-    }
-    return {};
+    return await callParser(path, 2);
 }
 
 async function svFast(path) {
-    if (!fs.existsSync(path)) {
-        return undefined;
-    }
-    return {};
+    return await callParser(path, 3);
 }
 
 async function svAll(path) {
-    if (!fs.existsSync(path)) {
-        return undefined;
-    }
-    return {};
+    return await callParser(path, 4);
+}
+
+async function vlogFast(path) {
+    return await callParser(path, 5);
+}
+
+async function vlogAll(path) {
+    return await callParser(path, 6);
 }
 
 module.exports = {

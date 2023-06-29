@@ -1,6 +1,8 @@
 module dependence_1 (
+    // this is a test
     input a, b, c,
-    output Q 
+    // a test
+    output Result       // balabalabala for result
 );
 
     // a & b | ((b & c) & (b | c))
@@ -10,6 +12,6 @@ module dependence_1 (
     // Simplify A + A = A     AB + BC
     // Factor                 B(A+C)
 
-    assign Q = a & (b | c);
+    assign Result = a & (b | c);
 
 endmodule

@@ -129,7 +129,52 @@
                     "type": "boolean",
                     "default": false,
                     "description": "run the simulation command in terminal instead of output"
-                }
+                },
+                "function.lsp.formatter.vlog.default.style": {
+                    "scope": "window",
+                    "type": "string",
+                    "enum": [
+                        "kr",
+                        "ansi",
+                        "gnu"
+                    ],
+                    "default": "kr",
+                    "description": "Select the verilog and systemverilog formatter style."
+                },
+                "function.lsp.formatter.vlog.default.args": {
+					"scope": "window",
+					"type": "string",
+					"default": "",
+					"description": "Add verilog formatter arguments here (like istyle)."
+				},
+				"function.lsp.formatter.vhdl.default.keyword-case": {
+					"description": "Keyword case",
+					"type": "string",
+					"default": "LowerCase",
+					"enum": [
+						"LowerCase",
+						"UpperCase"
+					]
+				},
+				"function.lsp.formatter.vhdl.default.align-comments": {
+					"description": "Align comments",
+					"type": "boolean",
+					"default": false
+				},
+				"function.lsp.formatter.vhdl.default.type-name-case": {
+					"description": "Type name case",
+					"type": "string",
+					"default": "LowerCase",
+					"enum": [
+						"LowerCase",
+						"UpperCase"
+					]
+				},
+				"function.lsp.formatter.vhdl.default.indentation": {
+					"description": "Indentation",
+					"type": "number",
+					"default": 4
+				}
             }
         },
         "commands": [
@@ -749,6 +794,7 @@
         "showdown": "^2.1.0",
         "state-machine-cat": "^9.2.5",
         "temp": "^0.9.4",
+        "vscode-textmate": "^9.0.0",
         "wavedrom": "^2.9.1"
     }
 }

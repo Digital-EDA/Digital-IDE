@@ -72,10 +72,6 @@ class HdlParam {
         this.modules.add(hdlModule);
     }
 
-    /**
-     * add module to global top modules
-     * @param hdlModule 
-     */
     public addTopModule(hdlModule: HdlModule) {
         this.topModules.add(hdlModule);
     }
@@ -204,13 +200,19 @@ class HdlParam {
     }
 
     public async initHdlFiles(hdlFiles: AbsPath[] | Generator<AbsPath>) {
+        const pools: Promise<void>[] = [];
         for (const path of hdlFiles) {        
-            this.doHdlFast(path);
+            const p = this.doHdlFast(path);
+            pools.push(p);
+        }
+        for (const p of pools) {
+            await p;
         }
     }
 
     public async initialize(hdlFiles: AbsPath[] | Generator<AbsPath>) {
         await this.initHdlFiles(hdlFiles);
+        
         for (const hdlFile of this.getAllHdlFiles()) {
             hdlFile.makeInstance();
         }
@@ -296,6 +298,7 @@ class HdlInstance {
 
         if (instModPath) {
             this.module = hdlParam.getHdlModule(instModPath, instModName);
+            
             // add refer for module 
             this.module?.addGlobalReferedInstance(this);
             // if module and parent module share the same source (e.g both in src folder)
@@ -347,9 +350,20 @@ class HdlModule {
         this.range = range;
         this.params = params;
         this.ports = ports;
+
+        if (!this.params) {
+            this.params = [];
+        }
+
+        if (!this.ports) {
+            this.ports = [];
+        }
         
         // make instance
         this.rawInstances = instances;
+        if (!this.rawInstances) {
+            this.rawInstances = [];
+        }
         this.nameToInstances = new Map<string, HdlInstance>();
 
         // add in hdlParam data structure
@@ -397,6 +411,7 @@ class HdlModule {
 
     public createHdlInstance(rawHdlInstance: common.RawHdlInstance): HdlInstance {
         const instModName = rawHdlInstance.type;
+        
         const searchResult = this.searchInstModPath(instModName);
         const hdlInstance = new HdlInstance(rawHdlInstance.name,
                                             rawHdlInstance.type,
@@ -417,7 +432,8 @@ class HdlModule {
     }
 
     public makeNameToInstances() {
-        if (this.rawInstances) {
+        
+        if (this.rawInstances) {            
             this.nameToInstances.clear();
             for (const inst of this.rawInstances) {
                 this.createHdlInstance(inst);
@@ -452,7 +468,7 @@ class HdlModule {
         }
     }
 
-    private searchInstModPath(instModName: string): common.InstModPathSearchResult {
+    private searchInstModPath(instModName: string): common.InstModPathSearchResult {        
         // search path of instance
         // priority:  "current file" -> "included files" -> "other hdls in the project"
 
@@ -508,6 +524,7 @@ class HdlModule {
     public addGlobalReferedInstance(inst: HdlInstance) {
         const globalRefers = this.globalRefers;
         globalRefers.add(inst);
+        // it is refered in global scope, so delete this from top module
         if (globalRefers.size > 0) {
             hdlParam.deleteTopModule(this);
         }
@@ -524,6 +541,7 @@ class HdlModule {
     public addLocalReferedInstance(inst: HdlInstance) {
         const localRefers = this.localRefers;
         localRefers.add(inst);
+        // it is refered in local scope, so delete this from top module
         if (localRefers.size > 0) {
             hdlParam.deleteTopModuleToSource(this);
         }

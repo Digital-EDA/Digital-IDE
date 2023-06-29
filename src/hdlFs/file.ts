@@ -124,7 +124,7 @@ function getLanguageId(path: AbsPath | RelPath): HdlLangID {
     if (!isFile(path)) {
         return HdlLangID.Unknown;
     }
-    const ext = hdlPath.extname(path, false);
+    const ext = hdlPath.extname(path, false);    
     if (verilogExts.includes(ext)) {
         return HdlLangID.Verilog;
     } else if (vhdlExts.includes(ext)) {

@@ -1,37 +1,36 @@
 import * as vscode from 'vscode';
 
+import { AllowNull } from '../../../global';
 import { HdlSymbol } from '../../../hdlParser';
+import { RawSymbol, makeVscodePosition, Range } from '../../../hdlParser/common';
+
+import { positionAfterEqual } from '../util';
+
+interface DocSymbolContainer {
+    docSymbol: AllowNull<vscode.DocumentSymbol>,
+    range: AllowNull<Range>
+};
 
 class VlogDocSymbolProvider implements vscode.DocumentSymbolProvider {
-    
-    public provideDocumentSymbols(document: vscode.TextDocument, token: vscode.CancellationToken): vscode.ProviderResult<vscode.SymbolInformation[] | vscode.DocumentSymbol[]> {
-        const code = document.getText();
-        const symbolResult = HdlSymbol.all(code);
-        const symbols = symbolResult.symbols;
-
-        if (!symbols) {
+    public async provideDocumentSymbols(document: vscode.TextDocument, token: vscode.CancellationToken): Promise<vscode.DocumentSymbol[]> {
+        const path = document.fileName;
+        const vlogAll = await HdlSymbol.all(path);        
+        
+        if (!vlogAll || !vlogAll.content) {
             return [];
-        }
-        try {
-            const symbolInfos = this.makeSymbolInfos(document, symbols);
+        } else {
+            const symbols = vlogAll.content;
+            const symbolInfos = this.makeDocumentSymbols(document, symbols);
             return symbolInfos;
-        } catch (err) {
-            console.log(err);
-            return [];
-        }   
+        }
     }
 
-    /**
-     * 
-     * @param {vscode.TextDocument} document
-     * @param {Array<SymbolResult>} symbols 
-     * @returns {Array<vscode.DocumentSymbol>}
-     */
-    makeSymbolInfos(document: vscode.TextDocument, symbols: SymbolResult[]) {
-        let docSymbols = [];
+
+    private makeDocumentSymbols(document: vscode.TextDocument, symbols: RawSymbol[]): vscode.DocumentSymbol[] {
+        const docSymbols = [];
         const visitedSymbols = new Set();
         const moduleSymbols = symbols.filter(symbol => {
-            if (symbol.type == 'module') {
+            if (symbol.type === 'module') {
                 visitedSymbols.add(symbol);
                 return true;
             }
@@ -41,38 +40,43 @@ class VlogDocSymbolProvider implements vscode.DocumentSymbolProvider {
         for (const moduleSymbol of moduleSymbols) {
             const moduleName = moduleSymbol.name;
             const moduleKind = this.getSymbolKind(moduleSymbol.type);
-            const moduleRange = new vscode.Range(moduleSymbol.start, moduleSymbol.end);
+            const moduleStart = new vscode.Position(moduleSymbol.range.start.line - 1, moduleSymbol.range.start.character);
+            const moduleEnd = new vscode.Position(moduleSymbol.range.end.line - 1, moduleSymbol.range.start.character);
+            const moduleRange = new vscode.Range(moduleStart, moduleEnd);
             const moduleDocSymbol = new vscode.DocumentSymbol(moduleName, 
                                                               moduleName,
                                                               moduleKind, 
                                                               moduleRange,
                                                               moduleRange);
             docSymbols.push(moduleDocSymbol);
-            let paramContainer = {
+            const paramContainer: DocSymbolContainer = {
                 docSymbol: null,
                 range: null
             };
-            let portContainer = {
+            const portContainer: DocSymbolContainer = {
                 docSymbol: null,
                 range: null
             };
+            const portTypes = ['input', 'inout', 'output'];
 
             // make others in module inner
             for (const symbol of symbols) {
                 if (visitedSymbols.has(symbol)) {
                     continue;
                 }
-                if (!(positionAfterEqual(symbol.start, moduleSymbol.start) &&
-                    positionAfterEqual(moduleSymbol.end, symbol.end))) {
+                if (!(positionAfterEqual(symbol.range.start, moduleSymbol.range.start) &&
+                    positionAfterEqual(moduleSymbol.range.end, symbol.range.end))) {
                     continue;
                 }
                 if (!symbol.name) {
                     symbol.name = '???';
                 }
                 visitedSymbols.add(symbol);
-                const symbolRange = new vscode.Range(symbol.start, symbol.end);
+                const symbolStart = new vscode.Position(symbol.range.start.line - 1, symbol.range.start.character);
+                const symbolEnd = new vscode.Position(symbol.range.end.line - 1, symbol.range.end.character);
+                const symbolRange = new vscode.Range(symbolStart, symbolEnd);
 
-                if (symbol.type == 'parameter') {
+                if (symbol.type === 'parameter') {
                     if (!paramContainer.range) {
                         paramContainer.range = symbolRange;
                         paramContainer.docSymbol = new vscode.DocumentSymbol('param',
@@ -87,9 +91,9 @@ class VlogDocSymbolProvider implements vscode.DocumentSymbolProvider {
                                                                      vscode.SymbolKind.Constant,
                                                                      symbolRange,
                                                                      symbolRange);
-                    paramContainer.docSymbol.children.push(paramDocSymbol);
+                    paramContainer.docSymbol?.children.push(paramDocSymbol);
                     
-                } else if (['input', 'inout', 'output'].includes(symbol.type)) {
+                } else if (portTypes.includes(symbol.type)) {
                     if (!portContainer.range) {
                         portContainer.range = symbolRange;
                         portContainer.docSymbol = new vscode.DocumentSymbol('port',
@@ -105,7 +109,7 @@ class VlogDocSymbolProvider implements vscode.DocumentSymbolProvider {
                                                                     vscode.SymbolKind.Interface,
                                                                     symbolRange,
                                                                     symbolRange);
-                    portContainer.docSymbol.children.push(portDocSymbol);
+                    portContainer.docSymbol?.children.push(portDocSymbol);
                 } else {
                     const symbolKind = this.getSymbolKind(symbol.type);
                     const symbolDocSymbol = new vscode.DocumentSymbol(symbol.name,
@@ -122,8 +126,8 @@ class VlogDocSymbolProvider implements vscode.DocumentSymbolProvider {
     }
 
 
-    getSymbolKind(name) {
-        if (name.indexOf('[') != -1) {
+    getSymbolKind(name: string): vscode.SymbolKind {
+        if (name.indexOf('[') !== -1) {
             return vscode.SymbolKind.Array;
         }
         switch (name) {
@@ -176,12 +180,11 @@ class VlogDocSymbolProvider implements vscode.DocumentSymbolProvider {
             case 'bit': return vscode.SymbolKind.Boolean;
             default: return vscode.SymbolKind.Event;
         }
-        /* Unused/Free SymbolKind icons
-            return SymbolKind.Number;
-            return SymbolKind.Enum;
-            return SymbolKind.EnumMember;
-            return SymbolKind.Operator;
-            return SymbolKind.Array;
-        */
     }
 }
+
+const vlogDocSymbolProvider = new VlogDocSymbolProvider();
+
+export {
+    vlogDocSymbolProvider
+};

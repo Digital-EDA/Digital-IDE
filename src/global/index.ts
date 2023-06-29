@@ -8,6 +8,8 @@ import * as Lang from './lang';
 type AbsPath = string;
 type RelPath = string;
 
+type AllowNull<T> = T | null;
+
 export {
     opeParam,
     OpeParamDefaults,
@@ -19,5 +21,6 @@ export {
     RelPath,
     MainOutput,
     YosysOutput,
-    ReportType
+    ReportType,
+    AllowNull
 };

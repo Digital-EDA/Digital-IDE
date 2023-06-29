@@ -12,10 +12,7 @@ interface Fast {
 }
 
 interface All {
-    content: {
-        error: string[]
-        symbols: RawSymbol[]
-    }
+    content: RawSymbol[]
     languageId: HdlLangID
     macro: Macro
 }

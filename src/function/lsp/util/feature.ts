@@ -126,14 +126,8 @@ function bin2float(bin: string, exp: number, fra: number): number | undefined {
     }
 }
 
-async function getFullSymbolInfo(document: vscode.TextDocument, range: Range, nonblank: RegExp, l_comment_symbol: string, l_comment_regExp: RegExp, needDefinition=true) {
+async function getFullSymbolInfo(document: vscode.TextDocument, range: Range, nonblank: RegExp, l_comment_symbol: string, l_comment_regExp: RegExp) {
     const comments = [];
-    if (needDefinition) {
-        const startPosition = new vscode.Position(range.start.line, range.start.character);
-        const endPosition = new vscode.Position(range.end.line, range.end.character);
-        const definitionString = document.getText(new vscode.Range(startPosition, endPosition));    
-        comments.push(definitionString);
-    }
 
     let content = '';
     let is_b_comment = false;
@@ -212,7 +206,13 @@ async function getFullSymbolInfo(document: vscode.TextDocument, range: Range, no
         }
     }
 
-    return comments.reverse().join('');
+    // 清除空前行
+    let resultComment = '';
+    for (const c of comments.reverse()) {
+        resultComment += c.trim() + '\n';
+    }
+
+    return resultComment;
 }
 
 /**
@@ -220,8 +220,8 @@ async function getFullSymbolInfo(document: vscode.TextDocument, range: Range, no
  * @param path
  * @param range
  */
-async function getSymbolComment(path: AbsPath, range: Range) {
-    let languageId = hdlFile.getLanguageId(path);
+async function getSymbolComment(path: AbsPath, range: Range): Promise<string | null> {
+    const languageId = hdlFile.getLanguageId(path);
     const uri = vscode.Uri.file(path);
     const documentPromise = vscode.workspace.openTextDocument(uri);
 
@@ -229,14 +229,15 @@ async function getSymbolComment(path: AbsPath, range: Range) {
     const nonblank = /\S+/g;
     const l_comment = getCommentUtilByLanguageId(languageId);
     if (l_comment) {
-        let l_comment_symbol = l_comment.l_comment_symbol;
-        let l_comment_regExp = l_comment.l_comment_regExp;
+        const l_comment_symbol = l_comment.l_comment_symbol;
+        const l_comment_regExp = l_comment.l_comment_regExp;
     
         // add definition first
         const document = await documentPromise;
-        return await getFullSymbolInfo(document, range, nonblank, l_comment_symbol, l_comment_regExp);
+        const symbolInfo = await getFullSymbolInfo(document, range, nonblank, l_comment_symbol, l_comment_regExp);        
+        return symbolInfo;
     }
-    return;
+    return null;
 }
 
 /**
@@ -263,7 +264,7 @@ async function getSymbolComments(path: string, ranges: Range[]): Promise<string[
     const commentPromises = [];
     const comments = [];
     for (const range of ranges) {
-        const commentP = getFullSymbolInfo(document, range, nonblank, l_comment_symbol, l_comment_regExp, false);
+        const commentP = getFullSymbolInfo(document, range, nonblank, l_comment_symbol, l_comment_regExp);
         commentPromises.push(commentP);
     }
 

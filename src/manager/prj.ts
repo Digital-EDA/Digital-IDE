@@ -49,7 +49,7 @@ class PrjManage {
      * init opeParam
      * @param context 
      */
-    public initOpeParam(context: vscode.ExtensionContext) {
+    public async initOpeParam(context: vscode.ExtensionContext) {
         const os = process.platform;
         const extensionPath = hdlPath.toSlash(context.extensionPath);
         const workspacePath = this.getWorkspacePath();
@@ -71,6 +71,15 @@ class PrjManage {
         if (fs.existsSync(propertyJsonPath)) {
             const rawPrjInfo = hdlFile.readJSON(propertyJsonPath) as RawPrjInfo;
             opeParam.mergePrjInfo(rawPrjInfo);
+        } else {
+            const createProperty = await vscode.window.showInformationMessage(
+                "property.json is not detected, do you want to create one ?",
+                { title: 'Yes', value: true },
+                { title: 'No', value: false }
+            );
+            if (createProperty?.value) {
+                vscode.commands.executeCommand('digital-ide.property-json.generate');
+            }
         }
     }
 
@@ -106,7 +115,7 @@ class PrjManage {
             console.time('launch');
         }
         
-        this.initOpeParam(context);
+        await this.initOpeParam(context);
         MainOutput.report('finish initialise opeParam', ReportType.Info);
         
         const hdlFiles = this.getPrjHardwareFiles();
@@ -121,7 +130,6 @@ class PrjManage {
         MainOutput.report('create pl and ps', ReportType.Info);
 
         
-
         if (countTimeCost) {
             console.timeLog('launch');
         }

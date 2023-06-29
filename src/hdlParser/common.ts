@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import * as vscode from 'vscode';
 
 import { AbsPath, RelPath } from '../global';
 
@@ -9,6 +10,10 @@ interface Position {
     // col of the cursor, index from 0
     character: number
 };
+
+function makeVscodePosition(position: Position): vscode.Position {
+    return new vscode.Position(position.line, position.character);
+} 
 
 interface Range {
     start: Position
@@ -32,11 +37,45 @@ enum HdlFileType {
     RemoteLib = 'remote_lib' 
 };
 enum InstModPathStatus {Current, Include, Others, Unknown};
-enum SymbolType {
-    Module = 'module',
-    Input = 'input',
-    Output = 'output'
-};
+// enum SymbolType {
+//     Module = 'module',
+//     Input = 'input',
+//     Output = 'output',
+//     Inout = 'inout',
+//     Program = 'program',
+//     Package = 'package',
+//     Import = 'import',
+//     Always = 'always',
+//     Processe = 'processe',
+//     Task = 'task',
+//     Function = 'function',
+//     Assert = 'assert',
+//     Event = 'event',
+//     Instance = 'instance',
+//     Time = 'time',
+//     Define = 'define',
+//     Typedef = 'typedef',
+//     Generate = 'generate',
+//     Enum = 'enum',
+//     Modport = 'modport',
+//     Property = 'property',
+//     Interface = 'interface',
+//     Buffer = 'buffer',
+//     Localparam = 'localparam',
+//     Parameter = 'parameter',
+//     Integer = 'integer',
+//     Char = 'char',
+//     Float = 'float',
+//     Int = 'int',
+//     String = 'string',
+//     Struct = 'struct',
+//     Class = 'class',
+//     Logic = 'logic',
+//     Wire = 'wire',
+//     Reg = 'reg',
+//     Net = 'net',
+//     Bit = 'bit'
+// };
 
 interface Error {
     severity: number
@@ -45,12 +84,30 @@ interface Error {
     range: Range
 };
 
-interface Define {
-    // `define A out
-    // name is "A", value is "out"
-    name: string
+interface DefineParam {
+    name: string,
     value: string
-    range: Position
+};
+
+/**
+ * `define A out
+ * name is "A", replacement is "out"
+ * `define max(a, b=1) a*b
+ * name is "max", replacement is "a*b", params is 
+ * {
+    "name": "a",
+    "value": "Unknown"
+    },
+    {
+    "name": "b",
+    "value": "1"
+    }
+*/
+interface Define {
+    name: string
+    replacement: string
+    range: Range
+    params: DefineParam[],
 };
 
 interface Include {
@@ -105,8 +162,9 @@ interface RawHdlModule {
 
 interface RawSymbol {
     name: string
-    type: SymbolType
+    type: string
     range: Range
+    width?: string
 };
 
 interface InstModPathSearchResult {
@@ -119,6 +177,12 @@ interface HdlDependence {
     include: AbsPath[]
     others: AbsPath[]
 };
+
+interface CommentResult {
+    start: { line : number }
+    length: number
+}
+
 
 export {
     Position,
@@ -138,5 +202,7 @@ export {
     RawHdlModule,
     InstModPathSearchResult,
     HdlDependence,
-    RawSymbol
+    RawSymbol,
+    CommentResult,
+    makeVscodePosition
 };

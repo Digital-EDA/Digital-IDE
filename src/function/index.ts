@@ -4,12 +4,17 @@ import * as hdlDoc from './hdlDoc';
 import * as sim from './sim';
 import * as treeView from './treeView';
 
+import * as lspCompletion from './lsp/completion';
+import * as lspDocSymbol from './lsp/docSymbol';
+import * as lspDefinition from './lsp/definition';
+import * as lspHover from './lsp/hover';
+import * as lspFormatter from '../../resources/formatter';
+
 function registerDocumentation(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('digital-ide.hdlDoc.showWebview', hdlDoc.showDocWebview);
     hdlDoc.registerFileDocExport(context);
     hdlDoc.registerProjectDocExport(context);
 }
-
 
 function registerSimulation(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('digital-ide.tool.instance', sim.instantiation);
@@ -42,6 +47,29 @@ function registerTreeView(context: vscode.ExtensionContext) {
 }
 
 
+function registerLsp(context: vscode.ExtensionContext) {
+    const vlogSelector: vscode.DocumentSelector = {scheme: 'file', language: 'verilog'};
+    const svlogSelector: vscode.DocumentSelector = {scheme: 'file', language: 'systemverilog'};
+    const vhdlSelector: vscode.DocumentSelector = {scheme: 'file', language: 'vhdl'};
+
+    // formatter
+    vscode.languages.registerDocumentFormattingEditProvider(vlogSelector, lspFormatter.hdlFormatterProvider);
+    vscode.languages.registerDocumentFormattingEditProvider(vhdlSelector, lspFormatter.hdlFormatterProvider);
+    vscode.languages.registerDocumentFormattingEditProvider(svlogSelector, lspFormatter.hdlFormatterProvider);
+
+    // verilog lsp
+    vscode.languages.registerDocumentSymbolProvider(vlogSelector, lspDocSymbol.vlogDocSymbolProvider);
+    vscode.languages.registerDefinitionProvider(vlogSelector, lspDefinition.vlogDefinitionProvider);
+    vscode.languages.registerHoverProvider(vlogSelector, lspHover.vlogHoverProvider);
+    vscode.languages.registerCompletionItemProvider(vlogSelector, lspCompletion.vlogIncludeCompletionProvider, '/', '"');
+    vscode.languages.registerCompletionItemProvider(vlogSelector, lspCompletion.vlogMacroCompletionProvider, '`');
+    vscode.languages.registerCompletionItemProvider(vlogSelector, lspCompletion.vlogPositionPortProvider, '.');
+    vscode.languages.registerCompletionItemProvider(vlogSelector, lspCompletion.vlogCompletionProvider);
+    // vhdl lsp
+
+}
+
 export {
-    registerFunctionCommands
+    registerFunctionCommands,
+    registerLsp
 };

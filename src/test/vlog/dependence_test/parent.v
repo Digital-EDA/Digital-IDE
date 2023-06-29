@@ -3,14 +3,17 @@
  *     current file -> macro include -> whole project
  *     expect dependence_1 from child_1.v (macro include)
  *     expect dependence_2 from child_2.v (whole project)
- *     cannot find dependence_3
+ *     cannot find dependence_3 `main
  */
 
 `include "child_1.v"
+`include "child_2.v"
 `define main out
 
 module Main (
+    // Main input
     input a, b, c,
+    // Main output
     output Qus, Qs, `main
 );
 
@@ -18,7 +21,7 @@ dependence_1 u_dependence_1(
     .a(a),
     .b(b),
     .c(c),
-    .Q(Qus)
+    .Result(Qus)
 );
 
 dependence_2 u_dependence_2(

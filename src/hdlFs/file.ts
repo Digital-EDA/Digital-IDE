@@ -65,11 +65,11 @@ function isSystemVerilogFile(path: AbsPath): boolean {
     return systemVerilogExts.includes(ext);
 }
 
-function isHDLFile(path: AbsPath): boolean {
+function isHDLFile(path: AbsPath): boolean {    
     if (!isFile(path)) {
         return false;
     }
-    const ext = hdlPath.extname(path, false);
+    const ext = hdlPath.extname(path, false);    
     return hdlExts.includes(ext);
 }
 
@@ -96,13 +96,13 @@ function pickFileRecursive(path: AbsPath | AbsPath[] | Set<AbsPath>, ignores?: A
 
         const hdlFiles = [];
         for (const file of fs.readdirSync(path)) {
-            const filePath = hdlPath.join(path, file);
+            const filePath = hdlPath.join(path, file);            
             if (isDir(filePath)) {
-                const subHdlFiles = pickFileRecursive(filePath, ignores);
+                const subHdlFiles = pickFileRecursive(filePath, ignores, condition);
                 if (subHdlFiles.length > 0) {
                     hdlFiles.push(...subHdlFiles);
                 }
-            } else if (!condition || condition(filePath)) {
+            } else if (!condition || condition(filePath)) {                
                 hdlFiles.push(filePath);
             }
         }
@@ -178,9 +178,7 @@ function writeFile(path: AbsPath, content: string): boolean {
 }
 
 function readJSON(path: AbsPath): object {
-    try {
-        console.log(path);
-        
+    try {        
         const context = fs.readFileSync(path, 'utf-8');
         return JSON.parse(context);
     } catch (err) {

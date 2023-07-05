@@ -11,7 +11,7 @@ class HdlParam {
     private readonly srcTopModules : Set<HdlModule> = new Set<HdlModule>();
     private readonly simTopModules : Set<HdlModule> = new Set<HdlModule>();
     private readonly pathToHdlFiles : Map<AbsPath, HdlFile> = new Map<AbsPath, HdlFile>();
-    private readonly modules : Set<HdlModule> = new Set<HdlModule>();
+    public  readonly modules : Set<HdlModule> = new Set<HdlModule>();
     private readonly unhandleInstances : Set<HdlInstance> = new Set<HdlInstance>();
 
     public hasHdlFile(path: AbsPath): boolean {
@@ -34,9 +34,32 @@ class HdlParam {
         return hdlFiles;
     }
 
+    /**
+     * used only in initialization stage
+     * @param hdlFile
+     */
     public addHdlFile(hdlFile: HdlFile) {
         const path = hdlFile.path;
         this.pathToHdlFiles.set(path, hdlFile);
+    }
+
+    /**
+     * add a file by path and create context
+     * @param path absolute path of the file to be added
+     */
+    public async addHdlPath(path: AbsPath) {
+        path = hdlPath.toSlash(path);
+        await this.initHdlFiles([path]);
+        const hdlFile = this.getHdlFile(path);
+        if (!hdlFile) {
+            MainOutput.report('error happen when we attempt to add file by path: ' + path, ReportType.Error);
+        } else {
+            hdlFile.makeInstance();
+            // when a new file is added, retry the solution of dependency
+            for (const hdlModule of hdlFile.getAllHdlModules()) {
+                hdlModule.solveUnhandleInstance();
+            }
+        }
     }
 
     public hasHdlModule(path: AbsPath | undefined, name: string): boolean {
@@ -184,12 +207,28 @@ class HdlParam {
         this.unhandleInstances.delete(inst);
     }
 
+    /**
+     * vlog -> HdlLangID.Verilog
+     * svlog -> HdlLangID.SystemVerilog
+     * vhdl -> HdlLangID.Vhdl
+     * @param langID 
+     */
+    private alignLanguageId(langID: string) : HdlLangID {
+        switch (langID) {
+            case 'vhdl': return HdlLangID.Vhdl;
+            case 'vlog': return HdlLangID.Verilog;
+            case 'svlog': return HdlLangID.SystemVerilog;
+            default: return HdlLangID.Unknown;
+        }
+    }
+
     private async doHdlFast(path: AbsPath) {
         try {
-            const fast = await HdlSymbol.fast(path);
+            const fast = await HdlSymbol.fast(path);            
             if (fast) {
+                const languageId = this.alignLanguageId(fast.languageId);
                 new HdlFile(path,
-                            fast.languageId,
+                            languageId,
                             fast.macro,
                             fast.content);
             }
@@ -253,6 +292,18 @@ class HdlParam {
             moduleFiles.push(module);
         }
         return moduleFiles;
+    }
+
+
+    public deleteHdlFile(path: AbsPath) {
+        path = hdlPath.toSlash(path);
+        const moduleFile = this.getHdlFile(path);
+        if (moduleFile) {
+            for (const name of moduleFile.getAllModuleNames()) {
+                moduleFile.deleteHdlModule(name);
+            }
+            this.pathToHdlFiles.delete(path);
+        }
     }
 };
 
@@ -324,6 +375,13 @@ class HdlInstance {
         }
         return false;
     }
+
+    public update(newInstance: common.RawHdlInstance) {
+        this.type = newInstance.type;
+        this.range = newInstance.range;
+        this.instparams = newInstance.instparams;
+        this.instports = newInstance.instports;
+    }
 };
 
 class HdlModule {
@@ -348,22 +406,10 @@ class HdlModule {
         this.file = file;
         this.name = name;
         this.range = range;
-        this.params = params;
-        this.ports = ports;
+        this.params = params ? params : [];
+        this.ports = ports ? ports : [];
 
-        if (!this.params) {
-            this.params = [];
-        }
-
-        if (!this.ports) {
-            this.ports = [];
-        }
-        
-        // make instance
         this.rawInstances = instances;
-        if (!this.rawInstances) {
-            this.rawInstances = [];
-        }
         this.nameToInstances = new Map<string, HdlInstance>();
 
         // add in hdlParam data structure
@@ -431,14 +477,13 @@ class HdlModule {
         return hdlInstance;
     }
 
-    public makeNameToInstances() {
-        
-        if (this.rawInstances) {            
+    public makeNameToInstances() {        
+        if (this.rawInstances !== undefined) {            
             this.nameToInstances.clear();
             for (const inst of this.rawInstances) {
                 this.createHdlInstance(inst);
             }
-            this.rawInstances = undefined;
+            // this.rawInstances = undefined;
         } else {
             MainOutput.report('call makeNameToInstances but this.rawInstances is undefined', 
                               ReportType.Warn);
@@ -450,7 +495,7 @@ class HdlModule {
         this.deleteInstance(inst);
     }
 
-    public deleteInstance(inst: HdlInstance | undefined) {
+    public deleteInstance(inst?: HdlInstance) {
         if (inst) {
             this.deleteUnhandleInstance(inst);
             hdlParam.deleteUnhandleInstance(inst);
@@ -585,13 +630,40 @@ class HdlModule {
             inst.locateHdlModule();            
         }
     }
+
+    public update(newModule: common.RawHdlModule) {
+        this.ports = newModule.ports;
+        this.params = newModule.params;
+        this.range = newModule.range;
+        // compare and make change to instance
+        const uncheckedInstanceNames = new Set<string>();
+        for (const inst of this.getAllInstances()) {
+            uncheckedInstanceNames.add(inst.name);
+        }
+
+        for (const newInst of newModule.instances) {
+            if (uncheckedInstanceNames.has(newInst.name)) {     
+                // match exist instance, compare and update
+                const originalInstance = this.getInstance(newInst.name);
+                originalInstance?.update(newInst);
+                uncheckedInstanceNames.delete(newInst.name);
+            } else {        
+                // unknown instance, create it
+                this.createHdlInstance(newInst);
+            }
+        }
+        // delete Instance that not visited
+        for (const instName of uncheckedInstanceNames) {
+            this.deleteInstanceByName(instName);
+        }
+    }
 };
 
 class HdlFile {
-    path: string;
-    languageId: HdlLangID;
-    type: common.HdlFileType;
-    macro: common.Macro;
+    public path: string;
+    public languageId: HdlLangID;
+    public type: common.HdlFileType;
+    public macro: common.Macro;
     private readonly nameToModule: Map<string, HdlModule>;
 
     constructor(path: string, 
@@ -652,7 +724,27 @@ class HdlFile {
     public deleteHdlModule(name: string) {
         const hdlModule = this.getHdlModule(name);
         if (hdlModule) {
+            // delete child reference in the module which use this
+            for (const childInst of hdlModule.getAllGlobalRefers()) {
+                const userModule = childInst.parentMod;
+                childInst.module = undefined;
+                childInst.instModPath = undefined;
+                childInst.instModPathStatus = common.InstModPathStatus.Unknown;
 
+                hdlParam.addUnhandleInstance(childInst);
+                userModule.addUnhandleInstance(childInst);
+            }
+
+            // delete all the instance in the module
+            for (const inst of hdlModule.getAllInstances()) {
+                hdlModule.deleteInstance(inst);
+            }
+
+            // delete any variables containing module
+            hdlParam.deleteTopModule(hdlModule);
+            hdlParam.deleteTopModuleToSource(hdlModule);
+            hdlParam.modules.delete(hdlModule);
+            this.nameToModule.delete(hdlModule.name);
         }
     }
     
@@ -660,6 +752,10 @@ class HdlFile {
         for (const module of this.getAllHdlModules()) {
             module.makeNameToInstances();
         }
+    }
+    
+    public updateMacro(macro: common.Macro) {
+        this.macro = macro;
     }
 }
 

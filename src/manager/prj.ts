@@ -87,6 +87,10 @@ class PrjManage {
         return [];
     }
 
+    /**
+     * get all the hdl files that to be parsed in the project
+     * @returns 
+     */
     public getPrjHardwareFiles(): AbsPath[] {
         const searchPathSet = new PathSet();
         const prjInfo = opeParam.prjInfo;
@@ -97,24 +101,32 @@ class PrjManage {
         MainOutput.report(`libManage finish process, add ${fileChange.add.length} files, del ${fileChange.del.length} files`, ReportType.Info);
 
         // add possible folder to search
-        searchPathSet.checkAdd(hardwareInfo.src);
+        searchPathSet.checkAdd(prjInfo.hardwareSrcPath);
+        searchPathSet.checkAdd(prjInfo.hardwareSimPath);
         searchPathSet.checkAdd(hardwareInfo.sim);
         searchPathSet.checkAdd(prjInfo.getLibraryCommonPaths());
         searchPathSet.checkAdd(prjInfo.getLibraryCustomPaths());
+        
+
+        MainOutput.report('<getPrjHardwareFiles> search folders: ', ReportType.Debug);
+        searchPathSet.files.forEach(p => MainOutput.report(p, ReportType.Debug));
 
         // TODO : make something like .gitignore
         const ignores = this.getIgnoreFiles();
 
         // do search
         const searchPaths = searchPathSet.files;
-        return hdlFile.getHDLFiles(searchPaths, ignores);
+        
+        const hdlFiles = hdlFile.getHDLFiles(searchPaths, ignores);
+        return hdlFiles;
     }
+
+    
 
     public async initialise(context: vscode.ExtensionContext, countTimeCost: boolean = true) {
         if (countTimeCost) {
             console.time('launch');
-        }
-        
+        }        
         await this.initOpeParam(context);
         MainOutput.report('finish initialise opeParam', ReportType.Info);
         

@@ -35,5 +35,6 @@
     "digital-ide.pl.addFile.title": "add file",
     "digital-ide.pl.delFile.title": "del file",
     "digital-ide.netlist.title": "netlist",
-    "digital-ide.fsm.title": "finite state machine"
+    "digital-ide.fsm.title": "finite state machine",
+    "digital-ide.lsp.tool.insertTextToUri.title": "insert text to uri"
 }

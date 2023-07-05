@@ -52,12 +52,13 @@ class VlogDefinitionProvider implements vscode.DefinitionProvider {
 
         // match `include        
         const includeResult = util.matchInclude(document, position, all.macro.includes);
+        
         if (includeResult) {
             const absPath = hdlPath.rel2abs(filePath, includeResult.name);
             const targetFile = vscode.Uri.file(absPath);
             const targetPosition = new vscode.Position(0, 0);
             const targetRange = new vscode.Range(targetPosition, targetPosition);
-            const originSelectionRange = document.getWordRangeAtPosition(position, /[\."_0-9a-zA-Z]+/);
+            const originSelectionRange = document.getWordRangeAtPosition(position, /["\.\\\/_0-9A-Za-z]+/);
             const link: vscode.LocationLink = { targetUri: targetFile, targetRange, originSelectionRange };
             return [link];
         }
@@ -142,10 +143,7 @@ class VlogDefinitionProvider implements vscode.DefinitionProvider {
         // match others
         const normalResult = util.matchNormalSymbol(targetWord, scopeSymbols.symbols);
         if (normalResult) {
-            const targetRange = util.transformRange(normalResult.range, -1, 0);
-            
-            console.log(targetRange, normalResult);
-            
+            const targetRange = util.transformRange(normalResult.range, -1, 0);            
             const link: vscode.LocationLink = { targetUri: document.uri, targetRange };
             return [link];
         }

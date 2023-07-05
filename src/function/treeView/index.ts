@@ -21,7 +21,7 @@ function openFileByUri(path: string, range: Range) {
     }
 }
 
-function refreshArchTree(element: ModuleDataItem) {
+function refreshArchTree(element?: ModuleDataItem) {
     // TODO : diff and optimize
     moduleTreeProvider.refresh(element);
 }

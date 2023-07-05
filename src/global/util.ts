@@ -16,7 +16,26 @@ class PathSet {
     }
 }
 
+/**
+ * tell if two set are element-wise equal
+ * @param setA 
+ * @param setB 
+ */
+function isSameSet<T>(setA: Set<T>, setB: Set<T>): boolean {
+    if (setA.size !== setB.size) {
+        return false;
+    }
+    
+    for (const el of setB) {
+        if (!setA.has(el)) {
+            return false;
+        }
+    }
+    return true;
+}
+
 
 export {
-    PathSet
+    PathSet,
+    isSameSet
 };

@@ -35,5 +35,6 @@
     "digital-ide.pl.addFile.title": "添加文件",
     "digital-ide.pl.delFile.title": "d删除文件",
     "digital-ide.netlist.title": "netlist",
-    "digital-ide.fsm.title": "有限状态机"
+    "digital-ide.fsm.title": "有限状态机",
+    "digital-ide.lsp.tool.insertTextToUri.title": "插入文本uri"
 }

@@ -142,39 +142,59 @@
                     "description": "Select the verilog and systemverilog formatter style."
                 },
                 "function.lsp.formatter.vlog.default.args": {
-					"scope": "window",
-					"type": "string",
-					"default": "",
-					"description": "Add verilog formatter arguments here (like istyle)."
-				},
-				"function.lsp.formatter.vhdl.default.keyword-case": {
-					"description": "Keyword case",
-					"type": "string",
-					"default": "LowerCase",
-					"enum": [
-						"LowerCase",
-						"UpperCase"
-					]
-				},
-				"function.lsp.formatter.vhdl.default.align-comments": {
-					"description": "Align comments",
-					"type": "boolean",
-					"default": false
-				},
-				"function.lsp.formatter.vhdl.default.type-name-case": {
-					"description": "Type name case",
-					"type": "string",
-					"default": "LowerCase",
-					"enum": [
-						"LowerCase",
-						"UpperCase"
-					]
-				},
-				"function.lsp.formatter.vhdl.default.indentation": {
-					"description": "Indentation",
-					"type": "number",
-					"default": 4
-				}
+                    "scope": "window",
+                    "type": "string",
+                    "default": "",
+                    "description": "Add verilog formatter arguments here (like istyle)."
+                },
+                "function.lsp.formatter.vhdl.default.keyword-case": {
+                    "description": "Keyword case",
+                    "type": "string",
+                    "default": "LowerCase",
+                    "enum": [
+                        "LowerCase",
+                        "UpperCase"
+                    ]
+                },
+                "function.lsp.formatter.vhdl.default.align-comments": {
+                    "description": "Align comments",
+                    "type": "boolean",
+                    "default": false
+                },
+                "function.lsp.formatter.vhdl.default.type-name-case": {
+                    "description": "Type name case",
+                    "type": "string",
+                    "default": "LowerCase",
+                    "enum": [
+                        "LowerCase",
+                        "UpperCase"
+                    ]
+                },
+                "function.lsp.formatter.vhdl.default.indentation": {
+                    "description": "Indentation",
+                    "type": "number",
+                    "default": 4
+                },
+                "function.lsp.completion.vlog.autoAddInclude": {
+                    "description": "`include \"xxx.v\" will be added to the top of the file automatically",
+                    "type": "boolean",
+                    "default": true
+                },
+                "function.lsp.completion.vlog.completeWholeInstante": {
+                    "description": "complete everything invoking a module needs including paramters and ports",
+                    "type": "boolean",
+                    "default": true
+                },
+                "function.instantiation.addComment": {
+                    "description": "add comment like // ports, // input, // output when doing instantiation, including completion for module invoking",
+                    "type": "boolean",
+                    "default": true
+                },
+                "function.instantiation.autoNetOutputDeclaration": {
+                    "description": "auto declare output type nets in the scope when instantiation happens.",
+                    "type": "boolean",
+                    "default": true
+                }
             }
         },
         "commands": [
@@ -385,6 +405,10 @@
                 },
                 "category": "tool",
                 "title": "%digital-ide.fsm.title%"
+            },
+            {
+                "command": "digital-ide.lsp.tool.insertTextToUri",
+                "title": "%digital-ide.lsp.tool.insertTextToUri.title%"
             }
         ],
         "menus": {

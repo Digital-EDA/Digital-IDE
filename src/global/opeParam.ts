@@ -1,7 +1,7 @@
 import * as assert from 'assert';
 import * as fs from 'fs';
 
-import { Arch, PrjInfo, RawPrjInfo, resolve, toSlash } from './prjInfo';
+import { Arch, PrjInfo, RawPrjInfo, resolve } from './prjInfo';
 
 type AbsPath = string;
 type RelPath = string;
@@ -70,14 +70,23 @@ class OpeParam {
         return this._prjInfo;
     }
     
+    /**
+     * path of property.json
+     */
     public get propertyJsonPath(): AbsPath {
         return this._propertyJsonPath;
     }
 
+    /**
+     * path of property-schema.json
+     */
     public get propertySchemaPath() : AbsPath {
         return this._propertySchemaPath;
     }
 
+    /**
+     * path of property-init.json
+     */
     public get propertyInitPath() : AbsPath {
         return this._propertyInitPath;
     }
@@ -156,19 +165,16 @@ class OpeParam {
      * get User's property.json
      */
     public getUserPrjInfo(): PrjInfo {
-        const propertyJsonPath = this.propertyJsonPath;
         const userPrjInfo = new PrjInfo();
-        if (fs.existsSync(propertyJsonPath)) {
-            const rawPrjInfo = readJSON(propertyJsonPath);
-            userPrjInfo.merge(rawPrjInfo);
-        } else {
-            // use default config instead
-            const rawPrjInfo = readJSON(this.propertyInitPath);
-            userPrjInfo.merge(rawPrjInfo);
-        }
+        const rawPrjInfo = this.getRawUserPrjInfo();
+        userPrjInfo.merge(rawPrjInfo);
         return userPrjInfo;
     }
 
+    /**
+     * get content from property.json (disk IO)
+     * @returns 
+     */
     public getRawUserPrjInfo(): RawPrjInfo {
         const propertyJsonPath = this.propertyJsonPath;
         if (fs.existsSync(propertyJsonPath)) {

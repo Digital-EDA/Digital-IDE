@@ -26,7 +26,7 @@ class ExportFunctionItem {
 };
 
 function registerFileDocExport(context: vscode.ExtensionContext) {
-    vscode.commands.registerCommand('digital-ide.hdlDoc.exportFile', () => {
+    vscode.commands.registerCommand('digital-ide.hdlDoc.exportFile', async () => {
         const option = {
             placeHolder: 'Select an Export Format'
         };
@@ -35,17 +35,16 @@ function registerFileDocExport(context: vscode.ExtensionContext) {
             new ExportFunctionItem('pdf', ' pdf', 'only support light theme', exportCurrentFileDocAsPDF),
             new ExportFunctionItem('html', ' html', 'only support light theme', exportCurrentFileDocAsHTML)
         ];
-		
-        vscode.window.showQuickPick(items, option).then(item => {
-            if (item) {
-                item.exportFunc();
-            }
-        });
+
+        const item = await vscode.window.showQuickPick(items, option);
+		if (item) {
+            item.exportFunc();
+        }
 	});
 }
 
 function registerProjectDocExport(context: vscode.ExtensionContext) {
-    vscode.commands.registerCommand('digital-ide.hdlDoc.exportProject', () => {
+    vscode.commands.registerCommand('digital-ide.hdlDoc.exportProject', async () => {
         const option = {
             placeHolder: 'Select an Export Format'
         };
@@ -54,12 +53,11 @@ function registerProjectDocExport(context: vscode.ExtensionContext) {
             new ExportFunctionItem('pdf', ' pdf', 'only support light theme', exportProjectDocAsPDF),
             new ExportFunctionItem('html', ' html', 'only support light theme', exportProjectDocAsHTML)
         ];
-		
-        vscode.window.showQuickPick(items, option).then(item => {
-            if (item) {
-                item.exportFunc();
-            }
-        });
+
+        const item = await vscode.window.showQuickPick(items, option);
+        if (item) {
+            item.exportFunc();
+        }
 	});
 }
 

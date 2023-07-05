@@ -203,7 +203,7 @@ class PrjInfo implements PrjInfoMeta {
      */
     public uniformisePath(path: AbsPath): AbsPath {
         const slashPath = toSlash(path);
-        const replacedPath = this.replacePathToken(path);
+        const replacedPath = this.replacePathToken(slashPath);
         return replacedPath;
     }
 
@@ -240,7 +240,7 @@ class PrjInfo implements PrjInfoMeta {
     public updateToolChain(toolChain?: ToolChainType) {
         if (toolChain) {
             if (!validToolChainType(toolChain)) {
-                vscode.window.showErrorMessage('expect toolChain to be "xilinx"');
+                vscode.window.showErrorMessage('expect toolChain to be "xilinx", "intel", "custom"');
                 return;
             }
             this._toolChain = toolChain;
@@ -250,7 +250,7 @@ class PrjInfo implements PrjInfoMeta {
     public updatePathWisely<T extends string>(obj: Record<T, AbsPath | AbsPath[]>, 
                                               attr: T, 
                                               path?: Path | Path[],
-                                              root?: AbsPath) {        
+                                              root?: AbsPath) {                
         if (path) {
             if (path instanceof Array) {
                 const actualPaths = [];
@@ -267,6 +267,8 @@ class PrjInfo implements PrjInfoMeta {
                     obj[attr] = actualPath;                    
                 }   
             }
+        } else {
+            obj[attr] = '';
         }
     }
     
@@ -335,7 +337,7 @@ class PrjInfo implements PrjInfoMeta {
     private setDefaultValue<T extends string, K>(obj: Record<T, K>, 
                                                  attr: T, 
                                                  defaultValue: K) {
-        const value: K = obj[attr];
+        const value: K = obj[attr];        
         let isNull = !Boolean(value);
         if (typeof value === 'string') {
             isNull ||= value === 'none';
@@ -353,7 +355,6 @@ class PrjInfo implements PrjInfoMeta {
 
     public updateArch(arch?: Arch) {
         const workspacePath = this._workspacePath;
-
         if (arch) {
             this.updatePathWisely(this.arch, 'prjPath', arch.prjPath);            
             if (arch.hardware) {
@@ -381,10 +382,10 @@ class PrjInfo implements PrjInfoMeta {
             this.arch.software.src = join(softwarePath, 'src');
             this.arch.software.data = join(softwarePath, 'data');
         }
-
-        // if path is '', set as workspace
+            
+        // // if path is '', set as workspace
         this.setDefaultValue(this.arch.hardware, 'src', workspacePath);
-        this.setDefaultValue(this.arch.hardware, 'sim', workspacePath);
+        this.setDefaultValue(this.arch.hardware, 'sim', this.arch.hardware.src);
         this.setDefaultValue(this.arch.hardware, 'data', workspacePath);
         this.setDefaultValue(this.arch.software, 'src', workspacePath);
         this.setDefaultValue(this.arch.software, 'data', workspacePath);
@@ -454,7 +455,7 @@ class PrjInfo implements PrjInfoMeta {
      * reserve the value that not covered in rawPrjInfo
      * @param rawPrjInfo 
      */
-    public merge(rawPrjInfo: RawPrjInfo) {
+    public merge(rawPrjInfo: RawPrjInfo) {        
         this.updateToolChain(rawPrjInfo.toolChain);
         this.updatePrjName(rawPrjInfo.prjName);
         this.updateIP_REPO(rawPrjInfo.IP_REPO);
@@ -491,6 +492,24 @@ class PrjInfo implements PrjInfoMeta {
         return libPath;
     }
 
+    public get hardwareSimPath(): AbsPath {
+        const simPath = this._arch.hardware.sim;        
+        if (fspath.isAbsolute(simPath)) {
+            return simPath;
+        }
+        const workspace = this._workspacePath;
+        return hdlPath.join(workspace, simPath);
+    }
+
+    public get hardwareSrcPath(): AbsPath {
+        const srcPath = this._arch.hardware.src;
+        if (fspath.isAbsolute(srcPath)) {
+            return srcPath;
+        }
+        const workspace = this._workspacePath;
+        return hdlPath.join(workspace, srcPath);
+    }
+
     public json(): RawPrjInfo {
         return {
             toolChain: this._toolChain,
@@ -504,9 +523,6 @@ class PrjInfo implements PrjInfoMeta {
         };
     }
 };
-
-
-
 
 export {
     PrjInfo,

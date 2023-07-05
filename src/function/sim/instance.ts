@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { HdlLangID } from '../../global/enum';
 import { hdlParam } from '../../hdlParser';
-import { HdlModulePort, HdlModuleParam } from '../../hdlParser/common';
+import { HdlModulePort, HdlModuleParam, HdlModulePortType } from '../../hdlParser/common';
 import { HdlModule } from '../../hdlParser/core';
 
 class ModuleInfoItem {
@@ -28,23 +28,33 @@ class ModuleInfoItem {
  * @description verilog模式下生成整个例化的内容
  * @param module 模块信息
  */
-function instanceVlogCode(module: HdlModule) {
-    let vlogPortStr = vlogPort(module.ports);
-    let vlogParamStr = vlogParam(module.params);
+function instanceVlogCode(module: HdlModule, prefix: string = '', returnSnippetString: boolean = false): string {
+    const instantiationConfig = vscode.workspace.getConfiguration('function.instantiation');
+    const needComment = instantiationConfig.get('addComment', true);
+    const autoNetOutputDeclaration = instantiationConfig.get('autoNetOutputDeclaration', true);
 
-    let instContent = '';
-    instContent += vlogPortStr.wireStr;
-    instContent += module.name + ' ';
+    const content = new vscode.SnippetString();
 
-    if (vlogParamStr !== '') {
-        instContent += `#(\n${vlogParamStr})\n`;
+    // make net declaration if needed
+    if (autoNetOutputDeclaration) {
+        const netDeclarationString = makeNetOutputDeclaration(module.ports, prefix, needComment);
+        if (netDeclarationString) {
+            content.appendText(netDeclarationString);
+        }
     }
 
-    instContent += `u_${module.name}(\n`;
-    instContent += vlogPortStr.portStr;
-    instContent += ');\n';
+    content.appendText(prefix + module.name + ' ');
+    if (returnSnippetString) {
+        content.appendPlaceholder('u_' + module.name);
+    } else {
+        content.appendText('u_' + module.name);
+    }
 
-    return instContent;
+    makeVlogParamAssignments(content, module.params, prefix, returnSnippetString, needComment);
+    makeVlogPortAssignments(content, module.ports, prefix, returnSnippetString, needComment);
+
+    const instanceString = content.value;
+    return instanceString;
 }
 
 /**
@@ -67,69 +77,95 @@ function instanceVhdlCode(module: HdlModule) {
     return instContent;
 }
 
+function makeNetOutputDeclaration(ports: HdlModulePort[], prefix: string, needComment: boolean): string | null {
+    const maxWidthLength = Math.max(...ports.map(p => p.width.length));
+
+    let netOutputDeclaration = prefix + (needComment ? '// outports wire\n' : '');
+    let haveOutput = false;
+    for (const port of ports) {
+        if (port.type === HdlModulePortType.Output) {
+            haveOutput = true;
+            let portWidth = port.width ? port.width : '';
+            portWidth += ' '.repeat(maxWidthLength - portWidth.length + 1);
+            const netDeclaration = prefix + `wire ${portWidth}\t${port.name};\n`;
+            netOutputDeclaration += netDeclaration;
+        }
+    }
+
+    if (!haveOutput) {
+        return null;
+    } else {
+        netOutputDeclaration += '\n';
+        return netOutputDeclaration;
+    }
+}
+
 /**
  * @description verilog模式下对端口信息生成要例化的内容
  * @param ports 端口信息列表
  */
-function vlogPort(ports: HdlModulePort[]) : { wireStr: string, portStr: string} {
-    let nmax = getlmax(ports, 'name');
-    let wmax = getlmax(ports, 'width');
-
-    let portStr = `\t// ports\n`;
-    let wireStr = '// outports wire\n';
-    for (let i = 0; i < ports.length; i++) {
-        const port = ports[i];
-
-        if (port.type === 'output') {
-            let width = port.width;
-            let wpadding = wmax - width.length + 1;
-            width += ' '.repeat(wpadding);
-            // TODO: vhdl type
-            wireStr += `wire ${width}\t${port.name};\n`;
-        }
-
-        let name = port.name;
-        let npadding = nmax - name.length + 1;
-        name += ' '.repeat(npadding);
-        portStr += `\t.${name}\t( ${name} )`;
-        if (i !== ports.length - 1) {
-            portStr += ',';
-        }
-        portStr += '\n';
+function makeVlogPortAssignments(content: vscode.SnippetString, ports: HdlModulePort[], prefix: string = '', returnSnippetString: boolean, needComment: boolean) {
+    if (ports.length === 0) {
+        content.appendText('();');
+        return;
     }
-    
-    return { wireStr, portStr };
 
+    const maxNameLength = Math.max(...ports.map(p => p.name.length));
+
+    content.appendText('(\n');
+
+    for (let i = 0; i < ports.length; ++ i) {
+        const port = ports[i];
+        const paddingName = port.name + ' '.repeat(maxNameLength - port.name.length + 1);   
+
+        content.appendText(prefix + '\t.' + paddingName + '\t( ');
+        if (returnSnippetString) {
+            content.appendPlaceholder(port.name);
+        } else {
+            content.appendText(port.name);
+        }
+        content.appendText(' '.repeat(maxNameLength - port.name.length + 1) + ' )');
+        if (i < ports.length - 1) {
+            content.appendText(',');
+        }
+        content.appendText('\n');
+    }
+
+    content.appendText(prefix + ');\n');
 }
+
 
 /**
  * @description verilog模式下对参数信息生成要例化的内容
  * @param params 参数信息列表
  */
-function vlogParam(params: HdlModuleParam[]): string {
-    let paramStr = '';
-    let nmax = getlmax(params, 'name');
-    let imax = getlmax(params, 'init');
-
-    // .NAME  ( INIT  ),
-    for (let i = 0; i < params.length; i++) {
-        let name = params[i].name;
-        let init = params[i].init;
-
-        let namePadding = nmax - name.length + 1;
-        let initPadding = imax - init.length + 1;
-
-        name +=' '.repeat(namePadding);
-        init +=' '.repeat(initPadding);
-
-        paramStr += `\t.${name}\t( ${init} )`;
-        if (i !== (params.length - 1)) {
-            paramStr += ',';
-            paramStr += '\n';
-        }
+function makeVlogParamAssignments(content: vscode.SnippetString, params: HdlModuleParam[], prefix: string = '', returnSnippetString: boolean, needComment: boolean) {
+    if (params.length === 0) {
+        return;
     }
 
-    return paramStr;
+    const maxNameLength = Math.max(...params.map(p => p.name.length));
+    const maxInitLength = Math.max(...params.map(p => p.init.length));
+
+    content.appendText('#(\n');
+
+    // .NAME  ( INIT  ),
+    for (let i = 0; i < params.length; ++ i) {
+        const param = params[i];
+        const paddingName = param.name + ' '.repeat(maxNameLength - param.name.length + 1);
+        content.appendText(prefix + '\t.' + paddingName + '\t( ');
+        if (returnSnippetString) {
+            content.appendPlaceholder(param.init);
+        } else {
+            content.appendText(param.init);
+        }
+        content.appendText(' '.repeat(maxInitLength - param.init.length + 1) + ' )');
+        if (i < params.length - 1) {
+            content.appendText(',');
+        }
+        content.appendText('\n');
+    }
+    content.appendText(prefix + ')\n');
 }
 
 /**
@@ -249,7 +285,7 @@ async function selectModuleFromAll() {
     }
 }
 
-function instanceByLangID(module: HdlModule): string {
+function instanceByLangID(module: HdlModule): string {    
     switch (module.languageId) {
         case HdlLangID.Verilog: return instanceVlogCode(module);
         case HdlLangID.Vhdl: return instanceVhdlCode(module);
@@ -260,9 +296,11 @@ function instanceByLangID(module: HdlModule): string {
 }
 
 async function instantiation() {
-    const module = await selectModuleFromAll();
+    const module = await selectModuleFromAll();    
     if (module) {
-        const code = instanceByLangID(module);
+        console.log(module);
+
+        const code = instanceByLangID(module);        
         const editor = vscode.window.activeTextEditor;
         if (editor) {
             selectInsert(code, editor);
@@ -271,6 +309,7 @@ async function instantiation() {
 }
 
 export {
+    instanceVlogCode,
     instantiation,
     instanceByLangID,
     getSelectItem

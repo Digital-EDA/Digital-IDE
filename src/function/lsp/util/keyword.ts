@@ -2,25 +2,26 @@ import * as vscode from 'vscode';
 
 
 class Keywords {
-    keywords: Set<string>;
-    keywordItems: vscode.CompletionItem[];
-    compilerKeywords: string[];    // start with `
-    systemKeywords: string[];   // start with $
+    private keywords: Set<string>;
+    private compilerKeywords: string[];    // start with `
+    private systemKeywords: string[];   // start with $
     constructor(keywords: string[], compilerKeywords: string[], systemKeywords: string[]) {
         this.keywords = new Set(keywords);
         const keywordItems = [];
-        for (const keyword of keywords) {
-            const clItem = new vscode.CompletionItem(keyword, vscode.CompletionItemKind.Keyword);
-            clItem.detail = "keyword";
-            keywordItems.push(clItem);
-        }
-        this.keywordItems = keywordItems;
         this.compilerKeywords = compilerKeywords;
         this.systemKeywords = systemKeywords;
     }
 
     public keys(): Set<string> {
         return this.keywords;
+    }
+
+    public compilerKeys(): string[] {
+        return this.compilerKeywords;
+    }
+
+    public systemKeys(): string[] {
+        return this.systemKeywords;
     }
 
     public isKeyword(word: string): boolean {

@@ -25,7 +25,7 @@ enum HdlModulePortType {
     Inout = 'inout', 
     Output = 'output', 
     Input = 'input', 
-    Unknown = 'Unknown'
+    Unknown = 'unknown'
 };
 
 enum HdlModuleParamType {LocalParam, Parameter, Unknown};

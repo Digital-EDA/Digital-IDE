@@ -28,12 +28,13 @@
     "digital-ide.hard.gui.title": "打開界面",
     "digital-ide.hard.exit.title": "退出當前項目",
     "digital-ide.pickLibrary.title": "從自定義選擇自由和普遍",
-    "digital-ide.pl.setSrcTop.title": "設置為src的文件",
-    "digital-ide.pl.setSimTop.title": "設置為文件的sim卡",
-    "digital-ide.pl.addDevice.title": "添加設備",
-    "digital-ide.pl.delDevice.title": "德爾設備",
+    "digital-ide.pl.setSrcTop.title": "設置為src的top",
+    "digital-ide.pl.setSimTop.title": "設置為sim的top",
+    "digital-ide.pl.addDevice.title": "添加device",
+    "digital-ide.pl.delDevice.title": "刪除device",
     "digital-ide.pl.addFile.title": "添加文件",
-    "digital-ide.pl.delFile.title": "del文件",
-    "digital-ide.netlist.title": "網表",
-    "digital-ide.fsm.title": "有限狀態機"
+    "digital-ide.pl.delFile.title": "d刪除文件",
+    "digital-ide.netlist.title": "netlist",
+    "digital-ide.fsm.title": "有限狀態機",
+    "digital-ide.lsp.tool.insertTextToUri.title": "插入文本uri"
 }

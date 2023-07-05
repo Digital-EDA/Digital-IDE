@@ -9,6 +9,9 @@ import * as lspDocSymbol from './lsp/docSymbol';
 import * as lspDefinition from './lsp/definition';
 import * as lspHover from './lsp/hover';
 import * as lspFormatter from '../../resources/formatter';
+import * as lspDocSemantic from './lsp/docSemantic';
+
+import * as tool from './tool';
 
 function registerDocumentation(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('digital-ide.hdlDoc.showWebview', hdlDoc.showDocWebview);
@@ -65,11 +68,18 @@ function registerLsp(context: vscode.ExtensionContext) {
     vscode.languages.registerCompletionItemProvider(vlogSelector, lspCompletion.vlogMacroCompletionProvider, '`');
     vscode.languages.registerCompletionItemProvider(vlogSelector, lspCompletion.vlogPositionPortProvider, '.');
     vscode.languages.registerCompletionItemProvider(vlogSelector, lspCompletion.vlogCompletionProvider);
-    // vhdl lsp
+    vscode.languages.registerDocumentSemanticTokensProvider(vlogSelector, lspDocSemantic.vlogDocSenmanticProvider, lspDocSemantic.vlogLegend);
 
+
+    // vhdl lsp
+}
+
+function registerToolCommands(context: vscode.ExtensionContext) {
+    vscode.commands.registerCommand('digital-ide.lsp.tool.insertTextToUri', tool.insertTextToUri);
 }
 
 export {
     registerFunctionCommands,
-    registerLsp
+    registerLsp,
+    registerToolCommands
 };

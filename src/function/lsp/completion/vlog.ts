@@ -4,10 +4,11 @@ import * as fs from 'fs';
 import * as util from '../util';
 import { hdlFile, hdlPath } from '../../../hdlFs';
 import { hdlParam, HdlSymbol } from '../../../hdlParser';
-import { AbsPath, MainOutput, ReportType } from '../../../global';
+import { AbsPath, MainOutput, RelPath, ReportType } from '../../../global';
 import { Define, Include, RawSymbol } from '../../../hdlParser/common';
 import { HdlInstance, HdlModule } from '../../../hdlParser/core';
 import { vlogKeyword } from '../util/keyword';
+import { instanceVlogCode } from '../../sim/instance';
 
 class VlogIncludeCompletionProvider implements vscode.CompletionItemProvider {
     public provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext): vscode.ProviderResult<vscode.CompletionItem[] | vscode.CompletionList<vscode.CompletionItem>> {
@@ -176,7 +177,9 @@ class VlogCompletionProvider implements vscode.CompletionItemProvider {
             const filePath = hdlPath.toSlash(document.fileName);
 
             // 1. provide keyword
-            const completions = this.getKeyWordItem();            
+            const completions = this.makeKeywordItems();
+            completions.push(...this.makeCompilerKeywordItems());
+            completions.push(...this.makeSystemKeywordItems());
 
             const symbolResult = await HdlSymbol.all(filePath);
             if (!symbolResult) {
@@ -199,7 +202,7 @@ class VlogCompletionProvider implements vscode.CompletionItemProvider {
             }
 
             // 3. provide modules
-            const suggestModulesPromise = this.provideModules(filePath, symbolResult.macro.includes);
+            const suggestModulesPromise = this.provideModules(document, position, filePath, symbolResult.macro.includes);
 
             // 4. provide params and ports of wrapper module
             const suggestParamsPortsPromise = this.provideParamsPorts(currentModule);
@@ -219,7 +222,7 @@ class VlogCompletionProvider implements vscode.CompletionItemProvider {
         }
     }
 
-    private getKeyWordItem(): vscode.CompletionItem[] {
+    private makeKeywordItems(): vscode.CompletionItem[] {
         const vlogKeywordItem = [];
         for (const keyword of vlogKeyword.keys()) {
             const clItem = this.makekeywordCompletionItem(keyword);
@@ -228,6 +231,29 @@ class VlogCompletionProvider implements vscode.CompletionItemProvider {
 
         return vlogKeywordItem;
     }
+
+    private makeCompilerKeywordItems(): vscode.CompletionItem[] {
+        const items = [];
+        for (const keyword of vlogKeyword.compilerKeys()) {
+            const clItem = new vscode.CompletionItem(keyword, vscode.CompletionItemKind.Keyword);
+            clItem.insertText = new vscode.SnippetString('`' + keyword);
+            clItem.detail = 'compiler directive';       
+            items.push(clItem);
+        }
+        return items;
+    }
+
+    private makeSystemKeywordItems(): vscode.CompletionItem[] {
+        const items = [];
+        for (const keyword of vlogKeyword.systemKeys()) {
+            const clItem = new vscode.CompletionItem(keyword, vscode.CompletionItemKind.Method);
+            clItem.insertText = new vscode.SnippetString('\\$' + keyword + '($1);');
+            clItem.detail = 'system task';
+            items.push(clItem);
+        }
+        return items;
+    }
+
 
     private makekeywordCompletionItem(keyword: string): vscode.CompletionItem {
         const clItem = new vscode.CompletionItem(keyword, vscode.CompletionItemKind.Keyword);
@@ -240,12 +266,53 @@ class VlogCompletionProvider implements vscode.CompletionItemProvider {
         return clItem;
     }
 
-    private async provideModules(filePath: AbsPath, includes: Include[]): Promise<vscode.CompletionItem[]> {
+    private async provideModules(document: vscode.TextDocument, position: vscode.Position, filePath: AbsPath, includes: Include[]): Promise<vscode.CompletionItem[]> {
         const suggestModules: vscode.CompletionItem[] = [];
 
-        // TODO : add `include xxx automatically
-        for (const module of hdlParam.getAllHdlModules()) {
+        const lspVlogConfig = vscode.workspace.getConfiguration('function.lsp.completion.vlog');
+        const autoAddInclude: boolean = lspVlogConfig.get('autoAddInclude', true);
+        const completeWholeInstante: boolean = lspVlogConfig.get('completeWholeInstante', true);
+        
+        const includePaths = new Set<AbsPath>();
+        let lastIncludeLine = 0;
+        for (const include of includes) {
+            const absIncludePath = hdlPath.rel2abs(filePath, include.path);
+            includePaths.add(absIncludePath);
+            lastIncludeLine = Math.max(include.range.end.line, lastIncludeLine);
+        }
+        const insertPosition = new vscode.Position(lastIncludeLine, 0);
+        const insertRange = new vscode.Range(insertPosition, insertPosition);
+        const fileFolder = hdlPath.resolve(filePath, '..');
+
+        // used only when completeWholeInstante is true
+        let completePrefix = '';
+        if (completeWholeInstante) {
+            const wordRange = document.getWordRangeAtPosition(position);
+            const countStart = wordRange ? wordRange.start.character : position.character;
+            const spaceNumber = Math.floor(countStart / 4) * 4;
+            console.log(wordRange, countStart, spaceNumber);
+            
+            completePrefix = ' '.repeat(spaceNumber);
+        }
+
+
+        for (const module of hdlParam.getAllHdlModules()) {            
             const clItem = new vscode.CompletionItem(module.name, vscode.CompletionItemKind.Class);
+
+            // feature 1 : auto add include path if there's no corresponding include path
+            if (autoAddInclude && !includePaths.has(module.path)) {
+                const relPath: RelPath = hdlPath.relative(fileFolder, module.path);
+                const includeString = '`include "' + relPath + '"\n';
+                const textEdit = new vscode.TextEdit(insertRange, includeString);
+                clItem.additionalTextEdits = [textEdit];
+            }
+
+            // feature 2 : auto complete instance
+            if (completeWholeInstante) {
+                const snippetString = instanceVlogCode(module, '', true);
+                clItem.insertText = new vscode.SnippetString(snippetString);
+            }
+
             clItem.detail = 'module';
             suggestModules.push(clItem);
         }
@@ -281,6 +348,7 @@ class VlogCompletionProvider implements vscode.CompletionItemProvider {
         for (const symbol of symbols) {
             if (symbol.type === 'wire' || symbol.type === 'reg') {
                 const clItem = new vscode.CompletionItem(symbol.name, vscode.CompletionItemKind.Variable);
+                clItem.sortText = '';
                 clItem.detail = symbol.type;
                 suggestNets.push(clItem);
             }

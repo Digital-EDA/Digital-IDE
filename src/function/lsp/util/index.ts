@@ -123,7 +123,7 @@ function isInComment(document: vscode.TextDocument, position: Position, comments
 
 
 function matchInclude(document: vscode.TextDocument, position: vscode.Position, includes: Include[]) : AllowNull<MatchedSymbol> {
-    const selectFileRange = document.getWordRangeAtPosition(position, /[\._0-9A-Za-z]+/);
+    const selectFileRange = document.getWordRangeAtPosition(position, /[\.\\\/_0-9A-Za-z]+/);
     const selectFileName = document.getText(selectFileRange);    
 
     if (!includes) {
@@ -318,7 +318,8 @@ function makeParamDesc(param: HdlModuleParam): string {
 }
 
 function makeNormalDesc(normal: RawSymbol): string {
-    const desc = normal.type + ' ' + normal.width + ' ' + normal.name;
+    const width = normal.width ? normal.width : '';
+    const desc = normal.type + ' ' + width + ' ' + normal.name;
     return desc;
 }
 

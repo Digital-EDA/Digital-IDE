@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 
 import { AllowNull } from '../../../global';
 import { HdlSymbol } from '../../../hdlParser';
-import { RawSymbol, makeVscodePosition, Range } from '../../../hdlParser/common';
+import { RawSymbol, Range } from '../../../hdlParser/common';
 
 import { positionAfterEqual } from '../util';
 

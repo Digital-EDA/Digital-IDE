@@ -26,6 +26,15 @@ function rel2abs(curPath: AbsPath, relPath: RelPath): AbsPath {
     return toSlash(absPath);
 }
 
+
+function relative(from: AbsPath, to: AbsPath): RelPath {
+    let rel = fspath.relative(from, to);
+    if (!rel.startsWith('.') && !rel.startsWith('./')) {
+        rel = './' + rel;
+    }
+    return toSlash(rel);
+}
+
 /**
  * cat paths with '/'
  * @param paths 
@@ -87,6 +96,7 @@ function exist(path: AbsPath | undefined): boolean {
 export {
     toSlash,
     rel2abs,
+    relative,
     join,
     resolve,
     filename,

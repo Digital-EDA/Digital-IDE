@@ -18,14 +18,30 @@ const _hdlParser = {
     }
 };
 
+const debug = {
+    acquire: 0,
+    io: 0,
+    compute: 0
+};
 
 async function callParser(path, func) {
+    const s1 = Date.now();
     const wasmModule = await _hdlParser.acquire();
+    debug.acquire += Date.now() - s1;
+
     const file = _hdlParser.tempPath;
     const fileLength = file.length;
+
+    const s2 = Date.now();
     const source = fs.readFileSync(path, 'utf-8') + '\n';
     wasmModule.FS.writeFile(_hdlParser.tempPath, source, { encoding: 'utf8' });
+    debug.io += Date.now() - s2;
+    
+    const s3 = Date.now();
     const res = wasmModule.ccall('call_parser', 'string', ['string', 'int', 'int'], [file, fileLength, func]);
+    debug.compute += Date.now() - s3;
+
+    console.log(debug);
     return JSON.parse(res);
 }
 

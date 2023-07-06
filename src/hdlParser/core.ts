@@ -224,7 +224,7 @@ class HdlParam {
 
     private async doHdlFast(path: AbsPath) {
         try {
-            const fast = await HdlSymbol.fast(path);            
+            const fast = await HdlSymbol.fast(path);                   
             if (fast) {
                 const languageId = this.alignLanguageId(fast.languageId);
                 new HdlFile(path,
@@ -239,13 +239,8 @@ class HdlParam {
     }
 
     public async initHdlFiles(hdlFiles: AbsPath[] | Generator<AbsPath>) {
-        const pools: Promise<void>[] = [];
         for (const path of hdlFiles) {        
-            const p = this.doHdlFast(path);
-            pools.push(p);
-        }
-        for (const p of pools) {
-            await p;
+            await this.doHdlFast(path);
         }
     }
 
@@ -254,7 +249,7 @@ class HdlParam {
         
         for (const hdlFile of this.getAllHdlFiles()) {
             hdlFile.makeInstance();
-        }
+        }        
     }
 
     public getTopModulesByType(type: string): HdlModule[] {

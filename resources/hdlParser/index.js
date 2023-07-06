@@ -41,7 +41,7 @@ async function callParser(path, func) {
     const res = wasmModule.ccall('call_parser', 'string', ['string', 'int', 'int'], [file, fileLength, func]);
     debug.compute += Date.now() - s3;
 
-    console.log(debug);
+    console.log(path, debug);
     return JSON.parse(res);
 }
 

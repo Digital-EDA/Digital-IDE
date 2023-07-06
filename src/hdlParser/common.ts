@@ -165,6 +165,8 @@ interface RawSymbol {
     type: string
     range: Range
     width?: string
+    init?: string
+    signed: number
 };
 
 interface InstModPathSearchResult {

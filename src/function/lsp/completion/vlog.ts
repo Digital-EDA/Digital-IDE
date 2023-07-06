@@ -177,9 +177,9 @@ class VlogCompletionProvider implements vscode.CompletionItemProvider {
             const filePath = hdlPath.toSlash(document.fileName);
 
             // 1. provide keyword
-            const completions = this.makeKeywordItems();
-            completions.push(...this.makeCompilerKeywordItems());
-            completions.push(...this.makeSystemKeywordItems());
+            const completions = this.makeKeywordItems(document, position);
+            completions.push(...this.makeCompilerKeywordItems(document, position));
+            completions.push(...this.makeSystemKeywordItems(document, position));
 
             const symbolResult = await HdlSymbol.all(filePath);
             if (!symbolResult) {
@@ -222,7 +222,7 @@ class VlogCompletionProvider implements vscode.CompletionItemProvider {
         }
     }
 
-    private makeKeywordItems(): vscode.CompletionItem[] {
+    private makeKeywordItems(document: vscode.TextDocument, position: vscode.Position): vscode.CompletionItem[] {
         const vlogKeywordItem = [];
         for (const keyword of vlogKeyword.keys()) {
             const clItem = this.makekeywordCompletionItem(keyword);
@@ -232,18 +232,21 @@ class VlogCompletionProvider implements vscode.CompletionItemProvider {
         return vlogKeywordItem;
     }
 
-    private makeCompilerKeywordItems(): vscode.CompletionItem[] {
+    private makeCompilerKeywordItems(document: vscode.TextDocument, position: vscode.Position): vscode.CompletionItem[] {
         const items = [];
+        const targetRange = document.getWordRangeAtPosition(position, /[`_0-9a-zA-Z]+/);
+        const targetWord = document.getText(targetRange);
+        const prefix = targetWord.startsWith('`') ? '' : '`';
         for (const keyword of vlogKeyword.compilerKeys()) {
             const clItem = new vscode.CompletionItem(keyword, vscode.CompletionItemKind.Keyword);
-            clItem.insertText = new vscode.SnippetString('`' + keyword);
+            clItem.insertText = new vscode.SnippetString(prefix + keyword);
             clItem.detail = 'compiler directive';       
             items.push(clItem);
         }
         return items;
     }
 
-    private makeSystemKeywordItems(): vscode.CompletionItem[] {
+    private makeSystemKeywordItems(document: vscode.TextDocument, position: vscode.Position): vscode.CompletionItem[] {
         const items = [];
         for (const keyword of vlogKeyword.systemKeys()) {
             const clItem = new vscode.CompletionItem(keyword, vscode.CompletionItemKind.Method);
@@ -260,7 +263,8 @@ class VlogCompletionProvider implements vscode.CompletionItemProvider {
         clItem.detail = 'keyword';
 
         switch (keyword) {
-            case 'begin': clItem.insertText = new vscode.SnippetString("begin$1end"); break;
+            case 'begin': clItem.insertText = new vscode.SnippetString("begin$1\nend"); break;
+            case 'function': clItem.insertText = new vscode.SnippetString("function ${1:name}\n\nendfunction"); break;
             default: break;
         }
         return clItem;

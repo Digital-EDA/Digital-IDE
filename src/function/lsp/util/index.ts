@@ -319,7 +319,11 @@ function makeParamDesc(param: HdlModuleParam): string {
 
 function makeNormalDesc(normal: RawSymbol): string {
     const width = normal.width ? normal.width : '';
-    const desc = normal.type + ' ' + width + ' ' + normal.name;
+    const signed = normal.signed === 1 ? 'signed' : '';
+    let desc = normal.type + ' ' + signed + ' ' + width + ' ' + normal.name;
+    if (normal.init) {
+        desc += ' = ' + normal.init;
+    }
     return desc;
 }
 

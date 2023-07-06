@@ -7,38 +7,24 @@
     "name": "Verilog",
     "patterns": [
         {
-            "begin": "\\s*(wire|reg)\\s+\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b",
+            "begin": "\\s*(wire|reg)\\s+(signed|unsigned)?\\s+\\[(.*?)(:)(.*?)\\]\\s+\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b",
             "beginCaptures": {
                 "1": {
                     "name": "keyword.control.verilog"
                 },
                 "2": {
-                    "name": "variable.other.constant.declaration.verilog"
-                }
-            },
-            "end": "(;)",
-            "endCaptures": {
-                "1": {
-                    "name": "source.verilog"
-                }
-            }
-        },
-        {
-            "begin": "\\s*(wire|reg)\\s+\\[(.*?)(:)(.*?)\\]\\s+\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b",
-            "beginCaptures": {
-                "1": {
                     "name": "keyword.control.verilog"
-                },
-                "2": {
-                    "name": "constant.numeric.width.verilog"
                 },
                 "3": {
-                    "name": "entity.name.function.width.spliter.verilog"
-                },
-                "4": {
                     "name": "constant.numeric.width.verilog"
                 },
+                "4": {
+                    "name": "entity.name.function.width.spliter.verilog"
+                },
                 "5": {
+                    "name": "constant.numeric.width.verilog"
+                },
+                "6": {
                     "name": "variable.other.constant.declaration.verilog"
                 }
             },
@@ -47,7 +33,43 @@
                 "1": {
                     "name": "source.verilog"
                 }
-            }
+            },
+            "patterns": [
+                {
+                    "include": "#constants"
+                },
+                {
+                    "include": "#operators"
+                }
+            ]
+        },
+        {
+            "begin": "\\s*(wire|reg)\\s+(signed|unsigned)?\\s+\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b",
+            "beginCaptures": {
+                "1": {
+                    "name": "keyword.control.verilog"
+                },
+                "2": {
+                    "name": "keyword.control.verilog"
+                },
+                "3": {
+                    "name": "variable.other.constant.declaration.verilog"
+                }
+            },
+            "end": "(;)",
+            "endCaptures": {
+                "1": {
+                    "name": "source.verilog"
+                }
+            },
+            "patterns": [
+                {
+                    "include": "#constants"
+                },
+                {
+                    "include": "#operators"
+                }
+            ]
         },
         {
             "begin": "\\s*\\b(function|task)\\b(\\s+automatic)?",

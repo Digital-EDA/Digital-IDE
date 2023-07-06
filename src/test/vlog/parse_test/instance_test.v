@@ -1,3 +1,4 @@
+`include "./Cordic.v"
 module instance_test (
     input  input_a,
     input  input_b,
@@ -6,5 +7,5 @@ module instance_test (
 
     assign output_c = input_a & input_b;
 
-
+    
 endmodule

@@ -76,6 +76,7 @@ function registerLsp(context: vscode.ExtensionContext) {
 
 function registerToolCommands(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('digital-ide.lsp.tool.insertTextToUri', tool.insertTextToUri);
+    vscode.commands.registerCommand('digital-ide.lsp.tool.transformOldPropertyFile', tool.transformOldPpy);
 }
 
 export {

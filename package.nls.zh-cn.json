@@ -36,5 +36,6 @@
     "digital-ide.pl.delFile.title": "d删除文件",
     "digital-ide.netlist.title": "netlist",
     "digital-ide.fsm.title": "有限状态机",
-    "digital-ide.lsp.tool.insertTextToUri.title": "插入文本uri"
+    "digital-ide.lsp.tool.insertTextToUri.title": "插入文本uri",
+    "digital-ide.lsp.tool.transformOldPropertyFile.title": "转换配置文件从先前版本新版本"
 }

@@ -24,44 +24,61 @@ type PrjInfoMeta = Record<keyof PrjInfoSchema, any>;
 type RawPrjInfoMeta = OptionalPickType<PrjInfoMeta>;
 
 const PrjInfoDefaults: PrjInfoMeta = {
-    toolChain: ToolChainType.Xilinx,
-
-    prjName: {
-        PL: 'template',
-        PS: 'template'
+    get toolChain() {
+        return ToolChainType.Xilinx;
     },
 
-    IP_REPO: [],
+    get prjName() {
+        return {
+            PL: 'template',
+            PS: 'template'
+        };
+    },
+
+    get IP_REPO() {
+        return [];
+    },
+
+    get soc() {
+        return {
+            core: '',
+            bd: '',
+            os: '',
+            app: ''
+        };
+    }, 
+
+    get enableShowLog() {
+        return false;
+    }
+
+    get device() {
+        return 'none';
+    },
     
-    soc: {
-        core: '',
-        bd: '',
-        os: '',
-        app: ''
+    get arch() {
+        return {
+            prjPath: '',
+            hardware: {
+                src: '',
+                sim: '',
+                data: ''
+            },
+            software: {
+                src: '',
+                data: ''
+            }
+        };
     },
 
-    enableShowLog: false,
-    device: 'none',
-
-    arch: {
-        prjPath: '',
-        hardware: {
-            src: '',
-            sim: '',
-            data: ''
-        },
-        software: {
-            src: '',
-            data: ''
-        }
-    },
-
-    library: {
-        state: LibraryState.Unknown,
-        hardware: {
-            common: [],
-            custom: []
-        }  
+    get library() {
+        return {
+            state: LibraryState.Unknown,
+            hardware: {
+                common: [],
+                custom: []
+            }  
+        };
     }
 };
 
@@ -250,7 +267,8 @@ class PrjInfo implements PrjInfoMeta {
     public updatePathWisely<T extends string>(obj: Record<T, AbsPath | AbsPath[]>, 
                                               attr: T, 
                                               path?: Path | Path[],
-                                              root?: AbsPath) {                
+                                              root?: AbsPath,
+                                              defaultPath: Path | Path[] = '') {                
         if (path) {
             if (path instanceof Array) {
                 const actualPaths = [];
@@ -268,7 +286,7 @@ class PrjInfo implements PrjInfoMeta {
                 }   
             }
         } else {
-            obj[attr] = '';
+            obj[attr] = defaultPath;
         }
     }
     
@@ -400,7 +418,7 @@ class PrjInfo implements PrjInfoMeta {
         this.checkDirExist(this.arch.prjPath);
     }
 
-    public updateLibrary(library?: Library) {
+    public updateLibrary(library?: Library) {        
         if (library) {
             if (library.state) {
                 if (!validLibraryState(library.state)) {
@@ -409,14 +427,22 @@ class PrjInfo implements PrjInfoMeta {
                 } else {
                     this._library.state = library.state;
                 }
+            } else {
+                this._library.state = library.state;
             }
             if (library.hardware) {
-                // TODO : finish this when you can acquire root of common and custom
                 const commonPath = this.libCommonPath;
                 const customPath = this.libCustomPath;
-                this.updatePathWisely(this.library.hardware, 'common', library.hardware.common, commonPath);
-                this.updatePathWisely(this.library.hardware, 'custom', library.hardware.custom, customPath);
+                this.library.hardware.common = library.hardware.common ? library.hardware.common : [];
+                // this.updatePathWisely(this.library.hardware, 'common', library.hardware.common, commonPath, []);
+                this.updatePathWisely(this.library.hardware, 'custom', library.hardware.custom, customPath, []);
+                
+            } else {
+                this._library.hardware = library.hardware;
             }
+        } else {
+            this._library.hardware = PrjInfoDefaults.library.hardware;
+            this._library.state = PrjInfoDefaults.library.state;
         }
     }
 
@@ -429,8 +455,8 @@ class PrjInfo implements PrjInfoMeta {
     }
 
     public getLibraryCommonPaths(absolute: boolean = true): Path[] {
-        if (absolute) {
-            const commonFolder = hdlPath.join(this.libCommonPath, 'Empty');
+        if (absolute) {            
+            const commonFolder = hdlPath.join(this.libCommonPath, 'Empty');            
             return this._library.hardware.common.map<Path>(relPath => hdlPath.rel2abs(commonFolder, relPath));
         }
         return this._library.hardware.common;
@@ -479,7 +505,7 @@ class PrjInfo implements PrjInfoMeta {
     public get libCommonPath(): AbsPath {
         const libPath = join(this._extensionPath, 'lib', 'common');
         if (!fs.existsSync(libPath)) {
-            vscode.window.showErrorMessage('common lib path in extension is invalid, maybe extension has been corrupted, reinstall the extension');
+            vscode.window.showErrorMessage('common lib path: "' + libPath + '"  in extension is invalid, maybe extension has been corrupted, reinstall the extension');
         }
         return libPath;
     }

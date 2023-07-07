@@ -24,6 +24,9 @@ class LibPick {
     constructor () {
         this.commonPath = opeParam.prjInfo.libCommonPath;
         this.customPath = opeParam.prjInfo.libCustomPath;
+        if (!this.customPath) {
+            this.customPath = 'no custom path is defined, see Prj->Lib->Custom->Path';
+        }
         
         this.commonQuickPickItem = {
             label: "$(libpick-common) common", 
@@ -177,9 +180,9 @@ class LibPick {
     }
 }
 
-function pickLibrary() {
+async function pickLibrary() {
     const picker = new LibPick();
-    picker.pickItems();
+    await picker.pickItems();
 }
 
 export {

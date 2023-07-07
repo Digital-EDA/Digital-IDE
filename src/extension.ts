@@ -60,7 +60,10 @@ async function launch(context: vscode.ExtensionContext) {
     // await vlogFast("e:/Project/Digial-IDE/TestWs/simulate/user/sim/tb_file/scc018ug_hd_rvt.v");
 
     console.log(hdlParam);
+    console.log(opeParam.prjInfo.library.hardware.common);
+    console.log(opeParam.prjInfo.library.hardware.custom);
     
+        
     MainOutput.report('Digital-IDE has launched, Version: 0.3.0');
     MainOutput.report('OS: ' + opeParam.os);
 }

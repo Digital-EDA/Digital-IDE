@@ -106,8 +106,7 @@ class PrjManage {
         searchPathSet.checkAdd(hardwareInfo.sim);
         searchPathSet.checkAdd(prjInfo.getLibraryCommonPaths());
         searchPathSet.checkAdd(prjInfo.getLibraryCustomPaths());
-        
-
+                
         MainOutput.report('<getPrjHardwareFiles> search folders: ', ReportType.Debug);
         searchPathSet.files.forEach(p => MainOutput.report(p, ReportType.Debug));
 

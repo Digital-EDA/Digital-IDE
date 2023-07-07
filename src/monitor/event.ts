@@ -167,21 +167,27 @@ class PpyAction extends BaseAction {
     // get path set from opeParam that used to tell if need to remake HdlMonitor
     private getImportantPathSet(): Set<AbsPath | RelPath> {
         const pathSet = new Set<AbsPath | RelPath>();
-        pathSet.add(opeParam.prjInfo.arch.hardware.sim);
-        pathSet.add(opeParam.prjInfo.arch.hardware.src);
-        pathSet.add(opeParam.prjInfo.libCommonPath);
-        pathSet.add(opeParam.prjInfo.libCustomPath);
+        pathSet.add(opeParam.prjInfo.hardwareSimPath);
+        pathSet.add(opeParam.prjInfo.hardwareSrcPath);
+        for (const path of opeParam.prjInfo.getLibraryCommonPaths()) {
+            pathSet.add(path);
+        }
+        for (const path of opeParam.prjInfo.getLibraryCustomPaths()) {
+            pathSet.add(path);
+        }        
         return pathSet;
     }
 
     public async updateProperty(m: HdlMonitor) {
         const originalPathSet = this.getImportantPathSet();
         const originalHdlFiles = prjManage.getPrjHardwareFiles();
-
+        
         const rawPrjInfo = opeParam.getRawUserPrjInfo();
         opeParam.mergePrjInfo(rawPrjInfo);
         
         const currentPathSet = this.getImportantPathSet();
+        console.log(originalPathSet, currentPathSet);
+        
         if (isSameSet(originalPathSet, currentPathSet)) {
             return;
         }
@@ -189,7 +195,7 @@ class PpyAction extends BaseAction {
         vscode.window.withProgress(options, async () => await this.refreshHdlMonitor(m, originalHdlFiles));
     }
 
-    public async refreshHdlMonitor(m: HdlMonitor, originalHdlFiles: AbsPath[]) {        
+    public async refreshHdlMonitor(m: HdlMonitor, originalHdlFiles: AbsPath[]) {           
         m.remakeHdlMonitor();
         
         // update pl

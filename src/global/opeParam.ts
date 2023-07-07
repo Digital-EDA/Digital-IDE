@@ -166,6 +166,7 @@ class OpeParam {
      */
     public getUserPrjInfo(): PrjInfo {
         const userPrjInfo = new PrjInfo();
+        userPrjInfo.initContextPath(this.extensionPath, this.workspacePath);
         const rawPrjInfo = this.getRawUserPrjInfo();
         userPrjInfo.merge(rawPrjInfo);
         return userPrjInfo;

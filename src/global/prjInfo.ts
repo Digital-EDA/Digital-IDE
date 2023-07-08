@@ -50,7 +50,7 @@ const PrjInfoDefaults: PrjInfoMeta = {
 
     get enableShowLog() {
         return false;
-    }
+    },
 
     get device() {
         return 'none';

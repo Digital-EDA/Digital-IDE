@@ -35,22 +35,23 @@ function mkdir(path: AbsPath): boolean {
 }
 
 function rmdir(path: AbsPath): void {
-    if (fs.existsSync(path)) {
-        if (fs.statSync(path).isDirectory()) {
-            const files = fs.readdirSync(path);
-            for (const file of files) {
-                const curPath = hdlPath.join(path, file);
-                if (fs.statSync(curPath).isDirectory()) { // recurse
-                    rmdir(curPath);
-                } else {                                  // delete file
-                    fs.unlinkSync(curPath);
-                }
-            }
-            fs.rmdirSync(path);
-        } else {
-            fs.unlinkSync(path);
-        }
-    }
+    fs.rm(path, { recursive: true, force: true }, () => {});
+    // if (fs.existsSync(path)) {
+    //     if (fs.statSync(path).isDirectory()) {
+    //         const files = fs.readdirSync(path);
+    //         for (const file of files) {
+    //             const curPath = hdlPath.join(path, file);
+    //             if (fs.statSync(curPath).isDirectory()) { // recurse
+    //                 rmdir(curPath);
+    //             } else {                                  // delete file
+    //                 fs.unlinkSync(curPath);
+    //             }
+    //         }
+    //         fs.rmdirSync(path);
+    //     } else {            
+    //         fs.unlinkSync(path);
+    //     }
+    // }
 }
 
 function mvdir(src: AbsPath, dest: AbsPath, cover: boolean): boolean {

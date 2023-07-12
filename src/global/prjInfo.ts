@@ -454,10 +454,16 @@ class PrjInfo implements PrjInfoMeta {
         this._library.hardware.custom.push(relPath);
     }
 
-    public getLibraryCommonPaths(absolute: boolean = true): Path[] {
+    public getLibraryCommonPaths(absolute: boolean = true, state?: LibraryState): Path[] {
+        const targetState = state ? state : this._library.state;
+        const localLibPath = hdlPath.join(this.hardwareSrcPath, 'lib');
+        const remoteLibPath = this.libCommonPath;
+        const targetLibPath = (targetState === LibraryState.Local) ? localLibPath : remoteLibPath;
+        const commonFolder = hdlPath.join(targetLibPath, 'Empty');
+        
         if (absolute) {            
-            const commonFolder = hdlPath.join(this.libCommonPath, 'Empty');            
-            return this._library.hardware.common.map<Path>(relPath => hdlPath.rel2abs(commonFolder, relPath));
+            const absPaths = this._library.hardware.common.map<Path>(relPath => hdlPath.rel2abs(commonFolder, relPath));            
+            return absPaths;
         }
         return this._library.hardware.common;
     }
@@ -519,7 +525,7 @@ class PrjInfo implements PrjInfoMeta {
     }
 
     public get hardwareSimPath(): AbsPath {
-        const simPath = this._arch.hardware.sim;        
+        const simPath = this._arch.hardware.sim;  
         if (fspath.isAbsolute(simPath)) {
             return simPath;
         }

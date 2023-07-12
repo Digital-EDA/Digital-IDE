@@ -5,6 +5,9 @@ import { AbsPath, opeParam } from '../global';
 import { hdlDir, hdlFile, hdlPath } from '../hdlFs';
 import { Library } from '../global/prjInfo';
 import { Path } from '../../resources/hdlParser';
+import { LibraryState } from '../global/enum';
+import { PathSet } from '../global/util';
+import { hdlIgnore } from './ignore';
 
 interface LibFileChange {
     add: AbsPath[],
@@ -12,7 +15,7 @@ interface LibFileChange {
 }
 
 interface LibStatus {
-    type?: string,
+    state?: LibraryState,
     list: AbsPath[]
 }
 
@@ -48,11 +51,11 @@ class LibManage {
     }
 
     public get srcPath(): AbsPath {
-        return opeParam.prjInfo.arch.hardware.src;
+        return opeParam.prjInfo.hardwareSrcPath;
     }
 
     public get simPath(): AbsPath {
-        return opeParam.prjInfo.arch.hardware.sim;
+        return opeParam.prjInfo.hardwareSimPath;
     }
 
     public get prjPath(): AbsPath {
@@ -68,79 +71,57 @@ class LibManage {
     }
 
     public processLibFiles(library: Library): LibFileChange {
-        // 在不设置state属性的时候默认为remote
-        this.next.list = this.getLibFiles(library);
-        if (!hdlFile.isHasAttr(library, 'state')) {
-            this.next.type = 'remote';
+        this.next.list = this.getLibFiles();
+        if (library.state === LibraryState.Local) {
+            this.next.state = LibraryState.Local;
         } else {
-            if (library.state !== 'remote' && library.state !== 'local') {
-                return {
-                    'add' : [],
-                    'del' : [],
-                };
-            }
-            this.next.type = library.state;
+            this.next.state = LibraryState.Remote;
         }
 
-        // 处于初始状态时的情况
-        if (!this.curr.type) {
-            if (!hdlFile.isDir(this.localLibPath)) {
-                this.curr.type = 'local';
-            } else {
-                this.curr.type = 'remote';
-            }
-        }
+        // current disk situation
 
-        const state = `${this.curr.type}-${this.next.type}`;
-        let add: AbsPath[] = [];
-        let del: AbsPath[] = [];
-        switch (state) {
+        if (hdlFile.isDir(this.localLibPath)) {
+            this.curr.state = LibraryState.Local;
+        } else {
+            this.curr.state = LibraryState.Remote;
+        }
+    
+        const add: AbsPath[] = [];
+        const del: AbsPath[] = [];
+        const statePair = this.curr.state + '-' + this.next.state;
+        
+        switch (statePair) {
             case 'remote-remote':
-                add = diffElement(this.next.list, this.curr.list);
-                del = diffElement(this.curr.list, this.next.list);
+                add.push(...diffElement(this.next.list, this.curr.list));
+                del.push(...diffElement(this.curr.list, this.next.list));
             break;
             case 'remote-local':
-                // 删除的内容全是remote的，将curr的交出去即可
-                del = this.curr.list;
+                del.push(...this.curr.list);
                 
-                // 将新增的全部复制到本地，交给monitor进行处理
-                this.remote2Local(this.next.list, (src, dist) => {
+                // copy file from remote to local
+                const remotePathList = this.getLibFiles(LibraryState.Remote);
+                this.remote2Local(remotePathList, (src, dist) => {                    
                     hdlFile.copyFile(src, dist);
                 });
             break;   
             case 'local-remote':
-                // 本地的lib全部删除，交给monitor进行处理
-                const fn = async () => {
-                    if (fs.existsSync(this.localLibPath)) {
-                        const needNotice = vscode.workspace.getConfiguration('prj.file.structure.notice');
-                        if (needNotice) {
-                            let select = await vscode.window.showWarningMessage("local lib will be removed.", 'Yes', 'Cancel');
-                            if (select === "Yes") {
-                                hdlDir.rmdir(this.localLibPath);
-                            }
-                        } else {
-                            hdlDir.rmdir(this.localLibPath);
-                        }
-                    }
-                };
-                fn();
+                add.push(...this.next.list);
 
-                // 增加的内容全是remote的，将next的交出去即可
-                add = this.next.list;
+                // delete local files (async)
+                this.deleteLocalFiles();
+
             break;
             case 'local-local':
-                // 只管理library里面的内容，如果自己再localPath里加减代码，则不去管理
-                add = diffElement(this.next.list, this.curr.list);
-                del = diffElement(this.curr.list, this.next.list);
+                add.push(...diffElement(this.next.list, this.curr.list));
+                del.push(...diffElement(this.curr.list, this.next.list));
 
                 this.remote2Local(add, (src, dist) => {
                     hdlFile.copyFile(src, dist);
                 });
 
-                this.remote2Local(del, (src, dist) => {
+                this.remote2Local(del, (src, dist) => {                    
                     hdlFile.removeFile(dist);
                 });
-                add = []; del = [];
             break;
             default: break;
         }
@@ -149,35 +130,46 @@ class LibManage {
     }
 
 
-    getLibFiles(library: Library) {
-        const libFileList: AbsPath[] = [];
-        const prjInfo = opeParam.prjInfo;
+    public getLibFiles(state?: LibraryState): AbsPath[] {
+        const libPathSet = new PathSet();
 
-        // collect common libs
-        prjInfo.getLibraryCommonPaths().forEach(absPath => libFileList.push(...hdlFile.getHDLFiles(absPath)));
+        for (const path of opeParam.prjInfo.getLibraryCommonPaths(true, state)) {            
+            libPathSet.checkAdd(path);
+        }
 
-        // collect custom libs
-        prjInfo.getLibraryCustomPaths().forEach(absPath => libFileList.push(...hdlFile.getHDLFiles(absPath)));
+        for (const path of opeParam.prjInfo.getLibraryCustomPaths()) {
+            libPathSet.checkAdd(path);
+        }
 
-        // Remove duplicate HDL files
-        return removeDuplicates(libFileList);
+        const ignores = hdlIgnore.getIgnoreFiles();
+        const libPathList = hdlFile.getHDLFiles(libPathSet.files, ignores);        
+        return libPathList;
     }
 
-    remote2Local(remotes: Path[], callback: (src: AbsPath, dist: AbsPath) => void) {
+    public async deleteLocalFiles() {
+        if (fs.existsSync(this.localLibPath)) {
+            const needNotice = vscode.workspace.getConfiguration('prj.file.structure.notice');
+            if (needNotice) {
+                let select = await vscode.window.showWarningMessage(`Local Lib (${this.localLibPath}) will be removed.`, 'Yes', 'Cancel');
+                if (select === "Yes") {
+                    hdlDir.rmdir(this.localLibPath);
+                }
+            } else {
+                hdlDir.rmdir(this.localLibPath);
+            }
+        }
+    }
+
+    public remote2Local(remotes: Path[], callback: (src: AbsPath, dist: AbsPath) => void) {
         const localLibPath = this.localLibPath;
         const sourceLibPath = this.sourceLibPath;
         const customerPath = this.customerPath;
         const customerPathValid = hdlFile.isDir(customerPath);
 
-        for (const src of remotes) {
-            let dist;
-            if (customerPathValid && src.includes(customerPath)) {
-                dist = src.replace(customerPath, localLibPath);
-            } else {
-                dist = src.replace(sourceLibPath, localLibPath);
-            }
-            
-            callback(src, dist);
+        for (const srcPath of remotes) {
+            const replacePath = ( customerPathValid && srcPath.includes(customerPath) ) ? customerPath : sourceLibPath;
+            const distPath = srcPath.replace(replacePath, localLibPath);            
+            callback(srcPath, distPath);
         }
     }
 };

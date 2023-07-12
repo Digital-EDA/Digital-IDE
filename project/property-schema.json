@@ -68,7 +68,8 @@
 					"type": "string",
 					"enum": [
 						"local",
-						"remote"
+						"remote",
+                        "unknown"
 					]
 				},
 				"hardware": {

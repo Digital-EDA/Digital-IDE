@@ -10,6 +10,7 @@ import { libManage } from './lib';
 import { hdlParam } from '../hdlParser';
 import { PlManage } from './PL';
 import { PsManage } from './PS';
+import { hdlIgnore } from './ignore';
 
 class PrjManage {
     pl?: PlManage;
@@ -83,10 +84,6 @@ class PrjManage {
         }
     }
 
-    public getIgnoreFiles(): AbsPath[] {
-        return [];
-    }
-
     /**
      * get all the hdl files that to be parsed in the project
      * @returns 
@@ -111,7 +108,7 @@ class PrjManage {
         searchPathSet.files.forEach(p => MainOutput.report(p, ReportType.Debug));
 
         // TODO : make something like .gitignore
-        const ignores = this.getIgnoreFiles();
+        const ignores = hdlIgnore.getIgnoreFiles();
 
         // do search
         const searchPaths = searchPathSet.files;

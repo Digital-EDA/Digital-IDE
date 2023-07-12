@@ -5,7 +5,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 
 import { refreshArchTree } from '../function/treeView';
-import { AbsPath, MainOutput, opeParam, RelPath, ReportType } from '../global';
+import { AbsPath, MainOutput, opeParam, PrjInfoDefaults, RelPath, ReportType } from '../global';
 import { isSameSet } from '../global/util';
 import { hdlFile, hdlPath } from '../hdlFs';
 import { hdlParam, HdlSymbol } from '../hdlParser';
@@ -160,19 +160,22 @@ class PpyAction extends BaseAction {
     async add(path: string, m: HdlMonitor): Promise<void> {
         console.log('PpyAction add');
         assert.equal(hdlPath.toSlash(path), opeParam.propertyJsonPath);
-        this.updateProperty(m);
+        await this.updateProperty(Event.Add, m);
+        prjManage.refreshPrjFolder();
     }
 
     async unlink(path: string, m: HdlMonitor): Promise<void> {
         console.log('PpyAction unlink');
         assert.equal(hdlPath.toSlash(path), opeParam.propertyJsonPath);
-        this.updateProperty(m);
+        await this.updateProperty(Event.Unlink, m);
+        prjManage.refreshPrjFolder();
     }
     
     async change(path: string, m: HdlMonitor): Promise<void> {
         console.log('PpyAction change');
         assert.equal(hdlPath.toSlash(path), opeParam.propertyJsonPath);
-        this.updateProperty(m);
+        await this.updateProperty(Event.Change, m);
+        prjManage.refreshPrjFolder();
     }
 
     // get path set from opeParam that used to tell if need to remake HdlMonitor
@@ -189,12 +192,17 @@ class PpyAction extends BaseAction {
         return pathSet;
     }
 
-    public async updateProperty(m: HdlMonitor) {
+    public async updateProperty(e: Event, m: HdlMonitor) {
         const originalPathSet = this.getImportantPathSet();
         const originalHdlFiles = await prjManage.getPrjHardwareFiles();
         const originalLibState = opeParam.prjInfo.library.state;
         
         const rawPrjInfo = opeParam.getRawUserPrjInfo();
+        // when delete, make ws path to be main parse path
+        if (e === Event.Unlink) {
+            rawPrjInfo.arch = PrjInfoDefaults.arch;
+        }
+
         opeParam.mergePrjInfo(rawPrjInfo);
         
         const currentPathSet = this.getImportantPathSet();
@@ -203,7 +211,7 @@ class PpyAction extends BaseAction {
         if (isSameSet(originalPathSet, currentPathSet)) {
             // skip hdl remake
             if (originalLibState !== currentLibState) {
-                const fileChange = libManage.processLibFiles(opeParam.prjInfo.library);
+                const fileChange = await libManage.processLibFiles(opeParam.prjInfo.library);
                 MainOutput.report(`libManage finish process, add ${fileChange.add.length} files, del ${fileChange.del.length} files`, ReportType.Info);
             }
             

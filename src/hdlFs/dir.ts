@@ -127,5 +127,6 @@ function cpdir(src: AbsPath, dest: AbsPath, cover: boolean) {
 export {
     mkdir,
     rmdir,
-    cpdir
+    cpdir,
+    mvdir
 };

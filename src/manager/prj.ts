@@ -79,7 +79,9 @@ class PrjManage {
                 { title: 'No', value: false }
             );
             if (res?.value) {
-                vscode.commands.executeCommand('digital-ide.property-json.generate');
+                await this.generatePropertyJson();
+                const rawPrjInfo = hdlFile.readJSON(propertyJsonPath) as RawPrjInfo;
+                opeParam.mergePrjInfo(rawPrjInfo);
             }
         }
     }
@@ -125,6 +127,7 @@ class PrjManage {
         }        
         await this.initOpeParam(context);
         MainOutput.report('finish initialise opeParam', ReportType.Info);
+        prjManage.refreshPrjFolder();
         
         const hdlFiles = await this.getPrjHardwareFiles();
         MainOutput.report(`finish collect ${hdlFiles.length} hdl files`, ReportType.Info);
@@ -143,22 +146,25 @@ class PrjManage {
         }
     }
 
-
-
     public async refreshPrjFolder() {
-        // TODO : finish this
-        // 无工程配置文件则直接退出
-        if (!opeParam.prjInfo) {
-            return;
+        // read new prj from ppy
+        const rawPrjInfo = opeParam.getRawUserPrjInfo();
+
+        if (rawPrjInfo.arch) {
+            // configure user's info
+            await this.createFolderByRawPrjInfo(rawPrjInfo);
+        } else {
+            // configure by default
+            await this.createFolderByDefault(rawPrjInfo);
         }
+    }
 
-        const prjInfo = opeParam.prjInfo;
-
-        // 如果是用户配置文件结构，检查并生成相关文件夹
-        if (prjInfo.arch) {
-            hdlDir.mkdir(prjInfo.arch.prjPath);
-            const hardware = prjInfo.arch.hardware;
-            const software = prjInfo.arch.software;
+    public async createFolderByRawPrjInfo(rawPrjInfo: RawPrjInfo) {
+        if (rawPrjInfo.arch) {
+            hdlDir.mkdir(rawPrjInfo.arch.prjPath);
+            
+            const hardware = rawPrjInfo.arch.hardware;
+            const software = rawPrjInfo.arch.software;
 
             if (hardware) {
                 hdlDir.mkdir(hardware.src);
@@ -172,29 +178,26 @@ class PrjManage {
             }
             return;
         }
+    }
 
-        // 先直接创建工程文件夹
-        hdlDir.mkdir(`${opeParam.workspacePath}/prj`);
 
-        // 初始化文件结构的路径
-        const userPath = `${opeParam.workspacePath}/user`;
-        const softwarePath = `${opeParam.workspacePath}/user/Software`;
-        const hardwarePath = `${opeParam.workspacePath}/user/Hardware`;
+    public async createFolderByDefault(rawPrjInfo: RawPrjInfo) {
+        // create prj first
+        const defaultPrjPath = hdlPath.join(opeParam.workspacePath, 'prj');
+        hdlDir.mkdir(defaultPrjPath);
 
-        let nextmode = "PL";
-        // 再对源文件结构进行创建
-        if (prjInfo.soc.core !== 'none') {
-            nextmode = "LS";
-        }
+        // basic path
+        const userPath = hdlPath.join(opeParam.workspacePath, 'user');
+        const softwarePath = hdlPath.join(userPath, 'Software');
+        const hardwarePath = hdlPath.join(userPath, 'Hardware');
 
-        let currmode = "PL";
-        if (fs.existsSync(softwarePath) || fs.existsSync(hardwarePath)) {
-            currmode = "LS";
-        }
+        const nextmode = this.getNextMode(rawPrjInfo);
+        const currmode = this.getCurrentMode(softwarePath, hardwarePath);
+
         
         if (currmode === nextmode) {
-            const hardware = opeParam.prjInfo.ARCH.Hardware;
-            const software = opeParam.prjInfo.ARCH.Software;
+            const hardware = opeParam.prjInfo.arch.hardware;
+            const software = opeParam.prjInfo.arch.software;            
 
             hdlDir.mkdir(hardware.src);
             hdlDir.mkdir(hardware.sim);
@@ -203,43 +206,68 @@ class PrjManage {
                 hdlDir.mkdir(software.src);
                 hdlDir.mkdir(software.data);
             }
-            return;
-        }
-
-        if (currmode === "PL" && nextmode === "LS") {
+        } else if (currmode === "PL" && nextmode === "LS") {
             hdlDir.mkdir(hardwarePath);
-            hdlDir.readdir(userPath, true, (folder) => {
-                if (folder !== "Hardware") {
-                    hdlDir.mvdir(folder, hardwarePath);
-                }
-            });
 
-            hdlDir.mkdir(`${softwarePath}/data`);
-            hdlDir.mkdir(`${softwarePath}/src`);
+            for (const path of fs.readdirSync(userPath)) {
+                const filePath = hdlPath.join(userPath, path);
+                if (filePath !== 'Hardware') {
+                    hdlDir.mvdir(filePath, hardwarePath, true);
+                }
+            }
+
+            const softwareDataPath = hdlPath.join(softwarePath, 'data');
+            const softwareSrcPath = hdlPath.join(softwarePath, 'src');
+
+            hdlDir.mkdir(softwareDataPath);
+            hdlDir.mkdir(softwareSrcPath);
         }
         else if (currmode === "LS" && nextmode === "PL") {
             const needNotice = vscode.workspace.getConfiguration().get('PRJ.file.structure.notice', true);
             if (needNotice) {
-                let select = await vscode.window.showWarningMessage("Software will be deleted.", 'Yes', 'No');
-                if (select === "Yes") {
+                const res = await vscode.window.showWarningMessage(
+                    "Software will be deleted.",
+                    { modal: true },
+                    { title: 'Yes', value: true },
+                    { title: 'No', value: false }
+                );
+                if (res?.value) {
                     hdlDir.rmdir(softwarePath);
                 }
             } else {
                 hdlDir.rmdir(softwarePath);
             }
 
-            if (hdlFile.isExist(hardwarePath)) {
-                hdlDir.readdir(hardwarePath, true, (folder) => {
-                    hdlDir.mvdir(folder, userPath);
-                })
-                
+            if (fs.existsSync(hardwarePath)) {
+                for (const path of fs.readdirSync(hardwarePath)) {
+                    const filePath = hdlPath.join(hardwarePath, path);
+                    hdlDir.mvdir(filePath, userPath, true);
+                }
                 hdlDir.rmdir(hardwarePath);
-            } 
+            }
 
-            hdlDir.mkdir(`${userPath}/src`);
-            hdlDir.mkdir(`${userPath}/sim`);
-            hdlDir.mkdir(`${userPath}/data`);
+            const userSrcPath = hdlPath.join(userPath, 'src');
+            const userSimPath = hdlPath.join(userPath, 'sim');
+            const userDataPath = hdlPath.join(userPath, 'data');
+
+            hdlDir.mkdir(userSrcPath);
+            hdlDir.mkdir(userSimPath);
+            hdlDir.mkdir(userDataPath);
         }
+    }
+
+    public getNextMode(rawPrjInfo: RawPrjInfo): 'PL' | 'LS' {
+        if (rawPrjInfo.soc && rawPrjInfo.soc.core !== 'none') {
+            return 'LS';
+        }
+        return 'PL';
+    }
+
+    public getCurrentMode(softwarePath: AbsPath, hardwarePath: AbsPath): 'PL' | 'LS' {
+        if (fs.existsSync(softwarePath) || fs.existsSync(hardwarePath)) {
+            return 'LS';
+        }
+        return 'PL';
     }
 }
 

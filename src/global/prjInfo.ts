@@ -58,15 +58,15 @@ const PrjInfoDefaults: PrjInfoMeta = {
     
     get arch() {
         return {
-            prjPath: '',
+            prjPath: '.',
             hardware: {
-                src: '',
-                sim: '',
-                data: ''
+                src: '.',
+                sim: '.',
+                data: '.'
             },
             software: {
-                src: '',
-                data: ''
+                src: '.',
+                data: '.'
             }
         };
     },

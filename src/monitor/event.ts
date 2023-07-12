@@ -2,15 +2,15 @@
 import assert = require('assert');
 import * as chokidar from 'chokidar';
 import * as vscode from 'vscode';
-import { refreshArchTree } from '../function/treeView';
+import * as fs from 'fs';
 
+import { refreshArchTree } from '../function/treeView';
 import { AbsPath, MainOutput, opeParam, RelPath, ReportType } from '../global';
 import { isSameSet } from '../global/util';
 import { hdlFile, hdlPath } from '../hdlFs';
 import { hdlParam, HdlSymbol } from '../hdlParser';
 import { prjManage } from '../manager';
 import { libManage } from '../manager/lib';
-
 import type { HdlMonitor } from './index';
 
 enum Event {
@@ -53,31 +53,10 @@ abstract class BaseAction {
         }
         fSWatcher.on(Event.Unlink, path => this.unlink(path, m));
     }
-
-    public listenUnlinkDir(m: HdlMonitor) {
-        const fSWatcher = this.selectFSWatcher(m);
-        if (!fSWatcher) {
-            MainOutput.report("FSWatcher hasn't been made!", ReportType.Error);
-            return;
-        }
-        fSWatcher.on(Event.UnlinkDir, path => this.unlinkDir(path, m));
-    }
-
-    // public listenAddDir(m: HdlMonitor) {
-    //     const fSWatcher = this.selectFSWatcher(m);
-    //     if (!fSWatcher) {
-    //         MainOutput.report("FSWatcher hasn't been made!", ReportType.Error);
-    //         return;
-    //     }
-    //     fSWatcher.on(Event.UnlinkDir, path => this.unlinkDir(path, m));
-    // }
-
     abstract selectFSWatcher(m: HdlMonitor): chokidar.FSWatcher | undefined;
     abstract change(path: AbsPath, m: HdlMonitor): Promise<void>;
     abstract add(path: AbsPath, m: HdlMonitor): Promise<void>;
-    // abstract addDir(path: AbsPath, m: HdlMonitor): Promise<void>;
     abstract unlink(path: AbsPath, m: HdlMonitor): Promise<void>;
-    abstract unlinkDir(path: AbsPath, m: HdlMonitor): Promise<void>;
 }
 
 class HdlAction extends BaseAction {
@@ -86,34 +65,40 @@ class HdlAction extends BaseAction {
     }
 
     async add(path: string, m: HdlMonitor): Promise<void> {
-        console.log('HdlAction add');
+        console.log('HdlAction add', path);
 
         path = hdlPath.toSlash(path);
-        // create corresponding moduleFile
-        hdlParam.initHdlFiles([path]);
-    
-        const moduleFile = hdlParam.getHdlFile(path);
-        if (!moduleFile) {
-            console.log('error happen when create moduleFile', path);
-        } else {
-            moduleFile.makeInstance();
-            for (const module of moduleFile.getAllHdlModules()) {
-                module.solveUnhandleInstance();
-            }
+
+        // check if it has been created
+        if (hdlParam.hasHdlFile(path)) {
+            MainOutput.report('<HdlAction Add Event> HdlFile ' + path + 'has been created', ReportType.Warn);
+            return;
         }
+
+        // create corresponding moduleFile
+        hdlParam.addHdlFile(path);
+
         refreshArchTree();
     }
 
     async unlink(path: string, m: HdlMonitor): Promise<void> {
         console.log('HdlAction unlink', path);
-        
-        path = hdlPath.toSlash(path);
-        hdlParam.deleteHdlFile(path);
-        refreshArchTree();
+
+        // operation to process unlink of hdl files can be deleted in <processLibFiles>
+        if (fs.existsSync(path)) {
+            path = hdlPath.toSlash(path);
+            hdlParam.deleteHdlFile(path);
+            refreshArchTree();
+        }
     }
 
     async unlinkDir(path: string, m: HdlMonitor): Promise<void> {
         console.log('HdlAction unlinkDir', path);
+        
+    }
+
+    async addDir(path: string, m: HdlMonitor): Promise<void> {
+        console.log('HdlAction addDir', path);
         
     }
 
@@ -184,10 +169,6 @@ class PpyAction extends BaseAction {
         this.updateProperty(m);
     }
     
-    async unlinkDir(path: string, m: HdlMonitor): Promise<void> {
-        
-    }
-
     async change(path: string, m: HdlMonitor): Promise<void> {
         console.log('PpyAction change');
         assert.equal(hdlPath.toSlash(path), opeParam.propertyJsonPath);
@@ -210,7 +191,7 @@ class PpyAction extends BaseAction {
 
     public async updateProperty(m: HdlMonitor) {
         const originalPathSet = this.getImportantPathSet();
-        const originalHdlFiles = prjManage.getPrjHardwareFiles();
+        const originalHdlFiles = await prjManage.getPrjHardwareFiles();
         const originalLibState = opeParam.prjInfo.library.state;
         
         const rawPrjInfo = opeParam.getRawUserPrjInfo();
@@ -229,19 +210,17 @@ class PpyAction extends BaseAction {
         } else {
             // update hdl monitor
             const options: vscode.ProgressOptions = { location: vscode.ProgressLocation.Notification, title: 'modify the project' };
-            vscode.window.withProgress(options, async () => await this.refreshHdlMonitor(m, originalHdlFiles));
+            await vscode.window.withProgress(options, async () => await this.refreshHdlMonitor(m, originalHdlFiles));
         }
+        refreshArchTree();    
     }
 
     public async refreshHdlMonitor(m: HdlMonitor, originalHdlFiles: AbsPath[]) {           
         m.remakeHdlMonitor();
         
         // update pl
-        console.log('current lib state', opeParam.prjInfo.library.state);
-        const currentHdlFiles = prjManage.getPrjHardwareFiles();
+        const currentHdlFiles = await prjManage.getPrjHardwareFiles();
         await this.updatePL(originalHdlFiles, currentHdlFiles);
-
-        refreshArchTree();    
     }
 
     public async updatePL(oldFiles: AbsPath[], newFiles: AbsPath[]) {

@@ -38,7 +38,7 @@ class HdlParam {
      * used only in initialization stage
      * @param hdlFile
      */
-    public addHdlFile(hdlFile: HdlFile) {
+    public setHdlFile(hdlFile: HdlFile) {
         const path = hdlFile.path;
         this.pathToHdlFiles.set(path, hdlFile);
     }
@@ -298,6 +298,21 @@ class HdlParam {
                 moduleFile.deleteHdlModule(name);
             }
             this.pathToHdlFiles.delete(path);
+        }
+    }
+
+    public addHdlFile(path: AbsPath) {
+        path = hdlPath.toSlash(path);
+        this.initHdlFiles([path]);
+    
+        const moduleFile = this.getHdlFile(path);
+        if (!moduleFile) {
+            MainOutput.report('error happen when create moduleFile ' + path, ReportType.Warn);
+        } else {
+            moduleFile.makeInstance();
+            for (const module of moduleFile.getAllHdlModules()) {
+                module.solveUnhandleInstance();
+            }
         }
     }
 };
@@ -672,7 +687,7 @@ class HdlFile {
         this.type = hdlFile.getHdlFileType(path);
 
         // add to global hdlParam
-        hdlParam.addHdlFile(this);
+        hdlParam.setHdlFile(this);
 
         // make nameToModule
         this.nameToModule = new Map<string, HdlModule>();

@@ -73,7 +73,7 @@ const PrjInfoDefaults: PrjInfoMeta = {
 
     get library() {
         return {
-            state: LibraryState.Unknown,
+            state: LibraryState.Remote,
             hardware: {
                 common: [],
                 custom: []
@@ -240,7 +240,7 @@ class PrjInfo implements PrjInfoMeta {
             uniformPath = fspath.resolve(rootPath, path);
         }
         
-        uniformPath = toSlash(uniformPath);
+        uniformPath = this.uniformisePath(uniformPath);
 
         if (check) {
             if (fs.existsSync(uniformPath)) {
@@ -366,6 +366,9 @@ class PrjInfo implements PrjInfoMeta {
     }
 
     private checkDirExist(dir: AbsPath) {
+        if (dir === '') {
+            return;
+        }
         if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir, { recursive: true });
         }
@@ -391,17 +394,17 @@ class PrjInfo implements PrjInfoMeta {
             const socCore = this._soc.core;
             if (socCore && socCore !== 'none') {
                 hardwarePath = join(hardwarePath, 'Hardware');
+                this.arch.software.src = join(softwarePath, 'src');
+                this.arch.software.data = join(softwarePath, 'data');
             }
+
             this.arch.prjPath = join(workspacePath, 'prj');
             this.arch.hardware.src = join(hardwarePath, 'src');
             this.arch.hardware.sim = join(hardwarePath, 'sim');
             this.arch.hardware.data = join(hardwarePath, 'data');
-
-            this.arch.software.src = join(softwarePath, 'src');
-            this.arch.software.data = join(softwarePath, 'data');
         }
-            
-        // // if path is '', set as workspace
+        
+        // if path is '', set as workspace
         this.setDefaultValue(this.arch.hardware, 'src', workspacePath);
         this.setDefaultValue(this.arch.hardware, 'sim', this.arch.hardware.src);
         this.setDefaultValue(this.arch.hardware, 'data', workspacePath);
@@ -409,7 +412,7 @@ class PrjInfo implements PrjInfoMeta {
         this.setDefaultValue(this.arch.software, 'data', workspacePath);
         this.setDefaultValue(this.arch, 'prjPath', workspacePath);
 
-        // check existence
+        // check existence & make dir
         this.checkDirExist(this.arch.hardware.sim);
         this.checkDirExist(this.arch.hardware.src);
         this.checkDirExist(this.arch.hardware.data);

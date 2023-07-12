@@ -16,7 +16,7 @@ class HdlMonitor{
         this.monitorConfig = {
             persistent: true,
             usePolling: false,
-            ignoreInitial: true,
+            ignoreInitial: true
         };
     }
 
@@ -85,6 +85,9 @@ class HdlMonitor{
         Event.hdlAction.listenAdd(this);
         Event.hdlAction.listenChange(this);
         Event.hdlAction.listenUnlink(this);
+
+        // Event.hdlAction.listenAddDir(this);
+        // Event.hdlAction.listenUnlinkDir(this);
     }
 
     public registerPpyMonitorListener() {

@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
+import * as fspath from 'path';
 
 import { AbsPath, opeParam } from '../global';
 import { hdlDir, hdlFile, hdlPath } from '../hdlFs';
@@ -8,6 +9,8 @@ import { Path } from '../../resources/hdlParser';
 import { LibraryState } from '../global/enum';
 import { PathSet } from '../global/util';
 import { hdlIgnore } from './ignore';
+import { hdlParam } from '../hdlParser';
+import { refreshArchTree } from '../function/treeView';
 
 interface LibFileChange {
     add: AbsPath[],
@@ -70,7 +73,7 @@ class LibManage {
         return hdlPath.join(opeParam.extensionPath, 'lib');
     }
 
-    public processLibFiles(library: Library): LibFileChange {
+    public async processLibFiles(library: Library): Promise<LibFileChange> {
         this.next.list = this.getLibFiles();
         if (library.state === LibraryState.Local) {
             this.next.state = LibraryState.Local;
@@ -100,15 +103,17 @@ class LibManage {
                 
                 // copy file from remote to local
                 const remotePathList = this.getLibFiles(LibraryState.Remote);
-                this.remote2Local(remotePathList, (src, dist) => {                    
+                this.remote2Local(remotePathList, (src, dist) => {
+                    hdlParam.deleteHdlFile(src);
                     hdlFile.copyFile(src, dist);
                 });
+
             break;   
             case 'local-remote':
                 add.push(...this.next.list);
 
-                // delete local files (async)
-                this.deleteLocalFiles();
+                // delete local files & data structure in hdlParam (async)
+                await this.deleteLocalFiles();
 
             break;
             case 'local-local':
@@ -150,14 +155,30 @@ class LibManage {
         if (fs.existsSync(this.localLibPath)) {
             const needNotice = vscode.workspace.getConfiguration('prj.file.structure.notice');
             if (needNotice) {
-                let select = await vscode.window.showWarningMessage(`Local Lib (${this.localLibPath}) will be removed.`, 'Yes', 'Cancel');
-                if (select === "Yes") {
-                    hdlDir.rmdir(this.localLibPath);
+                const res = await vscode.window.showWarningMessage(
+                    `Local Lib (${this.localLibPath}) will be removed.`,
+                    { modal: true },
+                    { title: 'Yes', value: true },
+                    { title: 'No', value: false }
+                );
+                if (res?.value) {
+                    this.deleteLocalLib();
                 }
             } else {
-                hdlDir.rmdir(this.localLibPath);
+                this.deleteLocalLib();
             }
         }
+    }
+
+    public deleteLocalLib() {
+        const ignores = hdlIgnore.getIgnoreFiles();
+        const hdlFileList = hdlFile.getHDLFiles([this.localLibPath], ignores);
+        for (const path of hdlFileList) {
+            hdlParam.deleteHdlFile(path);
+        }
+
+        refreshArchTree();
+        hdlDir.rmdir(this.localLibPath);
     }
 
     public remote2Local(remotes: Path[], callback: (src: AbsPath, dist: AbsPath) => void) {

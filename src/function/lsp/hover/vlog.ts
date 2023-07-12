@@ -157,9 +157,7 @@ class VlogHoverProvider implements vscode.HoverProvider {
         // match others        
         const normalResult = util.matchNormalSymbol(targetWord, scopeSymbols.symbols);
         if (normalResult) {
-            const normalComment = await util.searchCommentAround(filePath, normalResult.range);
-            console.log(normalResult);
-            
+            const normalComment = await util.searchCommentAround(filePath, normalResult.range);            
             const normalDesc = util.makeNormalDesc(normalResult);
             
             content.appendCodeblock(normalDesc, HdlLangID.Verilog);

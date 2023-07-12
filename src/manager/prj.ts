@@ -5,7 +5,7 @@ import * as fs from 'fs';
 import { AbsPath, MainOutput, opeParam, ReportType } from '../global';
 import { PathSet } from '../global/util';
 import { RawPrjInfo } from '../global/prjInfo';
-import { hdlFile, hdlPath } from '../hdlFs';
+import { hdlDir, hdlFile, hdlPath } from '../hdlFs';
 import { libManage } from './lib';
 import { hdlParam } from '../hdlParser';
 import { PlManage } from './PL';
@@ -73,12 +73,12 @@ class PrjManage {
             const rawPrjInfo = hdlFile.readJSON(propertyJsonPath) as RawPrjInfo;
             opeParam.mergePrjInfo(rawPrjInfo);
         } else {
-            const createProperty = await vscode.window.showInformationMessage(
+            const res = await vscode.window.showInformationMessage(
                 "property.json is not detected, do you want to create one ?",
                 { title: 'Yes', value: true },
                 { title: 'No', value: false }
             );
-            if (createProperty?.value) {
+            if (res?.value) {
                 vscode.commands.executeCommand('digital-ide.property-json.generate');
             }
         }
@@ -88,13 +88,13 @@ class PrjManage {
      * get all the hdl files that to be parsed in the project
      * @returns 
      */
-    public getPrjHardwareFiles(): AbsPath[] {
+    public async getPrjHardwareFiles(): Promise<AbsPath[]> {
         const searchPathSet = new PathSet();
         const prjInfo = opeParam.prjInfo;
         const hardwareInfo = prjInfo.arch.hardware;
         
         // handle library first
-        const fileChange = libManage.processLibFiles(prjInfo.library);
+        const fileChange = await libManage.processLibFiles(prjInfo.library);
         MainOutput.report(`libManage finish process, add ${fileChange.add.length} files, del ${fileChange.del.length} files`, ReportType.Info);
 
         // add possible folder to search
@@ -126,7 +126,7 @@ class PrjManage {
         await this.initOpeParam(context);
         MainOutput.report('finish initialise opeParam', ReportType.Info);
         
-        const hdlFiles = this.getPrjHardwareFiles();
+        const hdlFiles = await this.getPrjHardwareFiles();
         MainOutput.report(`finish collect ${hdlFiles.length} hdl files`, ReportType.Info);
         
         await hdlParam.initialize(hdlFiles);
@@ -140,6 +140,105 @@ class PrjManage {
         
         if (countTimeCost) {
             console.timeLog('launch');
+        }
+    }
+
+
+
+    public async refreshPrjFolder() {
+        // TODO : finish this
+        // 无工程配置文件则直接退出
+        if (!opeParam.prjInfo) {
+            return;
+        }
+
+        const prjInfo = opeParam.prjInfo;
+
+        // 如果是用户配置文件结构，检查并生成相关文件夹
+        if (prjInfo.arch) {
+            hdlDir.mkdir(prjInfo.arch.prjPath);
+            const hardware = prjInfo.arch.hardware;
+            const software = prjInfo.arch.software;
+
+            if (hardware) {
+                hdlDir.mkdir(hardware.src);
+                hdlDir.mkdir(hardware.sim);
+                hdlDir.mkdir(hardware.data);
+            }
+
+            if (software) {
+                hdlDir.mkdir(software.src);
+                hdlDir.mkdir(software.data);
+            }
+            return;
+        }
+
+        // 先直接创建工程文件夹
+        hdlDir.mkdir(`${opeParam.workspacePath}/prj`);
+
+        // 初始化文件结构的路径
+        const userPath = `${opeParam.workspacePath}/user`;
+        const softwarePath = `${opeParam.workspacePath}/user/Software`;
+        const hardwarePath = `${opeParam.workspacePath}/user/Hardware`;
+
+        let nextmode = "PL";
+        // 再对源文件结构进行创建
+        if (prjInfo.soc.core !== 'none') {
+            nextmode = "LS";
+        }
+
+        let currmode = "PL";
+        if (fs.existsSync(softwarePath) || fs.existsSync(hardwarePath)) {
+            currmode = "LS";
+        }
+        
+        if (currmode === nextmode) {
+            const hardware = opeParam.prjInfo.ARCH.Hardware;
+            const software = opeParam.prjInfo.ARCH.Software;
+
+            hdlDir.mkdir(hardware.src);
+            hdlDir.mkdir(hardware.sim);
+            hdlDir.mkdir(hardware.data);
+            if (currmode === 'LS') {
+                hdlDir.mkdir(software.src);
+                hdlDir.mkdir(software.data);
+            }
+            return;
+        }
+
+        if (currmode === "PL" && nextmode === "LS") {
+            hdlDir.mkdir(hardwarePath);
+            hdlDir.readdir(userPath, true, (folder) => {
+                if (folder !== "Hardware") {
+                    hdlDir.mvdir(folder, hardwarePath);
+                }
+            });
+
+            hdlDir.mkdir(`${softwarePath}/data`);
+            hdlDir.mkdir(`${softwarePath}/src`);
+        }
+        else if (currmode === "LS" && nextmode === "PL") {
+            const needNotice = vscode.workspace.getConfiguration().get('PRJ.file.structure.notice', true);
+            if (needNotice) {
+                let select = await vscode.window.showWarningMessage("Software will be deleted.", 'Yes', 'No');
+                if (select === "Yes") {
+                    hdlDir.rmdir(softwarePath);
+                }
+            } else {
+                hdlDir.rmdir(softwarePath);
+            }
+
+            if (hdlFile.isExist(hardwarePath)) {
+                hdlDir.readdir(hardwarePath, true, (folder) => {
+                    hdlDir.mvdir(folder, userPath);
+                })
+                
+                hdlDir.rmdir(hardwarePath);
+            } 
+
+            hdlDir.mkdir(`${userPath}/src`);
+            hdlDir.mkdir(`${userPath}/sim`);
+            hdlDir.mkdir(`${userPath}/data`);
         }
     }
 }

@@ -200,11 +200,27 @@ class PpyAction extends BaseAction {
         const rawPrjInfo = opeParam.getRawUserPrjInfo();
         // when delete, make ws path to be main parse path
         if (e === Event.Unlink) {
+            console.log('unlink ppy, PrjInfoDefaults.arch:', PrjInfoDefaults.arch);
+            
             rawPrjInfo.arch = PrjInfoDefaults.arch;
         }
 
         opeParam.mergePrjInfo(rawPrjInfo);
         
+        // // when delete, make ws path to be main parse path
+        // if (e === Event.Unlink) {
+        //     const prjInfoArch = opeParam.prjInfo.arch;
+        //     const workspacePath = opeParam.workspacePath;
+
+        //     // TODO : more elegant ?
+        //     prjInfoArch.hardware.src = workspacePath;
+        //     prjInfoArch.hardware.sim = workspacePath;
+        //     prjInfoArch.hardware.data = workspacePath;
+        //     prjInfoArch.prjPath = workspacePath;
+        //     prjInfoArch.software.data = workspacePath;
+        //     prjInfoArch.software.src = workspacePath;
+        // }
+
         const currentPathSet = this.getImportantPathSet();
         const currentLibState = opeParam.prjInfo.library.state;
             

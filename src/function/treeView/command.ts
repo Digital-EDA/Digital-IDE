@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import * as vscode from 'vscode';
+import { MainOutput, opeParam } from '../../global';
+import { hdlDir, hdlFile, hdlPath } from '../../hdlFs';
 import { getIconConfig } from '../../hdlFs/icons';
+import { hdlIgnore } from '../../manager/ignore';
 
 interface CommandDataItem {
     name: string,
@@ -186,6 +189,30 @@ class ToolTreeProvider extends BaseCommandTreeProvider {
             }
         };
         super(config, 'TOOL');
+
+        vscode.commands.registerCommand('digital-ide.tool.clean', this.clean);
+    }
+
+    public async clean() {
+        const prjPath = opeParam.prjInfo.arch.prjPath;
+        const xilFolder = hdlPath.join(opeParam.workspacePath, '.Xil');
+
+        hdlDir.rmdir(prjPath);
+        hdlDir.rmdir(xilFolder);
+
+        const ignores = hdlIgnore.getIgnoreFiles();
+
+        const strFiles = hdlFile.pickFileRecursive(opeParam.workspacePath, ignores, p => p.endsWith('.str'));
+        for (const path of strFiles) {
+            hdlFile.removeFile(path);
+        }
+
+        const logFiles = hdlFile.pickFileRecursive(opeParam.workspacePath, ignores, p => p.endsWith('.log'));
+        for (const path of logFiles) {
+            hdlFile.readFile(path);
+        }
+
+        MainOutput.report('finish digital-ide.tool.clean');
     }
 }
 

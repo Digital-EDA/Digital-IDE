@@ -11,6 +11,8 @@ import { hdlParam } from '../hdlParser';
 import { PlManage } from './PL';
 import { PsManage } from './PS';
 import { hdlIgnore } from './ignore';
+import { ppyAction } from '../monitor/event';
+import { hdlMonitor } from '../monitor';
 
 class PrjManage {
     pl?: PlManage;
@@ -23,8 +25,11 @@ class PrjManage {
             return;
         }
         const template = hdlFile.readJSON(opeParam.propertyInitPath) as RawPrjInfo;
-
         hdlFile.writeJSON(opeParam.propertyJsonPath, template);
+
+        // TODO : this is a bug, that monitor cannot sense the add event of ppy
+        // so we need to do <add event> manually here
+        await ppyAction.add(opeParam.propertyJsonPath, hdlMonitor);
     }
 
     // overwrite content in current property.json to property-init.json

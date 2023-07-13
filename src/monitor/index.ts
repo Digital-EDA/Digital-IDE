@@ -81,6 +81,14 @@ class HdlMonitor{
         }
     }
 
+    public remakePpyMonitor() {
+        if (this.ppyMonitor) {
+            this.ppyMonitor.close();
+            this.ppyMonitor = this.getPpyMonitor();
+            this.registerPpyMonitorListener();
+        }
+    }
+
     public registerHdlMonitorListener() {
         Event.hdlAction.listenAdd(this);
         Event.hdlAction.listenChange(this);

@@ -46,7 +46,6 @@ function registerTreeView(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('digital-ide.treeView.arch.collapse', treeView.collapseTreeView);
     vscode.commands.registerCommand('digital-ide.treeView.arch.refresh', treeView.refreshArchTree);
     vscode.commands.registerCommand('digital-ide.treeView.arch.openFile', treeView.openFileByUri);
-
 }
 
 

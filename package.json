@@ -415,6 +415,11 @@
                 "command": "digital-ide.lsp.tool.transformOldPropertyFile",
                 "title": "%digital-ide.lsp.tool.transformOldPropertyFile.title%",
                 "category": "Digital-IDE"
+            },
+            {
+                "command": "digital-ide.vhdl2vlog",
+                "title": "%digital-ide.vhdl2vlog.title%",
+                "category": "Digital-IDE"
             }
         ],
         "menus": {

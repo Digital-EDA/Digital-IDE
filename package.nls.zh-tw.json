@@ -37,5 +37,6 @@
     "digital-ide.netlist.title": "netlist",
     "digital-ide.fsm.title": "有限狀態機",
     "digital-ide.lsp.tool.insertTextToUri.title": "插入文本uri",
-    "digital-ide.lsp.tool.transformOldPropertyFile.title": "轉換配置文件從先前版本新版本"
+    "digital-ide.lsp.tool.transformOldPropertyFile.title": "轉換配置文件從先前版本新版本",
+    "digital-ide.vhdl2vlog.title": "vhdl代碼翻譯为verilog代碼"
 }

@@ -9,6 +9,7 @@ import * as lspDocSymbol from './lsp/docSymbol';
 import * as lspDefinition from './lsp/definition';
 import * as lspHover from './lsp/hover';
 import * as lspFormatter from '../../resources/formatter';
+import * as lspTranslator from '../../resources/translator';
 import * as lspDocSemantic from './lsp/docSemantic';
 
 import * as tool from './tool';
@@ -58,6 +59,9 @@ function registerLsp(context: vscode.ExtensionContext) {
     vscode.languages.registerDocumentFormattingEditProvider(vlogSelector, lspFormatter.hdlFormatterProvider);
     vscode.languages.registerDocumentFormattingEditProvider(vhdlSelector, lspFormatter.hdlFormatterProvider);
     vscode.languages.registerDocumentFormattingEditProvider(svlogSelector, lspFormatter.hdlFormatterProvider);
+
+    // translator
+    vscode.commands.registerCommand('digital-ide.vhdl2vlog', uri => lspTranslator.vhdl2vlog(uri));
 
     // verilog lsp
     vscode.languages.registerDocumentSymbolProvider(vlogSelector, lspDocSymbol.vlogDocSymbolProvider);

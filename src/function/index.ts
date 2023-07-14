@@ -77,12 +77,10 @@ function registerLsp(context: vscode.ExtensionContext) {
     vscode.languages.registerCompletionItemProvider(vlogSelector, lspCompletion.vlogPositionPortProvider, '.');
     vscode.languages.registerCompletionItemProvider(vlogSelector, lspCompletion.vlogCompletionProvider);
     vscode.languages.registerDocumentSemanticTokensProvider(vlogSelector, lspDocSemantic.vlogDocSenmanticProvider, lspDocSemantic.vlogLegend);
-    lspLinter.registerVlogLinterServer();
-
+    const vlogLinter = lspLinter.registerVlogLinterServer();
+    lspLinter.firstLinter(vlogLinter);
 
     // vhdl lsp
-
-
 }
 
 

@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { All } from '../../../../resources/hdlParser';
+import { getLanguageId, isVerilogFile } from '../../../hdlFs/file';
 import { hdlParam, HdlSymbol } from '../../../hdlParser';
 import { Position, Range } from '../../../hdlParser/common';
 
@@ -71,19 +72,35 @@ class VlogLinter {
     }
 }
 
-function registerVlogLinterServer() {
+function registerVlogLinterServer(): VlogLinter {
     const linter = new VlogLinter();
     vscode.workspace.onDidOpenTextDocument(doc => {
-        linter.lint(doc);
+        if (isVerilogFile(doc.fileName)) {
+            linter.lint(doc);
+        }
     });
     vscode.workspace.onDidSaveTextDocument(doc => {
-        linter.lint(doc);
+        if (isVerilogFile(doc.fileName)) {
+            linter.lint(doc);
+        }
     });
     vscode.workspace.onDidCloseTextDocument(doc => {
-        linter.remove(doc);
+        if (isVerilogFile(doc.fileName)) {
+            linter.remove(doc);
+        }
     });
+    return linter;
+}
+
+async function firstLinter(linter: VlogLinter) {
+    for (const doc of vscode.workspace.textDocuments) {
+        if (isVerilogFile(doc.fileName)) {
+            linter.lint(doc);
+        }
+    }
 }
 
 export {
-    registerVlogLinterServer
+    registerVlogLinterServer,
+    firstLinter
 };

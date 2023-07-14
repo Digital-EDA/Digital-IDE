@@ -197,14 +197,9 @@ class PrjManage {
         const softwarePath = hdlPath.join(userPath, 'Software');
         const hardwarePath = hdlPath.join(userPath, 'Hardware');
 
-        const nextmode = this.getNextMode(rawPrjInfo);
-        console.log(softwarePath, fs.existsSync(softwarePath));
-        console.log(hardwarePath, fs.existsSync(hardwarePath));
-        
+        const nextmode = this.getNextMode(rawPrjInfo);        
         const currmode = this.getCurrentMode(softwarePath, hardwarePath);
 
-        console.log(currmode, nextmode);
-        
         if (currmode === nextmode) {
             const hardware = opeParam.prjInfo.arch.hardware;
             const software = opeParam.prjInfo.arch.software;            

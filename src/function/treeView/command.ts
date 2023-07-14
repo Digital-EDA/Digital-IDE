@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import * as vscode from 'vscode';
+import * as fspath from 'path';
+
 import { MainOutput, opeParam } from '../../global';
 import { hdlDir, hdlFile, hdlPath } from '../../hdlFs';
 import { getIconConfig } from '../../hdlFs/icons';
@@ -194,26 +196,39 @@ class ToolTreeProvider extends BaseCommandTreeProvider {
     }
 
     public async clean() {
-        const prjPath = opeParam.prjInfo.arch.prjPath;
-        const xilFolder = hdlPath.join(opeParam.workspacePath, '.Xil');
+        const workspacePath = opeParam.workspacePath;
 
+        // remove prjPath & .xil
+        const prjPath = opeParam.prjInfo.arch.prjPath;
+        const xilFolder = hdlPath.join(workspacePath, '.Xil');
         hdlDir.rmdir(prjPath);
         hdlDir.rmdir(xilFolder);
 
+        // move bd * ip
+        const plName = opeParam.prjInfo.prjName.PL;
+        const targetPath = fspath.dirname(opeParam.prjInfo.arch.hardware.src);
+        const sourceIpPath = `${workspacePath}/prj/xilinx/${plName}.srcs/sources_1/ip`;
+        const sourceBdPath = `${workspacePath}/prj/xilinx/${plName}.srcs/sources_1/bd`;
+
+        hdlDir.mvdir(sourceIpPath, targetPath, true);
+        hdlDir.mvdir(sourceBdPath, targetPath, true);
+
+
         const ignores = hdlIgnore.getIgnoreFiles();
 
-        const strFiles = hdlFile.pickFileRecursive(opeParam.workspacePath, ignores, p => p.endsWith('.str'));
+        const strFiles = hdlFile.pickFileRecursive(workspacePath, ignores, p => p.endsWith('.str'));
         for (const path of strFiles) {
             hdlFile.removeFile(path);
         }
 
-        const logFiles = hdlFile.pickFileRecursive(opeParam.workspacePath, ignores, p => p.endsWith('.log'));
+        const logFiles = hdlFile.pickFileRecursive(workspacePath, ignores, p => p.endsWith('.log'));
         for (const path of logFiles) {
             hdlFile.readFile(path);
         }
 
         MainOutput.report('finish digital-ide.tool.clean');
     }
+
 }
 
 

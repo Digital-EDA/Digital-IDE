@@ -36,7 +36,6 @@ async function vhdl2vlog(uri) {
         
         const folderPath = fspath.dirname(path);
         const defaultSaveUri = new vscode.Uri('file', '', folderPath + '/' + fileName + '.v', '', '');
-        console.log(defaultSaveUri);
         const vscodeDialogConfig = {
             title: 'save the verilog code',
             defaultUri: defaultSaveUri,
@@ -46,7 +45,6 @@ async function vhdl2vlog(uri) {
 
         if (fileInfos && fileInfos.path) {
             let savePath = fileInfos.path;
-            console.log(savePath);
 
             if (savePath[0] === '/' && require('os').platform() === 'win32') {
                 savePath = savePath.substring(1);

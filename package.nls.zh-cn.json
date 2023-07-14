@@ -38,5 +38,7 @@
     "digital-ide.fsm.title": "有限状态机",
     "digital-ide.lsp.tool.insertTextToUri.title": "插入文本uri",
     "digital-ide.lsp.tool.transformOldPropertyFile.title": "转换配置文件从先前版本新版本",
-    "digital-ide.vhdl2vlog.title": "vhdl代码翻译为verilog代码"
+    "digital-ide.vhdl2vlog.title": "vhdl代码翻译为verilog代码",
+    "digital-ide.fsm.show.title": "显示当前文件的FSM图",
+    "digital-ide.netlist.show.title": "显示当前文件的netlist"
 }

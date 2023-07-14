@@ -14,6 +14,9 @@ import * as lspDocSemantic from './lsp/docSemantic';
 
 import * as tool from './tool';
 
+// special function
+import * as FSM from './fsm';
+
 function registerDocumentation(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('digital-ide.hdlDoc.showWebview', hdlDoc.showDocWebview);
     hdlDoc.registerFileDocExport(context);
@@ -82,8 +85,20 @@ function registerToolCommands(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('digital-ide.lsp.tool.transformOldPropertyFile', tool.transformOldPpy);
 }
 
+function registerFSM(context: vscode.ExtensionContext) {
+    vscode.commands.registerCommand('digital-ide.fsm.show', uri => FSM.openFsmViewer(context, uri));
+}
+
+function registerNetlist(context: vscode.ExtensionContext) {
+    vscode.commands.registerCommand('digital-ide.netlist.show', uri => {
+        vscode.window.showInformationMessage('launch netlist');
+    });
+}
+
 export {
     registerFunctionCommands,
     registerLsp,
-    registerToolCommands
+    registerToolCommands,
+    registerFSM,
+    registerNetlist
 };

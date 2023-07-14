@@ -16,6 +16,8 @@ async function registerCommand(context: vscode.ExtensionContext) {
     func.registerFunctionCommands(context);
     func.registerLsp(context);
     func.registerToolCommands(context);
+    func.registerFSM(context);
+    func.registerNetlist(context);
 }
 
 function* walk(path: AbsPath, ext: string): Generator {

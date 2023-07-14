@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Dependencies viewer</title>
+
+    <script src="../../public/jquery-2.2.4.min.js"></script>
+    <script src="../../public/svg-pan-zoom.min.js"></script>
+    <script src="../../public/full.render.js"></script>
+    <script src="../../public/viz.js"></script>
+    <div id="svg" style="text-align: center;"></div>
+    <link rel="stylesheet" href="../../css/fsm_viewer.css" type="text/css" />
+</head>
+
+<body>
+    <div class="toolbar">
+        <div class="center-panel">
+            <label class="fancy-checkbox">
+                <input id="export-as-svg" name="zoom-mode" type="radio" value="fit" />
+                <div class="button">Save as SVG</div>
+            </label>
+        </div>
+    </div>
+    <script src="fsm_draw.js"></script>
+    <div id="error-info" class="trontron">
+        <div id="inner" class="fuck"></div>
+    </div>
+    <div class="config">
+        <p id="message"></p>
+    </div>
+    <div class="column">
+        <div id="container"></div>
+    </div>
+</body>
+
+</html>

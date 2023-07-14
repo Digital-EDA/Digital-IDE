@@ -38,5 +38,7 @@
     "digital-ide.fsm.title": "finite state machine",
     "digital-ide.lsp.tool.insertTextToUri.title": "insert text to uri",
     "digital-ide.lsp.tool.transformOldPropertyFile.title": "transform configure file from previous version to new version",
-    "digital-ide.vhdl2vlog.title": "translate vhdl code to verilog code"
+    "digital-ide.vhdl2vlog.title": "translate vhdl code to verilog code",
+    "digital-ide.fsm.show.title": "show FSM graph of current file",
+    "digital-ide.netlist.show.title": "show netlist of current file"
 }

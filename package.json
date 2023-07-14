@@ -421,9 +421,27 @@
                 "title": "%digital-ide.vhdl2vlog.title%",
                 "category": "Digital-IDE",
                 "icon": {
-					"light": "images/svg/light/translate.svg",
-					"dark": "images/svg/dark/translate.svg"
-				}
+                    "light": "images/svg/light/translate.svg",
+                    "dark": "images/svg/dark/translate.svg"
+                }
+            },
+            {
+                "command": "digital-ide.fsm.show",
+                "icon": {
+                    "light": "images/svg/light/fsm.svg",
+                    "dark": "images/svg/dark/fsm.svg"
+                },
+                "category": "Digital-IDE",
+                "title": "%digital-ide.fsm.show.title%"
+            },
+            {
+                "command": "digital-ide.netlist.show",
+                "icon": {
+                    "light": "images/svg/light/netlist.svg",
+                    "dark": "images/svg/dark/netlist.svg"
+                },
+                "category": "Digital-IDE",
+                "title": "%digital-ide.netlist.show.title%"
             }
         ],
         "menus": {
@@ -451,7 +469,7 @@
                     "when": "view == digital-ide-treeView-arch && viewItem == file"
                 },
                 {
-                    "command": "digital-ide.netlist",
+                    "command": "digital-ide.netlist.show",
                     "group": "inline@3",
                     "when": "view == digital-ide-treeView-arch && viewItem == file"
                 },
@@ -478,46 +496,103 @@
                     "group": "navigation@1"
                 },
                 {
+					"when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
+					"command": "digital-ide.fsm.show",
+					"group": "navigation@2"
+				},
+				{
+					"when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
+					"command": "digital-ide.netlist.show",
+					"group": "navigation@3"
+				},
+                {
                     "when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
                     "command": "digital-ide.hdlDoc.showWebview",
                     "group": "navigation@4"
                 },
                 {
-					"when": "resourceLangId == vhdl",
-					"command": "digital-ide.vhdl2vlog",
-					"group": "navigation@5"
-				}
+                    "when": "resourceLangId == vhdl",
+                    "command": "digital-ide.vhdl2vlog",
+                    "group": "navigation@5"
+                }
             ],
-			"editor/context": [
+            "editor/context": [
+                {
+                    "when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
+                    "command": "digital-ide.pl.setSrcTop",
+                    "group": "navigation@1"
+                },
+                {
+                    "when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
+                    "command": "digital-ide.pl.setSimTop",
+                    "group": "navigation@2"
+                },
+                {
+                    "when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
+                    "command": "digital-ide.tool.instance",
+                    "group": "navigation@3"
+                },
+                {
+                    "when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
+                    "command": "digital-ide.tool.testbench",
+                    "group": "navigation@4"
+                },
+                {
+                    "when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
+                    "command": "digital-ide.tool.icarus.simulateFile",
+                    "group": "navigation@5"
+                },
+                {
+					"when": "resourceLangId == verilog || resourceLangId == systemverilog || resourceLangId == vhdl",
+					"command": "digital-ide.netlist.show",
+					"group": "navigation@6"
+				},
 				{
-					"when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
+					"when": "resourceLangId == verilog || resourceLangId == systemverilog || resourceLangId == vhdl",
+					"command": "digital-ide.fsm.show",
+					"group": "navigation@7"
+				},
+                {
+                    "when": "resourceLangId == vhdl",
+                    "command": "digital-ide.vhdl2vlog",
+                    "group": "navigation@8"
+                }
+            ],
+            "explorer/context": [
+				{
+					"when": "resourceLangId == verilog || resourceLangId == systemverilog || resourceLangId == vhdl",
 					"command": "digital-ide.pl.setSrcTop",
-					"group": "navigation@1"
+					"group": "navigation@5"
 				},
 				{
-					"when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
+					"when": "resourceLangId == verilog || resourceLangId == systemverilog || resourceLangId == vhdl",
 					"command": "digital-ide.pl.setSimTop",
-					"group": "navigation@2"
-				},
-				{
-					"when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
-					"command": "digital-ide.tool.instance",
-					"group": "navigation@3"
+					"group": "navigation@6"
 				},
 				{
 					"when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
 					"command": "digital-ide.tool.testbench",
-					"group": "navigation@4"
+					"group": "navigation@7"
 				},
 				{
-					"when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
-					"command": "digital-ide.tool.icarus.simulateFile",
-					"group": "navigation@5"
+					"when": "resourceLangId == verilog || resourceLangId == systemverilog || resourceLangId == vhdl",
+					"command": "digital-ide.tool.instance",
+					"group": "navigation@8"
+				},
+				{
+					"when": "resourceLangId == verilog || resourceLangId == systemverilog || resourceLangId == vhdl",
+					"command": "digital-ide.netlist.show",
+					"group": "navigation@9"
+				},
+				{
+					"when": "resourceLangId == verilog || resourceLangId == systemverilog || resourceLangId == vhdl",
+					"command": "digital-ide.fsm.show",
+					"group": "navigation@10"
 				},
 				{
 					"when": "resourceLangId == vhdl",
 					"command": "digital-ide.vhdl2vlog",
-					"group": "navigation@8"
+					"group": "navigation@11"
 				}
 			]
         },

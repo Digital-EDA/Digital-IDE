@@ -16,6 +16,7 @@ import * as tool from './tool';
 
 // special function
 import * as FSM from './fsm';
+import * as Netlist from './netlist';
 
 function registerDocumentation(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('digital-ide.hdlDoc.showWebview', hdlDoc.showDocWebview);
@@ -90,9 +91,7 @@ function registerFSM(context: vscode.ExtensionContext) {
 }
 
 function registerNetlist(context: vscode.ExtensionContext) {
-    vscode.commands.registerCommand('digital-ide.netlist.show', uri => {
-        vscode.window.showInformationMessage('launch netlist');
-    });
+    vscode.commands.registerCommand('digital-ide.netlist.show', uri => Netlist.openNetlistViewer(context, uri));
 }
 
 export {

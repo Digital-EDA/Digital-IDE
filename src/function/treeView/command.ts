@@ -213,7 +213,6 @@ class ToolTreeProvider extends BaseCommandTreeProvider {
         hdlDir.mvdir(sourceIpPath, targetPath, true);
         hdlDir.mvdir(sourceBdPath, targetPath, true);
 
-
         const ignores = hdlIgnore.getIgnoreFiles();
 
         const strFiles = hdlFile.pickFileRecursive(workspacePath, ignores, p => p.endsWith('.str'));

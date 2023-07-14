@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 const fs = require("fs");
 const fspath  = require("path");
 const vscode  = require("vscode");
@@ -198,7 +199,7 @@ class FsmViewer {
     }
 
     getWebviewContent() {
-        const resource_path = fspath.join(this.rootPath, 'resources', 'fsm', 'fsm_viewer.html');
+        const resource_path = fspath.join(this.rootPath, 'resources', 'fsm', 'view', 'fsm_viewer.html');
         const dir_path = fspath.dirname(resource_path);
         
         let html = fs.readFileSync(resource_path, 'utf-8');

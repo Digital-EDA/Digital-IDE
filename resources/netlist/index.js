@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 const os = require('os');
-const fs = require("../HDLfilesys");
 
-const kernel = require("./kernel");
+const kernel = require('./utils/kernel');
+const Vrfs = require('./utils/vrfs');
 
-class Operation {
+class NetlistKernel {
     constructor() {
         this.kernel = null;
         this.vrfs = null;
@@ -11,7 +12,7 @@ class Operation {
 
     async launch() {
         this.kernel = await kernel(); 
-        this.vrfs = new fs.vrfs(this.kernel);
+        this.vrfs = new Vrfs(this.kernel);
         this.vrfs.diskMount();
     }
 
@@ -145,4 +146,6 @@ class Operation {
         this.vrfs = null;
     }
 }
-module.exports = operation;
+module.exports = {
+    NetlistKernel
+};

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 "use strict";
 class render{
     constructor() {
@@ -17,14 +18,14 @@ class render{
                 this.curNetIndex--;
                 this.showNetlist(this.netLists[this.curNetIndex]);        
             }
-        }
+        };
 
         document.getElementById("next").onclick = function () {
             if (this.curNetIndex < this.netLists.length-1) {
                 this.curNetIndex++;
                 this.showNetlist(this.netLists[this.curNetIndex]);
             }
-        }
+        };
     }
 
     async showNetlist(netList, isClear) {
@@ -35,8 +36,6 @@ class render{
         }
 
         let netnode = this.showTreelist(netList);
-        console.log('net node');
-        console.log(netnode);
 
         var setting = {};
         $(document).ready(function () {
@@ -117,7 +116,7 @@ class render{
 
     removeClickEvent() {
         function handleRemove() {
-            console.log("ok");
+            console.w("ok");
         }
         let countries = this.embed_svg.childNodes;
         for (let i = 0; i < countries.length; i++) {

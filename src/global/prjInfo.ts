@@ -412,7 +412,16 @@ class PrjInfo implements PrjInfoMeta {
         this.setDefaultValue(this.arch.software, 'data', workspacePath);
         this.setDefaultValue(this.arch, 'prjPath', workspacePath);
 
-        // check existence & make dir
+        // // check existence & make dir
+        // this.checkDirExist(this.arch.hardware.sim);
+        // this.checkDirExist(this.arch.hardware.src);
+        // this.checkDirExist(this.arch.hardware.data);
+        // this.checkDirExist(this.arch.software.src);
+        // this.checkDirExist(this.arch.software.data);
+        // this.checkDirExist(this.arch.prjPath);
+    }
+
+    public checkArchDirExist() {
         this.checkDirExist(this.arch.hardware.sim);
         this.checkDirExist(this.arch.hardware.src);
         this.checkDirExist(this.arch.hardware.data);

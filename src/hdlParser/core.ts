@@ -301,9 +301,9 @@ class HdlParam {
         }
     }
 
-    public addHdlFile(path: AbsPath) {
+    public async addHdlFile(path: AbsPath) {
         path = hdlPath.toSlash(path);
-        this.initHdlFiles([path]);
+        await this.initHdlFiles([path]);
     
         const moduleFile = this.getHdlFile(path);
         if (!moduleFile) {

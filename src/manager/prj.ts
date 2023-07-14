@@ -162,6 +162,8 @@ class PrjManage {
             // configure by default
             await this.createFolderByDefault(rawPrjInfo);
         }
+
+        opeParam.prjInfo.checkArchDirExist();
     }
 
     public async createFolderByRawPrjInfo(rawPrjInfo: RawPrjInfo) {
@@ -181,7 +183,6 @@ class PrjManage {
                 hdlDir.mkdir(software.src);
                 hdlDir.mkdir(software.data);
             }
-            return;
         }
     }
 
@@ -197,8 +198,12 @@ class PrjManage {
         const hardwarePath = hdlPath.join(userPath, 'Hardware');
 
         const nextmode = this.getNextMode(rawPrjInfo);
+        console.log(softwarePath, fs.existsSync(softwarePath));
+        console.log(hardwarePath, fs.existsSync(hardwarePath));
+        
         const currmode = this.getCurrentMode(softwarePath, hardwarePath);
 
+        console.log(currmode, nextmode);
         
         if (currmode === nextmode) {
             const hardware = opeParam.prjInfo.arch.hardware;

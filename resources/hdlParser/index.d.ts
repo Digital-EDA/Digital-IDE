@@ -1,5 +1,5 @@
-import { RawHdlModule, Macro, RawSymbol } from '../../src/hdlParser/common';
-import { HdlLangID } from '../../src/global/enum';
+import type { RawHdlModule, Macro, RawSymbol, Error } from '../../src/hdlParser/common';
+import type { HdlLangID } from '../../src/global/enum';
 
 type AbsPath = string;
 type RelPath = string;
@@ -15,6 +15,7 @@ interface All {
     content: RawSymbol[]
     languageId: HdlLangID
     macro: Macro
+    error: Error[]
 }
 
 export function vlogFast(path: AbsPath): Promise<Fast | undefined>;

@@ -78,10 +78,12 @@ enum InstModPathStatus {Current, Include, Others, Unknown};
 // };
 
 interface Error {
-    severity: number
+    severity: vscode.DiagnosticSeverity
     message: string
     source: string
-    range: Range
+    range: Position
+    running_mode?: string
+    running_phase?: string
 };
 
 interface DefineParam {

@@ -11,6 +11,7 @@ import * as lspHover from './lsp/hover';
 import * as lspFormatter from '../../resources/formatter';
 import * as lspTranslator from '../../resources/translator';
 import * as lspDocSemantic from './lsp/docSemantic';
+import * as lspLinter from './lsp/linter';
 
 import * as tool from './tool';
 
@@ -76,10 +77,14 @@ function registerLsp(context: vscode.ExtensionContext) {
     vscode.languages.registerCompletionItemProvider(vlogSelector, lspCompletion.vlogPositionPortProvider, '.');
     vscode.languages.registerCompletionItemProvider(vlogSelector, lspCompletion.vlogCompletionProvider);
     vscode.languages.registerDocumentSemanticTokensProvider(vlogSelector, lspDocSemantic.vlogDocSenmanticProvider, lspDocSemantic.vlogLegend);
+    lspLinter.registerVlogLinterServer();
 
 
     // vhdl lsp
+
+
 }
+
 
 function registerToolCommands(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('digital-ide.lsp.tool.insertTextToUri', tool.insertTextToUri);

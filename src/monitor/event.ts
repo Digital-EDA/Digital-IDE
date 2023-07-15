@@ -218,8 +218,7 @@ class PpyAction extends BaseAction {
             
         } else {
             // update hdl monitor
-            const options: vscode.ProgressOptions = { location: vscode.ProgressLocation.Notification, title: 'modify the project' };
-            await vscode.window.withProgress(options, async () => await this.refreshHdlMonitor(m, originalHdlFiles));
+            await this.refreshHdlMonitor(m, originalHdlFiles);
         }
 
         refreshArchTree();

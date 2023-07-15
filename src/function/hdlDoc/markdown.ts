@@ -146,6 +146,11 @@ async function getDocsFromFile(path: AbsPath): Promise<MarkdownString[] | undefi
     if (!moduleFile) {
         MainOutput.report('Fail to export documentation of ' + path,
                           ReportType.Error);
+
+        const errorMsg = `${path} is not a valid hdl file in our parse list, check your property.json to see if arch.hardware.src is set correctly!
+        \ncurrent parse list: \n${opeParam.prjInfo.hardwareSrcPath}\n${opeParam.prjInfo.hardwareSimPath}`;
+        vscode.window.showErrorMessage(errorMsg);
+        
         return undefined;
     }
     const markdownStringPromises = [];

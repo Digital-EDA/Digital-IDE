@@ -161,21 +161,18 @@ class PpyAction extends BaseAction {
         console.log('PpyAction add');
         assert.equal(hdlPath.toSlash(path), opeParam.propertyJsonPath);
         await this.updateProperty(Event.Add, m);
-        prjManage.refreshPrjFolder();
     }
 
     async unlink(path: string, m: HdlMonitor): Promise<void> {
         console.log('PpyAction unlink');
         assert.equal(hdlPath.toSlash(path), opeParam.propertyJsonPath);
         await this.updateProperty(Event.Unlink, m);
-        prjManage.refreshPrjFolder();
     }
     
     async change(path: string, m: HdlMonitor): Promise<void> {
         console.log('PpyAction change');
         assert.equal(hdlPath.toSlash(path), opeParam.propertyJsonPath);
         await this.updateProperty(Event.Change, m);
-        prjManage.refreshPrjFolder();
     }
 
     // get path set from opeParam that used to tell if need to remake HdlMonitor
@@ -201,11 +198,11 @@ class PpyAction extends BaseAction {
         // when delete, make ws path to be main parse path
         if (e === Event.Unlink) {
             console.log('unlink ppy, PrjInfoDefaults.arch:', PrjInfoDefaults.arch);
-            
             rawPrjInfo.arch = PrjInfoDefaults.arch;
         }
 
         opeParam.mergePrjInfo(rawPrjInfo);
+        await prjManage.refreshPrjFolder();
         
         const currentPathSet = this.getImportantPathSet();
         const currentLibState = opeParam.prjInfo.library.state;

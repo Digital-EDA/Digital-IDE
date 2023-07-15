@@ -12,6 +12,7 @@ import { hdlParam, HdlSymbol } from '../hdlParser';
 import { prjManage } from '../manager';
 import { libManage } from '../manager/lib';
 import type { HdlMonitor } from './index';
+import { ToolChainType } from '../global/enum';
 
 enum Event {
     Add = 'add',                 // emit when add file
@@ -202,6 +203,7 @@ class PpyAction extends BaseAction {
         }
 
         opeParam.mergePrjInfo(rawPrjInfo);
+        await this.updatePL(originalHdlFiles);
         await prjManage.refreshPrjFolder();
         
         const currentPathSet = this.getImportantPathSet();
@@ -217,20 +219,26 @@ class PpyAction extends BaseAction {
         } else {
             // update hdl monitor
             const options: vscode.ProgressOptions = { location: vscode.ProgressLocation.Notification, title: 'modify the project' };
-            await vscode.window.withProgress(options, async () => await this.refreshHdlMonitor(m, originalHdlFiles));
+            await vscode.window.withProgress(options, async () => await this.refreshHdlMonitor(m));
         }
         refreshArchTree();    
     }
 
-    public async refreshHdlMonitor(m: HdlMonitor, originalHdlFiles: AbsPath[]) {           
+    public async refreshHdlMonitor(m: HdlMonitor) {           
         m.remakeHdlMonitor();
-        
-        // update pl
-        const currentHdlFiles = await prjManage.getPrjHardwareFiles();
-        await this.updatePL(originalHdlFiles, currentHdlFiles);
     }
 
-    public async updatePL(oldFiles: AbsPath[], newFiles: AbsPath[]) {
+    public async updatePL(oldFiles: AbsPath[]) {
+        // current only support xilinx
+        const options: vscode.ProgressOptions = { location: vscode.ProgressLocation.Notification };
+        if (opeParam.prjInfo.toolChain === ToolChainType.Xilinx) {
+            options.title = 'update Xilinx PL';
+            await vscode.window.withProgress(options, async () => await this.updateXilinxPL(oldFiles));
+        } 
+    }
+
+    public async updateXilinxPL(oldFiles: AbsPath[]) {
+        const newFiles = await prjManage.getPrjHardwareFiles();
         if (prjManage.pl) {
             const uncheckHdlFileSet = new Set<AbsPath>(oldFiles);
             const addFiles: AbsPath[] = [];

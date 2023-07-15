@@ -49,6 +49,11 @@ interface BootInfo {
  * xilinx operation under PL
  */
 class XilinxOperation {
+    guiLaunched: boolean;
+    constructor() {
+        this.guiLaunched = false;
+    }
+
     public get xipRepo(): XilinxIP[] {
         return opeParam.prjInfo.IP_REPO; 
     }
@@ -126,6 +131,7 @@ class XilinxOperation {
      * @param config
      */
     async launch(config: PLConfig): Promise<string | undefined> {
+        this.guiLaunched = false;
         const vivadoTerminal = config.terminal;
         if (!vivadoTerminal) {
             return undefined;
@@ -475,9 +481,10 @@ class XilinxOperation {
         config.terminal?.sendText(cmd);
     }
 
-    gui(config: PLConfig) {
+    public gui(config: PLConfig) {
         if (config.terminal) {
             config.terminal.sendText("start_gui -quiet");
+            this.guiLaunched = true;
         } else {
             const prjFiles = hdlFile.pickFileRecursive(this.prjPath, [], 
                 filePath => filePath.endsWith('.xpr'));
@@ -489,17 +496,22 @@ class XilinxOperation {
                     vscode.window.showErrorMessage(stderr);
                 } else {
                     vscode.window.showInformationMessage("GUI open successfully");
+                    this.guiLaunched = true;
                 }
             });
         }
     }
 
-    addFiles(files: string[], config: PLConfig) {
-        this.processFileInPrj(files, config, "add_file");
+    public addFiles(files: string[], config: PLConfig) {
+        if (!this.guiLaunched) {
+            this.processFileInPrj(files, config, "add_file");
+        }
     }
 
-    delFiles(files: string[], config: PLConfig) {
-        this.processFileInPrj(files, config, "remove_files");
+    public delFiles(files: string[], config: PLConfig) {
+        if (!this.guiLaunched) {
+            this.processFileInPrj(files, config, "remove_files");
+        }
     }
 
     setSrcTop(name: string, config: PLConfig) {

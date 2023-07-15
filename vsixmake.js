@@ -1,17 +1,26 @@
 const { execSync } = require('child_process');
 const fs = require('fs');
-const path = require('path');
-const hdlFile = require('./src/hdlFs/file');
-const hdlPath = require('./src/hdlFs/path');
+const fspath = require('path');
 
 const PACKAGE_PATH = './package.json';
 const SAVE_FOLDER = 'dist';
 const WEBPACK_OUT_FOLDER = 'out';
 
+function readJSON(path) {
+    const context = fs.readFileSync(path, 'utf-8');
+    return JSON.parse(context);
+}
+
+
+function writeJSON(path, obj) {
+    const jsonString = JSON.stringify(obj, null, '\t');
+    fs.writeFileSync(path, jsonString);
+}
+
 function changeMain(path) {
-    const packageJS = hdlFile.pullJsonInfo(PACKAGE_PATH);
+    const packageJS = readJSON(PACKAGE_PATH);
     packageJS.main = path;
-    hdlFile.pushJsonInfo(PACKAGE_PATH, packageJS);
+    writeJSON(PACKAGE_PATH, packageJS);
 }
 
 function findVsix() {
@@ -35,10 +44,11 @@ changeMain('./src/extension');
 execSync('code --uninstall-extension sterben.digital-ide');
 
 const vsix = findVsix();
-const targetPath = path.join(SAVE_FOLDER, vsix);
-hdlFile.moveFile(vsix, targetPath, true);
-hdlPath.deleteFolder(WEBPACK_OUT_FOLDER);
+const targetPath = fspath.join(SAVE_FOLDER, vsix);
+fs.copyFileSync(vsix, targetPath);
+fs.unlinkSync(vsix);
+fs.rm(WEBPACK_OUT_FOLDER, { recursive: true, force: true }, () => {});
 
-const vsixPath = hdlPath.join(SAVE_FOLDER, vsix);
+const vsixPath = fspath.join(SAVE_FOLDER, vsix);
 // install new one
 execSync('code --install-extension ' + vsixPath);

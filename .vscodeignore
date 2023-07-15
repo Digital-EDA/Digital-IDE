@@ -2,6 +2,7 @@
 .vscode-test/**
 test/**
 .gitignore
+.git
 .yarnrc
 vsc-extension-quickstart.md
 **/jsconfig.json
@@ -10,6 +11,7 @@ vsc-extension-quickstart.md
 dist/**/*.map
 webpack.config.js
 node_modules
-src/**
+out1/**
 vsixmake.js
 script
+CHANGELOG.md

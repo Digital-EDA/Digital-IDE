@@ -4,7 +4,7 @@
 		"PL": "template"
 	},
 	"soc": {
-		"core": "none"
+		"core": "cortexM3"
 	},
 	"enableShowLog": false,
 	"device": "none"

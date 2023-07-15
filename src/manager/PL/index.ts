@@ -43,15 +43,10 @@ class PlManage extends BaseManage {
         }       
     }
 
-
     public launch() {
-        if (!this.config.terminal) {
-            this.config.terminal = this.createTerminal('Hardware');
-            this.config.terminal.show(true);
-            this.config.ope.launch(this.config);
-        } else {
-            vscode.window.showInformationMessage('Hardware Terminal is launched !');
-        }
+        this.config.terminal = this.createTerminal('Hardware');
+        this.config.terminal.show(true);
+        this.config.ope.launch(this.config);
     }
 
     public simulate() {
@@ -117,7 +112,7 @@ class PlManage extends BaseManage {
     }
 
 
-    setSrcTop(item: ModuleDataItem) {        
+    public setSrcTop(item: ModuleDataItem) {        
         this.config.ope.setSrcTop(item.name, this.config);
         const type = moduleTreeProvider.getItemType(item);
         if (type === HdlFileType.Src) {
@@ -126,7 +121,7 @@ class PlManage extends BaseManage {
         }
     }
 
-    setSimTop(item: ModuleDataItem) {
+    public setSimTop(item: ModuleDataItem) {
         this.config.ope.setSimTop(item.name, this.config);
         const type = moduleTreeProvider.getItemType(item);
         if (type === HdlFileType.Sim) {

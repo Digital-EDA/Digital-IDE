@@ -174,6 +174,7 @@ class PpyAction extends BaseAction {
         console.log('PpyAction change');
         assert.equal(hdlPath.toSlash(path), opeParam.propertyJsonPath);
         await this.updateProperty(Event.Change, m);
+        console.log(hdlParam);   
     }
 
     // get path set from opeParam that used to tell if need to remake HdlMonitor
@@ -203,7 +204,6 @@ class PpyAction extends BaseAction {
         }
 
         opeParam.mergePrjInfo(rawPrjInfo);
-        await this.updatePL(originalHdlFiles);
         await prjManage.refreshPrjFolder();
         
         const currentPathSet = this.getImportantPathSet();
@@ -219,49 +219,63 @@ class PpyAction extends BaseAction {
         } else {
             // update hdl monitor
             const options: vscode.ProgressOptions = { location: vscode.ProgressLocation.Notification, title: 'modify the project' };
-            await vscode.window.withProgress(options, async () => await this.refreshHdlMonitor(m));
+            await vscode.window.withProgress(options, async () => await this.refreshHdlMonitor(m, originalHdlFiles));
         }
-        refreshArchTree();    
+
+        refreshArchTree();
     }
 
-    public async refreshHdlMonitor(m: HdlMonitor) {           
+    public diffNewOld(newFiles: AbsPath[], oldFiles: AbsPath[]) {
+        const uncheckHdlFileSet = new Set<AbsPath>(oldFiles);
+        const addFiles: AbsPath[] = [];
+        const delFiles: AbsPath[] = [];
+        
+        for (const path of newFiles) {
+            if (!uncheckHdlFileSet.has(path)) {
+                addFiles.push(path);
+            } else {
+                uncheckHdlFileSet.delete(path);
+            }
+        }
+
+        for (const path of uncheckHdlFileSet) {
+            hdlParam.deleteHdlFile(path);
+            delFiles.push(path);
+        }
+        return {
+            addFiles, delFiles
+        };
+    }
+
+    public async refreshHdlMonitor(m: HdlMonitor, originalHdlFiles: AbsPath[]) {           
         m.remakeHdlMonitor();
-    }
-
-    public async updatePL(oldFiles: AbsPath[]) {
-        // current only support xilinx
-        const options: vscode.ProgressOptions = { location: vscode.ProgressLocation.Notification };
-        if (opeParam.prjInfo.toolChain === ToolChainType.Xilinx) {
-            options.title = 'update Xilinx PL';
-            await vscode.window.withProgress(options, async () => await this.updateXilinxPL(oldFiles));
-        } 
-    }
-
-    public async updateXilinxPL(oldFiles: AbsPath[]) {
         const newFiles = await prjManage.getPrjHardwareFiles();
+        const { addFiles, delFiles } = this.diffNewOld(newFiles, originalHdlFiles);
+
+        const options: vscode.ProgressOptions = { location: vscode.ProgressLocation.Notification };
+        options.title = 'update HdlParam';
+        await vscode.window.withProgress(options, async () => await this.updateHdlParam(addFiles, delFiles));
+
+        if (opeParam.prjInfo.toolChain === ToolChainType.Xilinx) {
+            options.title = 'update PL';
+            await vscode.window.withProgress(options, async () => await this.updatePL(addFiles, delFiles));
+        }
+    }
+
+    public async updateHdlParam(addFiles: AbsPath[], delFiles: AbsPath[]) {
+        for (const path of addFiles) {
+            await hdlParam.addHdlFile(path);
+        }
+        for (const path of delFiles) {
+            hdlParam.deleteHdlFile(path);
+        }
+    }
+
+    public async updatePL(addFiles: AbsPath[], delFiles: AbsPath[]) {
+        // current only support xilinx
         if (prjManage.pl) {
-            const uncheckHdlFileSet = new Set<AbsPath>(oldFiles);
-            const addFiles: AbsPath[] = [];
-            const delFiles: AbsPath[] = [];
-            
-            for (const path of newFiles) {
-                if (!uncheckHdlFileSet.has(path)) {
-                    await hdlParam.addHdlPath(path);
-                    addFiles.push(path);
-                } else {
-                    uncheckHdlFileSet.delete(path);
-                }
-            }
-            const vivadoAddPromise = prjManage.pl.addFiles(addFiles);
-    
-            for (const path of uncheckHdlFileSet) {
-                hdlParam.deleteHdlFile(path);
-                delFiles.push(path);
-            }
-            const vivadoDelPromise = prjManage.pl.delFiles(delFiles);
-            
-            await vivadoAddPromise;
-            await vivadoDelPromise;
+            await prjManage.pl.addFiles(addFiles);
+            await prjManage.pl.delFiles(delFiles);
         } else {
             MainOutput.report('PL is not registered', ReportType.Warn);
         }

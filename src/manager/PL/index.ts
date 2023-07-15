@@ -1,3 +1,7 @@
+/**
+ * PL: program logic
+ * Hardware Programming
+ */
 import * as vscode from 'vscode';
 
 import { PLConfig, XilinxOperation } from './xilinx';
@@ -18,7 +22,7 @@ class PlManage extends BaseManage {
             tool: 'default', 
             path: '',
             ope: new XilinxOperation(),
-            terminal: this.createTerminal('Hardware')
+            terminal: null
         };
 
         if (opeParam.prjInfo.toolChain) {
@@ -41,7 +45,13 @@ class PlManage extends BaseManage {
 
 
     public launch() {
-        this.config.ope.launch(this.config);
+        if (!this.config.terminal) {
+            this.config.terminal = this.createTerminal('Hardware');
+            this.config.terminal.show(true);
+            this.config.ope.launch(this.config);
+        } else {
+            vscode.window.showInformationMessage('Hardware Terminal is launched !');
+        }
     }
 
     public simulate() {

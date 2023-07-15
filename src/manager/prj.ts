@@ -142,8 +142,10 @@ class PrjManage {
         MainOutput.report(`finish analyse ${hdlFiles.length} hdl files, find ${unhandleNum} unsolved instances`, ReportType.Info);
 
         this.pl = new PlManage();
-        this.ps = new PsManage();
-        MainOutput.report('create pl and ps', ReportType.Info);
+
+        // TODO : finish it later
+        // this.ps = new PsManage();
+        MainOutput.report('create pl', ReportType.Info);
 
         
         if (countTimeCost) {
@@ -199,11 +201,11 @@ class PrjManage {
 
         const nextmode = this.getNextMode(rawPrjInfo);        
         const currmode = this.getCurrentMode(softwarePath, hardwarePath);
-
+        
         if (currmode === nextmode) {
             const hardware = opeParam.prjInfo.arch.hardware;
-            const software = opeParam.prjInfo.arch.software;            
-
+            const software = opeParam.prjInfo.arch.software;
+            
             hdlDir.mkdir(hardware.src);
             hdlDir.mkdir(hardware.sim);
             hdlDir.mkdir(hardware.data);

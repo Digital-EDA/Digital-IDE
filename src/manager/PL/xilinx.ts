@@ -126,6 +126,11 @@ class XilinxOperation {
      * @param config
      */
     async launch(config: PLConfig): Promise<string | undefined> {
+        const vivadoTerminal = config.terminal;
+        if (!vivadoTerminal) {
+            return undefined;
+        }
+
         let scripts: string[] = [];
 
         let prjFilePath = this.prjPath as AbsPath;
@@ -152,7 +157,7 @@ class XilinxOperation {
         }
 
         const tclPath = hdlPath.join(this.xilinxPath, 'launch.tcl');
-        scripts.push(this.refresh());
+        scripts.push(this.getRefreshCmd());
         scripts.push(`file delete ${tclPath} -force`);
         const tclCommands = scripts.join('\n') + '\n';
 
@@ -160,8 +165,9 @@ class XilinxOperation {
 
         const argu = `-notrace -nolog -nojournal`;
         const cmd = `${config.path} -mode tcl -s ${tclPath} ${argu}`;
-        config.terminal?.show(true);
-        config.terminal?.sendText(cmd);
+
+        vivadoTerminal.show(true);
+        vivadoTerminal.sendText(cmd);
     }
 
     create(scripts: string[]) {
@@ -177,7 +183,7 @@ class XilinxOperation {
         scripts.push(`open_project ${path} -quiet`);
     }
 
-    refresh(terminal?: vscode.Terminal): string {
+    private getRefreshCmd(): string {
         const scripts: string[] = [];
         // 清除所有源文件
         scripts.push(`remove_files -quiet [get_files]`);
@@ -259,9 +265,8 @@ class XilinxOperation {
         for (const file of HDLFiles) {
             if (file.type === "src") {
                 scripts.push(`add_files ${file.path} -quiet`);
-            } else if (file.type === "sim") {
-                scripts.push(`add_files -fileset sim_1 ${file.path} -quiet`);
             }
+            scripts.push(`add_files -fileset sim_1 ${file.path} -quiet`);
         }
 
         scripts.push(`add_files -fileset constrs_1 ${this.datPath} -quiet`);
@@ -283,9 +288,12 @@ class XilinxOperation {
         script += `file delete ${scriptPath} -force\n`;
         hdlFile.writeFile(scriptPath, script);
         const cmd = `source ${scriptPath} -quiet`;
-
-        terminal?.sendText(cmd);
         return cmd;
+    }
+
+    refresh(terminal: vscode.Terminal) {
+        const cmd = this.getRefreshCmd();
+        terminal.sendText(cmd);
     }
 
     simulate(config: PLConfig) {
@@ -507,7 +515,9 @@ class XilinxOperation {
     processFileInPrj(files: string[], config: PLConfig, command: string) {
         const terminal = config.terminal;
         if (terminal) {
-            files.forEach(file => terminal.sendText(`${command} ${file}`));
+            for (const file of files) {
+                terminal.sendText(command + ' ' + file);
+            }
         }
     }
 

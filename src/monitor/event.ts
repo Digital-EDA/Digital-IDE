@@ -206,7 +206,7 @@ class PpyAction extends BaseAction {
         
         const currentPathSet = this.getImportantPathSet();
         const currentLibState = opeParam.prjInfo.library.state;
-            
+        
         if (isSameSet(originalPathSet, currentPathSet)) {
             // skip hdl remake
             if (originalLibState !== currentLibState) {

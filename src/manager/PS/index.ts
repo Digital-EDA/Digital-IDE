@@ -1,3 +1,7 @@
+/**
+ * PS: processing system
+ * software of cpu
+ */
 import * as vscode from 'vscode';
 import { opeParam } from '../../global';
 import { ToolChainType } from '../../global/enum';

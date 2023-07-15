@@ -42,7 +42,7 @@ function registerTreeView(context: vscode.ExtensionContext) {
     vscode.window.registerTreeDataProvider('digital-ide-treeView-arch', treeView.moduleTreeProvider);
     vscode.window.registerTreeDataProvider('digital-ide-treeView-tool', treeView.toolTreeProvider);
     vscode.window.registerTreeDataProvider('digital-ide-treeView-hardware', treeView.hardwareTreeProvider);
-    vscode.window.registerTreeDataProvider('digital-ide-treeView-software', treeView.softwareTreeProvider);
+    // vscode.window.registerTreeDataProvider('digital-ide-treeView-software', treeView.softwareTreeProvider);
 
     // constant used in tree
     vscode.commands.executeCommand('setContext', 'TOOL-tree-expand', false);

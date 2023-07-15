@@ -618,10 +618,6 @@
                 {
                     "id": "digital-ide-treeView-hardware",
                     "name": "HARD Options"
-                },
-                {
-                    "id": "digital-ide-treeView-software",
-                    "name": "SOFT Options"
                 }
             ]
         },

@@ -58,7 +58,7 @@ class Output {
      */
     public report(message: string | unknown, type: ReportType = ReportType.Info, reportInWindows: boolean = false) {
         if (!this.skipMessage(type) && message) {
-            this._output.show(true);
+            // this._output.show(true);
             const currentTime = this.getCurrentTime();
             this._output.appendLine('[' + type + ' - ' + currentTime + '] ' + message);
 

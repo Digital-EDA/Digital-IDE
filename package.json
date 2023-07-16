@@ -5,7 +5,7 @@
 	"publisher": "sterben",
 	"homepage": "https://digital-eda.github.io/DIDE-doc-Cn",
 	"version": "0.3.0",
-	"main": "./out1/extension",
+	"main": "./out/extension",
 	"icon": "images/DIDE.png",
 	"engines": {
 		"vscode": "^1.72.0"

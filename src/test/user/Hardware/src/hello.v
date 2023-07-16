@@ -8,6 +8,9 @@ module mux2to1(
     );
 
 
+
+
+
     assign outp = sel == 1'b0 ? a : b;
-    
+
 endmodule

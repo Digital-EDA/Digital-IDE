@@ -2,8 +2,27 @@
 
 ![](https://img.shields.io/badge/version-0.3.0-blue)
 
+
+
+---
+
+## Developer
+
+make pakage:
+
 ```bash
-npm i
+python script/command/make_package.py
 ```
 
-Enter Vscode & F5
+make package.json command title token:
+
+```bash
+python script/command/make_title_token.py
+```
+
+
+translate title token:
+
+```bash
+python script/command/translate_from_en.py
+```

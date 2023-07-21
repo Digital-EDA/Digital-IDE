@@ -31,14 +31,19 @@ function makeTableFromObjArray(md: MarkdownString, array: any[], name: string, f
         const rows = [];
         for (const obj of array) {
             const data = [];
-            for (const name of fieldNames) {
-                let value = obj[name];
-                if (name === 'instModPath' && value) {
+            for (const subName of fieldNames) {
+                let value = obj[subName];
+                if (subName === 'instModPath' && value) {
                     value = value.replace(ws, '');
                 }
 
                 if (value && value.trim().length === 0) {
                     value = ' ';
+                }
+
+                // TODO : 1 not known
+                if (name === 'ports' && value === 'Unknown') {
+                    value = '1';
                 }
                 data.push(value);
             }

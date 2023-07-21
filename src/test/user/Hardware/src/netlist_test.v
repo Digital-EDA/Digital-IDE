@@ -11,6 +11,7 @@ output reg carry_out, borrow_out, parity_out;
 reg [9:0] cnt_up, cnt_dn;
 reg [8:0] count_nxt;
 
+
 always @(posedge clock)
 begin
 	cnt_dn = count_out - 3'b 101;

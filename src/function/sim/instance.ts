@@ -86,6 +86,9 @@ function makeNetOutputDeclaration(ports: HdlModulePort[], prefix: string, needCo
         if (port.type === HdlModulePortType.Output) {
             haveOutput = true;
             let portWidth = port.width ? port.width : '';
+            if (portWidth === 'Unknown') {
+                portWidth = '';
+            }
             portWidth += ' '.repeat(maxWidthLength - portWidth.length + 1);
             const netDeclaration = prefix + `wire ${portWidth}\t${port.name};\n`;
             netOutputDeclaration += netDeclaration;

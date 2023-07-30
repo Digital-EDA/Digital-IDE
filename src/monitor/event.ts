@@ -13,6 +13,9 @@ import { prjManage } from '../manager';
 import { libManage } from '../manager/lib';
 import type { HdlMonitor } from './index';
 import { ToolChainType } from '../global/enum';
+import { vlogSymbolStorage } from '../function/lsp/core';
+import { vlogLinter } from '../function/lsp/linter';
+import { isVerilogFile } from '../hdlFs/file';
 
 enum Event {
     Add = 'add',                 // emit when add file
@@ -70,6 +73,8 @@ class HdlAction extends BaseAction {
 
         path = hdlPath.toSlash(path);
 
+        this.updateLinter(path);
+
         // check if it has been created
         if (hdlParam.hasHdlFile(path)) {
             MainOutput.report('<HdlAction Add Event> HdlFile ' + path + ' has been created', ReportType.Warn);
@@ -91,6 +96,10 @@ class HdlAction extends BaseAction {
             hdlParam.deleteHdlFile(path);
             refreshArchTree();
         }
+
+        const uri = vscode.Uri.file(path);
+        const document = await vscode.workspace.openTextDocument(uri);
+        vlogLinter.remove(document);
     }
 
     async unlinkDir(path: string, m: HdlMonitor): Promise<void> {
@@ -105,8 +114,29 @@ class HdlAction extends BaseAction {
 
     async change(path: string, m: HdlMonitor): Promise<void> {
         console.log('HdlAction change');
-
         path = hdlPath.toSlash(path);
+
+        // TODO : check performance
+        await this.updateSymbolStorage(path);
+        await this.updateLinter(path);
+
+        await this.updateHdlParam(path);
+        refreshArchTree();
+    }
+
+    async updateSymbolStorage(path: string) {
+        vlogSymbolStorage.updateSymbol(path);
+    }
+
+    async updateLinter(path: string) {
+        if (isVerilogFile(path)) {
+            const uri = vscode.Uri.file(path);
+            const document = await vscode.workspace.openTextDocument(uri);
+            vlogLinter.lint(document);
+        }
+    }
+
+    async updateHdlParam(path: string) {
         const moduleFile = hdlParam.getHdlFile(path);
     
         if (!moduleFile) {
@@ -147,8 +177,6 @@ class HdlAction extends BaseAction {
         for (const moduleName of uncheckedModuleNames) {
             moduleFile.deleteHdlModule(moduleName);
         }
-        
-        refreshArchTree();
     }
 }
 

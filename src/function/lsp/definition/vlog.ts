@@ -2,16 +2,18 @@ import * as vscode from 'vscode';
 import * as vsctm from 'vscode-textmate';
 
 import { hdlPath } from '../../../hdlFs';
-import { hdlParam, HdlSymbol } from '../../../hdlParser';
+import { hdlParam } from '../../../hdlParser';
 import { All } from '../../../../resources/hdlParser';
 import { vlogKeyword } from '../util/keyword';
 import * as util from '../util';
 import { MainOutput, ReportType } from '../../../global';
+import { vlogSymbolStorage } from '../core';
 
 
 class VlogDefinitionProvider implements vscode.DefinitionProvider {
-    
     public async provideDefinition(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.Location | vscode.LocationLink[] | null> {
+        // console.log('VlogDefinitionProvider');
+        
         // get current words
         const wordRange = document.getWordRangeAtPosition(position, /[`_0-9A-Za-z]+/);
         if (!wordRange) {
@@ -25,7 +27,7 @@ class VlogDefinitionProvider implements vscode.DefinitionProvider {
         }
 
         const filePath = document.fileName;
-        const vlogAll = await HdlSymbol.all(filePath);
+        const vlogAll = await vlogSymbolStorage.getSymbol(filePath);
         if (!vlogAll) {
             return null;
         } else {

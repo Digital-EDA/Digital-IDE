@@ -7,10 +7,7 @@ module mux2to1(
         output wire outp
     );
 
-
-
-
-
+    
     assign outp = sel == 1'b0 ? a : b;
 
 endmodule

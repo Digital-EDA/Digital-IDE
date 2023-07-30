@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 
 import { AllowNull } from '../../../global';
-import { HdlSymbol } from '../../../hdlParser';
 import { RawSymbol, Range } from '../../../hdlParser/common';
+import { vlogSymbolStorage } from '../core';
 
 import { positionAfterEqual } from '../util';
 
@@ -13,8 +13,10 @@ interface DocSymbolContainer {
 
 class VlogDocSymbolProvider implements vscode.DocumentSymbolProvider {
     public async provideDocumentSymbols(document: vscode.TextDocument, token: vscode.CancellationToken): Promise<vscode.DocumentSymbol[]> {
+        // console.log('VlogDocSymbolProvider');
+        
         const path = document.fileName;
-        const vlogAll = await HdlSymbol.all(path);        
+        const vlogAll = await vlogSymbolStorage.getSymbol(path);     
         
         if (!vlogAll || !vlogAll.content) {
             return [];

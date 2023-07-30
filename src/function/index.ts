@@ -14,6 +14,7 @@ import * as lspDocSemantic from './lsp/docSemantic';
 import * as lspLinter from './lsp/linter';
 
 import * as tool from './tool';
+import * as lspCore from './lsp/core';
 
 // special function
 import * as FSM from './fsm';
@@ -77,9 +78,10 @@ function registerLsp(context: vscode.ExtensionContext) {
     vscode.languages.registerCompletionItemProvider(vlogSelector, lspCompletion.vlogPositionPortProvider, '.');
     vscode.languages.registerCompletionItemProvider(vlogSelector, lspCompletion.vlogCompletionProvider);
     vscode.languages.registerDocumentSemanticTokensProvider(vlogSelector, lspDocSemantic.vlogDocSenmanticProvider, lspDocSemantic.vlogLegend);
-    const vlogLinter = lspLinter.registerVlogLinterServer();
-    lspLinter.firstLinter(vlogLinter);
 
+    lspLinter.vlogLinter.initialise();
+    lspCore.vlogSymbolStorage.initialise();
+    
     // vhdl lsp
 }
 

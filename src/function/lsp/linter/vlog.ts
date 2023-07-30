@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 import { All } from '../../../../resources/hdlParser';
-import { getLanguageId, isVerilogFile } from '../../../hdlFs/file';
-import { hdlParam, HdlSymbol } from '../../../hdlParser';
+import { isVerilogFile } from '../../../hdlFs/file';
 import { Position, Range } from '../../../hdlParser/common';
+import { vlogSymbolStorage } from '../core';
 
 
 class VlogLinter {
@@ -13,7 +13,9 @@ class VlogLinter {
 
     async lint(document: vscode.TextDocument) {
         const filePath = document.fileName;
-        const vlogAll = await HdlSymbol.all(filePath);
+        const vlogAll = await vlogSymbolStorage.getSymbol(filePath);
+        console.log('lint all finish');
+        
         if (vlogAll) {
             const diagnostics = this.provideDiagnostics(document, vlogAll);
             this.diagnostic.set(document.uri, diagnostics);
@@ -29,9 +31,7 @@ class VlogLinter {
                 diag.source = hdlError.source;
                 diagnostics.push(diag);
             }
-        }
-        console.log(diagnostics);
-        
+        }        
         return diagnostics;
     }
 
@@ -54,7 +54,6 @@ class VlogLinter {
         if (range.character === 0 && currentLine.trim().length > 0) {
             range.character = currentLine.trimEnd().length;
         }
-        console.log(range);
         
         const position = new vscode.Position(range.line, range.character);
         const wordRange = document.getWordRangeAtPosition(position, /[`_0-9a-zA-Z]+/);
@@ -70,37 +69,19 @@ class VlogLinter {
     async remove(document: vscode.TextDocument) {
         this.diagnostic.delete(document.uri);
     }
-}
 
-function registerVlogLinterServer(): VlogLinter {
-    const linter = new VlogLinter();
-    vscode.workspace.onDidOpenTextDocument(doc => {
-        if (isVerilogFile(doc.fileName)) {
-            linter.lint(doc);
-        }
-    });
-    vscode.workspace.onDidSaveTextDocument(doc => {
-        if (isVerilogFile(doc.fileName)) {
-            linter.lint(doc);
-        }
-    });
-    vscode.workspace.onDidCloseTextDocument(doc => {
-        if (isVerilogFile(doc.fileName)) {
-            linter.remove(doc);
-        }
-    });
-    return linter;
-}
-
-async function firstLinter(linter: VlogLinter) {
-    for (const doc of vscode.workspace.textDocuments) {
-        if (isVerilogFile(doc.fileName)) {
-            linter.lint(doc);
+    public async initialise() {
+        for (const doc of vscode.workspace.textDocuments) {
+            if (isVerilogFile(doc.fileName)) {
+                // TODO : check performance
+                await this.lint(doc);
+            }
         }
     }
 }
 
+const vlogLinter = new VlogLinter();
+
 export {
-    registerVlogLinterServer,
-    firstLinter
+    vlogLinter
 };

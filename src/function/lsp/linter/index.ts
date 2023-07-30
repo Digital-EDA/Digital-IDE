@@ -1,6 +1,5 @@
-import { registerVlogLinterServer, firstLinter } from './vlog';
+import { vlogLinter } from './vlog';
 
 export {
-    registerVlogLinterServer,
-    firstLinter
+    vlogLinter
 };

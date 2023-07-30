@@ -3,15 +3,18 @@ import * as fs from 'fs';
 
 import * as util from '../util';
 import { hdlFile, hdlPath } from '../../../hdlFs';
-import { hdlParam, HdlSymbol } from '../../../hdlParser';
+import { hdlParam } from '../../../hdlParser';
 import { AbsPath, MainOutput, RelPath, ReportType } from '../../../global';
 import { Define, Include, RawSymbol } from '../../../hdlParser/common';
 import { HdlInstance, HdlModule } from '../../../hdlParser/core';
 import { vlogKeyword } from '../util/keyword';
 import { instanceVlogCode } from '../../sim/instance';
+import { vlogSymbolStorage } from '../core';
 
 class VlogIncludeCompletionProvider implements vscode.CompletionItemProvider {
     public provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext): vscode.ProviderResult<vscode.CompletionItem[] | vscode.CompletionList<vscode.CompletionItem>> {
+        // console.log('VlogIncludeCompletionProvider');
+        
         try {
             const items = this.provideIncludeFiles(document, position);
             return items;
@@ -67,11 +70,14 @@ class VlogIncludeCompletionProvider implements vscode.CompletionItemProvider {
 
 class VlogMacroCompletionProvider implements vscode.CompletionItemProvider {
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext): Promise<vscode.CompletionItem[] | vscode.CompletionList<vscode.CompletionItem> | null | undefined> {
+        // console.log('VlogMacroCompletionProvider');
+        
         try {
             const targetWordRange = document.getWordRangeAtPosition(position, /[`_0-9a-zA-Z]+/);
             const targetWord = document.getText(targetWordRange);
             const filePath = document.fileName;
-            const symbolResult = await HdlSymbol.all(filePath);
+
+            const symbolResult = await vlogSymbolStorage.getSymbol(filePath);
             if (!symbolResult) {
                 return null;
             }
@@ -102,10 +108,12 @@ class VlogMacroCompletionProvider implements vscode.CompletionItemProvider {
 
 class VlogPositionPortProvider implements vscode.CompletionItemProvider {
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext): Promise<vscode.CompletionItem[] | vscode.CompletionList<vscode.CompletionItem> | null | undefined> {
+        // console.log('VlogPositionPortProvider');
+        
         try {
             const suggestPositionPorts: vscode.CompletionItem[] = [];
             const filePath = hdlPath.toSlash(document.fileName);
-            const symbolResult = await HdlSymbol.all(filePath);
+            const symbolResult = await vlogSymbolStorage.getSymbol(filePath);
                     if (!symbolResult) {
                 return null;
             }
@@ -173,6 +181,8 @@ class VlogPositionPortProvider implements vscode.CompletionItemProvider {
 
 class VlogCompletionProvider implements vscode.CompletionItemProvider {
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext): Promise<vscode.CompletionItem[] | vscode.CompletionList<vscode.CompletionItem> | null | undefined> {
+        // console.log('VlogCompletionProvider');
+        
         try {
             const filePath = hdlPath.toSlash(document.fileName);
 
@@ -181,7 +191,7 @@ class VlogCompletionProvider implements vscode.CompletionItemProvider {
             completions.push(...this.makeCompilerKeywordItems(document, position));
             completions.push(...this.makeSystemKeywordItems(document, position));
 
-            const symbolResult = await HdlSymbol.all(filePath);
+            const symbolResult = await vlogSymbolStorage.getSymbol(filePath);
             if (!symbolResult) {
                 return completions;
             }

@@ -4,7 +4,8 @@ module mux2to1(
         input wire a,
         input wire b,
         input wire sel,
-        output wire outp
+        output wire outp,
+        output wire test_port
     );
 
     

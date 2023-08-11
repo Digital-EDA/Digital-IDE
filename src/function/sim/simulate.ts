@@ -106,7 +106,7 @@ class Simulate {
      * @description 获取自带仿真库的路径
      * @param toolChain 
      */
-    getSimLibArr(toolChain: ToolChainType): AbsPath[] {
+    public getSimLibArr(toolChain: ToolChainType): AbsPath[] {
         let libPath: AbsPath[] = [];
         const setting = vscode.workspace.getConfiguration();
 
@@ -146,6 +146,38 @@ class IcarusSimulate extends Simulate {
         this.toolChain = opeParam.prjInfo.toolChain;
     }
 
+    private makeMacroIncludeArguments(includes: string[]): string {
+        const args = [];
+        for (const includePath of includes) {
+            if(!hdlFile.isDir(includePath)) {
+                args.push(includePath);
+            } else {
+                args.push('-I ' + includePath);
+            }
+        }
+        return args.join(' ').trim();
+    }
+
+    private makeDependenceArguments(dependences: string[]): string {
+        const args = [];
+        for (const dep of dependences) {
+            args.push('"' + dep + '"');
+        }
+        return args.join(' ').trim();
+    }
+
+    private makeThirdLibraryArguments(simLibPaths: string[]): string {
+        const args = [];
+        for (const libPath of simLibPaths) {
+            if(!hdlFile.isDir(libPath)) {
+                args.push(libPath);
+            } else {
+                args.push('-y ' + libPath);
+            }
+        }
+        return args.join(' ').trim();
+    }
+
     /**
      * generate acutal iverlog simulation command
      * @param name name of top module
@@ -160,6 +192,7 @@ class IcarusSimulate extends Simulate {
         }
         this.simConfig = simConfig;
         const installPath = simConfig.installPath;
+        const iverilogCompileOptions = opeParam.prjInfo.iverilogCompileOptions;
 
         if (this.os === 'win32') {
             simConfig.iverilogPath += '.exe';
@@ -171,25 +204,19 @@ class IcarusSimulate extends Simulate {
             simConfig.vvpPath = hdlPath.join(installPath, simConfig.vvpPath);
         }
 
-        let dependenceArgs = '';
-        dependences.forEach(d => dependenceArgs += '"' + d + '" ');
-        dependenceArgs = dependenceArgs.trim();
+        const simLibPaths = this.getSimLibArr(this.toolChain);
 
-        let thirdLibPath = ' ';
-        this.getSimLibArr(this.toolChain).forEach(element => {
-            if(!hdlFile.isDir(element)) {
-                thirdLibPath += element + " ";
-            } else {
-                thirdLibPath += `-y ${element}`;
-            }
-        });
+        const macroIncludeArgs = this.makeMacroIncludeArguments(iverilogCompileOptions.includes);
+        const dependenceArgs = this.makeDependenceArguments(dependences);
+        const thirdLibraryArgs = this.makeThirdLibraryArguments(simLibPaths);
 
         const iverilogPath = simConfig.iverilogPath;
-        const argu = '-g2012';
+        // default is -g2012
+        const argu = '-g' + iverilogCompileOptions.standard;
         const outVvpPath = '"' + hdlPath.join(simConfig.simulationHome, 'out.vvp') + '"';      
         const mainPath = '"' + path + '"';
 
-        const cmd = `${iverilogPath} ${argu} -o ${outVvpPath} -s ${name} ${mainPath} ${dependenceArgs} ${thirdLibPath}`;
+        const cmd = `${iverilogPath} ${argu} -o ${outVvpPath} -s ${name} ${macroIncludeArgs} ${mainPath} ${dependenceArgs} ${thirdLibraryArgs}`;
         MainOutput.report(cmd, ReportType.Run);
         return cmd;
     }
@@ -263,6 +290,7 @@ class IcarusSimulate extends Simulate {
         if (runInTerminal) {
             this.execInTerminal(command, cwd);
         } else {
+            MainOutput.show();
             this.execInOutput(command, cwd);
         }
     }
@@ -288,7 +316,7 @@ class IcarusSimulate extends Simulate {
         const dependences = this.getAllOtherDependences(path, name);
         const simulationCommand = this.getCommand(name, path, dependences);
         if (simulationCommand) {
-            const cwd = hdlPath.resolve(hdlModule.path, '..');
+            const cwd = hdlPath.resolve(path, '..');            
             this.exec(simulationCommand, cwd);
         } else {
             const errorMsg = 'Fail to generate command';

@@ -67,6 +67,10 @@ class Output {
             }
         }
     }
+
+    public show() {
+        this._output.show(true);
+    }
 }
 
 const MainOutput = new Output('Digital-IDE');

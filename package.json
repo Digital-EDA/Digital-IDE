@@ -10,7 +10,7 @@
 	"engines": {
 		"vscode": "^1.72.0"
 	},
-    "keywords": [
+	"keywords": [
 		"FPGA Develop Support",
 		"FPGA",
 		"ASIC",
@@ -23,7 +23,7 @@
 		"Vivado",
 		"Xilinx"
 	],
-    "repository": {
+	"repository": {
 		"type": "git",
 		"url": "https://github.com/Digital-EDA/Digital-IDE"
 	},
@@ -780,7 +780,7 @@
 			{
 				"language": "verilog",
 				"scopeName": "source.verilog",
-				"path": "./syntaxes/verilog.json"
+				"path": "./syntaxes/verilog.tmLanguage.json"
 			},
 			{
 				"language": "systemverilog",
@@ -956,6 +956,7 @@
 		"typescript": "^4.8.4"
 	},
 	"dependencies": {
+		"@vscode/wasm-wasi": "^0.8.2",
 		"chokidar": "^3.5.3",
 		"puppeteer-core": "^19.4.1",
 		"showdown": "^2.1.0",

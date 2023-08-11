@@ -79,6 +79,13 @@ const PrjInfoDefaults: PrjInfoMeta = {
                 custom: []
             }  
         };
+    },
+
+    get iverilogCompileOptions() {
+        return {
+            standard: "2012",
+            includes: []
+        };
     }
 };
 
@@ -106,6 +113,11 @@ interface Library {
         common: RelPath[], 
         custom: (RelPath | AbsPath)[]
     }
+}
+
+interface IverilogCompileOptions {
+    standard: string,
+    includes: Path[]
 }
 
 interface RawPrjInfo extends RawPrjInfoMeta {
@@ -160,6 +172,9 @@ class PrjInfo implements PrjInfoMeta {
     // library to manage
     private readonly _library: Library = PrjInfoDefaults.library;
 
+    // compile for iverilog
+    private readonly _iverilogCompileOptions: IverilogCompileOptions = PrjInfoDefaults.iverilogCompileOptions; 
+
     public get toolChain(): ToolChainType {
         return this._toolChain;
     }
@@ -196,6 +211,10 @@ class PrjInfo implements PrjInfoMeta {
         return 'microphase';
     }
 
+    public get iverilogCompileOptions(): IverilogCompileOptions {
+        return this._iverilogCompileOptions;
+    }
+
     /**
      * replace token like ${workspace} in path
      * @param path 
@@ -209,9 +228,9 @@ class PrjInfo implements PrjInfoMeta {
         const psname = this.prjName.PS;
 
         // TODO : packaging the replacer
-        return path.replace(new RegExp('${workspace}', 'g'), workspacePath)
-                   .replace(new RegExp('${plname}', 'g'), plname)
-                   .replace(new RegExp('${psname}', 'g'), psname);
+        return path.replace(/\$\{workspace\}/g, workspacePath)
+                   .replace(/\$\{plname\}/g, plname)
+                   .replace(/\$\{psname\}/g, psname);
     }
 
     /**
@@ -452,6 +471,21 @@ class PrjInfo implements PrjInfoMeta {
         }
     }
 
+    public updateIverilogCompileOptions(iverilogCompileOptions?: IverilogCompileOptions) {        
+        if (iverilogCompileOptions) {
+            if (iverilogCompileOptions.standard) {
+                this._iverilogCompileOptions.standard = iverilogCompileOptions.standard;
+            }
+            if (iverilogCompileOptions.includes && iverilogCompileOptions.includes instanceof Array<Path>) {
+                this._iverilogCompileOptions.includes = [];
+                for (const includePath of iverilogCompileOptions.includes) {
+                    const realIncludePath = includePath.replace(/\$\{workspace\}/g, this._workspacePath);
+                    this._iverilogCompileOptions.includes.push(realIncludePath);
+                }
+            }
+        }
+    }
+
     public appendLibraryCommonPath(relPath: RelPath) {
         this._library.hardware.common.push(relPath);
     }
@@ -502,6 +536,7 @@ class PrjInfo implements PrjInfoMeta {
         this.updateDevice(rawPrjInfo.device);
         this.updateArch(rawPrjInfo.arch);
         this.updateLibrary(rawPrjInfo.library);
+        this.updateIverilogCompileOptions(rawPrjInfo.iverilogCompileOptions);
     }
 
     /**

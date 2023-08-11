@@ -76,6 +76,10 @@ interface PrjInfoSchema {
 
     enableShowLog: Type & Desc & Default<boolean> & Enum<boolean>
     device: Type & Desc & Enum<string>
+    iverilogCompileOptions: {
+        standard: string
+        includes: string[]
+    }
 };
 
 interface PropertySchema {

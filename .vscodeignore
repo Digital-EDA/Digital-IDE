@@ -14,6 +14,4 @@ resources/**/*.js
 resources/**/*.d.ts
 resources/**/*.wasm
 vsixmake.js
-CHANGELOG.md
-README.md
 tsconfig.json

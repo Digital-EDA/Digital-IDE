@@ -9,7 +9,7 @@ import { Define, Include, RawSymbol } from '../../../hdlParser/common';
 import { HdlInstance, HdlModule } from '../../../hdlParser/core';
 import { vlogKeyword } from '../util/keyword';
 import { instanceVlogCode } from '../../sim/instance';
-import { vlogSymbolStorage } from '../core';
+import { hdlSymbolStorage } from '../core';
 
 class VlogIncludeCompletionProvider implements vscode.CompletionItemProvider {
     public provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext): vscode.ProviderResult<vscode.CompletionItem[] | vscode.CompletionList<vscode.CompletionItem>> {
@@ -77,7 +77,7 @@ class VlogMacroCompletionProvider implements vscode.CompletionItemProvider {
             const targetWord = document.getText(targetWordRange);
             const filePath = document.fileName;
 
-            const symbolResult = await vlogSymbolStorage.getSymbol(filePath);
+            const symbolResult = await hdlSymbolStorage.getSymbol(filePath);
             if (!symbolResult) {
                 return null;
             }
@@ -113,7 +113,7 @@ class VlogPositionPortProvider implements vscode.CompletionItemProvider {
         try {
             const suggestPositionPorts: vscode.CompletionItem[] = [];
             const filePath = hdlPath.toSlash(document.fileName);
-            const symbolResult = await vlogSymbolStorage.getSymbol(filePath);
+            const symbolResult = await hdlSymbolStorage.getSymbol(filePath);
 
             // console.log(symbolResult?.content);
             // console.log(position.character, position.line);
@@ -195,7 +195,7 @@ class VlogCompletionProvider implements vscode.CompletionItemProvider {
             completions.push(...this.makeCompilerKeywordItems(document, position));
             completions.push(...this.makeSystemKeywordItems(document, position));
 
-            const symbolResult = await vlogSymbolStorage.getSymbol(filePath);
+            const symbolResult = await hdlSymbolStorage.getSymbol(filePath);
             if (!symbolResult) {
                 return completions;
             }

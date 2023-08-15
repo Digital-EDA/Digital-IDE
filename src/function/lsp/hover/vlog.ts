@@ -7,7 +7,7 @@ import { vlogKeyword } from '../util/keyword';
 import * as util from '../util';
 import { MainOutput, ReportType } from '../../../global';
 import { HdlLangID } from '../../../global/enum';
-import { vlogSymbolStorage } from '../core';
+import { hdlSymbolStorage } from '../core';
 
 
 class VlogHoverProvider implements vscode.HoverProvider {
@@ -27,7 +27,7 @@ class VlogHoverProvider implements vscode.HoverProvider {
         }
 
         const filePath = document.fileName;
-        const vlogAll = await vlogSymbolStorage.getSymbol(filePath);          
+        const vlogAll = await hdlSymbolStorage.getSymbol(filePath);          
         if (!vlogAll) {
             return null;
         } else {
@@ -100,12 +100,21 @@ class VlogHoverProvider implements vscode.HoverProvider {
 
 
         // match port or param definition (position input)
-        if (util.isPositionInput(lineText, position.character)) {            
+        /** for example, when you hover the ".clk" below, the branch will be entered
+        template u_template(
+                 //input
+                 .clk        		( clk        		),
+             );
+         * 
+         */
+        if (util.isPositionInput(lineText, position.character)) {
+            console.log('enter position input');
             const currentInstResult = util.filterInstanceByPosition(position, scopeSymbols.symbols, currentModule);
             if (!currentInstResult || !currentInstResult.instModPath) {
                 return null;
             }
-
+            console.log(currentInstResult);
+            
             const instParamPromise = util.getInstParamByPosition(currentInstResult, position, targetWord);
             const instPortPromise = util.getInstPortByPosition(currentInstResult, position, targetWord);
             
@@ -130,6 +139,8 @@ class VlogHoverProvider implements vscode.HoverProvider {
                 }
                 return new vscode.Hover(content);
             }
+
+            return null;
         }
         
         
@@ -145,7 +156,7 @@ class VlogHoverProvider implements vscode.HoverProvider {
             return new vscode.Hover(content);
         }        
 
-        // match ports
+        // match ports        
         const portResult = util.matchPorts(targetWord, currentModule);
         if (portResult) {            
             const portComment = await util.searchCommentAround(filePath, portResult.range);

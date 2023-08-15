@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { All } from '../../../../resources/hdlParser';
 import { isVerilogFile } from '../../../hdlFs/file';
 import { Position, Range } from '../../../hdlParser/common';
-import { vlogSymbolStorage } from '../core';
+import { hdlSymbolStorage } from '../core';
 
 
 class VlogLinter {
@@ -13,7 +13,7 @@ class VlogLinter {
 
     async lint(document: vscode.TextDocument) {
         const filePath = document.fileName;
-        const vlogAll = await vlogSymbolStorage.getSymbol(filePath);
+        const vlogAll = await hdlSymbolStorage.getSymbol(filePath);
         // console.log('lint all finish');
         
         if (vlogAll) {

@@ -75,7 +75,6 @@ class Simulate {
         }
         
         
-        
         if (!hdlFile.isDir(simConfig.simulationHome)) {
             MainOutput.report('create dir ' + simConfig.simulationHome, ReportType.Info);
             hdlDir.mkdir(simConfig.simulationHome);
@@ -166,7 +165,7 @@ class IcarusSimulate extends Simulate {
         return args.join(' ').trim();
     }
 
-    private makeThirdLibraryArguments(simLibPaths: string[]): { fileArgs: string[], dirArgs: string[] } {
+    private makeThirdLibraryArguments(simLibPaths: string[]): { fileArgsString: string, dirArgsString: string } {
         const fileArgs = [];
         const dirArgs = [];
         for (const libPath of simLibPaths) {
@@ -176,7 +175,9 @@ class IcarusSimulate extends Simulate {
                 dirArgs.push('-y ' + libPath);
             }
         }
-        return { fileArgs, dirArgs };
+        const fileArgsString = fileArgs.join(' ');
+        const dirArgsString = dirArgs.join(' ');
+        return { fileArgsString, dirArgsString };
     }
 
     /**
@@ -211,8 +212,8 @@ class IcarusSimulate extends Simulate {
         const dependenceArgs = this.makeDependenceArguments(dependences);
         const thirdLibraryArgs = this.makeThirdLibraryArguments(simLibPaths);
 
-        const thirdLibraryFileArgs = thirdLibraryArgs.fileArgs;
-        const thirdLibraryDirArgs = thirdLibraryArgs.dirArgs;
+        const thirdLibraryFileArgs = thirdLibraryArgs.fileArgsString;
+        const thirdLibraryDirArgs = thirdLibraryArgs.dirArgsString;
 
         const iverilogPath = simConfig.iverilogPath;
         // default is -g2012

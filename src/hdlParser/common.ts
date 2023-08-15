@@ -131,7 +131,9 @@ interface HdlModulePort {
     type: HdlModulePortType
     width: string
     range: Range
-    desc?: string
+    desc?: string   // for patch in hdlDoc
+    signed: string
+    netType: string
 };
 
 interface HdlModuleParam {
@@ -169,6 +171,7 @@ interface RawSymbol {
     width?: string
     init?: string
     signed: number
+    netType: string
 };
 
 interface InstModPathSearchResult {

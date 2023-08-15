@@ -301,11 +301,20 @@ function matchParams(singleWord: string, module: HdlModule): AllowNull<HdlModule
 
 
 function makePortDesc(port: HdlModulePort): string {
-    let portDesc: string = port.type;
-    if (port.width && port.width !== Unknown) {
-        portDesc += ' ' + port.width;
+
+    const portDescArray = [];
+    portDescArray.push(port.type);    
+    if (port.netType) {
+        portDescArray.push(port.netType);
     }
-    portDesc += ' ' + port.name;
+    if (port.signed) {
+        portDescArray.push('signed');
+    }
+    if (port.width && port.width !== Unknown && port.width !== '1') {
+        portDescArray.push(port.width);
+    }
+    portDescArray.push(port.name);
+    const portDesc = portDescArray.join(' ');
     return portDesc;
 }
 

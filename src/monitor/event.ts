@@ -13,7 +13,7 @@ import { prjManage } from '../manager';
 import { libManage } from '../manager/lib';
 import type { HdlMonitor } from './index';
 import { ToolChainType } from '../global/enum';
-import { vlogSymbolStorage } from '../function/lsp/core';
+import { hdlSymbolStorage } from '../function/lsp/core';
 import { vlogLinter } from '../function/lsp/linter';
 import { isVerilogFile } from '../hdlFs/file';
 
@@ -125,7 +125,7 @@ class HdlAction extends BaseAction {
     }
 
     async updateSymbolStorage(path: string) {
-        vlogSymbolStorage.updateSymbol(path);
+        hdlSymbolStorage.updateSymbol(path);
     }
 
     async updateLinter(path: string) {

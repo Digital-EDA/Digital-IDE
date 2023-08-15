@@ -6,7 +6,7 @@ import { All } from '../../../../resources/hdlParser';
 import { vlogKeyword } from '../util/keyword';
 import * as util from '../util';
 import { MainOutput, ReportType } from '../../../global';
-import { vlogSymbolStorage } from '../core';
+import { hdlSymbolStorage } from '../core';
 
 
 class VlogDefinitionProvider implements vscode.DefinitionProvider {
@@ -26,7 +26,7 @@ class VlogDefinitionProvider implements vscode.DefinitionProvider {
         }
 
         const filePath = document.fileName;
-        const vlogAll = await vlogSymbolStorage.getSymbol(filePath);
+        const vlogAll = await hdlSymbolStorage.getSymbol(filePath);
         if (!vlogAll) {
             return null;
         } else {
@@ -120,6 +120,8 @@ class VlogDefinitionProvider implements vscode.DefinitionProvider {
                 const link: vscode.LocationLink = { targetUri: instModPathUri, targetRange };
                 return [link];
             }
+
+            return null;
         }    
         
 

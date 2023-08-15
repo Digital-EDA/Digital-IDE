@@ -80,7 +80,7 @@ function registerLsp(context: vscode.ExtensionContext) {
     vscode.languages.registerDocumentSemanticTokensProvider(vlogSelector, lspDocSemantic.vlogDocSenmanticProvider, lspDocSemantic.vlogLegend);
 
     lspLinter.vlogLinter.initialise();
-    lspCore.vlogSymbolStorage.initialise();
+    lspCore.hdlSymbolStorage.initialise();
     
     // vhdl lsp
 }

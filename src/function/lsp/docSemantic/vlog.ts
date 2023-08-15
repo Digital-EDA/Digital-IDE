@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { All } from '../../../../resources/hdlParser';
 import { HdlSymbol } from '../../../hdlParser';
-import { vlogSymbolStorage } from '../core';
+import { hdlSymbolStorage } from '../core';
 import { transformRange } from '../util';
 
 const tokenTypes = ['class', 'function', 'variable'];

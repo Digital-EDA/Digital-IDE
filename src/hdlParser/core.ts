@@ -5,6 +5,7 @@ import { MainOutput, ReportType } from '../global/outputChannel';
 import * as common from './common';
 import { hdlFile, hdlPath } from '../hdlFs';
 import { HdlSymbol } from './util';
+import { vhdlFast } from '../../resources/hdlParser';
 
 class HdlParam {
     private readonly topModules : Set<HdlModule> = new Set<HdlModule>();

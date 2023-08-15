@@ -166,16 +166,17 @@ class IcarusSimulate extends Simulate {
         return args.join(' ').trim();
     }
 
-    private makeThirdLibraryArguments(simLibPaths: string[]): string {
-        const args = [];
+    private makeThirdLibraryArguments(simLibPaths: string[]): { fileArgs: string[], dirArgs: string[] } {
+        const fileArgs = [];
+        const dirArgs = [];
         for (const libPath of simLibPaths) {
             if(!hdlFile.isDir(libPath)) {
-                args.push(libPath);
+                fileArgs.push(libPath);
             } else {
-                args.push('-y ' + libPath);
+                dirArgs.push('-y ' + libPath);
             }
         }
-        return args.join(' ').trim();
+        return { fileArgs, dirArgs };
     }
 
     /**
@@ -210,13 +211,16 @@ class IcarusSimulate extends Simulate {
         const dependenceArgs = this.makeDependenceArguments(dependences);
         const thirdLibraryArgs = this.makeThirdLibraryArguments(simLibPaths);
 
+        const thirdLibraryFileArgs = thirdLibraryArgs.fileArgs;
+        const thirdLibraryDirArgs = thirdLibraryArgs.dirArgs;
+
         const iverilogPath = simConfig.iverilogPath;
         // default is -g2012
         const argu = '-g' + iverilogCompileOptions.standard;
         const outVvpPath = '"' + hdlPath.join(simConfig.simulationHome, 'out.vvp') + '"';      
         const mainPath = '"' + path + '"';
 
-        const cmd = `${iverilogPath} ${argu} -o ${outVvpPath} -s ${name} ${macroIncludeArgs} ${thirdLibraryArgs} ${mainPath} ${dependenceArgs}`;
+        const cmd = `${iverilogPath} ${argu} -o ${outVvpPath} -s ${name} ${macroIncludeArgs} ${thirdLibraryDirArgs} ${mainPath} ${dependenceArgs} ${thirdLibraryFileArgs}`;
         MainOutput.report(cmd, ReportType.Run);
         return cmd;
     }

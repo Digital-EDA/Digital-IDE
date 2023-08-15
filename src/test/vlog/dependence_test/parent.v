@@ -40,6 +40,7 @@ dependence_3 u_dependence_3(
 
 endmodule
 
+
 /* @wavedrom this is wavedrom demo1
 {
     signal : [

@@ -10,10 +10,10 @@
             "include": "#comments"
         },
         {
-            "include": "#keywords"
+            "include": "#module_pattern"
         },
         {
-            "include": "#module_pattern"
+            "include": "#keywords"
         },
         {
             "include": "#constants"
@@ -116,7 +116,7 @@
                             "name": "entity.name.class.module.reference.verilog"
                         },
                         "2": {
-                            "name": "entity.name.tag.module.identifier.verilog"
+                            "name": "entity.name.function.module.identifier.verilog"
                         }
                     },
                     "end": ";",

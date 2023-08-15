@@ -78,6 +78,8 @@ initial begin
 	end    
 end
 
+
+
 integer n;
 initial begin
 	for (n = 0; n<=ITERATIONS; n=n+1) begin
@@ -98,6 +100,9 @@ initial begin
 		data_in_buff[k] = 0;
 	end    
 end
+
+
+
 
 genvar i;
 generate for(i=0;i<ITERATIONS;i=i+1) begin : CORDIC

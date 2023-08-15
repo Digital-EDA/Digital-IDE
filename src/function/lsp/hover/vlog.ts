@@ -27,7 +27,7 @@ class VlogHoverProvider implements vscode.HoverProvider {
         }
 
         const filePath = document.fileName;
-        const vlogAll = await vlogSymbolStorage.getSymbol(filePath);
+        const vlogAll = await vlogSymbolStorage.getSymbol(filePath);          
         if (!vlogAll) {
             return null;
         } else {

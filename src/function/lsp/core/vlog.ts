@@ -15,6 +15,11 @@ class VlogSymbolStorage {
 
     public async getSymbol(path: AbsPath): ThenableAll {
         path = hdlPath.toSlash(path);
+        const allP = this.symbolMap.get(path);
+        if (allP) {
+            return await allP;
+        }
+        this.updateSymbol(path);
         const all = await this.symbolMap.get(path);
         return all;
     }

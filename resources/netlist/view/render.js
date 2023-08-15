@@ -22,10 +22,10 @@ class render{
 
         document.getElementById("next").onclick = function () {
             if (this.curNetIndex < this.netLists.length-1) {
-                this.curNetIndex++;
+                this.curNetIndex ++;
                 this.showNetlist(this.netLists[this.curNetIndex]);
             }
-        };
+        };  
     }
 
     async showNetlist(netList, isClear) {
@@ -35,15 +35,15 @@ class render{
             this.netLists.push(netList);
         }
 
-        let netnode = this.showTreelist(netList);
+        const netnode = this.showTreelist(netList);
 
-        var setting = {};
-        $(document).ready(function () {
+        const setting = {};
+        $(document).ready(() => {
             this.zTreeObj = $.fn.zTree.init($("#netTree"), setting, netnode);
         });
 
         // remove embed
-        svgPanZoom(this.embed_svg).destroy();
+        // svgPanZoom(this.embed_svg).destroy();
         this.svg = await netlistsvg.render(netlistsvg.digitalSkin, netList);
 
         //Add to container

@@ -58,15 +58,15 @@ const PrjInfoDefaults: PrjInfoMeta = {
     
     get arch() {
         return {
-            prjPath: '.',
+            prjPath: '',
             hardware: {
-                src: '.',
-                sim: '.',
-                data: '.'
+                src: '',
+                sim: '',
+                data: ''
             },
             software: {
-                src: '.',
-                data: '.'
+                src: '',
+                data: ''
             }
         };
     },
@@ -476,7 +476,7 @@ class PrjInfo implements PrjInfoMeta {
             if (iverilogCompileOptions.standard) {
                 this._iverilogCompileOptions.standard = iverilogCompileOptions.standard;
             }
-            if (iverilogCompileOptions.includes && iverilogCompileOptions.includes instanceof Array<Path>) {
+            if (iverilogCompileOptions.includes && iverilogCompileOptions.includes instanceof Array) {
                 this._iverilogCompileOptions.includes = [];
                 for (const includePath of iverilogCompileOptions.includes) {
                     const realIncludePath = includePath.replace(/\$\{workspace\}/g, this._workspacePath);
@@ -567,19 +567,26 @@ class PrjInfo implements PrjInfoMeta {
 
     public get hardwareSimPath(): AbsPath {
         const simPath = this._arch.hardware.sim;  
+        const workspace = this._workspacePath;
         if (fspath.isAbsolute(simPath)) {
             return simPath;
+        } else if (simPath === '') {
+            return workspace;
         }
-        const workspace = this._workspacePath;
         return hdlPath.join(workspace, simPath);
     }
 
     public get hardwareSrcPath(): AbsPath {
         const srcPath = this._arch.hardware.src;
+        const workspace = this._workspacePath;
+
         if (fspath.isAbsolute(srcPath)) {
             return srcPath;
+        } else if (srcPath === '') {
+            return workspace;
         }
-        const workspace = this._workspacePath;
+        console.log(hdlPath.join(workspace, srcPath));
+        
         return hdlPath.join(workspace, srcPath);
     }
 

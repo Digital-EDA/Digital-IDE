@@ -203,6 +203,7 @@ function filterInstanceByPosition(position: vscode.Position, symbols: RawSymbol[
     }
     for (const symbol of symbols) {
         const inst = module.getInstance(symbol.name);
+                
         if (positionAfterEqual(position, symbol.range.start) && 
             positionAfterEqual(symbol.range.end, position) &&
             inst) {

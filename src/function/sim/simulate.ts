@@ -216,7 +216,7 @@ class IcarusSimulate extends Simulate {
         const outVvpPath = '"' + hdlPath.join(simConfig.simulationHome, 'out.vvp') + '"';      
         const mainPath = '"' + path + '"';
 
-        const cmd = `${iverilogPath} ${argu} -o ${outVvpPath} -s ${name} ${macroIncludeArgs} ${mainPath} ${dependenceArgs} ${thirdLibraryArgs}`;
+        const cmd = `${iverilogPath} ${argu} -o ${outVvpPath} -s ${name} ${macroIncludeArgs} ${thirdLibraryArgs} ${mainPath} ${dependenceArgs}`;
         MainOutput.report(cmd, ReportType.Run);
         return cmd;
     }

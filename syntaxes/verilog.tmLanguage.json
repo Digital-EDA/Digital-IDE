@@ -10,10 +10,10 @@
             "include": "#comments"
         },
         {
-            "include": "#module_pattern"
+            "include": "#keywords"
         },
         {
-            "include": "#keywords"
+            "include": "#module_pattern"
         },
         {
             "include": "#constants"
@@ -125,7 +125,7 @@
                             "name": "punctuation.terminator.expression.verilog"
                         }
                     },
-                    "name": "meta.block.instantiation.parameterless.verilog",
+                    "name": "variable.other.constant.instantiation.parameterless.verilog",
                     "patterns": [
                         {
                             "include": "#comments"

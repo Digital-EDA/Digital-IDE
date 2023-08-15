@@ -16,8 +16,7 @@ module Cordic #(
 	output  signed [XY_BITS-1:0] x_o,
 	output  signed [XY_BITS-1:0] y_o,
 	output  signed [PH_BITS-1:0] phase_out,
-
-	input   valid_in, 
+	input   valid_in,
 	output  valid_out
 );
 

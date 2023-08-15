@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as fspath from 'path';
 
-import { opeParam, MainOutput, ReportType, AbsPath } from './global';
+import { opeParam, MainOutput, AbsPath } from './global';
 import { hdlParam } from './hdlParser';
 import * as manager from './manager';
 import * as func from './function';
@@ -63,6 +63,9 @@ async function launch(context: vscode.ExtensionContext) {
         
     MainOutput.report('Digital-IDE has launched, Version: 0.3.0');
     MainOutput.report('OS: ' + opeParam.os);
+
+    console.log(hdlParam);
+    
 }
 
 export function activate(context: vscode.ExtensionContext) {

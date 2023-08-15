@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import * as fspath from 'path';
 
 import { NetlistKernel } from '../../../resources/netlist';
-import { MainOutput, opeParam, ReportType, YosysOutput } from '../../global';
+import { opeParam, ReportType, YosysOutput } from '../../global';
 import { hdlParam } from '../../hdlParser';
 import { hdlFile, hdlPath } from '../../hdlFs';
 
@@ -54,6 +54,7 @@ class Netlist {
             }
         });
 
+        prjFiles.forEach(file => YosysOutput.report('feed file: ' + file, ReportType.Debug));
         this.kernel.load(prjFiles);
         this.create();
     }

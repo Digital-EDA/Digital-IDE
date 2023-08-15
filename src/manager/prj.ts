@@ -120,7 +120,7 @@ class PrjManage {
         // do search
         const searchPaths = searchPathSet.files;
         
-        const hdlFiles = hdlFile.getHDLFiles(searchPaths, ignores);
+        const hdlFiles = hdlFile.getHDLFiles(searchPaths, ignores);        
         return hdlFiles;
     }
 

@@ -67,7 +67,7 @@ class NetlistKernel {
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
             if (os.platform().toLowerCase() === 'win32') {
-                console.log(this.kernel.FS.readdir('/'));
+                // console.log(this.kernel.FS.readdir('/'));
                 this.exec(`${command} /${file}`);
             } else {
                 this.exec(`${command} /host/${file}`);

@@ -108,13 +108,17 @@ class VlogMacroCompletionProvider implements vscode.CompletionItemProvider {
 
 class VlogPositionPortProvider implements vscode.CompletionItemProvider {
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext): Promise<vscode.CompletionItem[] | vscode.CompletionList<vscode.CompletionItem> | null | undefined> {
-        // console.log('VlogPositionPortProvider');
+        console.log('enter VlogPositionPortProvider');
         
         try {
             const suggestPositionPorts: vscode.CompletionItem[] = [];
             const filePath = hdlPath.toSlash(document.fileName);
             const symbolResult = await vlogSymbolStorage.getSymbol(filePath);
-                    if (!symbolResult) {
+
+            // console.log(symbolResult?.content);
+            // console.log(position.character, position.line);
+            
+            if (!symbolResult) {
                 return null;
             }
 

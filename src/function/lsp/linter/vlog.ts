@@ -14,7 +14,7 @@ class VlogLinter {
     async lint(document: vscode.TextDocument) {
         const filePath = document.fileName;
         const vlogAll = await vlogSymbolStorage.getSymbol(filePath);
-        console.log('lint all finish');
+        // console.log('lint all finish');
         
         if (vlogAll) {
             const diagnostics = this.provideDiagnostics(document, vlogAll);

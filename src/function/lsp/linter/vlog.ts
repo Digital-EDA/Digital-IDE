@@ -66,8 +66,8 @@ class VlogLinter {
         }
     }
 
-    async remove(document: vscode.TextDocument) {
-        this.diagnostic.delete(document.uri);
+    async remove(uri: vscode.Uri) {
+        this.diagnostic.delete(uri);
     }
 
     public async initialise() {

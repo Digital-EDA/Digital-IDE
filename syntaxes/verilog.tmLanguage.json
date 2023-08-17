@@ -38,6 +38,9 @@
         "comments": {
             "patterns": [
                 {
+                    "include": "#wavedrom_comment"
+                },
+                {
                     "begin": "(^[ \\t]+)?(?=//)",
                     "beginCaptures": {
                         "1": {
@@ -354,6 +357,75 @@
                     "name": "variable.other.constant.verilog"
                 }
             ]
+        },
+        "wavedrom_comment": {
+            "begin": "\\s*(/\\*)\\s*(@wavedrom)\\s*([\\S\\s]*)",
+            "beginCaptures": {
+                "0": {
+                    "name": "meta.psl.verilog"
+                },
+                "1": {
+                    "name": "comment.block.verilog"
+                },
+                "2": {
+                    "name": "keyword.comment.special.verilog"
+                },
+                "3": {
+                    "name": "comment.block.verilog"
+                },
+                "4": {
+                    "name": "comment.block.verilog"
+                }
+            },
+            "end": "(\\*/)",
+            "endCaptures": {
+                "1": {
+                    "name": "comment.block.verilog"
+                }
+            },
+            "patterns": [
+                {
+                    "match": "\\s*(signal|assign|reg)",
+                    "captures": {
+                        "0": {
+                            "name": "keyword.wavedrom.verilog"
+                        },
+                        "2": {
+                            "name": "entity.wavedrom.name.verilog"
+                        },
+                        "3": {
+                            "name": "keyword.operator.verilog"
+                        }
+                    }
+                },
+                {
+                    "match": "\\s*(name|wave|data)",
+                    "captures": {
+                        "0": {
+                            "name": "variable.wavedrom.verilog"
+                        },
+                        "2": {
+                            "name": "entity.wavedrom.name.verilog"
+                        },
+                        "3": {
+                            "name": "keyword.operator.verilog"
+                        },
+                        "4": {
+                            "name": "variable.wavedrom.verilog"
+                        }
+                    }
+                },
+                {
+                    "include": "#operators"
+                },
+                {
+                    "include": "#constants"
+                },
+                {
+                    "include" : "#strings" 
+                }
+            ],
+            "name": "meta.comment.wavedrom"
         }
     },
     "scopeName": "source.verilog",

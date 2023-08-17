@@ -1,5 +1,5 @@
 {
-	"name": "digital-ide",
+	"name": "fpga-support",
 	"displayName": "Digital IDE",
 	"description": "all in one vscode plugin for Verilog/VHDL development",
 	"publisher": "sterben",

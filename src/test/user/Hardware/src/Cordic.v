@@ -1,5 +1,8 @@
 `timescale 1ns / 1ps
 
+
+`include "mult_module.v"
+
 module Cordic #(
 	parameter XY_BITS      = 12,
 	parameter PH_BITS      = 32,

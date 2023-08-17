@@ -13,5 +13,4 @@ script
 resources/**/*.js
 resources/**/*.d.ts
 resources/**/*.wasm
-vsixmake.js
 tsconfig.json

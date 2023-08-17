@@ -86,7 +86,7 @@ function makeNetOutputDeclaration(ports: HdlModulePort[], prefix: string, needCo
         if (port.type === HdlModulePortType.Output) {
             haveOutput = true;
             let portWidth = port.width ? port.width : '';
-            if (portWidth === 'Unknown') {
+            if (portWidth === 'Unknown' || portWidth === '1') {
                 portWidth = '';
             }
             portWidth += ' '.repeat(maxWidthLength - portWidth.length + 1);

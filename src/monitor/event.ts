@@ -98,8 +98,7 @@ class HdlAction extends BaseAction {
         }
 
         const uri = vscode.Uri.file(path);
-        const document = await vscode.workspace.openTextDocument(uri);
-        vlogLinter.remove(document);
+        vlogLinter.remove(uri);
     }
 
     async unlinkDir(path: string, m: HdlMonitor): Promise<void> {

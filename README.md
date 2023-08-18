@@ -7,16 +7,21 @@
 ![](https://img.shields.io/badge/VHDL-building-black)
 ![](https://img.shields.io/badge/SystemVerilog-building-black)
 
+[Document](https://digital-eda.github.io/DIDE-doc-En) | [中文文档](https://digital-eda.github.io/DIDE-doc-Cn)
+
+
 ## Preface
 
-- Installation address[Installation address](https://marketplace.visualstudio.com/items?itemName=sterben.fpga-support)。
-- If you have any questions, please leave a message on the [issues](https://github.com/Bestduan/Digital-IDE/issues)上发表。
-- If you like it, click on the[star](https://github.com/Bestduan/Digital-IDE)吧。
+- Installation address[Installation address](https://marketplace.visualstudio.com/items?itemName=sterben.fpga-support)
+- If you have any questions, please leave a message on the [issues](https://github.com/Bestduan/Digital-IDE/issues)
+- If you like it, click on the[star](https://github.com/Bestduan/Digital-IDE)
 - email： sterben.nitcloud@gmail.com | zhelonghuang@mail.ustc.edu.cn
 
 - QQ group No.： 932987873
 
 Any problems you have met during the use, you can contact us in QQ group, and we will reply when I see it.
+
+---
 
 ## About Feedback
 
@@ -378,26 +383,26 @@ For project management on the PL side, I have abstracted the following functions
 6. gui --------- open the GUI interface of the tool chain
     1. After opening the GUI, the terminal named *`HardWare`* is not recommended to close by itself.
        - The whole GUI interface will be closed automatically after direct closure, and if not saved then the design may be lost.
-       - The plugin will not move your `IP and bd design` to the same level of `Hardware.src` after closing directly.
+       - The plugin will not move your `IP and bd design` to the same level of `Hardware/src/` after closing directly.
 7. exit -------- Closing the project is only valid under the CLI, after opening the GUI, terminal control is taken over by the GUI.
-    1. After clicking `exit` the plugin will move your `IP and bd design` to the same level of `Hardware.src`.
+    1. After clicking `exit` the plugin will move your `IP and bd design` to the same level of `Hardware/src/`.
     2. If you close the terminal named *`HardWare`* directly, the move of `IP and bd designs` will not take place.
-    3. Note: You can also move your `IP and bd designs` to the same level of `Hardware.src` when *Clean* is in the function bar *TOOL*.
+    3. Note: You can also move your `IP and bd designs` to the same level of `Hardware/src/` when *Clean* is in the function bar *TOOL*.
 
 In addition to the above explicit functions, there are two implicit functions each in the `architecture` column, which are
 1. `Set as Top` -------------- sets this file as the top-level design module of the current project
 2. `Set as Testbench Top` ---- sets the file as the top-level module of the simulation for the current project
 
-Specially, *`Zynq`* devices support mixed PS+PL development. To cope with the mixed development, the plugin gives the `SOC` configuration as follows:
+Specially, *`Zynq`* devices support mixed PS+PL development. To cope with the mixed development, the plugin gives the `soc` configuration as follows:
 ```json
-"SOC": {
+"soc": {
     "core": "ps7_cortexa9_0",
     "bd"  : "zynq_default"
 }
 ```
 Using the configuration plugin as above will automatically build a bd project containing the zynq design to help users quickly build the platform.
 
-Finally, about device selection, it can be configured in the `property.json` file under the *Device* property.
+Finally, about device selection, it can be configured in the `property.json` file under the *device* property.
 The following are currently available:
 - xc7z020clg400-2
 - xc7a35tftg256-1
@@ -408,14 +413,18 @@ The following are currently available:
 But the supported devices are not limited to these, theoretically all the devices that vivado can support can be supported. You can write your device directly to the *Device* attribute, which will give you a warning if the device is not in the database, but will not prevent you from running. To remove the warning you need to add your device to the database with the *FPGA:Add devices to the database* command. Unneeded devices can also be removed from the database with *FPGA:Remove the device from the database*.
 
 **Related setting**
-`TOOL.vivado.install.path` --- Installation path of vivado
+`prj.vivado.install.path` --- Installation path of vivado
 When vivado is installed, you can configure the installation path of vivado directly inside the plugin, or you can add vivado to the environment variables (recommended). If the path is not found by mistake, it is already added to the environment variables by default.
 *e.g. : D:/APP/vivado_18_3/Vivado/2018.3/bin/*
 `[Note]`: Use `/` to separate the paths and configure them to the bin directory.
 
-`PRJ.xilinx.IP.repo.path` ---- User-designed IP libraries from xilinx
+`prj.xilinx.IP.repo.path` ---- User-designed IP libraries from xilinx
 After configuring this property, the plugin will automatically add the path to the IP repo of vivado.
 *e.g. : D:/project/FPGA/.Lib/xIP*
+
+`prj.xilinx.BD.repo.path` ----  User-defined placement path for xilinx block design files
+*e.g. : D:/project/FPGA/.Lib/xbd*
+
 
 #### lib Manager
 The plugin comes with HDL function library linking function.
@@ -423,7 +432,7 @@ The `property.json` file is configured as follows:
 ```json
 "library" : {
     "state": "", // local | remote(default)
-    "Hardware" : {
+    "hardware" : {
         "common": [],
         "custom": []
     }
@@ -441,7 +450,7 @@ The *state* represents whether the library file is loaded into the local workspa
 - `remote` represents virtual inclusion from a remote (anything not under the workspace is considered remote, not remote on the network).
   - remote library files can be opened and changed *(`Note: `If the next import after the change is the code after the change)* .
 - `local` means import the remote file into the project locally
-  1. placed in the lib under `ARCH.Hardware.src`, the changes will not affect the code in the remote library.
+  1. placed in the lib under `arch.hardware.src`, the changes will not affect the code in the remote library.
   2. *`[Note]`: When changing from local back to remote the lib folder will be deleted (plugin will remind), please note*.
 
 The property *common* represents the HDL function library that comes with the plugin, *the code of this library is less mature and is for reference only*.
@@ -458,8 +467,8 @@ The lib paths that have been simulated and tested so far are as follows
 `[Note]`: When the input is a folder then it contains all the files under that folder. In addition, it is not recommended to change the code in this library directly, otherwise it will be overwritten again after the next plugin update, please be careful.
 
 The property *custom* represents a user-defined HDL function library.
-The use of this property requires the root directory of the user-defined library to be configured for *PRJ.custom.Lib.repo.path* under *setting*, and the absolute path of the file (folder) with the configuration under the *custom* property. The representation is as follows:
-*`PRJ.customer.Lib.repo.path`*`/`*`${custom}`* 
+The use of this property requires the root directory of the user-defined library to be configured for *prj.lib.custom.path* under *setting*, and the absolute path of the file (folder) with the configuration under the *custom* property. The representation is as follows:
+*`prj.lib.custom.path`*`/`*`${custom}`* 
 
 `[Note]`: When the input is a folder then it contains all the files under that folder.
 
@@ -469,7 +478,15 @@ Finally, for the `IP_REPO` property, this is the two official xilinx IP repo pro
 The purpose of simulation building is to help users to build their own simulation framework quickly and get simulation results quickly.
 
 #### generate instance & tb file
-![自动例化.gif](https://i.loli.net/2021/05/01/gCxJud91GhIWAmL.gif)
+
+Although auto-completion can realize the automatic completion of the example, but it can not view the entire project all the available modules and select from them, so we provide automatic example of the function; In addition, we also provide automatic generation of the selected module testbench function.
+
+<br>
+<div align=center>
+<img src="https://img1.imgtp.com/2023/08/18/bA4ybk5Z.gif" style="width: 90%;"/>
+</div>
+<br>
+
 The plugin supports cross instantiation between different languages, such as instantiating verilog and vhdl modules in a verilog file, or Verilog and vhdl modules in a vhdl file.
 
 The steps are as follows:
@@ -499,9 +516,28 @@ Currently the only supported simulation tool is iverilog, which will be continuo
 **Iverilog Fast Simulation**
 <br>
 <div align=center>
-<img src="https://i.loli.net/2021/05/02/bfJ1lFGWTjXkeRq.png" style="width: 90%;"/>
+<img src="https://img1.imgtp.com/2023/08/18/7PS5Cp37.gif" style="width: 90%;"/>
 </div>
 <br>
+
+- If you want to use this feature, please download iverilog by yourself and add environment variables.
+- VCD rendering is currently using wavetrace, a vscode plugin, the next version will introduce an embedded waveform renderer that we have developed, and it is completely free.
+- In term of Multi-file simulation, we recommend not to write include, if you write include, please add the folder path of all included files in property.json, for example:
+
+```json
+{
+	...
+    "iverilogCompileOptions": {
+        "standard": "2012",
+        "includes": [
+            "${workspace}/src",
+            "${workspace}/src/Controller",
+            "${workspace}/src/DataPath"
+        ]
+    },
+    ...
+}
+```
 
 
 
@@ -548,6 +584,7 @@ Auto-documentation currently only supports verilog and wavedrom visualization, a
 
 If you need to export pdf, please fill the startup path of your local Google Chrome or Edge browser into the parameter **markdown-pdf executable path**. As most pdf readers do not support color changing background, please export your pdf in light color theme:
 
+> > In windows 11, the default startup path for Edge is `C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe`.
 
 <br>
 <div align=center>

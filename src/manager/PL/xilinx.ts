@@ -104,8 +104,8 @@ class XilinxOperation {
 
     public get custom(): XilinxCustom {
         return {
-            ipRepo: vscode.workspace.getConfiguration().get('PRJ.xilinx.IP.repo.path', ''),
-            bdRepo: vscode.workspace.getConfiguration().get('PRJ.xilinx.BD.repo.path', '')
+            ipRepo: vscode.workspace.getConfiguration().get('prj.xilinx.IP.repo.path', ''),
+            bdRepo: vscode.workspace.getConfiguration().get('prj.xilinx.BD.repo.path', '')
         };
     }
     

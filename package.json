@@ -62,7 +62,23 @@
 					"default": "",
 					"description": "set the xilinx install path. \n e.g. : D:/APP/vivado_18_3/Vivado/2018.3/bin \n This applies only to WIN For other systems, add it to environment variables"
 				},
-				"prj.xsdk.install.path": {},
+                "prj.xilinx.IP.repo.path": {
+                    "scope": "window",
+                    "type": "string",
+                    "default": "",
+                    "description": "User-designed IP libraries from xilinx After configuring this property, the plugin will automatically add the path to the IP repo of vivado."
+                },
+                "prj.xilinx.BD.repo.path": {
+                    "scope": "window",
+                    "type": "string",
+                    "default": "",
+                    "description": "User-defined placement path for xilinx block design files"
+                },
+				"prj.xsdk.install.path": {
+                    "scope": "window",
+                    "type": "string",
+                    "default": ""
+                },
 				"function.doc.webview.backgroundImage": {
 					"type": "string",
 					"default": "",

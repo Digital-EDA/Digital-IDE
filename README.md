@@ -12,9 +12,9 @@
 
 ## Preface
 
-- Installation address[Installation address](https://marketplace.visualstudio.com/items?itemName=sterben.fpga-support)
+- Installation address [Installation address](https://marketplace.visualstudio.com/items?itemName=sterben.fpga-support)
 - If you have any questions, please leave a message on the [issues](https://github.com/Bestduan/Digital-IDE/issues)
-- If you like it, click on the[star](https://github.com/Bestduan/Digital-IDE)
+- If you like it, click on the [star](https://github.com/Bestduan/Digital-IDE)
 - email： sterben.nitcloud@gmail.com | zhelonghuang@mail.ustc.edu.cn
 
 - QQ group No.： 932987873

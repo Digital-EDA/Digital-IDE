@@ -81,7 +81,7 @@ If you have your own template, you can customize the template file using * TOOL:
 
 ###Description Of the Project Configuration File
 > New configuration properties will be used after version 0.3.0
-```json
+```jsonc
 // porperty.json  All attributes explained
 {
     // Third-party tool chains currently in use
@@ -394,7 +394,7 @@ In addition to the above explicit functions, there are two implicit functions ea
 2. `Set as Testbench Top` ---- sets the file as the top-level module of the simulation for the current project
 
 Specially, *`Zynq`* devices support mixed PS+PL development. To cope with the mixed development, the plugin gives the `soc` configuration as follows:
-```json
+```jsonc
 "soc": {
     "core": "ps7_cortexa9_0",
     "bd"  : "zynq_default"
@@ -429,7 +429,7 @@ After configuring this property, the plugin will automatically add the path to t
 #### lib Manager
 The plugin comes with HDL function library linking function.
 The `property.json` file is configured as follows:
-```json
+```jsonc
 "library" : {
     "state": "", // local | remote(default)
     "hardware" : {
@@ -524,7 +524,7 @@ Currently the only supported simulation tool is iverilog, which will be continuo
 - VCD rendering is currently using wavetrace, a vscode plugin, the next version will introduce an embedded waveform renderer that we have developed, and it is completely free.
 - In term of Multi-file simulation, we recommend not to write include, if you write include, please add the folder path of all included files in property.json, for example:
 
-```json
+```jsonc
 {
 	...
     "iverilogCompileOptions": {

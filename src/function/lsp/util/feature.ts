@@ -126,16 +126,18 @@ function bin2float(bin: string, exp: number, fra: number): number | undefined {
     }
 }
 
-async function getFullSymbolInfo(document: vscode.TextDocument, range: Range, nonblank: RegExp, l_comment_symbol: string, l_comment_regExp: RegExp) {
+async function getFullSymbolInfo(document: vscode.TextDocument, range: Range, nonblank: RegExp, l_comment_symbol: string, l_comment_regExp: RegExp): Promise<string> {
     const comments = [];
 
     let content = '';
     let is_b_comment = false;
-    let line = range.start.line + 1;
+    let line = range.start.line;
+    const firstLine = range.start.line - 1;
     
     while (line) {
-        line--;
+        line --;
         content = document.lineAt(line).text;
+
         // 首先判断该行是否是空白
         let isblank = content.match(nonblank);
         if (!isblank) {
@@ -159,12 +161,13 @@ async function getFullSymbolInfo(document: vscode.TextDocument, range: Range, no
 
         // 判断该行是否存在行注释
         let l_comment_index = content.indexOf(l_comment_symbol);
+        
         if (l_comment_index >= 0) {
             let before_l_comment = content.slice(0, l_comment_index);
-            // before_l_comment = del_comments(before_l_comment, b_comment_end_index);
+            // before_l_comment = del_comments(before_l_comment, b_comment_end_index);            
             if (before_l_comment.match(nonblank)) {
                 // 如果去除块注释之后还有字符则认为该注释不属于所要的
-                if (line === range.start.line) {
+                if (line === firstLine) {
                     // let b_comment_last_index = content.lastIndexOf('*/');
                     // b_comment_last_index = (b_comment_last_index == -1) ? 0 : (b_comment_last_index + 2);
                     // comments.push(content.slice(b_comment_last_index, l_comment_index) + '\n');
@@ -187,7 +190,7 @@ async function getFullSymbolInfo(document: vscode.TextDocument, range: Range, no
             behind_b_comment = del_comments(behind_b_comment, l_comment_regExp);
             if (behind_b_comment.match(nonblank)) {
                 // 如果去除块注释之后还有字符则认为该注释不属于所要的
-                if (line === range.start.line) {
+                if (line === firstLine) {
                     comments.push(content.slice(0, b_comment_end_index) + '\n');
                     is_b_comment = true;
                     continue;
@@ -201,7 +204,7 @@ async function getFullSymbolInfo(document: vscode.TextDocument, range: Range, no
         }
 
         // 说明既不是块注释又不是行注释所以就是到了代码块
-        if (line !== range.start.line) {
+        if (line !== firstLine) {
             break;
         }
     }
@@ -271,6 +274,7 @@ async function getSymbolComments(path: string, ranges: Range[]): Promise<string[
     for (const cp of commentPromises) {
         comments.push(await cp);
     }
+    
     return comments;
 }
 

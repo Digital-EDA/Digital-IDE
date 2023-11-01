@@ -8,6 +8,7 @@ import { hdlDir, hdlFile, hdlPath } from '../../hdlFs';
 import { getSelectItem } from './instance';
 import { ToolChainType } from '../../global/enum';
 import { HdlModule } from '../../hdlParser/core';
+import { Path } from '../../../resources/hdlParser';
 
 interface SimulateConfig {
     mod : string,   // 设置的顶层模块              
@@ -158,9 +159,15 @@ class IcarusSimulate extends Simulate {
     }
 
     private makeDependenceArguments(dependences: string[]): string {
+        // 去重
+        const visitedPath = new Set<Path>;
         const args = [];
         for (const dep of dependences) {
+            if (visitedPath.has(dep)) {
+                continue;
+            }
             args.push('"' + dep + '"');
+            visitedPath.add(dep);
         }
         return args.join(' ').trim();
     }

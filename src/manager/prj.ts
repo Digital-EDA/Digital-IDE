@@ -14,6 +14,10 @@ import { hdlIgnore } from './ignore';
 import { ppyAction } from '../monitor/event';
 import { hdlMonitor } from '../monitor';
 
+interface RefreshPrjConfig {
+    mkdir: boolean
+}
+
 class PrjManage {
     pl?: PlManage;
     ps?: PsManage;
@@ -55,7 +59,7 @@ class PrjManage {
      * init opeParam
      * @param context 
      */
-    public async initOpeParam(context: vscode.ExtensionContext) {
+    public async initOpeParam(context: vscode.ExtensionContext): Promise<RefreshPrjConfig> {
         const os = process.platform;
         const extensionPath = hdlPath.toSlash(context.extensionPath);
         const workspacePath = this.getWorkspacePath();
@@ -73,6 +77,8 @@ class PrjManage {
         // set path for merge in prjInfo        
         opeParam.prjInfo.initContextPath(extensionPath, workspacePath);
 
+        const refreshPrjConfig: RefreshPrjConfig = {mkdir: true};
+
         // merge prjInfo from propertyJsonPath if exist
         if (fs.existsSync(propertyJsonPath)) {
             const rawPrjInfo = hdlFile.readJSON(propertyJsonPath) as RawPrjInfo;
@@ -87,8 +93,12 @@ class PrjManage {
                 await this.generatePropertyJson();
                 const rawPrjInfo = hdlFile.readJSON(propertyJsonPath) as RawPrjInfo;
                 opeParam.mergePrjInfo(rawPrjInfo);
+            } else {
+                refreshPrjConfig.mkdir = false;
             }
         }
+
+        return refreshPrjConfig;
     }
 
     /**
@@ -130,9 +140,9 @@ class PrjManage {
         if (countTimeCost) {
             console.time('launch');
         }        
-        await this.initOpeParam(context);
+        const refreshPrjConfig = await this.initOpeParam(context);
         MainOutput.report('finish initialise opeParam', ReportType.Info);
-        prjManage.refreshPrjFolder();
+        prjManage.refreshPrjFolder(refreshPrjConfig);
         
         const hdlFiles = await this.getPrjHardwareFiles();
         MainOutput.report(`finish collect ${hdlFiles.length} hdl files`, ReportType.Info);
@@ -153,7 +163,10 @@ class PrjManage {
         }
     }
 
-    public async refreshPrjFolder() {
+    public async refreshPrjFolder(config?: RefreshPrjConfig) {
+        if (config && config.mkdir === false) {
+            return;
+        }
         // read new prj from ppy
         const rawPrjInfo = opeParam.getRawUserPrjInfo();
 
@@ -161,7 +174,7 @@ class PrjManage {
             // configure user's info
             await this.createFolderByRawPrjInfo(rawPrjInfo);
         } else {
-            // configure by default
+            // configure by default            
             await this.createFolderByDefault(rawPrjInfo);
         }
 

@@ -1,9 +1,0 @@
-create_debug_core u_ila_0 ila
-set_property ALL_PROBE_SAME_MU true
-set_property C_ADV_TRIGGER true
-set_property C_EN_STRG_QUAL true
-set_property C_INPUT_PIPE_STAGES true
-set_property C_TRIGIN_EN false
-set_property C_TRIGOUT_EN false
-set_property port_width
-connect_debug_port u_ila_0/clk

@@ -158,12 +158,12 @@ class HdlAction extends BaseAction {
         }
     
         for (const rawHdlModule of fast.content) {
-            const moduleName = rawHdlModule.name;
+            const moduleName = rawHdlModule.name;            
             if (uncheckedModuleNames.has(moduleName)) {     
                 // match the same module, check then
                 const originalModule = moduleFile.getHdlModule(moduleName);
                 uncheckedModuleNames.delete(moduleName);
-                originalModule?.update(rawHdlModule);
+                originalModule?.update(rawHdlModule);                
             } else {                                    
                 // no matched, create it
                 const newModule = moduleFile.createHdlModule(rawHdlModule);
@@ -171,6 +171,8 @@ class HdlAction extends BaseAction {
                 newModule.solveUnhandleInstance();
             }
         }
+
+        
     
         // 3. delete module not visited yet
         for (const moduleName of uncheckedModuleNames) {

@@ -305,7 +305,6 @@ class HdlParam {
     public async addHdlFile(path: AbsPath) {
         path = hdlPath.toSlash(path);
         await this.initHdlFiles([path]);
-    
         const moduleFile = this.getHdlFile(path);
         if (!moduleFile) {
             MainOutput.report('error happen when create moduleFile ' + path, ReportType.Warn);
@@ -387,11 +386,18 @@ class HdlInstance {
         return false;
     }
 
-    public update(newInstance: common.RawHdlInstance) {
+    /**
+     * @description update Instance of each time
+     * @param newInstance 
+     */
+    public update(newInstance: common.RawHdlInstance) {        
         this.type = newInstance.type;
         this.range = newInstance.range;
         this.instparams = newInstance.instparams;
         this.instports = newInstance.instports;
+
+        this.instModPath = this.parentMod.path;
+        this.instModPathStatus = this.parentMod.solveInstModPathStatus();
     }
 };
 
@@ -611,6 +617,26 @@ class HdlModule {
         }
     }
 
+    public solveInstModPathStatus(): common.InstModPathStatus {
+        const inst = hdlParam.getUnhandleInstanceByType(this.name);
+        if (!inst) {
+            return common.InstModPathStatus.Unknown;
+        }
+        const userModule = inst.parentMod;
+        if (userModule.path === this.path) {
+            return common.InstModPathStatus.Current;
+        } else {
+            const userIncludePaths = userModule.file.macro.includes.map(
+                include => hdlPath.rel2abs(userModule.path, include.path));
+
+            if (userIncludePaths.includes(this.path)) {
+                return common.InstModPathStatus.Include;
+            } else {
+                return common.InstModPathStatus.Others;
+            }
+        }
+    }
+
     public solveUnhandleInstance() {
         const inst = hdlParam.getUnhandleInstanceByType(this.name);
 
@@ -625,17 +651,7 @@ class HdlModule {
             inst.instModPath = this.path;
 
             // judge the type of instModPathStatus
-            if (userModule.path === this.path) {
-                inst.instModPathStatus = common.InstModPathStatus.Current;
-            } else {
-                const userIncludePaths = userModule.file.macro.includes.map(
-                    include => hdlPath.rel2abs(userModule.path, include.path));
-                if (userIncludePaths.includes(this.path)) {
-                    inst.instModPathStatus = common.InstModPathStatus.Include;
-                } else {
-                    inst.instModPathStatus = common.InstModPathStatus.Others;
-                }
-            }
+            inst.instModPathStatus = this.solveInstModPathStatus();
             
             // assign module in the instance
             inst.locateHdlModule();            
@@ -645,7 +661,7 @@ class HdlModule {
     public update(newModule: common.RawHdlModule) {
         this.ports = newModule.ports;
         this.params = newModule.params;
-        this.range = newModule.range;
+        this.range = newModule.range;        
         // compare and make change to instance
         const uncheckedInstanceNames = new Set<string>();
         for (const inst of this.getAllInstances()) {

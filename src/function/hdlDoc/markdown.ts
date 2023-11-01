@@ -70,7 +70,10 @@ async function patchComment(path: AbsPath, ports: (HdlModulePort | HdlModulePara
     const ranges = ports.map(port => port.range);
     const comments = await getSymbolComments(path, ranges);
     for (let i = 0; i < ports.length; ++ i) {
-        const inlineComment = comments[i].replace(/\n/, ' ');
+        let inlineComment = comments[i].replace(/\n/, ' ');
+        if (inlineComment.startsWith('//')) {
+            inlineComment = inlineComment.substring(2);
+        }
         ports[i].desc = inlineComment;
     }
 }

@@ -1,32 +1,681 @@
 {
-    "name": "digital-ide",
-    "displayName": "digital-ide",
-    "description": "all in one vscode plugin for Verilog/VHDL development",
-    "version": "0.0.1",
-    "engines": {
-        "vscode": "^1.72.0"
-    },
-    "main": "./out/extension.js",
-    "categories": [
-        "Extension Packs",
-        "Programming Languages",
-        "Snippets"
-    ],
-    "activationEvents": [
-        "onLanguage:verilog",
-        "onLanguage:vhdl",
-        "onLanguage:systemverilog",
-        "onCommand:TOOL.generate.property",
-        "workspaceContains:.vscode/property.json"
-    ],
-    "contributes": {
-        "commands": [
+	"name": "fpga-support",
+	"displayName": "Digital IDE",
+	"description": "all in one vscode plugin for Verilog/VHDL development",
+	"publisher": "sterben",
+	"homepage": "https://digital-eda.github.io/DIDE-doc-Cn",
+	"version": "0.3.1",
+	"main": "./out/extension",
+	"icon": "images/icon.png",
+	"engines": {
+		"vscode": "^1.72.0"
+	},
+	"keywords": [
+		"FPGA Develop Support",
+		"FPGA",
+		"ASIC",
+		"IC",
+		"Digital",
+		"HDL",
+		"Systemverilog",
+		"Verilog",
+		"VHDL",
+		"Vivado",
+		"Xilinx"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Digital-EDA/Digital-IDE"
+	},
+	"categories": [
+		"Extension Packs",
+		"Programming Languages",
+		"Snippets"
+	],
+	"activationEvents": [
+		"onLanguage:verilog",
+		"onLanguage:vhdl",
+		"onLanguage:systemverilog",
+		"onCommand:digital-ide.property-json.generate",
+		"onCommand:digital-ide.property-json.overwrite",
+		"workspaceContains:.vscode/property.json"
+	],
+	"contributes": {
+		"configuration": {
+			"title": "Digital-IDE",
+			"properties": {
+				"prj.lib.custom.path": {
+					"scope": "window",
+					"type": "string",
+					"default": "",
+					"description": "path of the dictionary of \"custom\" in library"
+				},
+				"prj.file.structure.notice": {
+					"scope": "window",
+					"type": "boolean",
+					"default": true,
+					"description": "notice when change file structure"
+				},
+				"prj.vivado.install.path": {
+					"scope": "window",
+					"type": "string",
+					"default": "",
+					"description": "set the xilinx install path. \n e.g. : D:/APP/vivado_18_3/Vivado/2018.3/bin \n This applies only to WIN For other systems, add it to environment variables"
+				},
+                "prj.xilinx.IP.repo.path": {
+                    "scope": "window",
+                    "type": "string",
+                    "default": "",
+                    "description": "User-designed IP libraries from xilinx After configuring this property, the plugin will automatically add the path to the IP repo of vivado."
+                },
+                "prj.xilinx.BD.repo.path": {
+                    "scope": "window",
+                    "type": "string",
+                    "default": "",
+                    "description": "User-defined placement path for xilinx block design files"
+                },
+				"prj.xsdk.install.path": {
+                    "scope": "window",
+                    "type": "string",
+                    "default": ""
+                },
+				"function.doc.webview.backgroundImage": {
+					"type": "string",
+					"default": "",
+					"description": "url of the background image"
+				},
+				"function.doc.pdf.scale": {
+					"type": "number",
+					"default": 1,
+					"description": "scale of the exported pdf"
+				},
+				"function.doc.pdf.printBackground": {
+					"type": "boolean",
+					"default": true,
+					"description": "whether print background"
+				},
+				"function.doc.pdf.landscape": {
+					"type": "boolean",
+					"default": false,
+					"description": "whether export pdf as a landscape style"
+				},
+				"function.doc.pdf.format": {
+					"type": "string",
+					"default": "A4",
+					"description": "format of pdf size"
+				},
+				"function.doc.pdf.displayHeaderFooter": {
+					"type": "boolean",
+					"default": false,
+					"description": "display header and footer in the exported pdf"
+				},
+				"function.doc.pdf.browserPath": {
+					"type": "string",
+					"default": "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
+					"description": "the absolute path of edge or chrome, we need browser to render pdf"
+				},
+				"function.doc.pdf.margin.top": {
+					"type": "number",
+					"default": 0.5,
+					"description": "top margin of exported pdf, unit cm"
+				},
+				"function.doc.pdf.margin.right": {
+					"type": "number",
+					"default": 0.5,
+					"description": "top margin of exported pdf, unit cm"
+				},
+				"function.doc.pdf.margin.bottom": {
+					"type": "number",
+					"default": 0.5,
+					"description": "top margin of exported pdf, unit cm"
+				},
+				"function.doc.pdf.margin.left": {
+					"type": "number",
+					"default": 0.5,
+					"description": "top margin of exported pdf, unit cm"
+				},
+				"function.doc.pdf.headerTemplate": {
+					"type": "string",
+					"default": "<div style=\"font-size: 9px; margin-left: 1cm;\"> <span class='title'></span></div> <div style=\"font-size: 9px; margin-left: auto; margin-right: 1cm; \"> <span class='date'></span></div>",
+					"description": "html template of header, if displayHeaderFooter is set to false, this setting will be ignored"
+				},
+				"function.doc.pdf.footerTemplate": {
+					"type": "string",
+					"default": "<div style=\"font-size: 9px; margin-left: 1cm;\"> <span class='title'></span></div> <div style=\"font-size: 9px; margin-left: auto; margin-right: 1cm; \"> <span class='date'></span></div>",
+					"description": "html template of footer, if displayHeaderFooter is set to false, this setting will be ignored"
+				},
+				"function.simulate.icarus.installPath": {
+					"type": "string",
+					"description": "Path of install path of iverilog components, if set to \"\", then iverilog and vvp in environment will be used for simulation. Otherwise, ones that in the install path will be used."
+				},
+				"function.simulate.simulationHome": {
+					"type": "string",
+					"description": "Path of simulation folder, .vvp and other file during simulation will be generated here"
+				},
+				"function.simulate.gtkwavePath": {
+					"type": "string",
+					"default": "gtkwave",
+					"description": "Absolute path of launch path of gtkwave software"
+				},
+				"function.simulate.xilinxLibPath": {
+					"type": "string",
+					"description": "Path of Xilinx library for simulation"
+				},
+				"function.simulate.runInTerminal": {
+					"type": "boolean",
+					"default": false,
+					"description": "run the simulation command in terminal instead of output"
+				},
+				"function.lsp.formatter.vlog.default.style": {
+					"scope": "window",
+					"type": "string",
+					"enum": [
+						"kr",
+						"ansi",
+						"gnu"
+					],
+					"default": "kr",
+					"description": "Select the verilog and systemverilog formatter style."
+				},
+				"function.lsp.formatter.vlog.default.args": {
+					"scope": "window",
+					"type": "string",
+					"default": "",
+					"description": "Add verilog formatter arguments here (like istyle)."
+				},
+				"function.lsp.formatter.vhdl.default.keyword-case": {
+					"description": "Keyword case",
+					"type": "string",
+					"default": "LowerCase",
+					"enum": [
+						"LowerCase",
+						"UpperCase"
+					]
+				},
+				"function.lsp.formatter.vhdl.default.align-comments": {
+					"description": "Align comments",
+					"type": "boolean",
+					"default": false
+				},
+				"function.lsp.formatter.vhdl.default.type-name-case": {
+					"description": "Type name case",
+					"type": "string",
+					"default": "LowerCase",
+					"enum": [
+						"LowerCase",
+						"UpperCase"
+					]
+				},
+				"function.lsp.formatter.vhdl.default.indentation": {
+					"description": "Indentation",
+					"type": "number",
+					"default": 4
+				},
+				"function.lsp.completion.vlog.autoAddInclude": {
+					"description": "`include \"xxx.v\" will be added to the top of the file automatically",
+					"type": "boolean",
+					"default": true
+				},
+				"function.lsp.completion.vlog.completeWholeInstante": {
+					"description": "complete everything invoking a module needs including paramters and ports",
+					"type": "boolean",
+					"default": true
+				},
+				"function.instantiation.addComment": {
+					"description": "add comment like // ports, // input, // output when doing instantiation, including completion for module invoking",
+					"type": "boolean",
+					"default": true
+				},
+				"function.instantiation.autoNetOutputDeclaration": {
+					"description": "auto declare output type nets in the scope when instantiation happens.",
+					"type": "boolean",
+					"default": true
+				}
+			}
+		},
+		"commands": [
+			{
+				"command": "digital-ide.property-json.generate",
+				"title": "%digital-ide.property-json.generate.title%",
+				"category": "Digital-IDE"
+			},
+			{
+				"command": "digital-ide.property-json.overwrite",
+				"title": "%digital-ide.property-json.overwrite.title%",
+				"category": "Digital-IDE"
+			},
+			{
+				"command": "digital-ide.hdlDoc.exportFile",
+				"title": "%digital-ide.hdlDoc.exportFile.title%",
+				"category": "Digital-IDE"
+			},
+			{
+				"command": "digital-ide.hdlDoc.exportProject",
+				"title": "%digital-ide.hdlDoc.exportProject.title%",
+				"category": "Digital-IDE"
+			},
+			{
+				"command": "digital-ide.hdlDoc.showWebview",
+				"title": "%digital-ide.hdlDoc.showWebview.title%",
+				"category": "Digital-IDE",
+				"icon": {
+					"light": "images/svg/light/documentation.svg",
+					"dark": "images/svg/dark/documentation.svg"
+				}
+			},
+			{
+				"command": "digital-ide.tool.instance",
+				"title": "%digital-ide.tool.instance.title%",
+				"category": "Digital-IDE"
+			},
+			{
+				"command": "digital-ide.tool.testbench",
+				"title": "%digital-ide.tool.testbench.title%",
+				"category": "Digital-IDE"
+			},
+			{
+				"command": "digital-ide.tool.icarus.simulateFile",
+				"title": "%digital-ide.tool.icarus.simulateFile.title%",
+				"category": "Digital-IDE",
+				"icon": {
+					"light": "images/svg/light/debug.svg",
+					"dark": "images/svg/dark/debug.svg"
+				}
+			},
+			{
+				"command": "digital-ide.pickLibrary",
+				"title": "%digital-ide.pickLibrary.title%",
+				"icon": {
+					"light": "images/svg/light/library.svg",
+					"dark": "images/svg/dark/library.svg"
+				},
+				"category": "Digital-IDE"
+			},
+			{
+				"command": "digital-ide.treeView.arch.expand",
+				"category": "tool",
+				"icon": "$(expand-all)",
+				"title": "%digital-ide.treeView.arch.expand.title%"
+			},
+			{
+				"command": "digital-ide.treeView.arch.collapse",
+				"category": "tool",
+				"icon": "$(collapse-all)",
+				"title": "%digital-ide.treeView.arch.collapse.title%"
+			},
+			{
+				"command": "digital-ide.treeView.arch.refresh",
+				"category": "tool",
+				"icon": "$(refresh)",
+				"title": "%digital-ide.treeView.arch.refresh.title%"
+			},
+			{
+				"command": "digital-ide.treeView.arch.openFile",
+				"category": "tool",
+				"title": "%digital-ide.treeView.arch.openFile.title%"
+			},
+			{
+				"command": "digital-ide.tool.clean",
+				"category": "tool",
+				"title": "%digital-ide.tool.clean.title%"
+			},
+			{
+				"command": "digital-ide.soft.launch",
+				"category": "tool",
+				"title": "%digital-ide.soft.launch.title%"
+			},
+			{
+				"command": "digital-ide.soft.build",
+				"category": "tool",
+				"title": "%digital-ide.soft.build.title%"
+			},
+			{
+				"command": "digital-ide.soft.download",
+				"category": "tool",
+				"title": "%digital-ide.soft.download.title%"
+			},
+			{
+				"command": "digital-ide.hard.launch",
+				"category": "tool",
+				"title": "%digital-ide.hard.launch.title%"
+			},
+			{
+				"command": "digital-ide.hard.simulate",
+				"category": "tool",
+				"title": "%digital-ide.hard.simulate.title%"
+			},
+			{
+				"command": "digital-ide.hard.simulate.cli",
+				"category": "tool",
+				"title": "%digital-ide.hard.simulate.cli.title%"
+			},
+			{
+				"command": "digital-ide.hard.simulate.gui",
+				"category": "tool",
+				"title": "%digital-ide.hard.simulate.gui.title%"
+			},
+			{
+				"command": "digital-ide.hard.refresh",
+				"category": "tool",
+				"title": "%digital-ide.hard.refresh.title%"
+			},
+			{
+				"command": "digital-ide.hard.build",
+				"category": "tool",
+				"title": "%digital-ide.hard.build.title%"
+			},
+			{
+				"command": "digital-ide.hard.build.synth",
+				"category": "tool",
+				"title": "%digital-ide.hard.build.synth.title%"
+			},
+			{
+				"command": "digital-ide.hard.build.impl",
+				"category": "tool",
+				"title": "%digital-ide.hard.build.impl.title%"
+			},
+			{
+				"command": "digital-ide.hard.build.bitstream",
+				"category": "tool",
+				"title": "%digital-ide.hard.build.bitstream.title%"
+			},
+			{
+				"command": "digital-ide.hard.program",
+				"category": "tool",
+				"title": "%digital-ide.hard.program.title%"
+			},
+			{
+				"command": "digital-ide.hard.gui",
+				"category": "tool",
+				"title": "%digital-ide.hard.gui.title%"
+			},
+			{
+				"command": "digital-ide.hard.exit",
+				"category": "tool",
+				"title": "%digital-ide.hard.exit.title%"
+			},
+			{
+				"command": "digital-ide.pl.setSrcTop",
+				"category": "pl",
+				"title": "%digital-ide.pl.setSrcTop.title%"
+			},
+			{
+				"command": "digital-ide.pl.setSimTop",
+				"category": "pl",
+				"title": "%digital-ide.pl.setSimTop.title%"
+			},
+			{
+				"command": "digital-ide.pl.addDevice",
+				"category": "pl",
+				"title": "%digital-ide.pl.addDevice.title%"
+			},
+			{
+				"command": "digital-ide.pl.delDevice",
+				"category": "pl",
+				"title": "%digital-ide.pl.delDevice.title%"
+			},
+			{
+				"command": "digital-ide.pl.addFile",
+				"category": "pl",
+				"title": "%digital-ide.pl.addFile.title%"
+			},
+			{
+				"command": "digital-ide.pl.delFile",
+				"category": "pl",
+				"title": "%digital-ide.pl.delFile.title%"
+			},
+			{
+				"command": "digital-ide.netlist",
+				"icon": {
+					"light": "images/svg/light/netlist.svg",
+					"dark": "images/svg/dark/netlist.svg"
+				},
+				"category": "Digital-IDE",
+				"title": "%digital-ide.netlist.title%"
+			},
+			{
+				"command": "digital-ide.fsm",
+				"icon": {
+					"light": "images/svg/light/fsm.svg",
+					"dark": "images/svg/dark/fsm.svg"
+				},
+				"category": "Digital-IDE",
+				"title": "%digital-ide.fsm.title%"
+			},
+			{
+				"command": "digital-ide.lsp.tool.insertTextToUri",
+				"title": "%digital-ide.lsp.tool.insertTextToUri.title%",
+				"category": "Digital-IDE"
+			},
+			{
+				"command": "digital-ide.lsp.tool.transformOldPropertyFile",
+				"title": "%digital-ide.lsp.tool.transformOldPropertyFile.title%",
+				"category": "Digital-IDE"
+			},
             {
-                "command": "digital-ide.helloWorld",
-                "title": "Hello World"
-            }
-        ],
-        "languages": [
+                "command": "digital-ide.lsp.verilog.linter",
+                "title": "%digital-ide.lsp.verilog.linter.title%"
+            },
+			{
+				"command": "digital-ide.vhdl2vlog",
+				"title": "%digital-ide.vhdl2vlog.title%",
+				"category": "Digital-IDE",
+				"icon": {
+					"light": "images/svg/light/translate.svg",
+					"dark": "images/svg/dark/translate.svg"
+				}
+			},
+			{
+				"command": "digital-ide.fsm.show",
+				"icon": {
+					"light": "images/svg/light/fsm.svg",
+					"dark": "images/svg/dark/fsm.svg"
+				},
+				"category": "Digital-IDE",
+				"title": "%digital-ide.fsm.show.title%"
+			},
+			{
+				"command": "digital-ide.netlist.show",
+				"icon": {
+					"light": "images/svg/light/netlist.svg",
+					"dark": "images/svg/dark/netlist.svg"
+				},
+				"category": "Digital-IDE",
+				"title": "%digital-ide.netlist.show.title%"
+			}
+		],
+		"menus": {
+			"view/title": [
+				{
+					"command": "digital-ide.treeView.arch.collapse",
+					"group": "navigation",
+					"when": "view == digital-ide-treeView-arch"
+				},
+				{
+					"command": "digital-ide.pickLibrary",
+					"group": "navigation",
+					"when": "view == digital-ide-treeView-arch"
+				},
+				{
+					"command": "digital-ide.treeView.arch.refresh",
+					"group": "navigation",
+					"when": "view == digital-ide-treeView-arch"
+				}
+			],
+			"view/item/context": [
+				{
+					"command": "digital-ide.tool.icarus.simulateFile",
+					"group": "inline@1",
+					"when": "view == digital-ide-treeView-arch && viewItem == file"
+				},
+				{
+					"command": "digital-ide.netlist.show",
+					"group": "inline@3",
+					"when": "view == digital-ide-treeView-arch && viewItem == file"
+				},
+				{
+					"command": "digital-ide.pl.setSrcTop",
+					"group": "navigation@1",
+					"when": "view == digital-ide-treeView-arch && viewItem == file"
+				},
+				{
+					"command": "digital-ide.pl.setSimTop",
+					"group": "navigation@2",
+					"when": "view == digital-ide-treeView-arch && viewItem == file"
+				},
+				{
+					"command": "digital-ide.tool.icarus.simulateFile",
+					"group": "navigation@3",
+					"when": "view == digital-ide-treeView-arch && viewItem == file"
+				}
+			],
+			"editor/title": [
+				{
+					"when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
+					"command": "digital-ide.tool.icarus.simulateFile",
+					"group": "navigation@1"
+				},
+				{
+					"when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
+					"command": "digital-ide.fsm.show",
+					"group": "navigation@2"
+				},
+				{
+					"when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
+					"command": "digital-ide.netlist.show",
+					"group": "navigation@3"
+				},
+				{
+					"when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
+					"command": "digital-ide.hdlDoc.showWebview",
+					"group": "navigation@4"
+				},
+				{
+					"when": "resourceLangId == vhdl",
+					"command": "digital-ide.vhdl2vlog",
+					"group": "navigation@5"
+				}
+			],
+			"editor/context": [
+				{
+					"when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
+					"command": "digital-ide.pl.setSrcTop",
+					"group": "navigation@1"
+				},
+				{
+					"when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
+					"command": "digital-ide.pl.setSimTop",
+					"group": "navigation@2"
+				},
+				{
+					"when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
+					"command": "digital-ide.tool.instance",
+					"group": "navigation@3"
+				},
+				{
+					"when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
+					"command": "digital-ide.tool.testbench",
+					"group": "navigation@4"
+				},
+				{
+					"when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
+					"command": "digital-ide.tool.icarus.simulateFile",
+					"group": "navigation@5"
+				},
+				{
+					"when": "resourceLangId == verilog || resourceLangId == systemverilog || resourceLangId == vhdl",
+					"command": "digital-ide.netlist.show",
+					"group": "navigation@6"
+				},
+				{
+					"when": "resourceLangId == verilog || resourceLangId == systemverilog || resourceLangId == vhdl",
+					"command": "digital-ide.fsm.show",
+					"group": "navigation@7"
+				},
+				{
+					"when": "resourceLangId == vhdl",
+					"command": "digital-ide.vhdl2vlog",
+					"group": "navigation@8"
+				}
+			],
+			"explorer/context": [
+				{
+					"when": "resourceLangId == verilog || resourceLangId == systemverilog || resourceLangId == vhdl",
+					"command": "digital-ide.pl.setSrcTop",
+					"group": "navigation@5"
+				},
+				{
+					"when": "resourceLangId == verilog || resourceLangId == systemverilog || resourceLangId == vhdl",
+					"command": "digital-ide.pl.setSimTop",
+					"group": "navigation@6"
+				},
+				{
+					"when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
+					"command": "digital-ide.tool.testbench",
+					"group": "navigation@7"
+				},
+				{
+					"when": "resourceLangId == verilog || resourceLangId == systemverilog || resourceLangId == vhdl",
+					"command": "digital-ide.tool.instance",
+					"group": "navigation@8"
+				},
+				{
+					"when": "resourceLangId == verilog || resourceLangId == systemverilog || resourceLangId == vhdl",
+					"command": "digital-ide.netlist.show",
+					"group": "navigation@9"
+				},
+				{
+					"when": "resourceLangId == verilog || resourceLangId == systemverilog || resourceLangId == vhdl",
+					"command": "digital-ide.fsm.show",
+					"group": "navigation@10"
+				},
+				{
+					"when": "resourceLangId == vhdl",
+					"command": "digital-ide.vhdl2vlog",
+					"group": "navigation@11"
+				}
+			]
+		},
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "TreeView",
+					"title": "Digital-IDE: TreeView",
+					"icon": "images/svg/view.svg"
+				}
+			]
+		},
+		"views": {
+			"TreeView": [
+				{
+					"id": "digital-ide-treeView-arch",
+					"name": "architecture"
+				},
+				{
+					"id": "digital-ide-treeView-tool",
+					"name": "TOOL Options"
+				},
+				{
+					"id": "digital-ide-treeView-hardware",
+					"name": "HARD Options"
+				}
+			]
+		},
+		"keybindings": [
+			{
+				"command": "digital-ide.tool.instance",
+				"key": "alt+i",
+				"mac": "alt+i",
+				"when": "editorTextFocus"
+			},
+			{
+				"command": "digital-ide.tool.testbench",
+				"key": "alt+t",
+				"mac": "alt+t",
+				"when": "editorTextFocus"
+			}
+		],
+		"languages": [
 			{
 				"id": "tcl",
 				"aliases": [
@@ -40,13 +689,22 @@
 					".xdc",
 					".fdc"
 				],
-				"configuration": "./config/tcl.configuration.json"
+				"configuration": "./config/tcl.configuration.json",
+                "icon": {
+                    "dark": "./images/svg/dark/tcl.svg",
+                    "light": "./images/svg/light/tcl.svg"
+                }
 			},
 			{
 				"id": "bd",
 				"extensions": [
 					".bd"
-				]
+				],
+                "configuration": "./config/bd.configuration.json",
+                "icon": {
+                    "dark": "./images/svg/dark/bd.svg",
+                    "light": "./images/svg/light/bd.svg"
+                }
 			},
 			{
 				"id": "vhdl",
@@ -60,7 +718,11 @@
 					".vho",
 					".vht"
 				],
-				"configuration": "./config/vhdl.configuration.json"
+				"configuration": "./config/vhdl.configuration.json",
+                "icon": {
+                    "dark": "./images/svg/dark/vhdl.svg",
+                    "light": "./images/svg/light/vhdl.svg"
+                }
 			},
 			{
 				"id": "verilog",
@@ -74,7 +736,11 @@
 					".vh",
 					".vl"
 				],
-				"configuration": "./config/verilog.configuration.json"
+				"configuration": "./config/verilog.configuration.json",
+                "icon": {
+                    "dark": "./images/svg/dark/verilog.svg",
+                    "light": "./images/svg/light/verilog.svg"
+                }
 			},
 			{
 				"id": "systemverilog",
@@ -86,7 +752,11 @@
 					".sv",
 					".SV"
 				],
-				"configuration": "./config/systemverilog.configuration.json"
+				"configuration": "./config/systemverilog.configuration.json",
+                "icon": {
+                    "dark": "./images/svg/dark/systemverilog.svg",
+                    "light": "./images/svg/light/systemverilog.svg"
+                }
 			},
 			{
 				"id": "arm",
@@ -113,12 +783,18 @@
 					".dld"
 				],
 				"configuration": "./config/link.configuration.json"
+			},
+			{
+				"id": "digital-ide-output",
+				"mimetypes": [
+					"text/x-code-output"
+				]
 			}
 		],
 		"jsonValidation": [
 			{
 				"fileMatch": "property.json",
-				"url": "./validation/property-schema.json"
+				"url": "./project/property-schema.json"
 			}
 		],
 		"grammars": [
@@ -145,12 +821,17 @@
 			{
 				"language": "verilog",
 				"scopeName": "source.verilog",
-				"path": "./syntaxes/verilog.json"
+				"path": "./syntaxes/verilog.tmLanguage.json"
 			},
 			{
 				"language": "systemverilog",
 				"scopeName": "source.systemverilog",
 				"path": "./syntaxes/systemverilog.json"
+			},
+			{
+				"language": "digital-ide-output",
+				"scopeName": "digital-ide.output",
+				"path": "./syntaxes/digital-ide-output.json"
 			}
 		],
 		"snippets": [
@@ -170,27 +851,158 @@
 				"language": "systemverilog",
 				"path": "snippets/svlog.json"
 			}
-		]
-    },
-    "scripts": {
-        "vscode:prepublish": "npm run compile",
-        "compile": "tsc -p ./",
-        "watch": "tsc -watch -p ./",
-        "pretest": "npm run compile && npm run lint",
-        "lint": "eslint src --ext ts",
-        "test": "node ./out/test/runTest.js"
-    },
-    "devDependencies": {
-        "@types/vscode": "^1.74.0",
-        "@types/glob": "^8.0.0",
-        "@types/mocha": "^10.0.0",
-        "@types/node": "16.x",
-        "@typescript-eslint/eslint-plugin": "^5.42.0",
-        "@typescript-eslint/parser": "^5.42.0",
-        "eslint": "^8.26.0",
-        "glob": "^8.0.3",
-        "mocha": "^10.1.0",
-        "typescript": "^4.8.4",
-        "@vscode/test-electron": "^2.2.0"
-    }
+		],
+		"icons": {
+			"instance-verilog": {
+				"description": "icon of verilog in TOOL.instance",
+				"default": {
+					"fontPath": "./images/icons/iconfont.woff2",
+					"fontCharacter": "\\e7a8"
+				}
+			},
+			"instance-vhdl": {
+				"description": "icon of verilog in TOOL.instance",
+				"default": {
+					"fontPath": "./images/icons/iconfont.woff2",
+					"fontCharacter": "\\e6b3"
+				}
+			},
+			"instance-port": {
+				"description": "port of verilog in TOOL.instance",
+				"default": {
+					"fontPath": "./images/icons/iconfont.woff2",
+					"fontCharacter": "\\e638"
+				}
+			},
+			"instance-param": {
+				"description": "param of verilog in TOOL.instance",
+				"default": {
+					"fontPath": "./images/icons/iconfont.woff2",
+					"fontCharacter": "\\e655"
+				}
+			},
+			"instance-module": {
+				"description": "module of verilog in TOOL.instance",
+				"default": {
+					"fontPath": "./images/icons/iconfont.woff2",
+					"fontCharacter": "\\e60b"
+				}
+			},
+			"instance-input": {
+				"description": "input",
+				"default": {
+					"fontPath": "./images/icons/iconfont.woff2",
+					"fontCharacter": "\\e908"
+				}
+			},
+			"instance-output": {
+				"description": "output",
+				"default": {
+					"fontPath": "./images/icons/iconfont.woff2",
+					"fontCharacter": "\\e7b0"
+				}
+			},
+			"instance-inout": {
+				"description": "inout",
+				"default": {
+					"fontPath": "./images/icons/iconfont.woff2",
+					"fontCharacter": "\\ea19"
+				}
+			},
+			"export-html": {
+				"description": "export html",
+				"default": {
+					"fontPath": "./images/icons/iconfont.woff2",
+					"fontCharacter": "\\e633"
+				}
+			},
+			"export-markdown": {
+				"description": "export markdown",
+				"default": {
+					"fontPath": "./images/icons/iconfont.woff2",
+					"fontCharacter": "\\ee68"
+				}
+			},
+			"export-pdf": {
+				"description": "export pdf",
+				"default": {
+					"fontPath": "./images/icons/iconfont.woff2",
+					"fontCharacter": "\\e684"
+				}
+			},
+			"libpick-folder": {
+				"description": "libpick folder",
+				"default": {
+					"fontPath": "./images/icons/iconfont.woff2",
+					"fontCharacter": "\\e600"
+				}
+			},
+			"libpick-verilog": {
+				"description": "libpick verilog",
+				"default": {
+					"fontPath": "./images/icons/iconfont.woff2",
+					"fontCharacter": "\\e7a8"
+				}
+			},
+			"libpick-vhdl": {
+				"description": "libpick vhdl",
+				"default": {
+					"fontPath": "./images/icons/iconfont.woff2",
+					"fontCharacter": "\\e6b3"
+				}
+			},
+			"libpick-common": {
+				"description": "libpick common",
+				"default": {
+					"fontPath": "./images/icons/iconfont.woff2",
+					"fontCharacter": "\\e622"
+				}
+			},
+			"libpick-custom": {
+				"description": "libpick custom",
+				"default": {
+					"fontPath": "./images/icons/iconfont.woff2",
+					"fontCharacter": "\\e623"
+				}
+			},
+			"libpick-unknown": {
+				"description": "libpick unknown",
+				"default": {
+					"fontPath": "./images/icons/iconfont.woff2",
+					"fontCharacter": "\\e62a"
+				}
+			}
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "webpack --mode production",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"pretest": "npm run compile && npm run lint",
+		"lint": "eslint src --ext ts",
+		"test": "node ./out/test/runTest.js"
+	},
+	"devDependencies": {
+		"@types/glob": "^8.0.0",
+		"@types/mocha": "^10.0.0",
+		"@types/node": "16.x",
+		"@types/showdown": "^2.0.0",
+		"@types/vscode": "^1.72.0",
+		"@typescript-eslint/eslint-plugin": "^5.42.0",
+		"@typescript-eslint/parser": "^5.42.0",
+		"@vscode/test-electron": "^2.2.0",
+		"eslint": "^8.26.0",
+		"glob": "^8.0.3",
+		"mocha": "^10.1.0",
+		"typescript": "^4.8.4"
+	},
+	"dependencies": {
+		"chokidar": "^3.5.3",
+		"puppeteer-core": "^19.4.1",
+		"showdown": "^2.1.0",
+		"state-machine-cat": "^9.2.5",
+		"temp": "^0.9.4",
+		"vscode-textmate": "^9.0.0",
+		"wavedrom": "^2.9.1"
+	}
 }

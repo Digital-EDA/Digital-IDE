@@ -135,8 +135,33 @@
 	"tk_messageBox": {
 		"prefix": "tk_messageBox",
 		"body": [
-			"tk_messageBox ${-message msg}"
+			"tk_messageBox ${0:message}"
 		],
 		"description": "Message Box"
-	}
+	},
+    "set_property": {
+		"prefix": "set_property",
+        "body": [
+            "set_property ${1:property_name} ${2:value}"
+        ],
+        "description": "set property"
+    },
+    "create_clock": {
+		"prefix": "create_clock",
+        "body": [
+            "create_clock ${1:signal_name} ${2:clock_name} ${3:frequency} ${4:uncertainty}"
+        ]
+    },
+    "set_initial_state": {
+        "prefix": "set_initial_state",
+        "body": [
+            "set_initial_5state ${1:initial_state}"
+        ]
+    },
+    "connect_port": {
+        "prefix": "connect_port",
+        "body": [
+            "connect_port ${1:source_port} ${2:sink_port}"
+        ]
+    }
 }

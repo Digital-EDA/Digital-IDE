@@ -2,167 +2,84 @@ import * as vscode from 'vscode';
 
 import { transferVlogNumber, getSymbolComment, getSymbolComments } from './feature';
 
-const { SymbolResult, Position, CommentResult, Range, Module, Instance, 
-        HDLParam, ModPort, ModParam } = require('../../../HDLparser');
+import { AbsPath, AllowNull } from '../../../global';
+import { Position, Range, HdlModulePort, HdlModuleParam, CommentResult, RawSymbol, Define, Include, makeVscodePosition } from '../../../hdlParser/common';
+import { HdlModule, HdlInstance, hdlParam } from '../../../hdlParser/core';
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const Unknown = 'Unknown';
+
+interface MatchedSymbol {
+    name: string, 
+    value: any, 
+    range: Range
+};
 
 
-
-const vlogKeyword = new Set([
-    '`include', '`define', 'input', 'output', 'inout', 'module', 'endmodule',
-    'wire', 'reg', 'parameter', 'always', 'assign', 'if', 'else', 'begin', 'end',
-    'case', 'endcase', 'posedge', 'negedge', 'or', 'default', 'while', 'and', '`timescale',
-    'or', 'xor', 'initial', 'function', 'endfunction', 'force', 'pulldown'
-]);
+interface ModuleScope {
+    module: RawSymbol,
+    symbols: RawSymbol[]
+};
 
 
-/**
- * @returns {Array<vscode.CompletionItem>}
- */
-function getVlogKeywordItem() {
-    const vlogKeywordItem = [];
-    for (const keyword of vlogKeyword) {
-        const clItem = new vscode.CompletionItem(keyword, vscode.CompletionItemKind.Keyword);
-        clItem.detail = "keyword";
-        vlogKeywordItem.push(clItem);
-    }
-    return vlogKeywordItem;
+function transformRange(range: Range | vscode.Range, lineOffset: number = 0, characterOffset: number = 0, 
+                        endLineOffset: number | undefined = undefined, endCharacterOffset: number | undefined = undefined): vscode.Range {
+    const start = range.start;
+    const end = range.end;
+    const startPosition = new vscode.Position(start.line + lineOffset, start.character + characterOffset);
+    endLineOffset = endLineOffset ? endLineOffset : lineOffset;
+    endCharacterOffset = endCharacterOffset ? endLineOffset : characterOffset;
+    const endPosition = new vscode.Position(end.line + endLineOffset, end.character + endCharacterOffset);
+    return new vscode.Range(startPosition, endPosition);
+}
+
+
+function positionAfter(positionA: Position, positionB: Position): boolean {
+    return positionA.line > positionB.line || (
+           positionA.line === positionB.line && 
+           positionA.character > positionB.character);
+}
+
+
+function positionEqual(positionA: Position, positionB: Position): boolean {
+    return positionA.line === positionB.line &&
+           positionA.character === positionB.character;
 }
 
 
 /**
- * 
- * @param {string} singleWord 
- * @returns {boolean}
+ * @description positionA behind or equal to positionB
  */
-function isVlogKeyword(singleWord) {
-    return vlogKeyword.has(singleWord);
-}
-
-
-/**
- * @description get the last single word in current line
- * @param {string} prefixString 
- * @returns {string}
- */
-function getLastSingleWord(prefixString) {
-    prefixString = prefixString.trim();
-    const length = prefixString.length;
-    if (length == 0) {
-        return '';
-    }
-    const wordCharacters = [];
-    let alphaReg = /[`_0-9A-Za-z]/;
-    for (let i = length - 1; i >= 0; -- i) {
-        const ch = prefixString[i];
-        if (alphaReg.test(ch)) {
-            wordCharacters.push(ch);
-        } else {
-            break;
-        }
-    }
-    return wordCharacters.reverse().join('');
-}
-
-
-/**
- * @description get the single word at hover
- * @param {string} lineText 
- * @param {number} character 
- */
-function getSingleWordAtCurrentPosition(lineText, character) {
-    let alphaReg = /[`_0-9A-Za-z]/;
-    if (alphaReg.test(lineText[character])) {
-        const leftPart = [];
-        const rightPart = [];
-        const length = lineText.length;
-        for (let i = character - 1; i >= 0; -- i) {
-            const ch = lineText[i];
-            if (alphaReg.test(ch)) {
-                leftPart.push(ch);
-            } else {
-                break;
-            }
-        }
-
-        for (let i = character + 1; i < length; ++ i) {
-            const ch = lineText[i];
-            if (alphaReg.test(ch)) {
-                rightPart.push(ch);
-            } else {
-                break;
-            }
-        }
-
-        const leftWord = leftPart.reverse().join('');
-        const rightWord = rightPart.join('');
-        return leftWord + lineText[character] + rightWord;
-    } else {
-        return "";
-    }
-}
-
-/**
- * @param {Position} position_a 
- * @param {Position} position_b 
- * @returns {boolean}
- */
-function positionAfter(position_a, position_b) {
-    return position_a.line > position_b.line || (
-           position_a.line == position_b.line && 
-           position_a.character > position_b.character);
-}
-
-
-/**
- * @param {Position} position_a 
- * @param {Position} position_b 
- * @returns {boolean}
- */
-function positionEqual(position_a, position_b) {
-    return position_a.line == position_b.line &&
-           position_a.character == position_b.character;
-}
-
-
-/**
- * @description position_a behind or equal to position_b
- * @param {Position} position_a 
- * @param {Position} position_b 
- * @returns {boolean}
- */
-function positionAfterEqual(position_a, position_b) {
-    return positionAfter(position_a, position_b) || 
-           positionEqual(position_a, position_b);
+function positionAfterEqual(positionA: Position, positionB: Position): boolean {
+    return positionAfter(positionA, positionB) || 
+           positionEqual(positionA, positionB);
 }
 
 
 
 /**
  * @description filter the symbol result item that exceed the scope
- * @param {vscode.Position} position
- * @param {Array<SymbolResult>} symbolResults
- * @returns {{module : SymbolResult, symbols : Array<SymbolResult>}}
  */
-function filterSymbolScope(position, symbolResults) {
-    if (!symbolResults) {
+function filterSymbolScope(position: vscode.Position, rawSymbols: RawSymbol[]): AllowNull<ModuleScope> {
+    if (!rawSymbols) {
         return null;
     }
-    const parentModules = symbolResults.filter(item => 
-        item.type == 'module' && 
-        positionAfterEqual(position, item.start) &&
-        positionAfterEqual(item.end, position)
+    const parentModules = rawSymbols.filter(item => 
+        item.type === 'module' && 
+        positionAfterEqual(position, item.range.start) &&
+        positionAfterEqual(item.range.end, position)
     );
 
-    if (parentModules.length == 0) {
+    if (parentModules.length === 0) {
         // TODO : macro
         return null;
     }
 
     const parentModule = parentModules[0];
-    const symbols = symbolResults.filter(item => 
-        item != parentModule &&
-        positionAfterEqual(item.start, parentModule.start) &&
-        positionAfterEqual(parentModule.end, item.end));
+    const symbols = rawSymbols.filter(item => 
+        item !== parentModule &&
+        positionAfterEqual(item.range.start, parentModule.range.start) &&
+        positionAfterEqual(parentModule.range.end, item.range.end));
     
     return {
         module : parentModule,
@@ -171,20 +88,14 @@ function filterSymbolScope(position, symbolResults) {
 }
 
 
-
-/**
- * @param {vscode.TextDocument} document
- * @param {Position} position 
- * @param {Array<CommentResult>} comments 
- */
-function isInComment(document, position, comments) {
+function isInComment(document: vscode.TextDocument, position: Position, comments: CommentResult[]): boolean {
     if (!comments) {
         return false;
     }
     // remove the situation that   <cursor> // comment
-    const lineText = document.lineAt(position).text;
+    const lineText = document.lineAt(makeVscodePosition(position)).text;
     const singleCommentIndex = lineText.indexOf('//');
-    if (singleCommentIndex != -1) {
+    if (singleCommentIndex !== -1) {
         return position.character >= singleCommentIndex;
     }
 
@@ -198,7 +109,7 @@ function isInComment(document, position, comments) {
         const startOffset = document.offsetAt(startPosition);
         const endPosition = document.positionAt(startOffset + comment.length);
 
-        const originalPosition = new Position(currentLine, position.character);
+        const originalPosition: Position = {line: currentLine, character: position.character};
 
         if (positionAfterEqual(originalPosition, startPosition) &&
             positionAfterEqual(endPosition, originalPosition)) {
@@ -210,55 +121,20 @@ function isInComment(document, position, comments) {
 
 
 
-/**
- * @param {vscode.Position} position 
- * @param {object} includes 
- * @returns {{name: string, start: Position, end: Position}}
- */
-function matchInclude(position, includes) {
+
+function matchInclude(document: vscode.TextDocument, position: vscode.Position, includes: Include[]) : AllowNull<MatchedSymbol> {
+    const selectFileRange = document.getWordRangeAtPosition(position, /[\.\\\/_0-9A-Za-z]+/);
+    const selectFileName = document.getText(selectFileRange);    
+
     if (!includes) {
         return null;
     }
-    for (const includeString of Object.keys(includes)) {
-        const range = includes[includeString];
-        // TODO : remove - 1 if bug is fixed
-        range.start.line -= 1;
-        range.end.line -= 1;
-        if (positionAfterEqual(position, range.start) &&
-            positionAfterEqual(range.end, position)) {
-
+    for (const include of includes) {
+        const range = include.range;
+        if (position.line + 1 === range.start.line && selectFileName === include.path) {
             return {
-                name : includeString,
-                start: range.start,
-                end: range.end
-            };
-        }
-    }
-    return null;
-}
-
-
-
-/**
- * @param {vscode.Position} position 
- * @param {string} singleWord 
- * @param {object} defines
- * @returns {{name: string, value: any, range: Range}}
- */
-function matchDefine(position, defines) {
-    if (!defines) {
-        return null;
-    }
-
-    for (const macro of Object.keys(defines)) {
-        const range = defines[macro].range;
-        range.start.line -= 1;
-        range.end.line -= 1;
-        if (positionAfterEqual(position, range.start) &&
-            positionAfterEqual(range.end, position)) {
-            return {
-                name : macro,
-                value: defines[macro].value,
+                name : include.path,
+                value: include.path,
                 range: range
             };
         }
@@ -268,31 +144,41 @@ function matchDefine(position, defines) {
 
 
 
-
-/**
- * @param {vscode.Position} position 
- * @param {string} singleWord 
- * @param {object} defines
- * @returns {{name: string, value: any, range: Range}}
- */
-function matchDefineMacro(position, singleWord, defines) {
+function matchDefine(position: vscode.Position, defines: Define[]) : AllowNull<MatchedSymbol> {
     if (!defines) {
         return null;
     }
-    if (singleWord[0] != '`' || singleWord.length <= 1) {
+
+    for (const define of defines) {
+        const range = define.range;
+        if (positionAfterEqual(position, range.start) &&
+            positionAfterEqual(range.end, position)) {
+            return {
+                name : define.name,
+                value: define.replacement,
+                range: range
+            };
+        }
+    }
+    return null;
+}
+
+
+
+function matchDefineMacro(position: vscode.Position, singleWord: string, defines: Define[]) : AllowNull<MatchedSymbol> {
+    if (!defines) {
+        return null;
+    }
+    if (singleWord[0] !== '`' || singleWord.length <= 1) {
         return null;
     }
     const targetMacro = singleWord.substring(1);
-    for (const macro of Object.keys(defines)) {
-        if (macro == targetMacro) {
-            const range = defines[macro].range;
-            const value = defines[macro].value;
-            // TODO : remove - 1 if bug is fixed
-            range.start.line -= 1;
-            range.end.line -= 1;
+    for (const define of defines) {
+        if (define.name === targetMacro) {
+            const range = define.range;
             return {
-                name : macro,
-                value : value,
+                name : define.name,
+                value : define.replacement,
                 range : range
             };
         }
@@ -301,40 +187,27 @@ function matchDefineMacro(position, singleWord, defines) {
 }
 
 
-/**
- * @param {string} singleWord single word to be matched
- * @param {Module} module
- * @returns {Instance}
- */
-function matchInstance(singleWord, module) {
-    if (!module) {
-        console.log('warning, cannot locate module', singleWord);
-        return null;
-    }
-
-    for (const inst of module.getInstances()) {
-        if (singleWord == inst.type) {
+function matchInstance(singleWord: string, module: HdlModule): AllowNull<HdlInstance> {
+    for (const inst of module.getAllInstances()) {
+        if (singleWord === inst.type) {
             return inst;
         }
     }
     return null;
 }
 
-/**
- * @param {vscode.Position} position current cursor position
- * @param {Array<SymbolResult>} symbols all the symbols in the wrapper module
- * @param {Module} module  wrapper module
- * @param {Instance}
- */
-function filterInstanceByPosition(position, symbols, module) {
+
+function filterInstanceByPosition(position: vscode.Position, symbols: RawSymbol[], module: HdlModule): AllowNull<HdlInstance> {
     if (!symbols) {
         return null;
     }
     for (const symbol of symbols) {
-        const inst = module.findInstance(symbol.name);
-        if (positionAfterEqual(position, symbol.start) && 
-            positionAfterEqual(symbol.end, position) &&
+        const inst = module.getInstance(symbol.name);
+                
+        if (positionAfterEqual(position, symbol.range.start) && 
+            positionAfterEqual(symbol.range.end, position) &&
             inst) {
+            
             return inst;
         }
     }
@@ -342,20 +215,17 @@ function filterInstanceByPosition(position, symbols, module) {
 }
 
 
-/**
- * @param {Instance} inst 
- * @param {vscode.Position} position 
- * @param {string} singleWord
- * @returns {Promise<ModPort>}
- */
-async function getInstPortByPosition(inst, position, singleWord) {
+async function getInstPortByPosition(inst: HdlInstance, position: vscode.Position, singleWord: string): Promise<AllowNull<HdlModulePort>> {
     if (!inst.module || !inst.instports) {
         return null;
     }
-    if (positionAfterEqual(position, inst.instports.start) &&
-        positionAfterEqual(inst.instports.end, position)) {
+
+    const instportRange = transformRange(inst.instports, -1, 0);
+
+    if (positionAfterEqual(position, instportRange.start) &&
+        positionAfterEqual(instportRange.end, position)) {
         for (const port of inst.module.ports) {
-            if (port.name == singleWord) {
+            if (port.name === singleWord) {
                 return port;
             }
         }
@@ -364,21 +234,17 @@ async function getInstPortByPosition(inst, position, singleWord) {
 }
 
 
-/**
- * @param {Instance} inst 
- * @param {vscode.Position} position 
- * @param {string} singleWord
- * @returns {Promise<ModParam>}
- */
-async function getInstParamByPosition(inst, position, singleWord) {
-    if (!inst.module || !inst.instparams) {
+async function getInstParamByPosition(inst: AllowNull<HdlInstance>, position: vscode.Position, singleWord: string): Promise<AllowNull<HdlModuleParam>> {
+    if (!inst || !inst.module || !inst.instparams) {
         return null;
     }
 
-    if (positionAfterEqual(position, inst.instparams.start) &&
-        positionAfterEqual(inst.instparams.end, position)) {
+    const instParamRange = transformRange(inst.instparams, -1, 0);
+
+    if (positionAfterEqual(position, instParamRange.start) &&
+        positionAfterEqual(instParamRange.end, position)) {
         for (const param of inst.module.params) {
-            if (param.name == singleWord) {
+            if (param.name === singleWord) {
                 return param;
             }
         }
@@ -387,21 +253,16 @@ async function getInstParamByPosition(inst, position, singleWord) {
 }
 
 
-/**
- * @param {string} lineText
- * @param {number} character
- * @returns {boolean}
- */
-function isPositionInput(lineText, character) {
-    let alphaReg = /[_0-9A-Za-z]/;
+function isPositionInput(lineText: string, character: number): boolean {
+    const alphaReg = /[_0-9A-Za-z]/;
     for (let i = character; i >= 0; -- i) {
         const ch = lineText[i];
         if (alphaReg.test(ch)) {
             continue;
-        } else if (ch == '.') {
-            if (i == 0) {
+        } else if (ch === '.') {
+            if (i === 0) {
                 return true;
-            } else if (lineText[i - 1] == ' ') {
+            } else if (lineText[i - 1] === ' ') {
                 return true;
             } else {
                 return false;
@@ -414,78 +275,75 @@ function isPositionInput(lineText, character) {
 }
 
 
-/**
- * @param {string} singleWord 
- * @param {Module} module
- * @returns {ModPort} 
- */
-function matchPorts(singleWord, module) {
-    if (!module || module.ports.length == 0) {
+function matchPorts(singleWord: string, module: HdlModule): AllowNull<HdlModulePort> {    
+    if (!module || module.ports.length === 0) {
         return null;
     }
-    const targetPorts = module.ports.filter(port => port.name == singleWord);
-    if (targetPorts.length == 0) {
+    const targetPorts = module.ports.filter(port => port.name === singleWord);
+    if (targetPorts.length === 0) {
         return null;
     }
     return targetPorts[0];
 }
 
 
-/**
- * @param {string} singleWord 
- * @param {Module} module
- * @returns {ModParam} 
- */
-function matchParams(singleWord, module) {
-    if (!module || module.params.length == 0) {
+function matchParams(singleWord: string, module: HdlModule): AllowNull<HdlModuleParam> {    
+    if (module.params.length === 0) {
         return null;
     }
-    const targetParams = module.params.filter(param => param.name == singleWord);
-    if (targetParams.length == 0) {
+    
+    const targetParams = module.params.filter(param => param.name === singleWord);
+    if (targetParams.length === 0) {
         return null;
     }
     return targetParams[0];
 }
 
-/**
- * 
- * @param {ModPort} port
- * @returns {string} 
- */
-function makePortDesc(port) {
-    let portDesc = port.type;
-    if (port.width) {
-        portDesc += ' ' + port.width;
+
+function makePortDesc(port: HdlModulePort): string {
+
+    const portDescArray = [];
+    portDescArray.push(port.type);    
+    if (port.netType) {
+        portDescArray.push(port.netType);
     }
-    portDesc += ' ' + port.name;
+    if (port.signed) {
+        portDescArray.push('signed');
+    }
+    if (port.width && port.width !== Unknown && port.width !== '1') {
+        portDescArray.push(port.width);
+    }
+    portDescArray.push(port.name);
+    const portDesc = portDescArray.join(' ');
     return portDesc;
 }
 
-/**
- * 
- * @param {ModParam} param
- * @returns {string} 
- */
-function makeParamDesc(param) {
+
+function makeParamDesc(param: HdlModuleParam): string {
     let paramDesc = 'parameter ' + param.name;
-    if (param.init) {
+    if (param.init && param.init !== Unknown) {
         paramDesc += ' = ' + param.init;
     }
     return paramDesc;
 }
 
+function makeNormalDesc(normal: RawSymbol): string {
+    const width = normal.width ? normal.width : '';
+    const signed = normal.signed === 1 ? 'signed' : '';
+    let desc = normal.type + ' ' + signed + ' ' + width + ' ' + normal.name;
+    if (normal.init) {
+        desc += ' = ' + normal.init;
+    }
+    return desc;
+}
 
-/**
- * @param {string} singleWord 
- * @param {Array<SymbolResult>} symbols
- * @returns {SymbolResult}
- */
-function matchNormalSymbol(singleWord, symbols) {
-    if (!symbols || Object.keys(symbols).length == 0) {
+
+function matchNormalSymbol(singleWord: string, symbols: RawSymbol[]): AllowNull<RawSymbol> {
+    if (!symbols || Object.keys(symbols).length === 0) {
         return null;
     }
     for (const symbol of symbols) {
-        if (singleWord == symbol.name) {
+        if (singleWord === symbol.name) {
             return symbol;
         }
     }
@@ -494,11 +352,7 @@ function matchNormalSymbol(singleWord, symbols) {
 }
 
 
-/**
- * @param {vscode.MarkdownString} content 
- * @param {Module} module 
- */
-async function makeVlogHoverContent(content, module) {
+async function makeVlogHoverContent(content: vscode.MarkdownString, module: HdlModule) {
     const portNum = module.ports.length;
     const paramNum = module.params.length;
     const instNum = module.getInstanceNum();
@@ -506,13 +360,11 @@ async function makeVlogHoverContent(content, module) {
     const moduleUri = vscode.Uri.file(module.path);
     const thenableFileDocument = vscode.workspace.openTextDocument(moduleUri);
 
-    const portDesc = paramNum + ' $(instance-param) ' + 
-                     portNum + ' $(instance-port) ' +
-                     instNum + ' $(instance-module)';
+    const portDesc =  ' $(instance-param) ' + paramNum +
+                      ' $(instance-port) ' + portNum +
+                      ' $(instance-module)' + instNum;
 
 
-    content.appendCodeblock('module ' + module.name, 'verilog');
-    content.appendText('\n');
     content.appendMarkdown(portDesc);
     content.appendText('   |   ');
 
@@ -522,11 +374,11 @@ async function makeVlogHoverContent(content, module) {
         inout: 0
     };
     for (const port of module.ports) {
-        count[port.type] += 1;
+        count[port.type as keyof typeof count] += 1;
     }
-    const ioDesc = count.input + ' $(instance-input) ' + 
-                   count.output + ' $(instance-output) ' +
-                   count.inout + ' $(instance-inout)';
+    const ioDesc = ' $(instance-input) ' + count.input +
+                   ' $(instance-output) ' + count.output +
+                   ' $(instance-inout)' + count.inout;
     content.appendMarkdown(ioDesc);
     content.appendText('\n');
 
@@ -534,20 +386,20 @@ async function makeVlogHoverContent(content, module) {
 
     // make document
     const fileDocument = await thenableFileDocument;
-    const range = new vscode.Range(module.range.start, module.range.end);
+    const range = transformRange(module.range, -1, 0, 1);    
     const moduleDefinitionCode = fileDocument.getText(range);
     content.appendCodeblock(moduleDefinitionCode, 'verilog');
 }
 
 
-async function searchCommentAround(uri, range) {
-
+async function searchCommentAround(path: AbsPath, range: Range): Promise<string | null> {
+    const targetRange = transformRange(range, -1, 0);
+    const comment = await getSymbolComment(path, targetRange);
+    return comment;
 }
 
-module.exports = {
-    getVlogKeywordItem,
-    getLastSingleWord,
-    getSingleWordAtCurrentPosition,
+export {
+    transformRange,
     filterSymbolScope,
     filterInstanceByPosition,
     isPositionInput,
@@ -559,14 +411,13 @@ module.exports = {
     matchPorts,
     matchParams,
     matchNormalSymbol,
-    isVlogKeyword,
     makeVlogHoverContent,
     positionAfterEqual,
     getInstPortByPosition,
     getInstParamByPosition,
     makePortDesc,
     makeParamDesc,
+    makeNormalDesc,
     transferVlogNumber,
-    getSymbolComment,
-    getSymbolComments
+    searchCommentAround,
 };

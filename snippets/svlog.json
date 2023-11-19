@@ -546,7 +546,7 @@
     },
 
     "include": {
-		"prefix": "inc",
+		"prefix": "include",
 		"body": [
 			"`include \"$1\""
 		],
@@ -554,9 +554,9 @@
 	},
 
     "define": {
-		"prefix": "def",
+		"prefix": "define",
 		"body": [
-			"`def $1 = $2"
+			"`define $1 $2"
 		],
 		"description": "`define var = val"
 	},
@@ -772,9 +772,9 @@
 	},
 
 	"display":{
-		"prefix":"$display",
+		"prefix":"display",
 		"body":[
-			"$$display(\"${1}\"$2);$0"
+			"\\$display($0);"
 		],
 		"description":"$display(\"...\", params...)"
 	},
@@ -901,6 +901,24 @@
             "    $1",
             "}",
             "*/"
+        ]
+    },
+    "dumpfile": {
+        "prefix": "$dumpfile",
+        "body": [
+			"\\$dumpfile(\"$1\");"
+		]
+    },
+    "dumpvars": {
+        "prefix": "$dumpvars",
+        "body": [
+			"\\$dumpvars;"
+		]
+    },
+    "finish": {
+        "prefix": "$finish",
+        "body": [
+            "\\$finish;"
         ]
     }
 }

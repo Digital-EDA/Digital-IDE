@@ -1,0 +1,221 @@
+GATE $__ZERO 0 Y=CONST0;
+GATE $__ONE 0 Y=CONST1;
+
+GATE $__CC_BUF 5 Y=A;
+PIN * NONINV 1 9999 10 5 10 5
+
+GATE $__CC_NOT 0 Y=!A;
+PIN * INV 1 9999 10 5 10 5
+
+GATE $__CC_MUX 5 Y=((A*!C)+(B*C));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC2_A 10 Y=(A*B);
+PIN * NONINV 1 9999 10 5 10 5
+
+GATE $__CC3_A_O 12 Y=(E+(A*B));
+PIN * NONINV 1 9999 10 5 10 5
+
+GATE $__CC3_A_X 12 Y=((E*(!A+!B))+(!E*(A*B)));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC2_O 10 Y=(A+B);
+PIN * NONINV 1 9999 10 5 10 5
+
+GATE $__CC3_O_A 12 Y=(E*(A+B));
+PIN * NONINV 1 9999 10 5 10 5
+
+GATE $__CC3_O_X 12 Y=((E*(!A*!B))+(!E*(A+B)));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC2_X 10 Y=((A*!B)+(!A*B));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC3_X_A 12 Y=(E*((A*!B)+(!A*B)));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC3_X_O 12 Y=(E+((A*!B)+(!A*B)));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC3_AA 10 Y=((A*B)*C);
+PIN * NONINV 1 9999 10 5 10 5
+
+GATE $__CC4_AA_O 12 Y=(E+((A*B)*C));
+PIN * NONINV 1 9999 10 5 10 5
+
+GATE $__CC4_AA_X 12 Y=((E*((!A+!B)+!C))+(!E*((A*B)*C)));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC3_OO 10 Y=((A+B)+C);
+PIN * NONINV 1 9999 10 5 10 5
+
+GATE $__CC4_OO_A 12 Y=(E*((A+B)+C));
+PIN * NONINV 1 9999 10 5 10 5
+
+GATE $__CC4_OO_X 12 Y=((E*((!A*!B)*!C))+(!E*((A+B)+C)));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC3_XX 10 Y=((((A*!B)+(!A*B))*!C)+(((!A+B)*(A+!B))*C));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC4_XX_A 12 Y=(E*((((A*!B)+(!A*B))*!C)+(((!A+B)*(A+!B))*C)));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC4_XX_O 12 Y=(E+((((A*!B)+(!A*B))*!C)+(((!A+B)*(A+!B))*C)));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC3_AO 10 Y=((A*B)+C);
+PIN * NONINV 1 9999 10 5 10 5
+
+GATE $__CC4_AO_A 12 Y=(E*((A*B)+C));
+PIN * NONINV 1 9999 10 5 10 5
+
+GATE $__CC4_AO_O 12 Y=(E+((A*B)+C));
+PIN * NONINV 1 9999 10 5 10 5
+
+GATE $__CC4_AO_X 12 Y=((E*((!A+!B)*!C))+(!E*((A*B)+C)));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC3_OA 10 Y=((A+B)*C);
+PIN * NONINV 1 9999 10 5 10 5
+
+GATE $__CC4_OA_A 12 Y=(E*((A+B)*C));
+PIN * NONINV 1 9999 10 5 10 5
+
+GATE $__CC4_OA_O 12 Y=(E+((A+B)*C));
+PIN * NONINV 1 9999 10 5 10 5
+
+GATE $__CC4_OA_X 12 Y=((E*((!A*!B)+!C))+(!E*((A+B)*C)));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC3_AX 10 Y=(((A*B)*!C)+((!A+!B)*C));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC4_AX_A 12 Y=(E*(((A*B)*!C)+((!A+!B)*C)));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC4_AX_O 12 Y=(E+(((A*B)*!C)+((!A+!B)*C)));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC4_AX_X 12 Y=((E*(((!A+!B)+C)*((A*B)+!C)))+(!E*(((A*B)*!C)+((!A+!B)*C))));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC3_XA 10 Y=(((A*!B)+(!A*B))*C);
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC4_XA_A 12 Y=(E*(((A*!B)+(!A*B))*C));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC4_XA_O 12 Y=(E+(((A*!B)+(!A*B))*C));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC4_XA_X 12 Y=((E*(((!A+B)*(A+!B))+!C))+(!E*(((A*!B)+(!A*B))*C)));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC4_AAA 10 Y=((A*B)*(C*D));
+PIN * NONINV 1 9999 10 5 10 5
+
+GATE $__CC5_AAA_A 12 Y=(E*((A*B)*(C*D)));
+PIN * NONINV 1 9999 10 5 10 5
+
+GATE $__CC5_AAA_O 12 Y=(E+((A*B)*(C*D)));
+PIN * NONINV 1 9999 10 5 10 5
+
+GATE $__CC5_AAA_X 12 Y=((E*((!A+!B)+(!C+!D)))+(!E*((A*B)*(C*D))));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC4_AXA 10 Y=(((A*B)*(!C+!D))+((!A+!B)*(C*D)));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC5_AXA_A 12 Y=(E*(((A*B)*(!C+!D))+((!A+!B)*(C*D))));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC5_AXA_O 12 Y=(E+(((A*B)*(!C+!D))+((!A+!B)*(C*D))));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC5_AXA_X 12 Y=((E*(((!A+!B)+(C*D))*((A*B)+(!C+!D))))+(!E*(((A*B)*(!C+!D))+((!A+!B)*(C*D)))));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC4_XAX 10 Y=(((A*!B)+(!A*B))*((C*!D)+(!C*D)));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC5_XAX_A 12 Y=(E*(((A*!B)+(!A*B))*((C*!D)+(!C*D))));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC5_XAX_O 12 Y=(E+(((A*!B)+(!A*B))*((C*!D)+(!C*D))));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC5_XAX_X 12 Y=((E*(((!A+B)*(A+!B))+((!C+D)*(C+!D))))+(!E*(((A*!B)+(!A*B))*((C*!D)+(!C*D)))));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC4_AAX 10 Y=((A*B)*((C*!D)+(!C*D)));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC5_AAX_A 12 Y=(E*((A*B)*((C*!D)+(!C*D))));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC5_AAX_O 12 Y=(E+((A*B)*((C*!D)+(!C*D))));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC5_AAX_X 12 Y=((E*((!A+!B)+((!C+D)*(C+!D))))+(!E*((A*B)*((C*!D)+(!C*D)))));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC4_AXX 10 Y=(((A*B)*((!C+D)*(C+!D)))+((!A+!B)*((C*!D)+(!C*D))));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC5_AXX_A 12 Y=(E*(((A*B)*((!C+D)*(C+!D)))+((!A+!B)*((C*!D)+(!C*D)))));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC5_AXX_O 12 Y=(E+(((A*B)*((!C+D)*(C+!D)))+((!A+!B)*((C*!D)+(!C*D)))));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC5_AXX_X 12 Y=((E*(((!A+!B)+((C*!D)+(!C*D)))*((A*B)+((!C+D)*(C+!D)))))+(!E*(((A*B)*((!C+D)*(C+!D)))+((!A+!B)*((C*!D)+(!C*D))))));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC4_XXX 10 Y=((((A*!B)+(!A*B))*((!C+D)*(C+!D)))+(((!A+B)*(A+!B))*((C*!D)+(!C*D))));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC5_XXX_A 12 Y=(E*((((A*!B)+(!A*B))*((!C+D)*(C+!D)))+(((!A+B)*(A+!B))*((C*!D)+(!C*D)))));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC5_XXX_O 12 Y=(E+((((A*!B)+(!A*B))*((!C+D)*(C+!D)))+(((!A+B)*(A+!B))*((C*!D)+(!C*D)))));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC5_XXX_X 12 Y=((E*((((!A+B)*(A+!B))+((C*!D)+(!C*D)))*(((A*!B)+(!A*B))+((!C+D)*(C+!D)))))+(!E*((((A*!B)+(!A*B))*((!C+D)*(C+!D)))+(((!A+B)*(A+!B))*((C*!D)+(!C*D))))));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC4_AAO 10 Y=((A*B)*(C+D));
+PIN * NONINV 1 9999 10 5 10 5
+
+GATE $__CC5_AAO_A 12 Y=(E*((A*B)*(C+D)));
+PIN * NONINV 1 9999 10 5 10 5
+
+GATE $__CC5_AAO_O 12 Y=(E+((A*B)*(C+D)));
+PIN * NONINV 1 9999 10 5 10 5
+
+GATE $__CC5_AAO_X 12 Y=((E*((!A+!B)+(!C*!D)))+(!E*((A*B)*(C+D))));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC4_AOA 10 Y=((A*B)+(C*D));
+PIN * NONINV 1 9999 10 5 10 5
+
+GATE $__CC5_AOA_A 12 Y=(E*((A*B)+(C*D)));
+PIN * NONINV 1 9999 10 5 10 5
+
+GATE $__CC5_AOA_O 12 Y=(E+((A*B)+(C*D)));
+PIN * NONINV 1 9999 10 5 10 5
+
+GATE $__CC5_AOA_X 12 Y=((E*((!A+!B)*(!C+!D)))+(!E*((A*B)+(C*D))));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC4_AOX 10 Y=((A*B)+((C*!D)+(!C*D)));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC5_AOX_A 12 Y=(E*((A*B)+((C*!D)+(!C*D))));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC5_AOX_O 12 Y=(E+((A*B)+((C*!D)+(!C*D))));
+PIN * UNKNOWN 1 9999 10 5 10 5
+
+GATE $__CC5_AOX_X 12 Y=((E*((!A+!B)*((!C+D)*(C+!D))))+(!E*((A*B)+((C*!D)+(!C*D)))));
+PIN * UNKNOWN 1 9999 10 5 10 5

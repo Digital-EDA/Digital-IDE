@@ -1,0 +1,90 @@
+{
+    "scopeName": "digital-ide.output",
+    "name": "digital-ide-output",
+    "patterns": [
+        {
+            "name": "digital-ide.Info",
+            "match": "(\\[Info - (.*)\\])(.*)",
+            "captures": {
+                "1": {
+                    "name": "token.info-token"
+                },
+                "2": {
+                    "name": "string"
+                }
+            }
+        },
+        {
+            "name": "digital-ide.Error",
+            "match": "(\\[Error - (.*)\\])(.*)",
+            "captures": {
+                "1": {
+                    "name": "token.error-token"
+                },
+                "2": {
+                    "name": "string"
+                },
+                "3": {
+                    "name": "token.error-token"
+                }
+            }
+        },
+        {
+            "name": "digital-ide.Warn",
+            "match": "(\\[Warn - (.*)\\])(.*)",
+            "captures": {
+                "1": {
+                    "name": "token.warn-token"
+                },
+                "2": {
+                    "name": "string"
+                },
+                "3": {
+                    "name": "token.warn-token"
+                }
+            }
+        },
+        {
+            "name": "digital-ide.Debug",
+            "match": "(\\[Debug - (.*)\\])([\\s\\S]*)",
+            "captures": {
+                "1": {
+                    "name": "token.debug-token"
+                },
+                "2": {
+                    "name": "string"
+                },
+                "3": {
+                    "name": "token.debug-token"
+                }
+            }
+        },
+        {
+            "name": "digital-ide.Run",
+            "match": "(\\[Run - (.*)\\])([\\s\\S]*)",
+            "captures": {
+                "1": {
+                    "name": "token.info-token"
+                },
+                "2": {
+                    "name": "string"
+                }
+            }
+        },
+        {
+            "name": "string.quoted.double",
+            "begin": "\"",
+            "beginCaptures": {
+                "0": {
+                    "name": "string"
+                }
+            },
+            "end": "\"",
+            "endCaptures": {
+                "0": {
+                    "name": "string"
+                }
+            }
+        }
+    ]
+}

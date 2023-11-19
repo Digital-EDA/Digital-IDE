@@ -452,6 +452,10 @@
 				"title": "%digital-ide.lsp.tool.transformOldPropertyFile.title%",
 				"category": "Digital-IDE"
 			},
+            {
+                "command": "digital-ide.lsp.verilog.linter",
+                "title": "%digital-ide.lsp.verilog.linter.title%"
+            },
 			{
 				"command": "digital-ide.vhdl2vlog",
 				"title": "%digital-ide.vhdl2vlog.title%",
@@ -685,13 +689,22 @@
 					".xdc",
 					".fdc"
 				],
-				"configuration": "./config/tcl.configuration.json"
+				"configuration": "./config/tcl.configuration.json",
+                "icon": {
+                    "dark": "./images/svg/dark/tcl.svg",
+                    "light": "./images/svg/light/tcl.svg"
+                }
 			},
 			{
 				"id": "bd",
 				"extensions": [
 					".bd"
-				]
+				],
+                "configuration": "./config/bd.configuration.json",
+                "icon": {
+                    "dark": "./images/svg/dark/bd.svg",
+                    "light": "./images/svg/light/bd.svg"
+                }
 			},
 			{
 				"id": "vhdl",
@@ -705,7 +718,11 @@
 					".vho",
 					".vht"
 				],
-				"configuration": "./config/vhdl.configuration.json"
+				"configuration": "./config/vhdl.configuration.json",
+                "icon": {
+                    "dark": "./images/svg/dark/vhdl.svg",
+                    "light": "./images/svg/light/vhdl.svg"
+                }
 			},
 			{
 				"id": "verilog",
@@ -719,7 +736,11 @@
 					".vh",
 					".vl"
 				],
-				"configuration": "./config/verilog.configuration.json"
+				"configuration": "./config/verilog.configuration.json",
+                "icon": {
+                    "dark": "./images/svg/dark/verilog.svg",
+                    "light": "./images/svg/light/verilog.svg"
+                }
 			},
 			{
 				"id": "systemverilog",
@@ -731,7 +752,11 @@
 					".sv",
 					".SV"
 				],
-				"configuration": "./config/systemverilog.configuration.json"
+				"configuration": "./config/systemverilog.configuration.json",
+                "icon": {
+                    "dark": "./images/svg/dark/systemverilog.svg",
+                    "light": "./images/svg/light/systemverilog.svg"
+                }
 			},
 			{
 				"id": "arm",

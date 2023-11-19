@@ -123,9 +123,40 @@ const systemverilogKeyword = new Keywords([
 );
 
 
+const tclKeyword = new Keywords([
+    'create_clock',  
+    'set_clock_uncertainty',  
+    'create_reset',  
+    'set_initial_state',  
+    'create_sync',  
+    'create_source_sync',  
+    'create_launch_bar',  
+    'connect_port',  
+    'set_signal_type',  
+    'set_edge_detect',  
+    'set_delay',  
+    'create_generated_clock',  
+    'create_programmable_logic',  
+    'create_lookup_table',  
+    'create_shift_register',  
+    'create_counter',  
+    'create_multiplier',  
+    'create_divider',  
+    'create_comparator',  
+    'create_register',  
+    'create_flop',  
+    'connect_power_pin',  
+    'connect_ground_pin',
+    'set_property'
+],
+[],
+[]
+);
+
 
 export {
     vlogKeyword,
     vhdlKeyword,
-    systemverilogKeyword
+    systemverilogKeyword,
+    tclKeyword
 };

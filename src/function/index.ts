@@ -60,6 +60,7 @@ function registerLsp(context: vscode.ExtensionContext) {
     const vlogSelector: vscode.DocumentSelector = {scheme: 'file', language: 'verilog'};
     const svlogSelector: vscode.DocumentSelector = {scheme: 'file', language: 'systemverilog'};
     const vhdlSelector: vscode.DocumentSelector = {scheme: 'file', language: 'vhdl'};
+    const tclSelector: vscode.DocumentSelector = {scheme: 'file', language: 'tcl'};
 
     // formatter
     vscode.languages.registerDocumentFormattingEditProvider(vlogSelector, lspFormatter.hdlFormatterProvider);
@@ -79,10 +80,14 @@ function registerLsp(context: vscode.ExtensionContext) {
     vscode.languages.registerCompletionItemProvider(vlogSelector, lspCompletion.vlogCompletionProvider);
     vscode.languages.registerDocumentSemanticTokensProvider(vlogSelector, lspDocSemantic.vlogDocSenmanticProvider, lspDocSemantic.vlogLegend);
 
+    // tcl lsp
+    vscode.languages.registerCompletionItemProvider(tclSelector, lspCompletion.tclCompletionProvider);
+
     lspLinter.vlogLinter.initialise();
     lspCore.hdlSymbolStorage.initialise();
     
     // vhdl lsp
+    
 }
 
 

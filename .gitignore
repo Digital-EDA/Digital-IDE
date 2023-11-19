@@ -1,6 +1,7 @@
 out
 dist
 node_modules
+script/__pycache__
 .vscode-test/
 *.vsix
 parser_stuck.v

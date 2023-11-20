@@ -454,8 +454,37 @@
 			},
             {
                 "command": "digital-ide.lsp.verilog.linter",
-                "title": "%digital-ide.lsp.verilog.linter.title%"
+                "title": "%digital-ide.lsp.verilog.linter.title%",
+                "type": "string",
+                "enum": [
+                    "vivado",
+                    "modelsim",
+                    "default"
+                ],
+                "category": "Digital-IDE"
             },
+            {
+                "command": "digital-ide.lsp.vhdl.linter",
+                "title": "%digital-ide.lsp.vhdl.linter.title%",
+                "type": "string",
+                "enum": [
+                    "vivado",
+                    "modelsim",
+                    "default"
+                ],
+                "category": "Digital-IDE"
+            },
+            {
+                "command": "digital-ide.lsp.systemverilog.linter",
+                "title": "%digital-ide.lsp.systemverilog.linter.title%",
+                "type": "string",
+                "enum": [
+                    "vivado",
+                    "modelsim",
+                    "default"
+                ],
+                "category": "Digital-IDE"
+            }, 
 			{
 				"command": "digital-ide.vhdl2vlog",
 				"title": "%digital-ide.vhdl2vlog.title%",

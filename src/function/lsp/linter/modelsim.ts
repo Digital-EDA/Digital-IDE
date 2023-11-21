@@ -8,7 +8,7 @@ import { easyExec } from "../../../global/util";
 import { BaseLinter } from "./base";
 import { HdlLangID } from "../../../global/enum";
 
-class VivadoLinter implements BaseLinter {
+class ModelsimLinter implements BaseLinter {
     diagnostic: vscode.DiagnosticCollection;
     executableFileMap: Map<HdlLangID, string | undefined> = new Map<HdlLangID, string>();
     executableInvokeNameMap: Map<HdlLangID, string | undefined> = new Map<HdlLangID, string>();
@@ -142,5 +142,5 @@ class VivadoLinter implements BaseLinter {
 
 
 export {
-    VivadoLinter
+    ModelsimLinter
 };

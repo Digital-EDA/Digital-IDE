@@ -1,5 +1,8 @@
-import { vlogLinter } from './vlog';
+import { vlogLinterManager } from './vlog';
+import { vhdlLinterManager } from './vhdl';
+
 
 export {
-    vlogLinter
+    vlogLinterManager,
+    vhdlLinterManager
 };

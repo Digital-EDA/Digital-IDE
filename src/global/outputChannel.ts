@@ -74,10 +74,12 @@ class Output {
 }
 
 const MainOutput = new Output('Digital-IDE');
+const LspOutput = new Output('Digital-IDE Language Server');
 const YosysOutput = new Output('Yosys');
 
 export {
     ReportType,
     MainOutput,
+    LspOutput,
     YosysOutput
 };

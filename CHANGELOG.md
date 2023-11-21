@@ -14,8 +14,8 @@ Bug 修复
 Feat
 - 增加对 XDC，TCL 等脚本的 LSP 支持
 - 增加 verilog, vhdl, xdc, tcl 等语言的图标
-- 增加对于 vivado 的支持，用户可以通过添加 vivado 路径的方式来使用 vivado 的仿真和自动纠错
-
+- 增加对于 vivado 的支持，用户可以通过添加 vivado 路径的方式（或者将 bin 文件夹添加到环境变量，默认路径为 C:\Xilinx\Vivado\2018.3\bin）来使用 vivado 的仿真和自动纠错
+- 增加对于 modelsim 的支持，用户可以通过添加 modelsim 安装路径（或者将 bin 文件夹添加到环境变量，默认路径为 C:\modeltech64_10.4\win64）来使用 vivado 的仿真和自动纠错
 
 ## [0.1.23] - 2022-12-24
 - Finish the css of documentation, see `./css/documentation.css` for detail.

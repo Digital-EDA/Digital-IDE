@@ -18,15 +18,15 @@ class ModelsimLinter implements BaseLinter {
         this.diagnostic = vscode.languages.createDiagnosticCollection();
         
         // configure map for executable file name
-        this.executableFileMap.set(HdlLangID.Verilog, 'xvlog');
-        this.executableFileMap.set(HdlLangID.Vhdl, 'xvhdl');
-        this.executableFileMap.set(HdlLangID.SystemVerilog, 'xvlog');
+        this.executableFileMap.set(HdlLangID.Verilog, 'vlog');
+        this.executableFileMap.set(HdlLangID.Vhdl, 'vcom');
+        this.executableFileMap.set(HdlLangID.SystemVerilog, 'vlog');
         this.executableFileMap.set(HdlLangID.Unknown, undefined);
 
         // configure map for argruments when lintering
-        this.linterArgsMap.set(HdlLangID.Verilog, ['--nolog']);
-        this.linterArgsMap.set(HdlLangID.Vhdl, ['--nolog']);
-        this.linterArgsMap.set(HdlLangID.SystemVerilog, ['--sv', '--nolog']);
+        this.linterArgsMap.set(HdlLangID.Verilog, ['-quiet', '-nologo']);
+        this.linterArgsMap.set(HdlLangID.Vhdl, ['-quiet', '-nologo', '-2008']);
+        this.linterArgsMap.set(HdlLangID.SystemVerilog, ['-quiet', '-nolog', '-sv']);
         this.linterArgsMap.set(HdlLangID.Unknown, []);
         
         this.initialise(HdlLangID.Verilog);
@@ -61,17 +61,22 @@ class ModelsimLinter implements BaseLinter {
     private provideDiagnostics(document: vscode.TextDocument, stdout: string): vscode.Diagnostic[] {
         const diagnostics = [];
         for (const line of stdout.split('\n')) {
-            const tokens = line.split(/:?\s*(?:\[|\])\s*/);
+            const tokens = line.split(/(Error|Warning).+?(?: *?(?:.+?(?:\\|\/))+.+?\((\d+?)\):|)(?: *?near "(.+?)":|)(?: *?\((.+?)\)|) +?(.+)/gm);
+            
+
             const headerInfo = tokens[0];
-            // const standardInfo = tokens[1];
-            const syntaxInfo = tokens[2];
-            const parsedPath = tokens[3];
-            if (headerInfo === 'ERROR') {
-                const errorInfos = parsedPath.split(':');
-                const errorLine = parseInt(errorInfos[errorInfos.length - 1]);
+            if (headerInfo === 'Error') {
+                const errorLine = parseInt(tokens[2]) - 1;
+                const syntaxInfo = tokens[5];
                 const range = this.makeCorrectRange(document, errorLine);
                 const diag = new vscode.Diagnostic(range, syntaxInfo, vscode.DiagnosticSeverity.Error);
                 diagnostics.push(diag);
+            } else if (headerInfo == 'Warning') {
+                const errorLine = parseInt(tokens[2]) - 1;
+                const syntaxInfo = tokens[5];
+                const range = this.makeCorrectRange(document, errorLine);
+                const diag = new vscode.Diagnostic(range, syntaxInfo, vscode.DiagnosticSeverity.Warning);
+                diagnostics.push(diag);  
             }
         }
         return diagnostics;

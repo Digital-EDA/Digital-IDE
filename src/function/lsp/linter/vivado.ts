@@ -29,9 +29,9 @@ class VivadoLinter implements BaseLinter {
         this.linterArgsMap.set(HdlLangID.SystemVerilog, ['--sv', '--nolog']);
         this.linterArgsMap.set(HdlLangID.Unknown, []);
         
-        this.initialise(HdlLangID.Verilog);
-        this.initialise(HdlLangID.Vhdl);
-        this.initialise(HdlLangID.SystemVerilog);
+        // this.initialise(HdlLangID.Verilog);
+        // this.initialise(HdlLangID.Vhdl);
+        // this.initialise(HdlLangID.SystemVerilog);
     }
 
         
@@ -40,10 +40,15 @@ class VivadoLinter implements BaseLinter {
         const langID = hdlFile.getLanguageId(filePath);
 
         // acquire install path
-        const args = [hdlPath.toSlash(filePath), ...this.linterArgsMap];
+        const linterArgs = this.linterArgsMap.get(langID);
+        if (linterArgs === undefined) {
+            return;
+        }
+
+        const args = [filePath, ...linterArgs];
         const executor = this.executableInvokeNameMap.get(langID);
         if (executor !== undefined) {
-            const { stdout, stderr } = await easyExec(executor, args);
+            const { stdout } = await easyExec(executor, args);
             if (stdout.length > 0) {
                 const diagnostics = this.provideDiagnostics(document, stdout);
                 this.diagnostic.set(document.uri, diagnostics);
@@ -122,7 +127,7 @@ class VivadoLinter implements BaseLinter {
         if (executorPath === undefined) {
             return false;
         }
-        const { stdout, stderr } = await easyExec(executorPath, []);
+        const { stderr } = await easyExec(executorPath, []);
         if (stderr.length === 0) {
             this.executableInvokeNameMap.set(langID, undefined);
             LspOutput.report(`fail to execute ${executorPath}! Reason: ${stderr}`, ReportType.Error);
@@ -140,7 +145,9 @@ class VivadoLinter implements BaseLinter {
     }
 }
 
+const vivadoLinter = new VivadoLinter();
 
 export {
+    vivadoLinter,
     VivadoLinter
 };

@@ -60,7 +60,13 @@
                     "scope": "window",
                     "type": "string",
                     "default": "",
-                    "description": "set the xilinx install path. \n e.g. : D:/APP/vivado_18_3/Vivado/2018.3/bin \n Default path is C:/Xilinx/Vivado/2018.3/bin \n This applies only to WIN For other systems, add it to environment variables"
+                    "description": "Set the xilinx install path. Ignore this setting if you add relative path to environment variable PATH \n e.g. : D:/APP/vivado_18_3/Vivado/2018.3/bin \n Default path is C:/Xilinx/Vivado/2018.3/bin"
+                },
+                "prj.modelsim.install.path": {
+                    "scope": "window",
+                    "type": "string",
+                    "default": "",
+                    "description": "set the modelsim install path. Ignore this setting if you add relative path to environment variable PATH \n Default path is C:/modeltech64_10.4/win64"
                 },
                 "prj.xilinx.IP.repo.path": {
                     "scope": "window",

@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { All } from '../../../../resources/hdlParser';
 import { isVerilogFile, isVhdlFile } from '../../../hdlFs/file';
-import { Position, Range } from '../../../hdlParser/common';
+import { Position } from '../../../hdlParser/common';
 import { hdlSymbolStorage } from '../core';
 import { BaseLinter } from './base';
 import { LspOutput, ReportType } from '../../../global';
@@ -159,7 +159,12 @@ class DefaultVHDLLinter implements BaseLinter {
     }
 }
 
+const defaultVlogLinter = new DefaultVlogLinter();
+const defaultVHDLLinter = new DefaultVHDLLinter();
+
 export {
+    defaultVlogLinter,
+    defaultVHDLLinter,
     DefaultVlogLinter,
     DefaultVHDLLinter
 };

@@ -9,6 +9,7 @@ interface BaseManager {
     initialise(): Promise<void>;
 }
 
+
 export {
     BaseLinter,
     BaseManager

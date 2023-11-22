@@ -8,7 +8,7 @@ import { easyExec } from "../../../global/util";
 import { BaseLinter } from "./base";
 import { HdlLangID } from "../../../global/enum";
 
-class ModelsimLinter implements BaseLinter {
+class VerilatorLinter implements BaseLinter {
     diagnostic: vscode.DiagnosticCollection;
     executableFileMap: Map<HdlLangID, string | undefined> = new Map<HdlLangID, string>();
     executableInvokeNameMap: Map<HdlLangID, string | undefined> = new Map<HdlLangID, string>();
@@ -18,15 +18,13 @@ class ModelsimLinter implements BaseLinter {
         this.diagnostic = vscode.languages.createDiagnosticCollection();
         
         // configure map for executable file name
-        this.executableFileMap.set(HdlLangID.Verilog, 'vlog');
-        this.executableFileMap.set(HdlLangID.Vhdl, 'vcom');
-        this.executableFileMap.set(HdlLangID.SystemVerilog, 'vlog');
+        this.executableFileMap.set(HdlLangID.Verilog, 'verilator');
+        this.executableFileMap.set(HdlLangID.SystemVerilog, 'verilator');
         this.executableFileMap.set(HdlLangID.Unknown, undefined);
 
         // configure map for argruments when lintering
-        this.linterArgsMap.set(HdlLangID.Verilog, ['-quiet', '-nologo']);
-        this.linterArgsMap.set(HdlLangID.Vhdl, ['-quiet', '-nologo', '-2008']);
-        this.linterArgsMap.set(HdlLangID.SystemVerilog, ['-quiet', '-nolog', '-sv']);
+        this.linterArgsMap.set(HdlLangID.Verilog, ['--lint-only', '-Wall', '-bbox-sys', '--bbox-unsup', '-DGLBL']);
+        this.linterArgsMap.set(HdlLangID.SystemVerilog, ['--lint-only', '-sv', '-Wall', '-bbox-sys', '--bbox-unsup', '-DGLBL']);
         this.linterArgsMap.set(HdlLangID.Unknown, []);
     }
 
@@ -51,7 +49,7 @@ class ModelsimLinter implements BaseLinter {
                 this.diagnostic.set(document.uri, diagnostics);
             }
         } else {
-            LspOutput.report('linter is not available, please check prj.modelsim.install.path in your setting', ReportType.Error);
+            LspOutput.report('linter is not available, please check prj.verilator.install.path in your setting', ReportType.Error);
         }
     }
 
@@ -64,8 +62,8 @@ class ModelsimLinter implements BaseLinter {
         const diagnostics = [];
         for (const line of stdout.split('\n')) {
             const tokens = line.split(/(Error|Warning).+?(?: *?(?:.+?(?:\\|\/))+.+?\((\d+?)\):|)(?: *?near "(.+?)":|)(?: *?\((.+?)\)|) +?(.+)/gm);
-            
-            
+            // TODO : make parser of output info from verilator
+
             const headerInfo = tokens[0];
             if (headerInfo === 'Error') {
                 const errorLine = parseInt(tokens[2]) - 1;
@@ -95,9 +93,9 @@ class ModelsimLinter implements BaseLinter {
     }
 
     private getExecutableFilePath(langID: HdlLangID): string | Path | undefined {
-        // modelsim install path stored in prj.modelsim.install.path
-        const modelsimConfig = vscode.workspace.getConfiguration('prj.modelsim');
-        const modelsimInstallPath = modelsimConfig.get('install.path', '');
+        // verilator install path stored in prj.verilator.install.path
+        const verilatorConfig = vscode.workspace.getConfiguration('prj.verilator');
+        const verilatorInstallPath = verilatorConfig.get('install.path', '');
         const executorName = this.executableFileMap.get(langID);
         if (executorName === undefined) {
             return undefined;
@@ -106,15 +104,15 @@ class ModelsimLinter implements BaseLinter {
         // e.g. vlog.exe in windows, vlog in linux
         const fullExecutorName = opeParam.os === 'win32' ? executorName + '.exe' : executorName;
         
-        if (modelsimInstallPath.trim() === '' || !fs.existsSync(modelsimInstallPath)) {
-            LspOutput.report(`User's modelsim Install Path ${modelsimInstallPath}, which is invalid. Use ${executorName} in default.`, ReportType.Warn);
-            LspOutput.report('If you have doubts, check prj.modelsim.install.path in setting', ReportType.Warn);
+        if (verilatorInstallPath.trim() === '' || !fs.existsSync(verilatorInstallPath)) {
+            LspOutput.report(`User's verilator Install Path ${verilatorInstallPath}, which is invalid. Use ${executorName} in default.`, ReportType.Warn);
+            LspOutput.report('If you have doubts, check prj.verilator.install.path in setting', ReportType.Warn);
             return executorName;
         } else {
-            LspOutput.report(`User's modelsim Install Path ${modelsimInstallPath}, which is invalid`);
+            LspOutput.report(`User's verilator Install Path ${verilatorInstallPath}, which is invalid`);
             
             const executorPath = hdlPath.join(
-                hdlPath.toSlash(modelsimInstallPath),
+                hdlPath.toSlash(verilatorInstallPath),
                 fullExecutorName
             );
             // prevent path like C://stupid name/xxx/xxx/bin
@@ -136,7 +134,7 @@ class ModelsimLinter implements BaseLinter {
             return false;
         } else {
             this.executableInvokeNameMap.set(langID, executorPath);
-            LspOutput.report(`success to verify ${executorPath}, linter from modelsim is ready to go!`, ReportType.Launch);
+            LspOutput.report(`success to verify ${executorPath}, linter from verilator is ready to go!`, ReportType.Launch);
             return true;
         }
     }
@@ -147,9 +145,9 @@ class ModelsimLinter implements BaseLinter {
     }
 }
 
-const modelsimLinter = new ModelsimLinter()
+const verilatorLinter = new VerilatorLinter();
 
 export {
-    modelsimLinter,
-    ModelsimLinter
+    verilatorLinter,
+    VerilatorLinter
 };

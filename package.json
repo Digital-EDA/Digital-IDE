@@ -33,11 +33,6 @@
         "Snippets"
     ],
     "activationEvents": [
-        "onLanguage:verilog",
-        "onLanguage:vhdl",
-        "onLanguage:systemverilog",
-        "onCommand:digital-ide.property-json.generate",
-        "onCommand:digital-ide.property-json.overwrite",
         "workspaceContains:.vscode/property.json"
     ],
     "contributes": {
@@ -832,6 +827,21 @@
                 "configuration": "./config/link.configuration.json"
             },
             {
+                "id": "vvp",
+                "aliases": [
+                    "VivadoVerificationPlan"
+                ],
+                "extensions": [
+                    ".vvp",
+                    ".VVP"
+                ],
+                "configuration": "./config/vvp.configuration.json",
+                "icon": {
+                    "dark": "./images/svg/dark/vvp.svg",
+                    "light": "./images/svg/light/vvp.svg"
+                }
+            },
+            {
                 "id": "digital-ide-output",
                 "mimetypes": [
                     "text/x-code-output"
@@ -863,7 +873,7 @@
             {
                 "language": "vhdl",
                 "scopeName": "source.vhdl",
-                "path": "./syntaxes/vhdl.json"
+                "path": "./syntaxes/vhdl.tmLanguage.json"
             },
             {
                 "language": "verilog",
@@ -874,6 +884,11 @@
                 "language": "systemverilog",
                 "scopeName": "source.systemverilog",
                 "path": "./syntaxes/systemverilog.json"
+            },
+            {
+                "language": "vvp",
+                "scopeName": "source.vvp",
+                "path": "./syntaxes/vvp.tmLanguage.json"
             },
             {
                 "language": "digital-ide-output",

@@ -54,8 +54,12 @@ class VivadoLinter implements BaseLinter {
                 this.diagnostic.set(document.uri, diagnostics);
             }
         } else {
-            LspOutput.report('linter is not available, please check prj.vivado.install.path in your setting', ReportType.Error);
+            LspOutput.report('vivado linter is not available, please check prj.vivado.install.path in your setting', ReportType.Error, true);
         }
+    }
+
+    async remove(uri: vscode.Uri) {
+        this.diagnostic.delete(uri);
     }
 
     /**
@@ -65,7 +69,7 @@ class VivadoLinter implements BaseLinter {
      */
     private provideDiagnostics(document: vscode.TextDocument, stdout: string): vscode.Diagnostic[] {
         const diagnostics = [];
-        for (const line of stdout.split('\n')) {
+        for (const line of stdout.split(/\r?\n/g)) {
             const tokens = line.split(/:?\s*(?:\[|\])\s*/);
             const headerInfo = tokens[0];
             // const standardInfo = tokens[1];
@@ -73,8 +77,10 @@ class VivadoLinter implements BaseLinter {
             const parsedPath = tokens[3];
             if (headerInfo === 'ERROR') {
                 const errorInfos = parsedPath.split(':');
-                const errorLine = parseInt(errorInfos[errorInfos.length - 1]);
-                const range = this.makeCorrectRange(document, errorLine);
+                const errorLine = Math.max(parseInt(errorInfos[errorInfos.length - 1]) - 1, 0);
+                LspOutput.report(`<xvlog linter> line: ${errorLine}, info: ${syntaxInfo}`, ReportType.Run);
+
+                const range = this.makeCorrectRange(document, errorLine, syntaxInfo);
                 const diag = new vscode.Diagnostic(range, syntaxInfo, vscode.DiagnosticSeverity.Error);
                 diagnostics.push(diag);
             }
@@ -82,8 +88,32 @@ class VivadoLinter implements BaseLinter {
         return diagnostics;
     }
 
-    private makeCorrectRange(document: vscode.TextDocument, line: number): vscode.Range {
+    private makeCorrectRange(document: vscode.TextDocument, line: number, syntaxInfo: string): vscode.Range {
+        // extract all the words like 'adawwd' in a syntax info
+        const singleQuoteWords = syntaxInfo.match(/'([^']*)'/g);
+        if (singleQuoteWords && singleQuoteWords.length > 0) {
+            const targetWord = singleQuoteWords.map(val => val.replace(/'/g, ''))[0];
+            // find range of target word
+            const textLine = document.lineAt(line);
+            const text = textLine.text;
+            const startCharacter = text.indexOf(targetWord);
+            if (startCharacter > -1) {
+                const endCharacter = startCharacter + targetWord.length;
+                const range = new vscode.Range(
+                    new vscode.Position(line, startCharacter),
+                    new vscode.Position(line, endCharacter)
+                );
+                return range;
+            }
+        }
+
+        // else target the first word in the line
+        return this.makeCommonRange(document, line, syntaxInfo);
+    }
+
+    private makeCommonRange(document: vscode.TextDocument, line: number, syntaxInfo: string): vscode.Range {
         const startPosition = new vscode.Position(line, 0);
+            
         const wordRange = document.getWordRangeAtPosition(startPosition, /[`_0-9a-zA-Z]+/);
         if (wordRange) {
             return wordRange;
@@ -105,11 +135,11 @@ class VivadoLinter implements BaseLinter {
         const fullExecutorName = opeParam.os === 'win32' ? executorName + '.bat' : executorName;
         
         if (vivadoInstallPath.trim() === '' || !fs.existsSync(vivadoInstallPath)) {
-            LspOutput.report(`User's Vivado Install Path ${vivadoInstallPath}, which is invalid. Use ${executorName} in default.`, ReportType.Warn);
+            LspOutput.report(`User's Vivado Install Path "${vivadoInstallPath}", which is invalid. Use ${executorName} in default.`, ReportType.Warn);
             LspOutput.report('If you have doubts, check prj.vivado.install.path in setting', ReportType.Warn);
             return executorName;
         } else {
-            LspOutput.report(`User's Vivado Install Path ${vivadoInstallPath}, which is invalid`);
+            LspOutput.report(`User's Vivado Install Path "${vivadoInstallPath}", which is invalid`);
             
             const executorPath = hdlPath.join(
                 hdlPath.toSlash(vivadoInstallPath),
@@ -129,19 +159,19 @@ class VivadoLinter implements BaseLinter {
         }
         const { stderr } = await easyExec(executorPath, []);
         if (stderr.length === 0) {
-            this.executableInvokeNameMap.set(langID, undefined);
-            LspOutput.report(`fail to execute ${executorPath}! Reason: ${stderr}`, ReportType.Error);
-            return false;
-        } else {
             this.executableInvokeNameMap.set(langID, executorPath);
             LspOutput.report(`success to verify ${executorPath}, linter from vivado is ready to go!`, ReportType.Launch);
             return true;
+        } else {
+            this.executableInvokeNameMap.set(langID, undefined);
+            LspOutput.report(`fail to execute ${executorPath}! Reason: ${stderr}`, ReportType.Error, true);
+            return false;
         }
     }
 
-    public initialise(langID: HdlLangID) {
+    public async initialise(langID: HdlLangID): Promise<boolean> {
         const executorPath = this.getExecutableFilePath(langID);
-        this.setExecutableFilePath(executorPath, langID);
+        return this.setExecutableFilePath(executorPath, langID);
     }
 }
 

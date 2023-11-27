@@ -12,9 +12,9 @@ import { hdlParam, HdlSymbol } from '../hdlParser';
 import { prjManage } from '../manager';
 import { libManage } from '../manager/lib';
 import type { HdlMonitor } from './index';
-import { ToolChainType } from '../global/enum';
+import { HdlLangID, ToolChainType } from '../global/enum';
 import { hdlSymbolStorage } from '../function/lsp/core';
-import { vlogLinter } from '../function/lsp/linter';
+import { vlogLinterManager, vhdlLinterManager } from '../function/lsp/linter';
 import { isVerilogFile } from '../hdlFs/file';
 
 enum Event {
@@ -98,7 +98,12 @@ class HdlAction extends BaseAction {
         }
 
         const uri = vscode.Uri.file(path);
-        vlogLinter.remove(uri);
+        const langID = hdlFile.getLanguageId(path);
+        if (langID === HdlLangID.Verilog) {
+            vlogLinterManager.remove(uri);
+        } else if (langID === HdlLangID.Vhdl) {
+            vhdlLinterManager.remove(uri);
+        }
     }
 
     async unlinkDir(path: string, m: HdlMonitor): Promise<void> {
@@ -128,10 +133,16 @@ class HdlAction extends BaseAction {
     }
 
     async updateLinter(path: string) {
-        if (isVerilogFile(path)) {
-            const uri = vscode.Uri.file(path);
-            const document = await vscode.workspace.openTextDocument(uri);
-            vlogLinter.lint(document);
+        const uri = vscode.Uri.file(path);
+        const document = await vscode.workspace.openTextDocument(uri);
+        const langID = hdlFile.getLanguageId(path);
+
+        if (langID === HdlLangID.Verilog) {
+            vlogLinterManager.lint(document);
+        } else if (langID === HdlLangID.Vhdl) {
+            vhdlLinterManager.lint(document);
+        } else if (langID === HdlLangID.SystemVerilog) {
+            // TODO
         }
     }
 

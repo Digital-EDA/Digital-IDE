@@ -72,6 +72,18 @@
             }
         },
         {
+            "name": "digital-ide.Launch",
+            "match": "(\\[Launch - (.*)\\])([\\s\\S]*)",
+            "captures": {
+                "1": {
+                    "name": "keyword.launch-token"
+                },
+                "2": {
+                    "name": "string"
+                }
+            }
+        },
+        {
             "name": "string.quoted.double",
             "begin": "\"",
             "beginCaptures": {

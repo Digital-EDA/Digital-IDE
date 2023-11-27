@@ -78,16 +78,23 @@ function registerLsp(context: vscode.ExtensionContext) {
     vscode.languages.registerCompletionItemProvider(vlogSelector, lspCompletion.vlogMacroCompletionProvider, '`');
     vscode.languages.registerCompletionItemProvider(vlogSelector, lspCompletion.vlogPositionPortProvider, '.');
     vscode.languages.registerCompletionItemProvider(vlogSelector, lspCompletion.vlogCompletionProvider);
-    vscode.languages.registerDocumentSemanticTokensProvider(vlogSelector, lspDocSemantic.vlogDocSenmanticProvider, lspDocSemantic.vlogLegend);
+    // vscode.languages.registerDocumentSemanticTokensProvider(vlogSelector, lspDocSemantic.vlogDocSenmanticProvider, lspDocSemantic.vlogLegend);
+
+
+    
+    // vhdl lsp
+    
+    vscode.languages.registerCompletionItemProvider(vhdlSelector, lspCompletion.vhdlCompletionProvider);
+    
 
     // tcl lsp
     vscode.languages.registerCompletionItemProvider(tclSelector, lspCompletion.tclCompletionProvider);
 
-    lspLinter.vlogLinter.initialise();
+    // lsp linter
+    // make first symbols in workspace
     lspCore.hdlSymbolStorage.initialise();
-    
-    // vhdl lsp
-    
+    lspLinter.vlogLinterManager.initialise();
+    lspLinter.vhdlLinterManager.initialise();
 }
 
 

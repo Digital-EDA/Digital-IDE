@@ -43,14 +43,18 @@ class VerilatorLinter implements BaseLinter {
         const args = [filePath, ...linterArgs];
         const executor = this.executableInvokeNameMap.get(langID);
         if (executor !== undefined) {
-            const { stdout } = await easyExec(executor, args);
-            if (stdout.length > 0) {
-                const diagnostics = this.provideDiagnostics(document, stdout);
+            const { stderr } = await easyExec(executor, args);
+            if (stderr.length > 0) {
+                const diagnostics = this.provideDiagnostics(document, stderr);
                 this.diagnostic.set(document.uri, diagnostics);
             }
         } else {
-            LspOutput.report('linter is not available, please check prj.verilator.install.path in your setting', ReportType.Error);
+            LspOutput.report('verilator linter is not available, please check prj.verilator.install.path in your setting', ReportType.Error, true);
         }
+    }
+
+    async remove(uri: vscode.Uri) {
+        this.diagnostic.delete(uri);
     }
 
     /**
@@ -58,32 +62,40 @@ class VerilatorLinter implements BaseLinter {
      * @param stdout stdout from xvlog
      * @returns { vscode.Diagnostic[] } linter info
      */
-    private provideDiagnostics(document: vscode.TextDocument, stdout: string): vscode.Diagnostic[] {
+    private provideDiagnostics(document: vscode.TextDocument, stderr: string): vscode.Diagnostic[] {
         const diagnostics = [];
-        for (const line of stdout.split('\n')) {
-            const tokens = line.split(/(Error|Warning).+?(?: *?(?:.+?(?:\\|\/))+.+?\((\d+?)\):|)(?: *?near "(.+?)":|)(?: *?\((.+?)\)|) +?(.+)/gm);
-            // TODO : make parser of output info from verilator
+        for (let line of stderr.split(/\r?\n/g)) {
+            if (!line.startsWith('%')) {
+                continue;
+            } else {
+                line = line.substring(1);
+            }
+    
+            const tokens = line.split(':');
+            if (tokens.length < 3) {
+                continue;
+            }
+            const header = tokens[0].toLowerCase();
+            const fileName = tokens[1];
+            const lineNo = parseInt(tokens[2]) - 1;
+            const characterNo = parseInt(tokens[3]) - 1;
+            const syntaxInfo = tokens[4];
 
-            const headerInfo = tokens[0];
-            if (headerInfo === 'Error') {
-                const errorLine = parseInt(tokens[2]) - 1;
-                const syntaxInfo = tokens[5];
-                const range = this.makeCorrectRange(document, errorLine);
+            if (header.startsWith('warning')) {
+                const range = this.makeCorrectRange(document, lineNo, characterNo);
+                const diag = new vscode.Diagnostic(range, syntaxInfo, vscode.DiagnosticSeverity.Warning);
+                diagnostics.push(diag);
+            } else if (header.startsWith('error')) {
+                const range = this.makeCorrectRange(document, lineNo, characterNo);
                 const diag = new vscode.Diagnostic(range, syntaxInfo, vscode.DiagnosticSeverity.Error);
                 diagnostics.push(diag);
-            } else if (headerInfo == 'Warning') {
-                const errorLine = parseInt(tokens[2]) - 1;
-                const syntaxInfo = tokens[5];
-                const range = this.makeCorrectRange(document, errorLine);
-                const diag = new vscode.Diagnostic(range, syntaxInfo, vscode.DiagnosticSeverity.Warning);
-                diagnostics.push(diag);  
             }
         }
         return diagnostics;
     }
 
-    private makeCorrectRange(document: vscode.TextDocument, line: number): vscode.Range {
-        const startPosition = new vscode.Position(line, 0);
+    private makeCorrectRange(document: vscode.TextDocument, line: number, character: number): vscode.Range {
+        const startPosition = new vscode.Position(line, character);
         const wordRange = document.getWordRangeAtPosition(startPosition, /[`_0-9a-zA-Z]+/);
         if (wordRange) {
             return wordRange;
@@ -129,19 +141,20 @@ class VerilatorLinter implements BaseLinter {
         }
         const { stderr } = await easyExec(executorPath, []);
         if (stderr.length === 0) {
-            this.executableInvokeNameMap.set(langID, undefined);
-            LspOutput.report(`fail to execute ${executorPath}! Reason: ${stderr}`, ReportType.Error);
-            return false;
-        } else {
             this.executableInvokeNameMap.set(langID, executorPath);
             LspOutput.report(`success to verify ${executorPath}, linter from verilator is ready to go!`, ReportType.Launch);
             return true;
+        } else {
+            this.executableInvokeNameMap.set(langID, undefined);
+            LspOutput.report(`fail to execute ${executorPath}! Reason: ${stderr}`, ReportType.Error, true);
+            
+            return false;
         }
     }
 
-    public initialise(langID: HdlLangID) {
+    public async initialise(langID: HdlLangID): Promise<boolean> {
         const executorPath = this.getExecutableFilePath(langID);
-        this.setExecutableFilePath(executorPath, langID);
+        return this.setExecutableFilePath(executorPath, langID);
     }
 }
 

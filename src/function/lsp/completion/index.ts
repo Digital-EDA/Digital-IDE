@@ -1,4 +1,5 @@
 import { vlogCompletionProvider, vlogIncludeCompletionProvider, vlogMacroCompletionProvider, vlogPositionPortProvider } from './vlog';
+import { vhdlCompletionProvider } from './vhdl';
 import { tclCompletionProvider } from './tcl';
 
 export {
@@ -6,5 +7,6 @@ export {
     vlogIncludeCompletionProvider,
     vlogMacroCompletionProvider,
     vlogPositionPortProvider,
+    vhdlCompletionProvider,
     tclCompletionProvider
 };

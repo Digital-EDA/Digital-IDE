@@ -51,8 +51,12 @@ class ModelsimLinter implements BaseLinter {
                 this.diagnostic.set(document.uri, diagnostics);
             }
         } else {
-            LspOutput.report('linter is not available, please check prj.modelsim.install.path in your setting', ReportType.Error);
+            LspOutput.report('modelsim linter is not available, please check prj.modelsim.install.path in your setting!', ReportType.Error, true);
         }
+    }
+
+    async remove(uri: vscode.Uri) {
+        this.diagnostic.delete(uri);
     }
 
     /**
@@ -62,21 +66,24 @@ class ModelsimLinter implements BaseLinter {
      */
     private provideDiagnostics(document: vscode.TextDocument, stdout: string): vscode.Diagnostic[] {
         const diagnostics = [];
-        for (const line of stdout.split('\n')) {
+        for (const line of stdout.split(/\r?\n/g)) {
             const tokens = line.split(/(Error|Warning).+?(?: *?(?:.+?(?:\\|\/))+.+?\((\d+?)\):|)(?: *?near "(.+?)":|)(?: *?\((.+?)\)|) +?(.+)/gm);
             
-            
-            const headerInfo = tokens[0];
+            const headerInfo = tokens[1];
             if (headerInfo === 'Error') {
                 const errorLine = parseInt(tokens[2]) - 1;
                 const syntaxInfo = tokens[5];
-                const range = this.makeCorrectRange(document, errorLine);
+                LspOutput.report(`<vlog linter> line: ${errorLine}, info: ${syntaxInfo}`, ReportType.Run);
+
+                const range = this.makeCorrectRange(document, errorLine, syntaxInfo);
                 const diag = new vscode.Diagnostic(range, syntaxInfo, vscode.DiagnosticSeverity.Error);
                 diagnostics.push(diag);
-            } else if (headerInfo == 'Warning') {
+            } else if (headerInfo === 'Warning') {
                 const errorLine = parseInt(tokens[2]) - 1;
                 const syntaxInfo = tokens[5];
-                const range = this.makeCorrectRange(document, errorLine);
+                LspOutput.report(`<vlog linter> line: ${errorLine}, info: ${syntaxInfo}`, ReportType.Run);
+
+                const range = this.makeCorrectRange(document, errorLine, syntaxInfo);
                 const diag = new vscode.Diagnostic(range, syntaxInfo, vscode.DiagnosticSeverity.Warning);
                 diagnostics.push(diag);  
             }
@@ -84,8 +91,32 @@ class ModelsimLinter implements BaseLinter {
         return diagnostics;
     }
 
-    private makeCorrectRange(document: vscode.TextDocument, line: number): vscode.Range {
+    private makeCorrectRange(document: vscode.TextDocument, line: number, syntaxInfo: string): vscode.Range {
+        // extract all the words like 'adawwd' in a syntax info
+        const singleQuoteWords = syntaxInfo.match(/'([^']*)'/g);
+        if (singleQuoteWords && singleQuoteWords.length > 0) {
+            const targetWord = singleQuoteWords.map(val => val.replace(/'/g, ''))[0];
+            // find range of target word
+            const textLine = document.lineAt(line);
+            const text = textLine.text;
+            const startCharacter = text.indexOf(targetWord);
+            if (startCharacter > -1) {
+                const endCharacter = startCharacter + targetWord.length;
+                const range = new vscode.Range(
+                    new vscode.Position(line, startCharacter),
+                    new vscode.Position(line, endCharacter)
+                );
+                return range;
+            }
+        }
+
+        // else target the first word in the line
+        return this.makeCommonRange(document, line, syntaxInfo);
+    }
+
+    private makeCommonRange(document: vscode.TextDocument, line: number, syntaxInfo: string): vscode.Range {
         const startPosition = new vscode.Position(line, 0);
+            
         const wordRange = document.getWordRangeAtPosition(startPosition, /[`_0-9a-zA-Z]+/);
         if (wordRange) {
             return wordRange;
@@ -107,11 +138,11 @@ class ModelsimLinter implements BaseLinter {
         const fullExecutorName = opeParam.os === 'win32' ? executorName + '.exe' : executorName;
         
         if (modelsimInstallPath.trim() === '' || !fs.existsSync(modelsimInstallPath)) {
-            LspOutput.report(`User's modelsim Install Path ${modelsimInstallPath}, which is invalid. Use ${executorName} in default.`, ReportType.Warn);
+            LspOutput.report(`User's modelsim Install Path "${modelsimInstallPath}", which is invalid. Use ${executorName} in default.`, ReportType.Warn);
             LspOutput.report('If you have doubts, check prj.modelsim.install.path in setting', ReportType.Warn);
             return executorName;
         } else {
-            LspOutput.report(`User's modelsim Install Path ${modelsimInstallPath}, which is invalid`);
+            LspOutput.report(`User's modelsim Install Path "${modelsimInstallPath}", which is invalid`);
             
             const executorPath = hdlPath.join(
                 hdlPath.toSlash(modelsimInstallPath),
@@ -131,23 +162,23 @@ class ModelsimLinter implements BaseLinter {
         }
         const { stderr } = await easyExec(executorPath, []);
         if (stderr.length === 0) {
-            this.executableInvokeNameMap.set(langID, undefined);
-            LspOutput.report(`fail to execute ${executorPath}! Reason: ${stderr}`, ReportType.Error);
-            return false;
-        } else {
             this.executableInvokeNameMap.set(langID, executorPath);
             LspOutput.report(`success to verify ${executorPath}, linter from modelsim is ready to go!`, ReportType.Launch);
             return true;
+        } else {
+            this.executableInvokeNameMap.set(langID, undefined);
+            LspOutput.report(`fail to execute ${executorPath}! Reason: ${stderr}`, ReportType.Error, true);
+            return false;
         }
     }
 
-    public initialise(langID: HdlLangID) {
+    public async initialise(langID: HdlLangID): Promise<boolean> {
         const executorPath = this.getExecutableFilePath(langID);
-        this.setExecutableFilePath(executorPath, langID);
+        return this.setExecutableFilePath(executorPath, langID);
     }
 }
 
-const modelsimLinter = new ModelsimLinter()
+const modelsimLinter = new ModelsimLinter();
 
 export {
     modelsimLinter,

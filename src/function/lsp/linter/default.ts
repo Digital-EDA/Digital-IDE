@@ -73,13 +73,8 @@ class DefaultVlogLinter implements BaseLinter {
     }
 
     public async initialise() {
-        for (const doc of vscode.workspace.textDocuments) {
-            if (isVerilogFile(doc.fileName)) {
-                // TODO : check performance
-                await this.lint(doc);
-            }
-        }
-        LspOutput.report('finish initialization of default vlog linter', ReportType.Launch);
+        // move code to outer layer
+        return true;
     }
 }
 
@@ -149,13 +144,8 @@ class DefaultVHDLLinter implements BaseLinter {
     }
 
     public async initialise() {
-        for (const doc of vscode.workspace.textDocuments) {
-            if (isVhdlFile(doc.fileName)) {
-                // TODO : check performance
-                await this.lint(doc);
-            }
-        }
-        LspOutput.report('finish initialization of default vlog linter', ReportType.Launch);
+        // move code to outer layer
+        return true;
     }
 }
 

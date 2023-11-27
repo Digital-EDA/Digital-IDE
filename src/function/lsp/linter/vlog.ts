@@ -35,7 +35,7 @@ class VlogLinterManager implements BaseManager {
         if (!success) {
             return;
         }
-        
+
         for (const doc of vscode.workspace.textDocuments) {
             const fileName = hdlPath.toSlash(doc.fileName);
             if (hdlFile.isVerilogFile(fileName)) {
@@ -54,7 +54,7 @@ class VlogLinterManager implements BaseManager {
     }
 
     public getUserDiagnostorSelection() {
-        const vlogLspConfig = vscode.workspace.getConfiguration('function.lsp.linter.vlog');
+        const vlogLspConfig = vscode.workspace.getConfiguration('digital-ide.function.lsp.linter.vlog');
         const diagnostor = vlogLspConfig.get('diagnostor', 'default');
         return diagnostor;
     }

@@ -31,7 +31,7 @@ class PlManage extends BaseManage {
 
         const curToolChain = this.config.tool;
         if (curToolChain === ToolChainType.Xilinx) {
-            const vivadoPath = vscode.workspace.getConfiguration('prj.vivado.install').get('path', '');
+            const vivadoPath = vscode.workspace.getConfiguration('digital-ide.prj.vivado.install').get('path', '');
             if (hdlFile.isDir(vivadoPath)) {
                 this.config.path = hdlPath.join(hdlPath.toSlash(vivadoPath), 'vivado');
                 if (opeParam.os === 'win32') {

@@ -287,7 +287,7 @@ class VlogCompletionProvider implements vscode.CompletionItemProvider {
     private async provideModules(document: vscode.TextDocument, position: vscode.Position, filePath: AbsPath, includes: Include[]): Promise<vscode.CompletionItem[]> {
         const suggestModules: vscode.CompletionItem[] = [];
 
-        const lspVlogConfig = vscode.workspace.getConfiguration('function.lsp.completion.vlog');
+        const lspVlogConfig = vscode.workspace.getConfiguration('digital-ide.function.lsp.completion.vlog');
         const autoAddInclude: boolean = lspVlogConfig.get('autoAddInclude', true);
         const completeWholeInstante: boolean = lspVlogConfig.get('completeWholeInstante', true);
         

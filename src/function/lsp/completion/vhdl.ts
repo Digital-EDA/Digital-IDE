@@ -117,7 +117,7 @@ class VhdlCompletionProvider implements vscode.CompletionItemProvider {
     private async provideModules(document: vscode.TextDocument, position: vscode.Position, filePath: AbsPath, includes: Include[]): Promise<vscode.CompletionItem[]> {
         const suggestModules: vscode.CompletionItem[] = [];
 
-        const lspVhdlConfig = vscode.workspace.getConfiguration('function.lsp.completion.vhdl');
+        const lspVhdlConfig = vscode.workspace.getConfiguration('digital-ide.function.lsp.completion.vhdl');
         const autoAddInclude: boolean = lspVhdlConfig.get('autoAddInclude', true);
         const completeWholeInstante: boolean = lspVhdlConfig.get('completeWholeInstante', true);
         

@@ -127,7 +127,7 @@ class ModelsimLinter implements BaseLinter {
 
     private getExecutableFilePath(langID: HdlLangID): string | Path | undefined {
         // modelsim install path stored in prj.modelsim.install.path
-        const modelsimConfig = vscode.workspace.getConfiguration('prj.modelsim');
+        const modelsimConfig = vscode.workspace.getConfiguration('digital-ide.prj.modelsim');
         const modelsimInstallPath = modelsimConfig.get('install.path', '');
         const executorName = this.executableFileMap.get(langID);
         if (executorName === undefined) {

@@ -104,8 +104,8 @@ class XilinxOperation {
 
     public get custom(): XilinxCustom {
         return {
-            ipRepo: vscode.workspace.getConfiguration().get('prj.xilinx.IP.repo.path', ''),
-            bdRepo: vscode.workspace.getConfiguration().get('prj.xilinx.BD.repo.path', '')
+            ipRepo: vscode.workspace.getConfiguration().get('digital-ide.prj.xilinx.IP.repo.path', ''),
+            bdRepo: vscode.workspace.getConfiguration().get('digital-ide.prj.xilinx.BD.repo.path', '')
         };
     }
     
@@ -588,7 +588,7 @@ class XilinxBd {
         this.schemaCont = hdlFile.readJSON(this.schemaPath) as PropertySchema;
         
         this.bdEnum = this.schemaCont.properties.soc.properties.bd.enum;
-        this.bdRepo = this.setting.get('PRJ.xilinx.BD.repo.path', '');
+        this.bdRepo = this.setting.get('digital-ide.prj.xilinx.BD.repo.path', '');
     }
     
     getConfig() {
@@ -597,7 +597,7 @@ class XilinxBd {
         this.schemaPath = opeParam.propertySchemaPath;
         this.schemaCont = hdlFile.readJSON(this.schemaPath) as PropertySchema;
         this.bdEnum = this.schemaCont.properties?.soc.properties.bd.enum;
-        this.bdRepo = this.setting.get('PRJ.xilinx.BD.repo.path', '');
+        this.bdRepo = this.setting.get('digital-ide.prj.xilinx.BD.repo.path', '');
     }
 
     async overwrite(uri: vscode.Uri): Promise<void> {
@@ -638,7 +638,7 @@ class XilinxBd {
         }
 
         // 获取存放路径
-        let storePath = this.setting.get('PRJ.xilinx.BD.repo.path', '');
+        let storePath = this.setting.get('digital-ide.prj.xilinx.BD.repo.path', '');
         if (!fs.existsSync(storePath)) {
             vscode.window.showWarningMessage(`This bd file will be added into extension folder.We don't recommend doing this because it will be cleared in the next update.`);
             storePath = this.xbdPath;

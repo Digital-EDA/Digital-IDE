@@ -124,7 +124,7 @@ class VivadoLinter implements BaseLinter {
 
     private getExecutableFilePath(langID: HdlLangID): string | Path | undefined {
         // vivado install path stored in prj.vivado.install.path
-        const vivadoConfig = vscode.workspace.getConfiguration('prj.vivado');
+        const vivadoConfig = vscode.workspace.getConfiguration('digital-ide.prj.vivado');
         const vivadoInstallPath = vivadoConfig.get('install.path', '');
         const executorName = this.executableFileMap.get(langID);
         if (executorName === undefined) {

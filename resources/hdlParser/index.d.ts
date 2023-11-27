@@ -5,6 +5,9 @@ type AbsPath = string;
 type RelPath = string;
 type Path = AbsPath | RelPath;
 
+
+export const extensionUrl: string;
+
 interface Fast {
     content: RawHdlModule[]
     languageId: string

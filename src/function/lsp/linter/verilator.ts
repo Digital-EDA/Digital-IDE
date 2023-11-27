@@ -106,7 +106,7 @@ class VerilatorLinter implements BaseLinter {
 
     private getExecutableFilePath(langID: HdlLangID): string | Path | undefined {
         // verilator install path stored in prj.verilator.install.path
-        const verilatorConfig = vscode.workspace.getConfiguration('prj.verilator');
+        const verilatorConfig = vscode.workspace.getConfiguration('digital-ide.prj.verilator');
         const verilatorInstallPath = verilatorConfig.get('install.path', '');
         const executorName = this.executableFileMap.get(langID);
         if (executorName === undefined) {

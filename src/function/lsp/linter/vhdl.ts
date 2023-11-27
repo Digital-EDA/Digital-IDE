@@ -52,7 +52,7 @@ class VhdlLinterManager implements BaseManager {
     }
 
     public getUserDiagnostorSelection() {
-        const vlogLspConfig = vscode.workspace.getConfiguration('function.lsp.linter.vlog');
+        const vlogLspConfig = vscode.workspace.getConfiguration('digital-ide.function.lsp.linter.vlog');
         const diagnostor = vlogLspConfig.get('diagnostor', 'default');
         return diagnostor;
     }

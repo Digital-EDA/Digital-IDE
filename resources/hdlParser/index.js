@@ -1,6 +1,11 @@
-const hdlParser = require('./parser');
+const vscode = require('vscode');
 const fs = require('fs');
+
+const hdlParser = require('./parser');
 const { exit } = require('process');
+
+const githubIssueUrl = 'https://github.com/Digital-EDA/Digital-IDE/issues';
+const extensionUrl = 'https://github.com/Digital-EDA/Digital-IDE';
 
 const _hdlParser = {
     module: null,
@@ -37,12 +42,25 @@ async function callParser(path, func) {
     wasmModule.FS.writeFile(_hdlParser.tempPath, source, { encoding: 'utf8' });
     debug.io += Date.now() - s2;
     
-    const s3 = Date.now();
-    const res = wasmModule.ccall('call_parser', 'string', ['string', 'int', 'int'], [file, fileLength, func]);
-    debug.compute += Date.now() - s3;
+    try {
+        const s3 = Date.now();
+        const res = wasmModule.ccall('call_parser', 'string', ['string', 'int', 'int'], [file, fileLength, func]);
+        debug.compute += Date.now() - s3;
+        console.log(path, debug);
+        return JSON.parse(res);
+    } catch (error) {
+        console.log(`errors happen when call wasm, path: ${path}, errors: ${error}`);
+        const res = await vscode.window.showErrorMessage(
+            'Errors happen when parsing ' + path + '. Just propose a valuable issue in our github repo 😊',
+            { title: 'Go and Propose!', value: true },
+            { title: 'Refuse', value: false }
+        );
+        if (res && res.value) {
+            vscode.env.openExternal(vscode.Uri.parse(githubIssueUrl));
+        }
 
-    console.log(path, debug);
-    return JSON.parse(res);
+        return undefined;
+    }
 }
 
 
@@ -76,5 +94,6 @@ module.exports = {
     vhdlFast,
     vhdlAll,
     svFast,
-    svAll
+    svAll,
+    extensionUrl
 };

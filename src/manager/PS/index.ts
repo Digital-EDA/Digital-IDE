@@ -31,7 +31,7 @@ class PsManage extends BaseManage {
 
         // get install path & operation object
         if (this.config.tool === ToolChainType.Xilinx) {
-            const xsdkPath = vscode.workspace.getConfiguration('prj.xsdk.install').get('path', '');
+            const xsdkPath = vscode.workspace.getConfiguration('digital-ide.prj.xsdk.install').get('path', '');
             if (hdlFile.isDir(xsdkPath)) {
                 this.config.path = hdlPath.join(hdlPath.toSlash(xsdkPath), 'xsct');
                 if (opeParam.os === "win32") {

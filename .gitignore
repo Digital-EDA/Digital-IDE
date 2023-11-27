@@ -9,3 +9,4 @@ parser_stuck.v
 out-js/
 *.pyc
 *.pyd
+*.wasm

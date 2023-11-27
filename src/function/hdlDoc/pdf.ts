@@ -21,7 +21,7 @@ function getDefaultBrowerPath(): AbsPath {
  * @param pdfPath output path of pdf
 */
 async function htmlFile2PdfFile(htmlPath: AbsPath, pdfPath: AbsPath) {    
-    const pdfConfig = vscode.workspace.getConfiguration("function.doc.pdf");
+    const pdfConfig = vscode.workspace.getConfiguration("digital-ide.function.doc.pdf");
     const platformDefaultBrowerPath = getDefaultBrowerPath();
     const browserPath = pdfConfig.get('browserPath', platformDefaultBrowerPath);
     

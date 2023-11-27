@@ -243,7 +243,7 @@ class PrjManage {
             hdlDir.mkdir(softwareSrcPath);
         }
         else if (currmode === "LS" && nextmode === "PL") {
-            const needNotice = vscode.workspace.getConfiguration().get('PRJ.file.structure.notice', true);
+            const needNotice = vscode.workspace.getConfiguration().get('digital-ide.prj.file.structure.notice', true);
             if (needNotice) {
                 const res = await vscode.window.showWarningMessage(
                     "Software will be deleted.",

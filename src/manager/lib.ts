@@ -153,7 +153,7 @@ class LibManage {
 
     public async deleteLocalFiles() {
         if (fs.existsSync(this.localLibPath)) {
-            const needNotice = vscode.workspace.getConfiguration('prj.file.structure.notice');
+            const needNotice = vscode.workspace.getConfiguration('digital-ide.prj.file.structure.notice');
             if (needNotice) {
                 const res = await vscode.window.showWarningMessage(
                     `Local Lib (${this.localLibPath}) will be removed.`,

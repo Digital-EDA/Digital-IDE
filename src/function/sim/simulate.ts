@@ -70,7 +70,7 @@ class Simulate {
 
         // make simulation dir
         const defaultSimulationDir = hdlPath.join(opeParam.prjInfo.arch.prjPath, 'simulation', 'icarus');
-        simConfig.simulationHome = setting.get('function.simulate.simulationHome', '');
+        simConfig.simulationHome = setting.get('digital-ide.function.simulate.simulationHome', '');
         if (!fs.existsSync(simConfig.simulationHome)) {
             simConfig.simulationHome = defaultSimulationDir;
         }
@@ -81,7 +81,7 @@ class Simulate {
             hdlDir.mkdir(simConfig.simulationHome);
         }
 
-        simConfig.gtkwavePath = setting.get('function.simulate.gtkwavePath', 'gtkwave');
+        simConfig.gtkwavePath = setting.get('digital-ide.function.simulate.gtkwavePath', 'gtkwave');
         
         if (simConfig.gtkwavePath !== '' && !hdlFile.isDir(simConfig.gtkwavePath)) {
             simConfig.gtkwavePath = 'gtkwave'; // 如果不存在则认为是加入了环境变量
@@ -93,7 +93,7 @@ class Simulate {
             }
         }
 
-        simConfig.installPath = setting.get('function.simulate.icarus.installPath', '');
+        simConfig.installPath = setting.get('digital-ide.function.simulate.icarus.installPath', '');
         if (simConfig.installPath !== '' && !hdlFile.isDir(simConfig.installPath)) {
             MainOutput.report(`install path ${simConfig.installPath} is illegal`, ReportType.Error, true);
             return;
@@ -112,7 +112,7 @@ class Simulate {
 
         // 获取xilinx的自带仿真库的路径
         if (toolChain === ToolChainType.Xilinx) {
-            const simLibPath = setting.get('function.simulate.xilinxLibPath', '');
+            const simLibPath = setting.get('digital-ide.function.simulate.xilinxLibPath', '');
 
             if (!hdlFile.isDir(simLibPath)) {
                 return [];
@@ -297,7 +297,7 @@ class IcarusSimulate extends Simulate {
             return;
         }
 
-        const runInTerminal = vscode.workspace.getConfiguration().get('function.simulate.runInTerminal');
+        const runInTerminal = vscode.workspace.getConfiguration().get('digital-ide.function.simulate.runInTerminal');
         
         if (runInTerminal) {
             this.execInTerminal(command, cwd);

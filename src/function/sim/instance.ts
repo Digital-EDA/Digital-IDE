@@ -29,7 +29,7 @@ class ModuleInfoItem {
  * @param module 模块信息
  */
 function instanceVlogCode(module: HdlModule, prefix: string = '', returnSnippetString: boolean = false): string {
-    const instantiationConfig = vscode.workspace.getConfiguration('function.instantiation');
+    const instantiationConfig = vscode.workspace.getConfiguration('digital-ide.function.instantiation');
     const needComment = instantiationConfig.get('addComment', true);
     const autoNetOutputDeclaration = instantiationConfig.get('autoNetOutputDeclaration', true);
 

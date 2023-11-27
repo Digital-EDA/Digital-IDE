@@ -126,7 +126,7 @@ async function makeShowHTML(usage: string): Promise<string> {
     // add css
     let cssString = getDocCssString();
     if (usage === 'webview') {          // if invoked by webview, change background image
-        const webviewConfig = vscode.workspace.getConfiguration("function.doc.webview");
+        const webviewConfig = vscode.workspace.getConfiguration("digital-ide.function.doc.webview");
         const imageUrl = webviewConfig.get('backgroundImage', '');
         cssString = cssString.replace("--backgroundImage", imageUrl);
     } else if (usage === 'pdf') {      // if invoked by pdf, transform .vscode-light to #write

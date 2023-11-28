@@ -40,5 +40,8 @@
     "digital-ide.lsp.tool.transformOldPropertyFile.title": "Transform configure file from previous version to new version",
     "digital-ide.vhdl2vlog.title": "Translate vhdl code to verilog code",
     "digital-ide.fsm.show.title": "Show FSM graph of current file",
-    "digital-ide.netlist.show.title": "Show netlist of current file"
+    "digital-ide.netlist.show.title": "Show netlist of current file",
+    "digital-ide.lsp.vlog.linter.pick.title": "select a diagnostic for verilog",
+    "digital-ide.lsp.vhdl.linter.pick.title": "select a diagnostic for vhdl",
+    "digital-ide.lsp.systemverilog.linter.pick.title": "select a diagnostic for systemverilog"
 }

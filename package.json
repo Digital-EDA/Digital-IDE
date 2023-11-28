@@ -4,7 +4,7 @@
     "description": "all in one vscode plugin for Verilog/VHDL development",
     "publisher": "sterben",
     "homepage": "https://digital-eda.github.io/DIDE-doc-Cn",
-    "version": "0.3.1",
+    "version": "0.3.2",
     "main": "./out/extension",
     "icon": "images/icon.png",
     "engines": {
@@ -495,6 +495,21 @@
                 "category": "Digital-IDE"
             },
             {
+                "command": "digital-ide.lsp.vlog.linter.pick",
+                "category": "Digital-IDE",
+                "title": "%digital-ide.lsp.vlog.linter.pick.title%"
+            },
+            {
+                "command": "digital-ide.lsp.vhdl.linter.pick",
+                "category": "Digital-IDE",
+                "title": "%digital-ide.lsp.vhdl.linter.pick.title%"
+            },
+            {
+                "command": "digital-ide.lsp.systemverilog.linter.pick",
+                "category": "Digital-IDE",
+                "title": "%digital-ide.lsp.systemverilog.linter.pick.title%"
+            },
+            {
                 "command": "digital-ide.vhdl2vlog",
                 "title": "%digital-ide.vhdl2vlog.title%",
                 "category": "Digital-IDE",
@@ -829,12 +844,23 @@
                 ],
                 "extensions": [
                     ".vvp",
-                    ".VVP"
+                    ".VVP",
+                    ".v.out"
                 ],
                 "configuration": "./config/vvp.configuration.json",
                 "icon": {
                     "dark": "./images/svg/dark/vvp.svg",
                     "light": "./images/svg/light/vvp.svg"
+                }
+            },
+            {
+                "id": "vcd",
+                "extensions": [
+                    ".vcd"
+                ],
+                "icon": {
+                    "dark": "./images/svg/dark/vcd.svg",
+                    "light": "./images/svg/light/vcd.svg"
                 }
             },
             {

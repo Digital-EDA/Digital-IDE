@@ -14,11 +14,12 @@ Bug 修复
 
 Change
 - 将插件的工作状态显示在 vscode 下侧的状态栏上，利于用户了解目前的设置状态
+- 状态栏右下角现在可以看到目前选择的linter以及是否正常工作了
 - 优化项目配置目录
 
 Feature
 - 增加对 XDC，TCL 等脚本的 LSP 支持
-- 增加 verilog, vhdl, xdc, tcl, vvp 等语言的工作区图标
+- 增加 verilog, vhdl, xdc, tcl, vvp, vcd 等语言或生成文件的工作区图标
 - 增加对于 vivado, modelsim, verilator 的支持，用户可以通过设置 `function.lsp.linter.vhdl.diagnostor`(设置 vhdl) 和 `function.lsp.linter.vlog.diagnostor`(设置 verilog) 来使用这些第三方工具的仿真和自动纠错。
 - 增加对于 TCL, XDC, VVP 等脚本的 LSP 和 语法高亮 支持
 

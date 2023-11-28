@@ -122,7 +122,7 @@ class VivadoLinter implements BaseLinter {
         }
     }
 
-    private getExecutableFilePath(langID: HdlLangID): string | Path | undefined {
+    public getExecutableFilePath(langID: HdlLangID): string | Path | undefined {
         // vivado install path stored in prj.vivado.install.path
         const vivadoConfig = vscode.workspace.getConfiguration('digital-ide.prj.vivado');
         const vivadoInstallPath = vivadoConfig.get('install.path', '');
@@ -164,7 +164,7 @@ class VivadoLinter implements BaseLinter {
             return true;
         } else {
             this.executableInvokeNameMap.set(langID, undefined);
-            LspOutput.report(`fail to execute ${executorPath}! Reason: ${stderr}`, ReportType.Error, true);
+            LspOutput.report(`Fail to execute ${executorPath}! Reason: ${stderr}`, ReportType.Error, true);            
             return false;
         }
     }

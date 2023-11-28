@@ -104,7 +104,7 @@ class VerilatorLinter implements BaseLinter {
         }
     }
 
-    private getExecutableFilePath(langID: HdlLangID): string | Path | undefined {
+    public getExecutableFilePath(langID: HdlLangID): string | Path | undefined {
         // verilator install path stored in prj.verilator.install.path
         const verilatorConfig = vscode.workspace.getConfiguration('digital-ide.prj.verilator');
         const verilatorInstallPath = verilatorConfig.get('install.path', '');
@@ -146,7 +146,9 @@ class VerilatorLinter implements BaseLinter {
             return true;
         } else {
             this.executableInvokeNameMap.set(langID, undefined);
-            LspOutput.report(`fail to execute ${executorPath}! Reason: ${stderr}`, ReportType.Error, true);
+            console.log(stderr);
+            
+            LspOutput.report(`Fail to execute ${executorPath}! Reason: ${stderr}`, ReportType.Error, true);
             
             return false;
         }

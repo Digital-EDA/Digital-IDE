@@ -125,7 +125,7 @@ class ModelsimLinter implements BaseLinter {
         }
     }
 
-    private getExecutableFilePath(langID: HdlLangID): string | Path | undefined {
+    public getExecutableFilePath(langID: HdlLangID): string | Path | undefined {
         // modelsim install path stored in prj.modelsim.install.path
         const modelsimConfig = vscode.workspace.getConfiguration('digital-ide.prj.modelsim');
         const modelsimInstallPath = modelsimConfig.get('install.path', '');
@@ -167,7 +167,7 @@ class ModelsimLinter implements BaseLinter {
             return true;
         } else {
             this.executableInvokeNameMap.set(langID, undefined);
-            LspOutput.report(`fail to execute ${executorPath}! Reason: ${stderr}`, ReportType.Error, true);
+            LspOutput.report(`Fail to execute ${executorPath}! Reason: ${stderr}`, ReportType.Error, true);
             return false;
         }
     }

@@ -9,4 +9,5 @@ parser_stuck.v
 out-js/
 *.pyc
 *.pyd
-*.wasm
+resources/hdlParser/parser.js
+resources/hdlParser/parser.wasm

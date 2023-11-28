@@ -171,7 +171,7 @@ class VivadoLinter implements BaseLinter {
 
     public async initialise(langID: HdlLangID): Promise<boolean> {
         const executorPath = this.getExecutableFilePath(langID);
-        return this.setExecutableFilePath(executorPath, langID);
+        return await this.setExecutableFilePath(executorPath, langID);
     }
 }
 

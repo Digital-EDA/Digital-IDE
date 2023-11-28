@@ -12,7 +12,7 @@ interface CommandDataItem {
     cmd: string,
     icon: string,
     tip: string,
-    children: any[]
+    children: CommandDataItem[]
 }
 
 type CommandConfig = Record<string, {

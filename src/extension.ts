@@ -19,8 +19,7 @@ async function registerCommand(context: vscode.ExtensionContext) {
 
 
 async function launch(context: vscode.ExtensionContext) {
-    
-    vscode.window.withProgress({
+    await vscode.window.withProgress({
         location: vscode.ProgressLocation.Window,
         title: 'Initialization (Digtial-IDE)'
     }, async () => {
@@ -29,10 +28,10 @@ async function launch(context: vscode.ExtensionContext) {
         hdlMonitor.start();
     });
         
-    MainOutput.report('Digital-IDE has launched, Version: 0.3.2');
-    MainOutput.report('OS: ' + opeParam.os);
+    MainOutput.report('Digital-IDE has launched, Version: 0.3.2', ReportType.Launch);
+    MainOutput.report('OS: ' + opeParam.os, ReportType.Launch);
 
-    // console.log(hdlParam);
+    console.log(hdlParam);
     
     // show welcome information (if first install)
     const welcomeSetting = vscode.workspace.getConfiguration('digital-ide.welcome');

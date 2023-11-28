@@ -1,4 +1,5 @@
 const vscode = require('vscode');
+
 const fs = require('fs');
 
 const hdlParser = require('./parser');
@@ -49,14 +50,21 @@ async function callParser(path, func) {
         console.log(path, debug);
         return JSON.parse(res);
     } catch (error) {
-        console.log(`errors happen when call wasm, path: ${path}, errors: ${error}`);
+        console.log(`errors happen when call wasm, path: ${path}, errors: ${error}, input params: (${path}, ${func})`);
+
+        const dsaSetting = vscode.workspace.getConfiguration('digital-ide.dont-show-again');
+        if (dsaSetting.get('propose.issue', false) === true) {
+            return undefined;
+        }
         const res = await vscode.window.showErrorMessage(
-            'Errors happen when parsing ' + path + '. Just propose a valuable issue in our github repo 😊',
+            `Errors happen when parsing ${path}. Error: "${error}". Just propose a valuable issue in our github repo 😊`,
             { title: 'Go and Propose!', value: true },
-            { title: 'Refuse', value: false }
+            { title: "Don't Show Again", value: false }
         );
-        if (res && res.value) {
+        if (res && res.value === true) {
             vscode.env.openExternal(vscode.Uri.parse(githubIssueUrl));
+        } else if (res && res.value === false) {
+            dsaSetting.update('propose.issue', true);
         }
 
         return undefined;
@@ -95,5 +103,6 @@ module.exports = {
     vhdlAll,
     svFast,
     svAll,
-    extensionUrl
+    extensionUrl,
+    callParser
 };

@@ -128,7 +128,7 @@ class VlogDocSymbolProvider implements vscode.DocumentSymbolProvider {
     }
 
 
-    getSymbolKind(name: string): vscode.SymbolKind {
+    private getSymbolKind(name: string): vscode.SymbolKind {
         if (name.indexOf('[') !== -1) {
             return vscode.SymbolKind.Array;
         }

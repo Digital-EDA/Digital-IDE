@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 
-
 class Keywords {
     private keywords: Set<string>;
     private compilerKeywords: string[];    // start with `
@@ -76,7 +75,24 @@ const vlogKeyword = new Keywords([
 );
 
 // TODO : do vhdl and sv version
-const vhdlKeyword = new Keywords([], [], []);
+const vhdlKeyword = new Keywords(["abs", "configuration", "impure", "null", "rem", "type", 
+    "access", "constant", "in", "of", "report", "unaffected", "after", "disconnect", 
+    "inertial", "on", "return", "units", "alias", "downto", "inout", "open", "rol", 
+    "until", "all", "else", "is", "or", "ror", "use", "and", "elsif", "label", "others", 
+    "select", "variable", "architecture", "end", "library", "out", "severity", "wait", "array", 
+    "entity", "linkage", "package", "signal", "when", "assert", "exit", "literal", "port", "shared", 
+    "while", "attribute", "file", "loop", "postponed", "sla", "with", "begin", "for", "map", "procedure", 
+    "sll", "xnor", "block", "function", "mod", "process", "sra", "xor", "body", "generate", "nand", "pure", 
+    "srl", "buffer", "generic", "new", "range", "subtype", "bus", "group", "next", "record", "then", "case", 
+    "guarded", "nor", "register", "to",
+], 
+[
+    "std_logic", "std_ulogic", "std_logic_vector", "std_ulogic_vector", "signed", "unsigned", "complex", "complex_polar", 
+    "boolean", "bit", "character", "severity_level", "integer", "real", "time", "delay_length", "now", "natural", "positive",
+    "string", "bit_vector", "file_open_kind", "file_open_status", "fs", "ps", "ns", "us", "ms", "sec", "min", "hr", 
+    "severity_level", "note", "warning", "error", "failure", "line", "text", "side", "width", "input", "output"
+], 
+[]);
 
 const systemverilogKeyword = new Keywords([
     "above", "disable", "idt", "notif1", "supply0", "abs", "discipline", "idtmod",

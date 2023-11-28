@@ -1220,23 +1220,23 @@
             "patterns": [
                 {
                     "match": "\\b(?i:boolean|bit|character|severity_level|integer|real|time|delay_length|now|natural|positive|string|bit_vector|file_open_kind|file_open_status|fs|ps|ns|us|ms|sec|min|hr|severity_level|note|warning|error|failure)\\b",
-                    "name": "support.type.std.standard.vhdl"
+                    "name": "support.function.type.std.standard.vhdl"
                 },
                 {
                     "match": "\\b(?i:line|text|side|width|input|output)\\b",
-                    "name": "support.type.std.textio.vhdl"
+                    "name": "support.function.type.std.textio.vhdl"
                 },
                 {
                     "match": "\\b(?i:std_logic|std_ulogic|std_logic_vector|std_ulogic_vector)\\b",
-                    "name": "support.type.ieee.std_logic_1164.vhdl"
+                    "name": "support.function.type.ieee.std_logic_1164.vhdl"
                 },
                 {
                     "match": "\\b(?i:signed|unsigned)\\b",
-                    "name": "support.type.ieee.numeric_std.vhdl"
+                    "name": "support.function.type.ieee.numeric_std.vhdl"
                 },
                 {
                     "match": "\\b(?i:complex|complex_polar)\\b",
-                    "name": "support.type.ieee.math_complex.vhdl"
+                    "name": "support.function.type.ieee.math_complex.vhdl"
                 }
             ]
         },

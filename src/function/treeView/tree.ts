@@ -120,7 +120,7 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
 
         // set iconPath
         treeItem.iconPath = getIconConfig(element.icon);
-        
+
         // set command
         treeItem.command = {
             title: "Open this HDL File",
@@ -225,8 +225,8 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
                     icon: 'file',
                     type: instance.name,
                     name: instance.type,
-                    range: instance.module ? instance.module.range : null,
-                    path: instance.instModPath,
+                    range: instance.range,
+                    path: instance.parentMod.path,
                     parent: element
                 };
 
@@ -257,6 +257,10 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
 
     private judgeIcon(item: ModuleDataItem, instance: HdlInstance): string {
         const workspacePath = opeParam.workspacePath;
+        if (instance.module === undefined) {
+            return 'File Error';
+        }
+
         if (hdlPath.exist(item.path)) {
             if (!item.path?.includes(workspacePath)) {
                 return 'remote';

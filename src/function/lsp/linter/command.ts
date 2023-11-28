@@ -7,6 +7,7 @@ import { HdlLangID } from '../../../global/enum';
 import { vlogLinterManager } from './vlog';
 import { vhdlLinterManager } from './vhdl';
 import { easyExec } from '../../../global/util';
+import { LspOutput } from '../../../global';
 
 let _selectVlogLinter: string | null = null;
 let _selectVhdlLinter: string | null = null;
@@ -76,13 +77,20 @@ async function makeModelsimPickItem(langID: HdlLangID): Promise<LinterItem> {
 
 async function pickVlogLinter() {
     const pickWidget = vscode.window.createQuickPick<LinterItem>();
-    pickWidget.placeholder = 'select a linter for code diagnostic';
+    pickWidget.placeholder = 'select a linter for verilog code diagnostic';
     pickWidget.canSelectMany = false;
-    pickWidget.items = [
-        await makeDefaultPickItem(),
-        await makeVivadoPickItem(HdlLangID.Verilog),
-        await makeModelsimPickItem(HdlLangID.Verilog)
-    ];
+
+    await vscode.window.withProgress({
+        location: vscode.ProgressLocation.Notification,
+        title: 'Parsing local environment ...',
+        cancellable: true
+    }, async () => {
+        pickWidget.items = [
+            await makeDefaultPickItem(),
+            await makeVivadoPickItem(HdlLangID.Verilog),
+            await makeModelsimPickItem(HdlLangID.Verilog)
+        ];
+    });
     
     pickWidget.onDidChangeSelection(items => {
         const selectedItem = items[0];
@@ -101,7 +109,36 @@ async function pickVlogLinter() {
 }
 
 async function pickVhdlLinter() {
+    const pickWidget = vscode.window.createQuickPick<LinterItem>();
+    pickWidget.placeholder = 'select a linter for code diagnostic';
+    pickWidget.canSelectMany = false;
+
+    await vscode.window.withProgress({
+        location: vscode.ProgressLocation.Notification,
+        title: 'Parsing local environment ...',
+        cancellable: true
+    }, async () => {
+        pickWidget.items = [
+            await makeDefaultPickItem(),
+            await makeVivadoPickItem(HdlLangID.Vhdl),
+            await makeModelsimPickItem(HdlLangID.Vhdl)
+        ];
+    });
     
+    pickWidget.onDidChangeSelection(items => {
+        const selectedItem = items[0];
+        _selectVlogLinter = selectedItem.name;
+    });
+
+    pickWidget.onDidAccept(() => {
+        if (_selectVlogLinter) {
+            const vlogLspConfig = vscode.workspace.getConfiguration('digital-ide.function.lsp.linter.vhdl');
+            vlogLspConfig.update('diagnostor', _selectVlogLinter);
+            pickWidget.hide();
+        }
+    });
+
+    pickWidget.show();
 }
 
 

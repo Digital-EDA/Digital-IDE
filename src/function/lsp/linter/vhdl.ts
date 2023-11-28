@@ -2,38 +2,54 @@ import * as vscode from 'vscode';
 import { LspOutput, ReportType } from '../../../global';
 import { HdlLangID } from '../../../global/enum';
 import { BaseLinter, BaseManager } from './base';
-import { defaultVlogLinter } from './default';
+import { defaultVhdlLinter } from './default';
 import { modelsimLinter } from './modelsim';
 import { vivadoLinter } from './vivado';
 import { hdlFile, hdlPath } from '../../../hdlFs';
 
 class VhdlLinterManager implements BaseManager {
     currentLinter: BaseLinter | undefined;
-    activateList: Map<string, boolean> = new Map<string, boolean>();
     activateLinterName: string;
+    statusBarItem: vscode.StatusBarItem;
+    initialized: boolean;
 
     constructor() {
-        this.activateList.set('vivado', false);
-        this.activateList.set('modelsim', false);
-        this.activateList.set('default', false);
         this.activateLinterName = 'default';
+        this.initialized = false;
+
+        // make a status bar for rendering
+        this.statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right);
+        this.statusBarItem.command = 'digital-ide.lsp.vhdl.linter.pick';
+
+        // when changing file, hide if langID is not vhdl
+        vscode.window.onDidChangeActiveTextEditor(editor => {
+            if (!editor) {
+                return;
+            }
+            const currentFileName = hdlPath.toSlash(editor.document.fileName);
+                        
+            if (hdlFile.isVhdlFile(currentFileName)) {
+                this.statusBarItem.show();
+            } else {
+                this.statusBarItem.hide();
+            }
+        });
 
         // update when user's config is changed
         vscode.workspace.onDidChangeConfiguration(() => {
-            const diagnostor = this.getUserDiagnostorSelection();
-            const lastDiagnostor = this.activateLinterName;
-            if (diagnostor !== lastDiagnostor) {
-                LspOutput.report(`<vhdl lsp manager> detect linter setting changes, switch ${lastDiagnostor} to ${diagnostor}.`, );
-                this.updateLinter(); 
-            }
+            this.updateLinter();
         });
     }
 
     async initialise(): Promise<void> {
         const success = await this.updateLinter();
+        
         if (!success) {
             return;
         }
+
+        this.initialized = true;
+
         for (const doc of vscode.workspace.textDocuments) {
             const fileName = hdlPath.toSlash(doc.fileName);
             if (hdlFile.isVhdlFile(fileName)) {
@@ -41,44 +57,83 @@ class VhdlLinterManager implements BaseManager {
             }
         }
         LspOutput.report('<vhdl lsp manager> finish initialization of vhdl linter. Linter name: ' + this.activateLinterName, ReportType.Launch);
+              
+        // hide it if current window is not vhdl
+        const editor = vscode.window.activeTextEditor;
+        if (editor && hdlFile.isVhdlFile(editor.document.fileName)) {
+            this.statusBarItem.show();
+        } else {
+            this.statusBarItem.hide();
+        }
     }
 
     async lint(document: vscode.TextDocument) {
+        this.currentLinter?.remove(document.uri);
         await this.currentLinter?.lint(document);
     }
-    
+
     async remove(uri: vscode.Uri): Promise<void> {
         this.currentLinter?.remove(uri);
     }
 
     public getUserDiagnostorSelection() {
-        const vlogLspConfig = vscode.workspace.getConfiguration('digital-ide.function.lsp.linter.vlog');
-        const diagnostor = vlogLspConfig.get('diagnostor', 'default');
+        const vhdlLspConfig = vscode.workspace.getConfiguration('digital-ide.function.lsp.linter.vhdl');
+        const diagnostor = vhdlLspConfig.get('diagnostor', 'xxx');
         return diagnostor;
     }
 
-    public async updateLinter(): Promise<boolean> {
-        const diagnostor = this.getUserDiagnostorSelection();
-        switch (diagnostor) {
-            case 'vivado':    return this.activateVivado();
-            case 'modelsim':  return this.activateModelsim();
-            case 'default':   return this.activateDefault();
-            default:          return this.activateDefault();
-        } 
+    public async updateLinter(): Promise<boolean> {        
+        const diagnostorName = this.getUserDiagnostorSelection();
+        
+        const lastDiagnostorName = this.activateLinterName;
+        const lastDiagnostor = this.currentLinter;
+        
+        if (this.initialized && diagnostorName === lastDiagnostorName) {
+            // no need for update
+            return true;
+        }
+        LspOutput.report(`<vhdl lsp manager> detect linter setting changes, switch from ${lastDiagnostorName} to ${diagnostorName}.`, ReportType.Launch);
+
+        let launch = false;
+        switch (diagnostorName) {
+            case 'vivado':    launch = await this.activateVivado(); break;
+            case 'modelsim':  launch = await this.activateModelsim(); break;
+            case 'default':   launch = await this.activateDefault(); break;
+            default:          launch = await this.activateDefault(); break;
+        }
+
+        for (const doc of vscode.workspace.textDocuments) {
+            const fileName = hdlPath.toSlash(doc.fileName);
+            if (hdlFile.isVhdlFile(fileName)) {
+                lastDiagnostor?.remove(doc.uri);
+                await this.lint(doc);
+            }
+        }
+
+        return launch;
     }
 
     public async activateVivado(): Promise<boolean> {
         const selectedLinter = vivadoLinter;
         let launch = true;
 
-        if (this.activateList.get('vivado') === false) {
-            launch = await selectedLinter.initialise(HdlLangID.Verilog);
-            this.activateList.set('vivado', true);
+        launch = await selectedLinter.initialise(HdlLangID.Vhdl);            
+        if (launch) {
+            this.statusBarItem.text = '$(getting-started-beginner) Linter(vivado)';
+
             LspOutput.report('<vhdl lsp manager> vivado linter has been activated', ReportType.Info);
+        } else {
+            this.statusBarItem.backgroundColor = new vscode.ThemeColor('statusBarItem.warningBackground');
+            this.statusBarItem.tooltip = 'Fail to launch vivado linter';
+            this.statusBarItem.text = '$(extensions-warning-message) Linter(vivado)';
+
+            LspOutput.report('<vhdl lsp manager> Fail to launch vivado linter', ReportType.Error);
         }
 
         this.currentLinter = selectedLinter;
         this.activateLinterName = 'vivado';
+        this.statusBarItem.show();
+        
         return launch;
     }
 
@@ -86,29 +141,46 @@ class VhdlLinterManager implements BaseManager {
         const selectedLinter = modelsimLinter;
         let launch = true;
 
-        if (this.activateList.get('modelsim') === false) {
-            launch = await selectedLinter.initialise(HdlLangID.Verilog);
-            this.activateList.set('modelsim', true);
-            LspOutput.report('<vhdl lsp manager> modelsim linter has been activated', ReportType.Info); 
+        launch = await selectedLinter.initialise(HdlLangID.Vhdl);
+        if (launch) {
+            this.statusBarItem.text = '$(getting-started-beginner) Linter(modelsim)';
+
+            LspOutput.report('<vhdl lsp manager> modelsim linter has been activated', ReportType.Info);
+        } else {
+            this.statusBarItem.backgroundColor = new vscode.ThemeColor('statusBarItem.warningBackground');
+            this.statusBarItem.tooltip = 'Fail to launch modelsim linter';
+            this.statusBarItem.text = '$(extensions-warning-message) Linter(modelsim)';
+
+            LspOutput.report('<vhdl lsp manager> Fail to launch modelsim linter', ReportType.Error);
         }
 
         this.currentLinter = selectedLinter;
         this.activateLinterName = 'modelsim';
+        this.statusBarItem.show();
+
         return launch;
     }
 
     public async activateDefault(): Promise<boolean> {
-        const selectedLinter = defaultVlogLinter;
+        const selectedLinter = defaultVhdlLinter;
         let launch = true;
 
-        if (this.activateList.get('default') === false) {
+        if (launch) {
+            this.statusBarItem.text = '$(getting-started-beginner) Linter(default)';
             
-            this.activateList.set('default', true);
             LspOutput.report('<vhdl lsp manager> default build-in linter has been activated', ReportType.Info);
+        } else {
+            this.statusBarItem.backgroundColor = undefined;
+            this.statusBarItem.tooltip = 'Fail to launch default linter';
+            this.statusBarItem.text = '$(extensions-warning-message) Linter(default)';
+
+            LspOutput.report('<vhdl lsp manager> Fail to launch default linter', ReportType.Error);
         }
 
         this.currentLinter = selectedLinter;
         this.activateLinterName = 'default';
+        this.statusBarItem.show();
+
         return launch;
     }
 }

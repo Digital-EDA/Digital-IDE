@@ -155,7 +155,7 @@ class HdlAction extends BaseAction {
     
         const fast = await HdlSymbol.fast(path);
         if (!fast) {
-            vscode.window.showErrorMessage('error happen when parse ' + path + '\nFail to update');
+            // vscode.window.showErrorMessage('error happen when parse ' + path + '\nFail to update');
             return;
         }
     

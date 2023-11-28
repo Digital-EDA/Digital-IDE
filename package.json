@@ -44,6 +44,11 @@
                     "default": true,
                     "description": "show the welcome text in Digital-IDE"
                 },
+                "digital-ide.dont-show-again.propose.issue": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "show the welcome text in Digital-IDE"
+                },
                 "digital-ide.lib.custom.path": {
                     "type": "string",
                     "default": "",

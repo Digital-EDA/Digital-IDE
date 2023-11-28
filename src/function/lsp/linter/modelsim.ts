@@ -43,7 +43,7 @@ class ModelsimLinter implements BaseLinter {
         }
 
         const args = [filePath, ...linterArgs];
-        const executor = this.executableInvokeNameMap.get(langID);
+        const executor = this.executableInvokeNameMap.get(langID);        
         if (executor !== undefined) {
             const { stdout } = await easyExec(executor, args);
             if (stdout.length > 0) {

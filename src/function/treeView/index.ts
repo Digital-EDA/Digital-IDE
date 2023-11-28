@@ -14,6 +14,10 @@ async function openFileAtPosition(uri: vscode.Uri, line: number, character: numb
 }
 
 function openFileByUri(path: string, range: Range) {
+    if (range === undefined) {
+        vscode.window.showErrorMessage(`${path} not support jump yet`);
+        return;
+    }
     if (hdlPath.exist(path)) {
         const uri = vscode.Uri.file(path);
         const start = range.start;

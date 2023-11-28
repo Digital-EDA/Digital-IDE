@@ -5,7 +5,6 @@ script/__pycache__
 .vscode-test/
 *.vsix
 parser_stuck.v
-**/*.wasm
 out-js/
 *.pyc
 *.pyd

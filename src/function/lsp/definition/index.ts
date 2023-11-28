@@ -1,5 +1,7 @@
 import { vlogDefinitionProvider } from './vlog';
+import { vhdlDefinitionProvider } from './vhdl';
 
 export {
-    vlogDefinitionProvider
+    vlogDefinitionProvider,
+    vhdlDefinitionProvider
 };

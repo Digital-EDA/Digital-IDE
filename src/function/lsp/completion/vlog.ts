@@ -184,6 +184,7 @@ class VlogPositionPortProvider implements vscode.CompletionItemProvider {
 }
 
 class VlogCompletionProvider implements vscode.CompletionItemProvider {
+    keywordItems: vscode.CompletionItem[] | undefined;
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext): Promise<vscode.CompletionItem[] | vscode.CompletionList<vscode.CompletionItem> | null | undefined> {
         // console.log('VlogCompletionProvider');
         
@@ -237,13 +238,16 @@ class VlogCompletionProvider implements vscode.CompletionItemProvider {
     }
 
     private makeKeywordItems(document: vscode.TextDocument, position: vscode.Position): vscode.CompletionItem[] {
-        const vlogKeywordItem = [];
+        if (this.keywordItems !== undefined && this.keywordItems.length > 0) {
+            return this.keywordItems;
+        }
+        const vlogKeywordItems: vscode.CompletionItem[] = [];
         for (const keyword of vlogKeyword.keys()) {
             const clItem = this.makekeywordCompletionItem(keyword);
-            vlogKeywordItem.push(clItem);
+            vlogKeywordItems.push(clItem);
         }
-
-        return vlogKeywordItem;
+        this.keywordItems = vlogKeywordItems;
+        return vlogKeywordItems;
     }
 
     private makeCompilerKeywordItems(document: vscode.TextDocument, position: vscode.Position): vscode.CompletionItem[] {
@@ -274,7 +278,7 @@ class VlogCompletionProvider implements vscode.CompletionItemProvider {
 
     private makekeywordCompletionItem(keyword: string): vscode.CompletionItem {
         const clItem = new vscode.CompletionItem(keyword, vscode.CompletionItemKind.Keyword);
-        clItem.detail = 'keyword';
+        clItem.detail = 'verilog keyword';
 
         switch (keyword) {
             case 'begin': clItem.insertText = new vscode.SnippetString("begin$1\nend"); break;

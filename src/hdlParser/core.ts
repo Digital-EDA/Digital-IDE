@@ -1,3 +1,5 @@
+import * as vscode from 'vscode';
+
 import { AbsPath, opeParam } from '../global';
 import { HdlLangID } from '../global/enum';
 import { MainOutput, ReportType } from '../global/outputChannel';
@@ -240,7 +242,7 @@ class HdlParam {
     }
 
     public async initHdlFiles(hdlFiles: AbsPath[] | Generator<AbsPath>) {
-        for (const path of hdlFiles) {        
+        for (const path of hdlFiles) {
             await this.doHdlFast(path);
         }
     }
@@ -475,23 +477,52 @@ class HdlModule {
     public createHdlInstance(rawHdlInstance: common.RawHdlInstance): HdlInstance {
         const instModName = rawHdlInstance.type;
         
-        const searchResult = this.searchInstModPath(instModName);
-        const hdlInstance = new HdlInstance(rawHdlInstance.name,
-                                            rawHdlInstance.type,
-                                            searchResult.path,
-                                            searchResult.status,
-                                            rawHdlInstance.instparams,
-                                            rawHdlInstance.instports,
-                                            rawHdlInstance.range,
-                                            this);
-        if (!searchResult.path) {
-            hdlParam.addUnhandleInstance(hdlInstance);
-            this.addUnhandleInstance(hdlInstance);
+        
+        if (this.languageId === HdlLangID.Verilog || this.languageId === HdlLangID.SystemVerilog) {
+            const searchResult = this.searchInstModPath(instModName);
+            const hdlInstance = new HdlInstance(rawHdlInstance.name,
+                                                rawHdlInstance.type,
+                                                searchResult.path,
+                                                searchResult.status,
+                                                rawHdlInstance.instparams,
+                                                rawHdlInstance.instports,
+                                                rawHdlInstance.range,
+                                                this);
+            if (!searchResult.path) {
+                hdlParam.addUnhandleInstance(hdlInstance);
+                this.addUnhandleInstance(hdlInstance);
+            }
+            if (this.nameToInstances) {
+                this.nameToInstances.set(rawHdlInstance.name, hdlInstance);
+            }
+            return hdlInstance; 
+        } else if (this.languageId === HdlLangID.Vhdl) {
+            const hdlInstance = new HdlInstance(rawHdlInstance.name,
+                                                rawHdlInstance.type,
+                                                this.path,
+                                                common.InstModPathStatus.Current,
+                                                rawHdlInstance.instparams,
+                                                this.ports[0].range,
+                                                rawHdlInstance.range,
+                                                this);
+            hdlInstance.module = this;
+            if (this.nameToInstances) {
+                this.nameToInstances.set(rawHdlInstance.name, hdlInstance);
+            }           
+            return hdlInstance;
+        } else {
+            vscode.window.showErrorMessage(`Unknown Language :${this.languageId} exist in our core program`);
+            const hdlInstance = new HdlInstance(rawHdlInstance.name,
+                                                rawHdlInstance.type,
+                                                this.path,
+                                                common.InstModPathStatus.Unknown,
+                                                rawHdlInstance.instparams,
+                                                this.ports[0].range,
+                                                rawHdlInstance.range,
+                                                this);
+            
+            return hdlInstance;
         }
-        if (this.nameToInstances) {
-            this.nameToInstances.set(rawHdlInstance.name, hdlInstance);
-        }
-        return hdlInstance;
     }
 
     public makeNameToInstances() {        
@@ -707,7 +738,7 @@ class HdlFile {
         hdlParam.setHdlFile(this);
 
         // make nameToModule
-        this.nameToModule = new Map<string, HdlModule>();
+        this.nameToModule = new Map<string, HdlModule>();   
         for (const rawHdlModule of modules) {
             this.createHdlModule(rawHdlModule);
         }
@@ -776,7 +807,7 @@ class HdlFile {
     }
     
     public makeInstance() {
-        for (const module of this.getAllHdlModules()) {
+        for (const module of this.getAllHdlModules()) {            
             module.makeNameToInstances();
         }
     }

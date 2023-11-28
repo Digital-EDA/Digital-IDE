@@ -10,7 +10,7 @@ import { LspOutput, ReportType } from '../../../global';
 class DefaultVlogLinter implements BaseLinter {
     diagnostic: vscode.DiagnosticCollection;
     constructor() {
-        this.diagnostic = vscode.languages.createDiagnosticCollection();
+        this.diagnostic = vscode.languages.createDiagnosticCollection('Digital-IDE Default Linter');
     }
 
     async lint(document: vscode.TextDocument): Promise<void> {
@@ -22,14 +22,16 @@ class DefaultVlogLinter implements BaseLinter {
             const diagnostics = this.provideDiagnostics(document, vlogAll);
             this.diagnostic.set(document.uri, diagnostics);
         }
-    }
+    }   
 
     private provideDiagnostics(document: vscode.TextDocument, all: All): vscode.Diagnostic[] {
         const diagnostics: vscode.Diagnostic[] = [];
         if (all.error && all.error.length > 0) {
             for (const hdlError of all.error) {
+                LspOutput.report(`<default linter> line: ${hdlError.range.line}, info: ${hdlError.message}`, ReportType.Run);
+                const syntaxInfo = hdlError.message.replace(/\\r\\n/g, '\n');
                 const range = this.makeCorrectRange(document, hdlError.range);
-                const diag = new vscode.Diagnostic(range, hdlError.message, hdlError.severity);
+                const diag = new vscode.Diagnostic(range, syntaxInfo, hdlError.severity);
                 diag.source = hdlError.source;
                 diagnostics.push(diag);
             }
@@ -78,7 +80,7 @@ class DefaultVlogLinter implements BaseLinter {
     }
 }
 
-class DefaultVHDLLinter implements BaseLinter {
+class DefaultVhdlLinter implements BaseLinter {
     diagnostic: vscode.DiagnosticCollection;
     constructor() {
         this.diagnostic = vscode.languages.createDiagnosticCollection();
@@ -99,6 +101,8 @@ class DefaultVHDLLinter implements BaseLinter {
         const diagnostics: vscode.Diagnostic[] = [];
         if (all.error && all.error.length > 0) {
             for (const hdlError of all.error) {
+                LspOutput.report(`<default linter> line: ${hdlError.range.line}, info: ${hdlError.message}`, ReportType.Run);
+                
                 const range = this.makeCorrectRange(document, hdlError.range);
                 const diag = new vscode.Diagnostic(range, hdlError.message, hdlError.severity);
                 diag.source = hdlError.source;
@@ -150,11 +154,11 @@ class DefaultVHDLLinter implements BaseLinter {
 }
 
 const defaultVlogLinter = new DefaultVlogLinter();
-const defaultVHDLLinter = new DefaultVHDLLinter();
+const defaultVhdlLinter = new DefaultVhdlLinter();
 
 export {
     defaultVlogLinter,
-    defaultVHDLLinter,
+    defaultVhdlLinter,
     DefaultVlogLinter,
-    DefaultVHDLLinter
+    DefaultVhdlLinter
 };

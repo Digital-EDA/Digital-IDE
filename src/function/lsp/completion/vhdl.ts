@@ -11,53 +11,27 @@ import { hdlPath } from '../../../hdlFs';
 import { hdlSymbolStorage } from '../core';
 
 class VhdlCompletionProvider implements vscode.CompletionItemProvider {
+    keywordItems: vscode.CompletionItem[] | undefined;
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext): Promise<vscode.CompletionItem[] | vscode.CompletionList<vscode.CompletionItem> | null | undefined> {
-        // console.log('VhdlCompletionProvider');
         
         try {
             const filePath = hdlPath.toSlash(document.fileName);
 
             // 1. provide keyword
             const completions = this.makeKeywordItems(document, position);
-            completions.push(...this.makeCompilerKeywordItems(document, position));
-            completions.push(...this.makeSystemKeywordItems(document, position));
 
             const symbolResult = await hdlSymbolStorage.getSymbol(filePath);
+            
             if (!symbolResult) {
                 return completions;
             }
-
-            console.log('vhdl symbol result');
             
-            
-            // locate at one module
-            const scopeSymbols = util.filterSymbolScope(position, symbolResult.content);
-            if (!scopeSymbols || 
-                !scopeSymbols.module || 
-                !hdlParam.hasHdlModule(filePath, scopeSymbols.module.name)) {
-                // MainOutput.report('Fail to get HdlModule ' + filePath + ' ' + scopeSymbols?.module.name, ReportType.Debug);
-                return completions;
+            const symbols = symbolResult.content;
+            for (const symbol of symbols) {
+                const kind = this.getCompletionItemKind(symbol.type);
+                const clItem = new vscode.CompletionItem(symbol.name, kind);
+                completions.push(clItem);
             }
-
-            // find wrapper module
-            const currentModule = hdlParam.getHdlModule(filePath, scopeSymbols.module.name);
-            if (!currentModule) {
-                return completions;
-            }
-
-            // 3. provide modules
-            const suggestModulesPromise = this.provideModules(document, position, filePath, symbolResult.macro.includes);
-
-            // 4. provide params and ports of wrapper module
-            const suggestParamsPortsPromise = this.provideParamsPorts(currentModule);
-
-            // 5. provide nets
-            const suggestNetsPromise = this.provideNets(scopeSymbols.symbols);
-
-            // collect
-            completions.push(...await suggestModulesPromise);
-            completions.push(...await suggestParamsPortsPromise);
-            completions.push(...await suggestNetsPromise);
             
             return completions;
 
@@ -66,49 +40,43 @@ class VhdlCompletionProvider implements vscode.CompletionItemProvider {
         }
     }
 
-    private makeKeywordItems(document: vscode.TextDocument, position: vscode.Position): vscode.CompletionItem[] {
-        const vhdlKeywordItem = [];
+    private getCompletionItemKind(type: string): vscode.CompletionItemKind {
+        switch (type) {
+            case 'entity': return vscode.CompletionItemKind.Class; break;
+            case 'port': return vscode.CompletionItemKind.Variable; break;
+            default: return vscode.CompletionItemKind.Value; break;
+        }
+    } 
+
+    private makeKeywordItems(document: vscode.TextDocument, position: vscode.Position): vscode.CompletionItem[] {        
+        if (this.keywordItems !== undefined && this.keywordItems.length > 0) {
+            return this.keywordItems;
+        }
+        const vhdlKeywordItems: vscode.CompletionItem[] = [];
         for (const keyword of vhdlKeyword.keys()) {
-            const clItem = this.makekeywordCompletionItem(keyword);
-            vhdlKeywordItem.push(clItem);
+            const clItem = this.makekeywordCompletionItem(keyword, 'vhdl keyword');
+            vhdlKeywordItems.push(clItem);
         }
-
-        return vhdlKeywordItem;
-    }
-
-    private makeCompilerKeywordItems(document: vscode.TextDocument, position: vscode.Position): vscode.CompletionItem[] {
-        const items = [];
-        const targetRange = document.getWordRangeAtPosition(position, /[`_0-9a-zA-Z]+/);
-        const targetWord = document.getText(targetRange);
-        const prefix = targetWord.startsWith('`') ? '' : '`';
         for (const keyword of vhdlKeyword.compilerKeys()) {
-            const clItem = new vscode.CompletionItem(keyword, vscode.CompletionItemKind.Keyword);
-            clItem.insertText = new vscode.SnippetString(prefix + keyword);
-            clItem.detail = 'compiler directive';       
-            items.push(clItem);
+            const clItem = this.makekeywordCompletionItem(keyword, 'IEEE lib function');
+            vhdlKeywordItems.push(clItem);
         }
-        return items;
-    }
-
-    private makeSystemKeywordItems(document: vscode.TextDocument, position: vscode.Position): vscode.CompletionItem[] {
-        const items = [];
         for (const keyword of vhdlKeyword.systemKeys()) {
-            const clItem = new vscode.CompletionItem(keyword, vscode.CompletionItemKind.Method);
-            clItem.insertText = new vscode.SnippetString('\\$' + keyword + '($1);');
-            clItem.detail = 'system task';
-            items.push(clItem);
+            const clItem = this.makekeywordCompletionItem(keyword, 'vhdl keyword');
+            vhdlKeywordItems.push(clItem);
         }
-        return items;
+        this.keywordItems = vhdlKeywordItems;
+        return vhdlKeywordItems;
     }
 
-
-    private makekeywordCompletionItem(keyword: string): vscode.CompletionItem {
+    private makekeywordCompletionItem(keyword: string, detail: string): vscode.CompletionItem {
         const clItem = new vscode.CompletionItem(keyword, vscode.CompletionItemKind.Keyword);
-        clItem.detail = 'keyword';
+        clItem.detail = detail;
 
         switch (keyword) {
             case 'begin': clItem.insertText = new vscode.SnippetString("begin$1\nend"); break;
-            case 'function': clItem.insertText = new vscode.SnippetString("function ${1:name}\n\nendfunction"); break;
+            case 'entity': clItem.insertText = new vscode.SnippetString("entity ${1:name} is\n\t${2:content}\nend entity;"); break;
+            case 'architecture': clItem.insertText = new vscode.SnippetString("architecture ${1:name} of ${2:entity} is\n\t${3:definition}\nbegin\n\t${4:content}\nend architecture;"); break;
             default: break;
         }
         return clItem;

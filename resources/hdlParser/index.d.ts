@@ -21,6 +21,7 @@ interface All {
     error: Error[]
 }
 
+export function callParser(path: AbsPath, func: number): Promise<any | undefined>;
 export function vlogFast(path: AbsPath): Promise<Fast | undefined>;
 export function vlogAll(path: AbsPath): Promise<All | undefined>;
 export function vhdlFast(path: AbsPath): Promise<Fast | undefined>;

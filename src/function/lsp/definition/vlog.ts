@@ -74,7 +74,7 @@ class VlogDefinitionProvider implements vscode.DefinitionProvider {
         }
 
         // locate at one module
-        const scopeSymbols = util.filterSymbolScope(position, all.content);
+        const scopeSymbols = util.locateVlogSymbol(position, all.content);
         if (!scopeSymbols || !scopeSymbols.module) {
             return null;
         }

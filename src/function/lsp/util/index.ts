@@ -60,7 +60,7 @@ function positionAfterEqual(positionA: Position, positionB: Position): boolean {
 /**
  * @description filter the symbol result item that exceed the scope
  */
-function filterSymbolScope(position: vscode.Position, rawSymbols: RawSymbol[]): AllowNull<ModuleScope> {
+function locateVlogSymbol(position: vscode.Position, rawSymbols: RawSymbol[]): AllowNull<ModuleScope> {
     if (!rawSymbols) {
         return null;
     }
@@ -76,6 +76,34 @@ function filterSymbolScope(position: vscode.Position, rawSymbols: RawSymbol[]): 
     }
 
     const parentModule = parentModules[0];
+    const symbols = rawSymbols.filter(item => 
+        item !== parentModule &&
+        positionAfterEqual(item.range.start, parentModule.range.start) &&
+        positionAfterEqual(parentModule.range.end, item.range.end));
+    
+    return {
+        module : parentModule,
+        symbols : symbols
+    };
+}
+
+function locateVhdlSymbol(position: vscode.Position, rawSymbols: RawSymbol[]): AllowNull<ModuleScope> {
+    if (!rawSymbols) {
+        return null;
+    }
+    const parentModules = rawSymbols.filter(item => 
+        (item.type === 'entity' || item.type === 'architecture') && 
+        positionAfterEqual(position, item.range.start) &&
+        positionAfterEqual(item.range.end, position)
+    );
+
+    if (parentModules.length === 0) {
+        // TODO : macro
+        return null;
+    }
+
+    const parentModule = parentModules[0];
+
     const symbols = rawSymbols.filter(item => 
         item !== parentModule &&
         positionAfterEqual(item.range.start, parentModule.range.start) &&
@@ -391,6 +419,45 @@ async function makeVlogHoverContent(content: vscode.MarkdownString, module: HdlM
     content.appendCodeblock(moduleDefinitionCode, 'verilog');
 }
 
+async function makeVhdlHoverContent(content: vscode.MarkdownString, module: HdlModule) {
+    const portNum = module.ports.length;
+    const paramNum = module.params.length;
+    const instNum = module.getInstanceNum();
+
+    const moduleUri = vscode.Uri.file(module.path);
+    const thenableFileDocument = vscode.workspace.openTextDocument(moduleUri);
+
+    const portDesc =  ' $(instance-param) ' + paramNum +
+                      ' $(instance-port) ' + portNum +
+                      ' $(instance-module)' + instNum;
+
+
+    content.appendMarkdown(portDesc);
+    content.appendText('   |   ');
+
+    const count = {
+        input: 0,
+        output: 0,
+        inout: 0
+    };
+    for (const port of module.ports) {
+        count[port.type as keyof typeof count] += 1;
+    }
+    const ioDesc = ' $(instance-input) ' + count.input +
+                   ' $(instance-output) ' + count.output +
+                   ' $(instance-inout)' + count.inout;
+    content.appendMarkdown(ioDesc);
+    content.appendText('\n');
+
+    content.appendMarkdown('---');
+
+    // make document
+    const fileDocument = await thenableFileDocument;
+    const range = transformRange(module.range, -1, 0, 1);    
+    const moduleDefinitionCode = fileDocument.getText(range);
+    content.appendCodeblock(moduleDefinitionCode, 'vhdl');
+}
+
 
 async function searchCommentAround(path: AbsPath, range: Range): Promise<string | null> {
     const targetRange = transformRange(range, -1, 0);
@@ -400,7 +467,8 @@ async function searchCommentAround(path: AbsPath, range: Range): Promise<string 
 
 export {
     transformRange,
-    filterSymbolScope,
+    locateVlogSymbol,
+    locateVhdlSymbol,
     filterInstanceByPosition,
     isPositionInput,
     isInComment,
@@ -412,6 +480,7 @@ export {
     matchParams,
     matchNormalSymbol,
     makeVlogHoverContent,
+    makeVhdlHoverContent,
     positionAfterEqual,
     getInstPortByPosition,
     getInstParamByPosition,
@@ -420,4 +489,5 @@ export {
     makeNormalDesc,
     transferVlogNumber,
     searchCommentAround,
+    ModuleScope
 };

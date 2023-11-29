@@ -91,11 +91,10 @@ class HdlAction extends BaseAction {
         console.log('HdlAction unlink', path);
 
         // operation to process unlink of hdl files can be deleted in <processLibFiles>
-        if (fs.existsSync(path)) {
-            path = hdlPath.toSlash(path);
-            hdlParam.deleteHdlFile(path);
-            refreshArchTree();
-        }
+        path = hdlPath.toSlash(path);
+        hdlParam.deleteHdlFile(path);
+        console.log(hdlParam);
+        refreshArchTree();
 
         const uri = vscode.Uri.file(path);
         const langID = hdlFile.getLanguageId(path);

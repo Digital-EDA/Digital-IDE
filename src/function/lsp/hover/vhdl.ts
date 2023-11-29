@@ -3,11 +3,12 @@ import * as vscode from 'vscode';
 import { hdlPath } from '../../../hdlFs';
 import { hdlParam } from '../../../hdlParser';
 import { All } from '../../../../resources/hdlParser';
-import { vlogKeyword } from '../util/keyword';
+import { vhdlKeyword } from '../util/keyword';
 import * as util from '../util';
 import { MainOutput, ReportType } from '../../../global';
 import { HdlLangID } from '../../../global/enum';
 import { hdlSymbolStorage } from '../core';
+import { RawSymbol } from '../../../hdlParser/common';
 
 
 class VhdlHoverProvider implements vscode.HoverProvider {
@@ -26,19 +27,33 @@ class VhdlHoverProvider implements vscode.HoverProvider {
             return null;
         }
 
+        const keywordHover = this.getKeywordHover(targetWord);
+        if (keywordHover) {
+            return keywordHover;
+        }
+
         const filePath = document.fileName;
-        const vlogAll = await hdlSymbolStorage.getSymbol(filePath);          
-        if (!vlogAll) {
+        const vhdlAll = await hdlSymbolStorage.getSymbol(filePath);
+        if (!vhdlAll) {
             return null;
         } else {
-            const hover = await this.makeHover(document, position, vlogAll, targetWord, wordRange);
+            const hover = await this.makeHover(document, position, vhdlAll, targetWord, wordRange);
             return hover;
         }
     }
 
+    private getKeywordHover(words: string): vscode.Hover | undefined {
+        const content = new vscode.MarkdownString('', true);
+        if (vhdlKeyword.compilerKeys().has(words)) {
+            content.appendMarkdown('IEEE Library data type');
+            return new vscode.Hover(content);
+        }
+        return undefined;
+    }
+
     private needSkip(document: vscode.TextDocument, position: vscode.Position, targetWord: string): boolean {
         // check keyword
-        if (vlogKeyword.isKeyword(targetWord)) {
+        if (vhdlKeyword.isKeyword(targetWord)) {
             return true;
         }
 
@@ -52,147 +67,110 @@ class VhdlHoverProvider implements vscode.HoverProvider {
         const lineText = document.lineAt(position).text;
         const filePath = hdlPath.toSlash(document.fileName);
 
-        // total content rendered on the hover box
+        // locate at one entity or architecture
+        // TODO: remove it after adjust of backend
+        const rawSymbols = [];
+        for (const symbol of all.content) {
+            const rawSymbol: RawSymbol = {
+                name: symbol.name,
+                type: symbol.type,
+                parent: symbol.parent,
+                range: util.transformRange(symbol.range, -1),
+                signed: symbol.signed,
+                netType: symbol.netType
+            };
+            rawSymbols.push(rawSymbol);
+        }
+
+        const moduleScope = util.locateVhdlSymbol(position, rawSymbols);
+
+        if (!moduleScope) {
+            return null;
+        }
+
+        const scopeType = moduleScope.module.type;
+        if (scopeType === 'architecture') {
+            return await this.makeArchitectureHover(filePath, targetWord, targetWordRange, moduleScope);
+        } else if (scopeType === 'entity') {
+            return await this.makeEntityHover(filePath, targetWord, targetWordRange, moduleScope);
+        }
+
+        return null;
+    }
+
+    private async makeArchitectureHover(filePath: string, targetWord: string, targetWordRange: vscode.Range, moduleScope: util.ModuleScope): Promise<vscode.Hover | null> {
+        const architecture = moduleScope.module;
         const content = new vscode.MarkdownString('', true);
 
-        // match `include
-        const includeResult = util.matchInclude(document, position, all.macro.includes);
-        if (includeResult) {
-            const absPath = hdlPath.rel2abs(filePath, includeResult.name);
-            content.appendCodeblock(`"${absPath}"`, HdlLangID.Verilog);
-            const targetRange = document.getWordRangeAtPosition(position, /[1-9a-zA-Z_\.]+/);
-            return new vscode.Hover(content, targetRange);
-        } else if (lineText.trim().startsWith('`include')) {
-            return null;
-        }
-
-        // match macro
-        const macroResult = util.matchDefineMacro(position, targetWord, all.macro.defines);
-        if (macroResult) {
-            const name = macroResult.name;
-            const value = macroResult.value;
-            content.appendCodeblock(`\`define ${name} ${value}`, HdlLangID.Verilog);
-            return new vscode.Hover(content, targetWordRange);
-        }
-        
-        // locate at one module
-        const scopeSymbols = util.filterSymbolScope(position, all.content);
-        if (!scopeSymbols || !scopeSymbols.module || !hdlParam.hasHdlModule(filePath, scopeSymbols.module.name)) {
-            return null;
-        }
-        const currentModule = hdlParam.getHdlModule(filePath, scopeSymbols.module.name);
-        if (!currentModule) {
-            MainOutput.report('Fail to get HdlModule ' + filePath + ' ' + scopeSymbols.module.name, ReportType.Debug);
-            return null;
-        }
-
-        // match instance
-        const instResult = util.matchInstance(targetWord, currentModule);
-        if (instResult) {
-            const instModule = instResult.module;
-            if (!instModule || !instResult.instModPath) {
-                content.appendMarkdown('cannot find the definition of the module');
+        // point to the entity of the architecture
+        if (architecture.parent && architecture.parent === targetWord) {
+            const entity = hdlParam.getHdlModule(filePath, architecture.parent);
+            if (entity) {
+                await util.makeVhdlHoverContent(content, entity);
                 return new vscode.Hover(content);
             }
-            await util.makeVlogHoverContent(content, instModule);
-            return new vscode.Hover(content);
         }
 
-
-        // match port or param definition (position input)
-        /** for example, when you hover the ".clk" below, the branch will be entered
-        template u_template(
-                 //input
-                 .clk        		( clk        		),
-             );
-         * 
-         */
-        if (util.isPositionInput(lineText, position.character)) {
-            console.log('enter position input');
-            const currentInstResult = util.filterInstanceByPosition(position, scopeSymbols.symbols, currentModule);
-            if (!currentInstResult || !currentInstResult.instModPath) {
-                return null;
+        // filter defined signal
+        for (const symbol of moduleScope.symbols) {
+            if (symbol.name === targetWord) {
+                content.appendCodeblock(symbol.type, 'vhdl');
+                return new vscode.Hover(content);
             }
-            console.log(currentInstResult);
-            
-            const instParamPromise = util.getInstParamByPosition(currentInstResult, position, targetWord);
-            const instPortPromise = util.getInstPortByPosition(currentInstResult, position, targetWord);
-            
-            const instParam = await instParamPromise;
-            const instPort = await instPortPromise;
+        }
 
-            if (instParam) {
-                const paramComment = await util.searchCommentAround(currentInstResult.instModPath, instParam.range);
-                const paramDesc = util.makeParamDesc(instParam);
-                content.appendCodeblock(paramDesc, HdlLangID.Verilog);
-                if (paramComment) {
-                    content.appendCodeblock(paramComment, HdlLangID.Verilog);
+        // inner variable mapping to entity
+        if (architecture.parent) {
+            const entity = hdlParam.getHdlModule(filePath, architecture.parent);
+            if (entity) {
+                // find params definitio
+                for (const param of entity.params) {
+                    if (param.name === targetWord) {
+                        const desc = util.makeParamDesc(param);
+                        content.appendCodeblock(desc, 'vhdl');
+                        return new vscode.Hover(content);
+                    }
                 }
-                return new vscode.Hover(content);
-            }
-            if (instPort) {
-                const portComment = await util.searchCommentAround(currentInstResult.instModPath, instPort.range);
-                const portDesc = util.makePortDesc(instPort);
-                content.appendCodeblock(portDesc, HdlLangID.Verilog);
-                if (portComment) {
-                    content.appendCodeblock(portComment, HdlLangID.Verilog);
+                // find ports definition
+                for (const port of entity.ports) {
+                    if (port.name === targetWord) {
+                        const desc = util.makePortDesc(port);
+                        content.appendCodeblock(desc, 'vhdl');
+                        return new vscode.Hover(content);
+                    }
                 }
+            }
+        }
+
+        return null;
+    }
+
+    private async makeEntityHover(filePath: string, targetWord: string, targetWordRange: vscode.Range, moduleScope: util.ModuleScope): Promise<vscode.Hover | null> {
+        const entity = hdlParam.getHdlModule(filePath, moduleScope.module.name);
+        const content = new vscode.MarkdownString('', true);
+        if (entity) {
+            if (targetWord === entity.name) {
+                await util.makeVhdlHoverContent(content, entity);
                 return new vscode.Hover(content);
             }
-
-            return null;
-        }
-        
-        
-        // match params
-        const paramResult = util.matchParams(targetWord, currentModule);
-        if (paramResult) {
-            const paramComment = await util.searchCommentAround(filePath, paramResult.range);
-            const paramDesc = util.makeParamDesc(paramResult);
-            content.appendCodeblock(paramDesc, HdlLangID.Verilog);
-            if (paramComment) {
-                content.appendCodeblock(paramComment, HdlLangID.Verilog);
+            // find params definitio
+            for (const param of entity.params) {
+                if (param.name === targetWord) {
+                    const desc = util.makeParamDesc(param);
+                    content.appendCodeblock(desc, 'vhdl');
+                    return new vscode.Hover(content);
+                }
             }
-            return new vscode.Hover(content);
-        }        
-
-        // match ports        
-        const portResult = util.matchPorts(targetWord, currentModule);
-        if (portResult) {            
-            const portComment = await util.searchCommentAround(filePath, portResult.range);
-            const portDesc = util.makePortDesc(portResult);
-            content.appendCodeblock(portDesc, HdlLangID.Verilog);            
-            if (portComment) {
-                content.appendCodeblock(portComment, HdlLangID.Verilog);
+            // find ports definition
+            for (const port of entity.ports) {
+                if (port.name === targetWord) {
+                    const desc = util.makePortDesc(port);
+                    content.appendCodeblock(desc, 'vhdl');
+                    return new vscode.Hover(content);
+                }
             }
-            return new vscode.Hover(content);
         }
-
-        // match others        
-        const normalResult = util.matchNormalSymbol(targetWord, scopeSymbols.symbols);
-        if (normalResult) {
-            const normalComment = await util.searchCommentAround(filePath, normalResult.range);            
-            const normalDesc = util.makeNormalDesc(normalResult);
-            
-            content.appendCodeblock(normalDesc, HdlLangID.Verilog);
-            if (normalComment) {
-                content.appendCodeblock(normalComment, HdlLangID.Verilog);
-            }
-            return new vscode.Hover(content);
-        }
-
-
-        // feature 1. number signed and unsigned number display
-        const numberResult = util.transferVlogNumber(lineText, position.character);
-        if (numberResult) {
-            const bits = targetWord.length - 1;
-            content.appendCodeblock(bits + "'" + targetWord, HdlLangID.Verilog);
-            content.appendMarkdown("`unsigned` " + numberResult.unsigned);
-            content.appendText('\n');
-            content.appendMarkdown("`signed` " + numberResult.signed);
-        }
-
-        return new vscode.Hover(content);
+        return null;
     }
 }
 

@@ -2,24 +2,23 @@ import * as vscode from 'vscode';
 
 class Keywords {
     private keywords: Set<string>;
-    private compilerKeywords: string[];    // start with `
-    private systemKeywords: string[];   // start with $
+    private compilerKeywords: Set<string>;    // start with `
+    private systemKeywords: Set<string>;   // start with $
     constructor(keywords: string[], compilerKeywords: string[], systemKeywords: string[]) {
         this.keywords = new Set(keywords);
-        const keywordItems = [];
-        this.compilerKeywords = compilerKeywords;
-        this.systemKeywords = systemKeywords;
+        this.compilerKeywords = new Set(compilerKeywords);
+        this.systemKeywords = new Set(systemKeywords);
     }
 
     public keys(): Set<string> {
         return this.keywords;
     }
 
-    public compilerKeys(): string[] {
+    public compilerKeys(): Set<string> {
         return this.compilerKeywords;
     }
 
-    public systemKeys(): string[] {
+    public systemKeys(): Set<string> {
         return this.systemKeywords;
     }
 

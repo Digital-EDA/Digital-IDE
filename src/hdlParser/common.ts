@@ -170,6 +170,7 @@ interface RawSymbol {
     range: Range
     width?: string
     init?: string
+    parent?: string
     signed: number
     netType: string
 };

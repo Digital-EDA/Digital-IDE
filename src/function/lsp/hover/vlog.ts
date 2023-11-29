@@ -27,7 +27,7 @@ class VlogHoverProvider implements vscode.HoverProvider {
         }
 
         const filePath = document.fileName;
-        const vlogAll = await hdlSymbolStorage.getSymbol(filePath);          
+        const vlogAll = await hdlSymbolStorage.getSymbol(filePath);        
         if (!vlogAll) {
             return null;
         } else {
@@ -75,11 +75,13 @@ class VlogHoverProvider implements vscode.HoverProvider {
             return new vscode.Hover(content, targetWordRange);
         }
         
-        // locate at one module
-        const scopeSymbols = util.filterSymbolScope(position, all.content);
+        // locate at one module        
+        const scopeSymbols = util.locateVlogSymbol(position, all.content);
+
         if (!scopeSymbols || !scopeSymbols.module || !hdlParam.hasHdlModule(filePath, scopeSymbols.module.name)) {
             return null;
         }
+
         const currentModule = hdlParam.getHdlModule(filePath, scopeSymbols.module.name);
         if (!currentModule) {
             MainOutput.report('Fail to get HdlModule ' + filePath + ' ' + scopeSymbols.module.name, ReportType.Debug);

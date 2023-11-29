@@ -122,7 +122,7 @@ class VlogPositionPortProvider implements vscode.CompletionItemProvider {
                 return null;
             }
 
-            const scopeSymbols = util.filterSymbolScope(position, symbolResult.content);
+            const scopeSymbols = util.locateVlogSymbol(position, symbolResult.content);
             if (!scopeSymbols || 
                 !scopeSymbols.module || 
                 !scopeSymbols.symbols || 
@@ -202,7 +202,7 @@ class VlogCompletionProvider implements vscode.CompletionItemProvider {
             }
 
             // locate at one module
-            const scopeSymbols = util.filterSymbolScope(position, symbolResult.content);
+            const scopeSymbols = util.locateVlogSymbol(position, symbolResult.content);
             if (!scopeSymbols || 
                 !scopeSymbols.module || 
                 !hdlParam.hasHdlModule(filePath, scopeSymbols.module.name)) {

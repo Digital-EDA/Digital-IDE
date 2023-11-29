@@ -7,12 +7,13 @@ import { vlogKeyword } from '../util/keyword';
 import * as util from '../util';
 import { MainOutput, ReportType } from '../../../global';
 import { hdlSymbolStorage } from '../core';
+import { RawSymbol } from '../../../hdlParser/common';
 
 
 class VhdlDefinitionProvider implements vscode.DefinitionProvider {
     public async provideDefinition(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.Location | vscode.LocationLink[] | null> {
         // console.log('VhdlDefinitionProvider');
-        
+
         // get current words
         const wordRange = document.getWordRangeAtPosition(position, /[`_0-9A-Za-z]+/);
         if (!wordRange) {
@@ -51,106 +52,115 @@ class VhdlDefinitionProvider implements vscode.DefinitionProvider {
         const filePath = hdlPath.toSlash(document.fileName);
         const lineText = document.lineAt(position).text;
 
-        // match `include        
-        const includeResult = util.matchInclude(document, position, all.macro.includes);
-        
-        if (includeResult) {
-            const absPath = hdlPath.rel2abs(filePath, includeResult.name);
-            const targetFile = vscode.Uri.file(absPath);
-            const targetPosition = new vscode.Position(0, 0);
-            const targetRange = new vscode.Range(targetPosition, targetPosition);
-            const originSelectionRange = document.getWordRangeAtPosition(position, /["\.\\\/_0-9A-Za-z]+/);
-            const link: vscode.LocationLink = { targetUri: targetFile, targetRange, originSelectionRange };
-            return [link];
+        // locate at one entity or architecture
+        // TODO: remove it after adjust of backend
+        const rawSymbols = [];
+        for (const symbol of all.content) {
+            const rawSymbol: RawSymbol = {
+                name: symbol.name,
+                type: symbol.type,
+                parent: symbol.parent,
+                range: util.transformRange(symbol.range, -1),
+                signed: symbol.signed,
+                netType: symbol.netType
+            };
+            rawSymbols.push(rawSymbol);
         }
 
+        const moduleScope = util.locateVhdlSymbol(position, rawSymbols);
 
-        // match macro
-        const macroResult = util.matchDefineMacro(position, targetWord, all.macro.defines);
-        if (macroResult) {
-            const targetRange = util.transformRange(macroResult.range, -1, -1);
-            const link: vscode.LocationLink = { targetUri: document.uri, targetRange: targetRange, originSelectionRange: targetWordRange };
-            return [link];
-        }
-
-        // locate at one module
-        const scopeSymbols = util.filterSymbolScope(position, all.content);
-        if (!scopeSymbols || !scopeSymbols.module) {
-            return null;
-        }
-        const currentModule = hdlParam.getHdlModule(filePath, scopeSymbols.module.name);
-        if (!currentModule) {
-            MainOutput.report('Fail to get HdlModule ' + filePath + ' ' + scopeSymbols.module.name, ReportType.Debug);
+        if (!moduleScope) {
             return null;
         }
 
-        // match instance
-        const instResult = util.matchInstance(targetWord, currentModule);
-        if (instResult) {
-            const instModule = instResult.module;
-            if (!instModule || !instResult.instModPath) {
-                return null;
-            }
-            const targetFile = vscode.Uri.file(instResult.instModPath);
-            const targetRange = util.transformRange(instModule.range, -1, 0, 1);
-            const link: vscode.LocationLink = { targetUri: targetFile, targetRange };
-            return [link];
+        const scopeType = moduleScope.module.type;
+        if (scopeType === 'architecture') {
+            return await this.makeArchitectureDefinition(filePath, targetWord, targetWordRange, moduleScope);
+        } else if (scopeType === 'entity') {
+            return await this.makeEntityDefinition(filePath, targetWord, targetWordRange, moduleScope);
         }
 
-        // match port or param definition (position input)
-        if (util.isPositionInput(lineText, position.character)) {
-            const currentInstResult = util.filterInstanceByPosition(position, scopeSymbols.symbols, currentModule);
-            if (!currentInstResult || !currentInstResult.instModPath) {
-                return null;
+        return null;
+    }
+
+    private async makeArchitectureDefinition(filePath: string, targetWord: string, targetWordRange: vscode.Range, moduleScope: util.ModuleScope): Promise<vscode.Location | vscode.LocationLink[] | null> {
+        const architecture = moduleScope.module;
+        // point to the entity of the architecture
+        if (architecture.parent && architecture.parent === targetWord) {
+            const entity = hdlParam.getHdlModule(filePath, architecture.parent);
+            if (entity) {
+                const targetUri = vscode.Uri.file(entity.path);
+                const targetRange = util.transformRange(entity.range, -1, 0);
+                const link: vscode.LocationLink = { targetUri, targetRange, originSelectionRange: targetWordRange };
+                return [ link ];
             }
-            const instParamPromise = util.getInstParamByPosition(currentInstResult, position, targetWord);
-            const instPortPromise = util.getInstPortByPosition(currentInstResult, position, targetWord);
-
-            const instParam = await instParamPromise;
-            const instPort = await instPortPromise;
-            const instModPathUri = vscode.Uri.file(currentInstResult.instModPath);            
-
-            if (instParam) {
-                const targetRange = util.transformRange(instParam.range, -1, 0);
-                const link: vscode.LocationLink = { targetUri: instModPathUri, targetRange };
-                return [link];
-            }
-            if (instPort) {
-                const targetRange = util.transformRange(instPort.range, -1, 0);
-                const link: vscode.LocationLink = { targetUri: instModPathUri, targetRange };
-                return [link];
-            }
-
-            return null;
-        }    
-        
-
-        // match params
-        const paramResult = util.matchParams(targetWord, currentModule);
-        
-        if (paramResult) {
-            const targetRange = util.transformRange(paramResult.range, -1, 0);
-            const link: vscode.LocationLink = { targetUri: document.uri, targetRange };
-            return [link];
         }
 
-        // match ports
-        const portResult = util.matchPorts(targetWord, currentModule);        
-
-        if (portResult) {
-            const targetRange = util.transformRange(portResult.range, -1, 0);
-            const link: vscode.LocationLink = { targetUri: document.uri, targetRange };
-            return [link];
+        // filter defined signal
+        for (const symbol of moduleScope.symbols) {
+            if (symbol.name === targetWord) {
+                const targetUri = vscode.Uri.file(filePath);
+                const targetRange = util.transformRange(symbol.range, 0, 0);
+                const link: vscode.LocationLink = { targetUri, targetRange, originSelectionRange: targetWordRange };
+                return [ link ];
+            }
         }
 
-        // match others
-        const normalResult = util.matchNormalSymbol(targetWord, scopeSymbols.symbols);
-        if (normalResult) {
-            const targetRange = util.transformRange(normalResult.range, -1, 0);            
-            const link: vscode.LocationLink = { targetUri: document.uri, targetRange };
-            return [link];
+        // inner variable mapping to entity
+        if (architecture.parent) {
+            const entity = hdlParam.getHdlModule(filePath, architecture.parent);
+            if (entity) {
+                // find params definitio
+                for (const param of entity.params) {
+                    if (param.name === targetWord) {
+                        const targetUri = vscode.Uri.file(entity.path);
+                        const targetRange = util.transformRange(param.range, -1, 0);
+                        const link: vscode.LocationLink = { targetUri, targetRange, originSelectionRange: targetWordRange };
+                        return [ link ];
+                    }
+                }
+                // find ports definition
+                for (const port of entity.ports) {
+                    if (port.name === targetWord) {
+                        const targetUri = vscode.Uri.file(entity.path);
+                        const targetRange = util.transformRange(port.range, -1, 0);
+                        const link: vscode.LocationLink = { targetUri, targetRange, originSelectionRange: targetWordRange };
+                        return [ link ];
+                    }
+                }
+            }
         }
+        return null;
+    }
 
+    private async makeEntityDefinition(filePath: string, targetWord: string, targetWordRange: vscode.Range, moduleScope: util.ModuleScope): Promise<vscode.Location | vscode.LocationLink[] | null> {
+        const entity = hdlParam.getHdlModule(filePath, moduleScope.module.name);
+        if (entity) {
+            if (targetWord === entity.name) {
+                const targetUri = vscode.Uri.file(entity.path);
+                const targetRange = util.transformRange(entity.range, -1, 0);
+                const link: vscode.LocationLink = { targetUri, targetRange, originSelectionRange: targetWordRange };
+                return [ link ];
+            }
+            // find params definitio
+            for (const param of entity.params) {
+                if (param.name === targetWord) {
+                    const targetUri = vscode.Uri.file(entity.path);
+                    const targetRange = util.transformRange(param.range, -1, 0);
+                    const link: vscode.LocationLink = { targetUri, targetRange, originSelectionRange: targetWordRange };
+                    return [ link ];
+                }
+            }
+            // find ports definition
+            for (const port of entity.ports) {
+                if (port.name === targetWord) {
+                    const targetUri = vscode.Uri.file(entity.path);
+                    const targetRange = util.transformRange(port.range, -1, 0);
+                    const link: vscode.LocationLink = { targetUri, targetRange, originSelectionRange: targetWordRange };
+                    return [ link ];
+                }
+            }
+        }
         return null;
     }
 }

@@ -427,7 +427,7 @@ class HdlModule {
         this.range = range;
         this.params = params ? params : [];
         this.ports = ports ? ports : [];
-
+                
         this.rawInstances = instances;
         this.nameToInstances = new Map<string, HdlInstance>();
 

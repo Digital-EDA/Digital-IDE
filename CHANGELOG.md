@@ -6,11 +6,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.3.2] - 2023-11-01
 
-Bug 修复
-- 修复文档化 input, output 处注释无法正常显示到文档的 bug
-- 修复 iverilog 仿真功能中，将重复的路径作为编译参数编译的 bug
-- 修复 iverilog 仿真功能中，将 <code>`include</code> 加入或去除后，无法通过仿真编译的 bug （没有更新 instance 的 instModPathStatus 属性）
-- 修复其他已知 bug
+Feature
+- 增加对于 vhdl 的 全面支持（文件树、LSP等）
+- 增加对 XDC，TCL 等脚本的 LSP 支持
+- 增加 verilog, vhdl, xdc, tcl, vvp, vcd 等语言或生成文件的工作区图标
+- 增加对于 vivado, modelsim, verilator 的支持，用户可以通过设置 `function.lsp.linter.vhdl.diagnostor`(设置 vhdl) 和 `function.lsp.linter.vlog.diagnostor`(设置 verilog) 来使用这些第三方工具的仿真和自动纠错。
+- 增加对于 TCL, XDC, VVP 等脚本的 LSP 和 语法高亮 支持。
 
 Change
 - 将插件的工作状态显示在 vscode 下侧的状态栏上，利于用户了解目前的设置状态
@@ -18,11 +19,13 @@ Change
 - 优化项目配置目录
 - 优化自动补全的性能
 
-Feature
-- 增加对 XDC，TCL 等脚本的 LSP 支持
-- 增加 verilog, vhdl, xdc, tcl, vvp, vcd 等语言或生成文件的工作区图标
-- 增加对于 vivado, modelsim, verilator 的支持，用户可以通过设置 `function.lsp.linter.vhdl.diagnostor`(设置 vhdl) 和 `function.lsp.linter.vlog.diagnostor`(设置 verilog) 来使用这些第三方工具的仿真和自动纠错。
-- 增加对于 TCL, XDC, VVP 等脚本的 LSP 和 语法高亮 支持
+Bug 修复
+- 修复文档化 input, output 处注释无法正常显示到文档的 bug
+- 修复 iverilog 仿真功能中，将重复的路径作为编译参数编译的 bug
+- 修复 iverilog 仿真功能中，将 <code>`include</code> 加入或去除后，无法通过仿真编译的 bug （没有更新 instance 的 instModPathStatus 属性）
+- 修复其他已知 bug
+
+
 
 ## [0.1.23] - 2022-12-24
 - Finish the css of documentation, see `./css/documentation.css` for detail.

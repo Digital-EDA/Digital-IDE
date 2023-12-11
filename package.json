@@ -238,6 +238,21 @@
                     "default": "default",
                     "description": "choose diagnostor to do linter in editing verilog"
                 },
+                "digital-ide.function.lsp.linter.svlog.diagnostor": {
+                    "type": "string",
+                    "enumDescriptions": [
+                        "use diagnostor in vivado",
+                        "use diagnostor in modelsim",
+                        "use our buildin diagnostor"
+                    ],
+                    "enum": [
+                        "vivado",
+                        "modelsim",
+                        "default"
+                    ],
+                    "default": "default",
+                    "description": "choose diagnostor to do linter in editing verilog"
+                },
                 "digital-ide.function.lsp.linter.vhdl.diagnostor": {
                     "type": "string",
                     "enumDescriptions": [
@@ -503,6 +518,11 @@
                 "command": "digital-ide.lsp.vlog.linter.pick",
                 "category": "Digital-IDE",
                 "title": "%digital-ide.lsp.vlog.linter.pick.title%"
+            },
+            {
+                "command": "digital-ide.lsp.svlog.linter.pick",
+                "category": "Digital-IDE",
+                "title": "%digital-ide.lsp.svlog.linter.pick.title%"
             },
             {
                 "command": "digital-ide.lsp.vhdl.linter.pick",

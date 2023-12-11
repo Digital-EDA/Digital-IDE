@@ -97,9 +97,11 @@ function registerLsp(context: vscode.ExtensionContext) {
     lspCore.hdlSymbolStorage.initialise();
     lspLinter.vlogLinterManager.initialise();
     lspLinter.vhdlLinterManager.initialise();
+    lspLinter.svlogLinterManager.initialise();
 
     vscode.commands.registerCommand('digital-ide.lsp.vlog.linter.pick', lspLinter.pickVlogLinter);
     vscode.commands.registerCommand('digital-ide.lsp.vhdl.linter.pick', lspLinter.pickVhdlLinter);
+    vscode.commands.registerCommand('digital-ide.lsp.svlog.linter.pick', lspLinter.pickSvlogLinter);
 }
 
 

@@ -14,8 +14,7 @@ import { libManage } from '../manager/lib';
 import type { HdlMonitor } from './index';
 import { HdlLangID, ToolChainType } from '../global/enum';
 import { hdlSymbolStorage } from '../function/lsp/core';
-import { vlogLinterManager, vhdlLinterManager } from '../function/lsp/linter';
-import { isVerilogFile } from '../hdlFs/file';
+import { vlogLinterManager, vhdlLinterManager, svlogLinterManager } from '../function/lsp/linter';
 
 enum Event {
     Add = 'add',                 // emit when add file
@@ -102,6 +101,8 @@ class HdlAction extends BaseAction {
             vlogLinterManager.remove(uri);
         } else if (langID === HdlLangID.Vhdl) {
             vhdlLinterManager.remove(uri);
+        } else if (langID === HdlLangID.SystemVerilog) {
+            svlogLinterManager.remove(uri);
         }
     }
 
@@ -141,7 +142,7 @@ class HdlAction extends BaseAction {
         } else if (langID === HdlLangID.Vhdl) {
             vhdlLinterManager.lint(document);
         } else if (langID === HdlLangID.SystemVerilog) {
-            // TODO
+            svlogLinterManager.lint(document);
         }
     }
 

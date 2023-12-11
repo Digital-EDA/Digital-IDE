@@ -108,6 +108,42 @@ async function pickVlogLinter() {
     pickWidget.show();
 }
 
+
+async function pickSvlogLinter() {
+    const pickWidget = vscode.window.createQuickPick<LinterItem>();
+    pickWidget.placeholder = 'select a linter for verilog code diagnostic';
+    pickWidget.canSelectMany = false;
+
+    await vscode.window.withProgress({
+        location: vscode.ProgressLocation.Notification,
+        title: 'Parsing local environment ...',
+        cancellable: true
+    }, async () => {
+        pickWidget.items = [
+            // TODO : add this if system verilog is supported
+            // await makeDefaultPickItem(),
+            await makeVivadoPickItem(HdlLangID.Verilog),
+            await makeModelsimPickItem(HdlLangID.Verilog)
+        ];
+    });
+    
+    pickWidget.onDidChangeSelection(items => {
+        const selectedItem = items[0];
+        _selectVlogLinter = selectedItem.name;
+    });
+
+    pickWidget.onDidAccept(() => {
+        if (_selectVlogLinter) {
+            const vlogLspConfig = vscode.workspace.getConfiguration('digital-ide.function.lsp.linter.svlog');
+            vlogLspConfig.update('diagnostor', _selectVlogLinter);
+            pickWidget.hide();
+        }
+    });
+
+    pickWidget.show();
+}
+
+
 async function pickVhdlLinter() {
     const pickWidget = vscode.window.createQuickPick<LinterItem>();
     pickWidget.placeholder = 'select a linter for code diagnostic';
@@ -145,5 +181,6 @@ async function pickVhdlLinter() {
 
 export {
     pickVlogLinter,
-    pickVhdlLinter
+    pickVhdlLinter,
+    pickSvlogLinter
 };

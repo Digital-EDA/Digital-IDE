@@ -42,6 +42,7 @@
     "digital-ide.fsm.show.title": "显示当前文件的FSM图",
     "digital-ide.netlist.show.title": "显示当前文件的netlist",
     "digital-ide.lsp.vlog.linter.pick.title": "选择 Verilog 的诊断",  
+    "digital-ide.lsp.svlog.linter.pick.title": "选择 System Verilog 的诊断",  
     "digital-ide.lsp.vhdl.linter.pick.title": "选择 VHDL 的诊断",  
     "digital-ide.lsp.systemverilog.linter.pick.title": "选择 SystemVerilog 的诊断"
 }

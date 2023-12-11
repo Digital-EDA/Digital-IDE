@@ -14,3 +14,4 @@ resources/**/*.js
 resources/**/*.d.ts
 resources/**/*.wasm
 tsconfig.json
+design

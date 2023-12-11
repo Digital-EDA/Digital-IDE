@@ -23,6 +23,21 @@ interface SimulateConfig {
     vvpPath: string
 }
 
+function makeSafeArgPath(path: Path): string {
+    const haveHeadQuote = path.startsWith('"');
+    const haveTailQuote = path.startsWith('"');
+
+    if (haveHeadQuote && haveHeadQuote) {
+        return path;
+    } else if (!haveHeadQuote && !haveTailQuote) {
+        return '"' + path + '"';
+    } else if (!haveHeadQuote && haveTailQuote) {
+        return '"' + path;
+    } else {
+        return path + '"';
+    }
+}
+
 class Simulate {
     regExp = {
         mod  : /\/\/ @ sim.module : (?<mod>\w+)/,
@@ -150,9 +165,9 @@ class IcarusSimulate extends Simulate {
         const args = [];
         for (const includePath of includes) {
             if(!hdlFile.isDir(includePath)) {
-                args.push(includePath);
+                args.push(makeSafeArgPath(includePath));
             } else {
-                args.push('-I ' + includePath);
+                args.push('-I ' + makeSafeArgPath(includePath));
             }
         }
         return args.join(' ').trim();
@@ -166,7 +181,7 @@ class IcarusSimulate extends Simulate {
             if (visitedPath.has(dep)) {
                 continue;
             }
-            args.push('"' + dep + '"');
+            args.push(makeSafeArgPath(dep));
             visitedPath.add(dep);
         }
         return args.join(' ').trim();
@@ -177,9 +192,9 @@ class IcarusSimulate extends Simulate {
         const dirArgs = [];
         for (const libPath of simLibPaths) {
             if(!hdlFile.isDir(libPath)) {
-                fileArgs.push(libPath);
+                fileArgs.push(makeSafeArgPath(libPath));
             } else {
-                dirArgs.push('-y ' + libPath);
+                dirArgs.push('-y ' + makeSafeArgPath(libPath));
             }
         }
         const fileArgsString = fileArgs.join(' ');
@@ -225,8 +240,8 @@ class IcarusSimulate extends Simulate {
         const iverilogPath = simConfig.iverilogPath;
         // default is -g2012
         const argu = '-g' + iverilogCompileOptions.standard;
-        const outVvpPath = '"' + hdlPath.join(simConfig.simulationHome, 'out.vvp') + '"';      
-        const mainPath = '"' + path + '"';
+        const outVvpPath = makeSafeArgPath(hdlPath.join(simConfig.simulationHome, 'out.vvp'));      
+        const mainPath = makeSafeArgPath(path);
 
         const cmd = `${iverilogPath} ${argu} -o ${outVvpPath} -s ${name} ${macroIncludeArgs} ${thirdLibraryDirArgs} ${mainPath} ${dependenceArgs} ${thirdLibraryFileArgs}`;
         MainOutput.report(cmd, ReportType.Run);

@@ -329,7 +329,6 @@ function matchParams(singleWord: string, module: HdlModule): AllowNull<HdlModule
 
 
 function makePortDesc(port: HdlModulePort): string {
-
     const portDescArray = [];
     portDescArray.push(port.type);    
     if (port.netType) {

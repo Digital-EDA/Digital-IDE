@@ -131,8 +131,9 @@ async function getFullSymbolInfo(document: vscode.TextDocument, range: Range, no
 
     let content = '';
     let is_b_comment = false;
-    let line = range.start.line;
+    let line = range.start.line + 1;
     const firstLine = range.start.line - 1;
+    console.log('enter getFullSymbolInfo');
     
     while (line) {
         line --;
@@ -160,20 +161,13 @@ async function getFullSymbolInfo(document: vscode.TextDocument, range: Range, no
         }
 
         // 判断该行是否存在行注释
-        let l_comment_index = content.indexOf(l_comment_symbol);
+        let l_comment_index = content.indexOf(l_comment_symbol);    
         
         if (l_comment_index >= 0) {
             let before_l_comment = content.slice(0, l_comment_index);
-            // before_l_comment = del_comments(before_l_comment, b_comment_end_index);            
             if (before_l_comment.match(nonblank)) {
-                // 如果去除块注释之后还有字符则认为该注释不属于所要的
-                if (line === firstLine) {
-                    // let b_comment_last_index = content.lastIndexOf('*/');
-                    // b_comment_last_index = (b_comment_last_index == -1) ? 0 : (b_comment_last_index + 2);
-                    // comments.push(content.slice(b_comment_last_index, l_comment_index) + '\n');
-                    comments.push(content.slice(l_comment_index, content.length) + '\n');
-                    continue;
-                }
+                // TODO : check again if bug takes place 
+                comments.push(content.slice(l_comment_index, content.length) + '\n');
                 break; 
             }
 

@@ -5,7 +5,7 @@ import { hdlParam } from '../../../hdlParser';
 import { All } from '../../../../resources/hdlParser';
 import { vlogKeyword } from '../util/keyword';
 import * as util from '../util';
-import { MainOutput, ReportType } from '../../../global';
+import { LspOutput, MainOutput, ReportType } from '../../../global';
 import { HdlLangID } from '../../../global/enum';
 import { hdlSymbolStorage } from '../core';
 
@@ -148,7 +148,9 @@ class VlogHoverProvider implements vscode.HoverProvider {
         
         // match params
         const paramResult = util.matchParams(targetWord, currentModule);
+
         if (paramResult) {
+            LspOutput.report('<vlog hover> get param info ' + paramResult?.name, ReportType.Info);
             const paramComment = await util.searchCommentAround(filePath, paramResult.range);
             const paramDesc = util.makeParamDesc(paramResult);
             content.appendCodeblock(paramDesc, HdlLangID.Verilog);
@@ -160,9 +162,12 @@ class VlogHoverProvider implements vscode.HoverProvider {
 
         // match ports        
         const portResult = util.matchPorts(targetWord, currentModule);
-        if (portResult) {            
+
+        if (portResult) {
+            LspOutput.report('<vlog hover> get port info ' + portResult?.name, ReportType.Info);
             const portComment = await util.searchCommentAround(filePath, portResult.range);
             const portDesc = util.makePortDesc(portResult);
+            
             content.appendCodeblock(portDesc, HdlLangID.Verilog);            
             if (portComment) {
                 content.appendCodeblock(portComment, HdlLangID.Verilog);

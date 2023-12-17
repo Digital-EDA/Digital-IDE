@@ -69,8 +69,8 @@ class Formatter {
     }
 
     get_vlog_config() {
-        let style = vscode.workspace.getConfiguration("function.lsp.formatter.vlog.default").get("style");
-        let args = vscode.workspace.getConfiguration("function.lsp.formatter.vlog.default").get("args");
+        let style = vscode.workspace.getConfiguration("digital-ide.function.lsp.formatter.vlog.default").get("style", 'kr');
+        let args = vscode.workspace.getConfiguration("digital-ide.function.lsp.formatter.vlog.default").get("args", '');
         return `--style=${style} ${args}`;
     }
 

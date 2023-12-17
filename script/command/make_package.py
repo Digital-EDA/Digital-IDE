@@ -102,7 +102,7 @@ def install_extension():
     os.system('code --install-extension ' + vsix_path)
 
 pipe = CommandPipe()
-pipe.add_command('uninstall original extension', 'code --uninstall-extension sterben.digital-ide')
+pipe.add_command('uninstall original extension', 'code --uninstall-extension sterben.fpga-support')
 pipe.add_command('compile typescript', 'tsc -p ./ --outDir out-js')
 pipe.add_command('webpack', 'webpack --mode production')
 pipe.add_command('make vsix installer', 'vsce package')

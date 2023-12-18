@@ -11,7 +11,6 @@ import { hdlPath } from '../../../hdlFs';
 import { hdlSymbolStorage } from '../core';
 
 class VhdlCompletionProvider implements vscode.CompletionItemProvider {
-    keywordItems: vscode.CompletionItem[] | undefined;
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext): Promise<vscode.CompletionItem[] | vscode.CompletionList<vscode.CompletionItem> | null | undefined> {
         
         try {
@@ -49,9 +48,6 @@ class VhdlCompletionProvider implements vscode.CompletionItemProvider {
     } 
 
     private makeKeywordItems(document: vscode.TextDocument, position: vscode.Position): vscode.CompletionItem[] {        
-        if (this.keywordItems !== undefined && this.keywordItems.length > 0) {
-            return this.keywordItems;
-        }
         const vhdlKeywordItems: vscode.CompletionItem[] = [];
         for (const keyword of vhdlKeyword.keys()) {
             const clItem = this.makekeywordCompletionItem(keyword, 'vhdl keyword');
@@ -65,7 +61,6 @@ class VhdlCompletionProvider implements vscode.CompletionItemProvider {
             const clItem = this.makekeywordCompletionItem(keyword, 'vhdl keyword');
             vhdlKeywordItems.push(clItem);
         }
-        this.keywordItems = vhdlKeywordItems;
         return vhdlKeywordItems;
     }
 

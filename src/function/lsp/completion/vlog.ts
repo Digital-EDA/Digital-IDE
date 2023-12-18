@@ -184,7 +184,6 @@ class VlogPositionPortProvider implements vscode.CompletionItemProvider {
 }
 
 class VlogCompletionProvider implements vscode.CompletionItemProvider {
-    keywordItems: vscode.CompletionItem[] | undefined;
     public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext): Promise<vscode.CompletionItem[] | vscode.CompletionList<vscode.CompletionItem> | null | undefined> {
         // console.log('VlogCompletionProvider');
         
@@ -238,15 +237,12 @@ class VlogCompletionProvider implements vscode.CompletionItemProvider {
     }
 
     private makeKeywordItems(document: vscode.TextDocument, position: vscode.Position): vscode.CompletionItem[] {
-        if (this.keywordItems !== undefined && this.keywordItems.length > 0) {
-            return this.keywordItems;
-        }
         const vlogKeywordItems: vscode.CompletionItem[] = [];
         for (const keyword of vlogKeyword.keys()) {
             const clItem = this.makekeywordCompletionItem(keyword);
             vlogKeywordItems.push(clItem);
         }
-        this.keywordItems = vlogKeywordItems;
+        
         return vlogKeywordItems;
     }
 

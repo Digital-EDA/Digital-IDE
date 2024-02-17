@@ -110,6 +110,7 @@ async function makeShowHTML(usage: string): Promise<string> {
 
     // start to render the real html
     let body = '';
+
     for (const r of renderList) {
         const renderResult = r.render();
         if (renderResult) {
@@ -150,6 +151,7 @@ async function showDocWebview() {
 
     webview.iconPath = hdlIcon.getIconConfig('documentation');
     webview.webview.html = await htmlPromise;
+    
 }
 
 

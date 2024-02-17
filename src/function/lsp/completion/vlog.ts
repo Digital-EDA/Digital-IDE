@@ -195,6 +195,7 @@ class VlogCompletionProvider implements vscode.CompletionItemProvider {
             completions.push(...this.makeCompilerKeywordItems(document, position));
             completions.push(...this.makeSystemKeywordItems(document, position));
 
+
             const symbolResult = await hdlSymbolStorage.getSymbol(filePath);
             if (!symbolResult) {
                 return completions;
@@ -215,6 +216,7 @@ class VlogCompletionProvider implements vscode.CompletionItemProvider {
                 return completions;
             }
 
+            
             // 3. provide modules
             const suggestModulesPromise = this.provideModules(document, position, filePath, symbolResult.macro.includes);
 

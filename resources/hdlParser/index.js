@@ -64,7 +64,7 @@ async function callParser(path, func) {
         if (res && res.value === true) {
             vscode.env.openExternal(vscode.Uri.parse(githubIssueUrl));
         } else if (res && res.value === false) {
-            dsaSetting.update('propose.issue', true);
+            dsaSetting.update('propose.issue', true, vscode.ConfigurationTarget.Global);
         }
 
         return undefined;

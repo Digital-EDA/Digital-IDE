@@ -36,13 +36,14 @@ async function launch(context: vscode.ExtensionContext) {
     // show welcome information (if first install)
     const welcomeSetting = vscode.workspace.getConfiguration('digital-ide.welcome');
     const showWelcome = welcomeSetting.get('show', true);
+ 
     if (showWelcome) {
         // don't show in next time
-        welcomeSetting.update('show', false);
+        welcomeSetting.update('show', false, vscode.ConfigurationTarget.Global);
         const res = await vscode.window.showInformationMessage(
             'Thanks for using Digital-IDE ❤️. Your star will be our best motivation! 😊',
             { title: 'Star', value: true },
-            { title: 'Refuse', value: true },
+            { title: 'Refuse', value: false },
         );
         if (res?.value) {
             vscode.env.openExternal(vscode.Uri.parse(extensionUrl));

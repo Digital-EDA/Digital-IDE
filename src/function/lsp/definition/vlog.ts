@@ -86,12 +86,13 @@ class VlogDefinitionProvider implements vscode.DefinitionProvider {
 
         // match instance
         const instResult = util.matchInstance(targetWord, currentModule);
+        
         if (instResult) {
             const instModule = instResult.module;
             if (!instModule || !instResult.instModPath) {
                 return null;
             }
-            const targetFile = vscode.Uri.file(instResult.instModPath);
+            const targetFile = vscode.Uri.file(instResult.instModPath);            
             const targetRange = util.transformRange(instModule.range, -1, 0, 1);
             const link: vscode.LocationLink = { targetUri: targetFile, targetRange };
             return [link];

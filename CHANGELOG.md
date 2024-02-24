@@ -12,7 +12,8 @@ Feature
 
 Bug 修复
 - Verilog 参数例化位置错误
-- 文档化的部分问题
+- [issue-51] 文档化的部分问题
+- 点击 Refuse 会在用户工作区创建 json 文件
 
 
 ---

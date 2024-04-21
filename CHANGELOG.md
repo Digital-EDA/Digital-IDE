@@ -4,6 +4,20 @@ All notable changes to the "digital-ide" extension will be documented in this fi
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.3.3] - 2024-02-05
+
+Feature
+- 重做了文档化功能，并且添加了参数和接口的 diagram 可视化的渲染模块
+- 增加了波形显示器
+
+
+Bug 修复
+- Verilog 参数例化位置错误
+- [issue-51] 文档化的部分问题
+- 点击 Refuse 会在用户工作区创建 json 文件
+
+
+---
 ## [0.3.2] - 2023-11-01
 
 Feature

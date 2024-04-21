@@ -181,8 +181,6 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
             const range = firstTop.range;
             const parent = element;
 
-            
-
             const tops = topModuleItemList.filter(item => item.path === path && item.name === name);
             const adjustItemList = [];
             if (tops.length > 0 || !hdlParam.hasHdlModule(path, name)) {

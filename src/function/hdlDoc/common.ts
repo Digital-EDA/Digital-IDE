@@ -10,6 +10,7 @@ import * as showdown from 'showdown';
 
 import { ThemeType } from '../../global/enum';
 import { MainOutput, ReportType } from '../../global';
+import { HdlModuleParam, HdlModulePort } from '../../hdlParser/common';
 
 const Count = {
     svgMakeTimes: 0
@@ -32,7 +33,7 @@ enum MarkdownTag {
 };
 
 enum MarkdownAlign { Left, Center, Right };
-enum RenderType { Wavedrom, Markdown };
+enum RenderType { Wavedrom, Markdown, Diagram };
 
 function getAlignSpliter(align: MarkdownAlign): string {
     switch (align) {
@@ -267,6 +268,26 @@ class WavedromString extends RenderString {
     }
 };
 
+class DiagramString extends RenderString {
+    params: HdlModuleParam[];
+    ports: HdlModulePort[];
+
+    constructor(line: number) {
+        super(line, RenderType.Diagram);
+        this.params = [];
+        this.ports = [];
+    }
+
+    add() {
+
+    }
+
+    render(): string {
+
+        return '';
+    }
+}
+
 function parseJson5(text: string): any {
     let json = null;
     try {
@@ -368,5 +389,6 @@ export {
     RenderString,
     makeWaveDromSVG,
     getWavedromsFromFile,
+    getThemeColorKind,
     Count
 };

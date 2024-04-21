@@ -65,6 +65,8 @@ async function testbench() {
     console.log(path);
     
     const currentHdlFile = hdlParam.getHdlFile(path);
+    console.log(currentHdlFile);
+    
     if (!currentHdlFile) {
         vscode.window.showErrorMessage('There is no hdlFile respect to ' + path);
         return;

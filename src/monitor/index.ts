@@ -55,7 +55,7 @@ class HdlMonitor{
         }
         MainOutput.report('Following folders are tracked: ');
         monitorPathSet.files.forEach(p => MainOutput.report(p));
-                
+
         return this.makeMonitor(monitorFoldersWithGlob);
     }
 

@@ -44,13 +44,14 @@ function instanceVlogCode(module: HdlModule, prefix: string = '', returnSnippetS
     }
 
     content.appendText(prefix + module.name + ' ');
+    makeVlogParamAssignments(content, module.params, prefix, returnSnippetString, needComment);
+
     if (returnSnippetString) {
         content.appendPlaceholder('u_' + module.name);
     } else {
         content.appendText('u_' + module.name);
     }
 
-    makeVlogParamAssignments(content, module.params, prefix, returnSnippetString, needComment);
     makeVlogPortAssignments(content, module.ports, prefix, returnSnippetString, needComment);
 
     const instanceString = content.value;
@@ -165,8 +166,8 @@ function makeVlogParamAssignments(content: vscode.SnippetString, params: HdlModu
         content.appendText(' '.repeat(maxInitLength - param.init.length + 1) + ' )');
         if (i < params.length - 1) {
             content.appendText(',');
+            content.appendText('\n');
         }
-        content.appendText('\n');
     }
     content.appendText(prefix + ')\n');
 }

@@ -18,6 +18,7 @@ body {
     -webkit-background-size: cover;
     -o-background-size: cover;
     background-position: center 0;
+    background-image: url(--backgroundImage);
 }
 
 .octicon {
@@ -48,12 +49,12 @@ a {
 }
 
 .vscode-dark .ImgCaption {
-    /* border-bottom: 2px solid var(--dark-main-color); */
+    border-bottom: 2px solid var(--dark-main-color);
     color: white;
 }
 
 .vscode-light .ImgCaption {
-    /* border-bottom: 2px solid var(--light-main-color); */
+    border-bottom: 2px solid var(--light-main-color);
     color: black;
 }
 
@@ -92,6 +93,7 @@ code,
 kbd,
 pre {
     font-family: monospace, monospace;
+    font-size: 1em;
 }
 
 hr {
@@ -242,6 +244,7 @@ dd {
 
 code {
     font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size: 12px;
 }
 
 pre {
@@ -347,7 +350,7 @@ kbd {
 
 .vscode-dark h1 {
     color: #eee;
-    /* border-bottom: 3px solid #df733d; */
+    border-bottom: 3px solid #df733d;
     width: fit-content;
     margin: 0 0 1.0em 0;
     line-height: 1.3;
@@ -357,7 +360,7 @@ kbd {
     color: #eee;
 }
 
-/* .vscode-dark h2::before {
+.vscode-dark h2::before {
     content: 'H2';
     border-radius: .3em;
     font-size: .8em;
@@ -365,11 +368,11 @@ kbd {
     margin-right: 15px;
     color: #eee;
     background-color: #df733d;
-} */
+}
 
 .vscode-light h1 {
     color: #000;
-    /* border-bottom: 3px solid #cc6633; */
+    border-bottom: 3px solid #cc6633;
     width: fit-content;
     margin: 0 0 1.0em 0;
     line-height: 1.3; 
@@ -379,7 +382,7 @@ kbd {
     color: #000;
 }
 
-/* .vscode-light h2::before {
+.vscode-light h2::before {
     content: 'H2';
     border-radius: .3em;
     font-size: .8em;
@@ -387,7 +390,7 @@ kbd {
     margin-right: 15px;
     color: #eee;
     background-color: #cc6633;
-} */
+}
 
 h1 {
     padding-bottom: 0.3em;
@@ -463,23 +466,25 @@ img {
     box-sizing: content-box;
 }
 
-#write table {
+#write table
+{
     width: 95%;
     border-collapse: collapse;
     text-align: center;
     margin: 20px;
     max-width: 750px;
 }
-
-#write table td, table th {
-    border: 1px solid;
+#write table td, table th
+{
+    border: 1px solid transparent;
     padding: 12px 10px;
-    /* border-radius: .5em; */
+    border-radius: .5em;
     word-wrap: break-word;
 }
 
-#write table thead th {
-    /* background-color: var(--dark-main-color); */
+#write table thead th
+{
+    background-color: var(--dark-main-color);
     font-size: 20px;
     font-weight: bolder;
     width: 100px;
@@ -488,135 +493,28 @@ img {
     padding: 10px;
 }
 
-.vscode-dark table {
-    color: #F0F0F0;
-}
-
-.vscode-light table {
-    color: #1F2329;
-}
-
-
-.vscode-dark #write table thead th {
-    background-color: rgb(76,55,114);
-}
-
-.vscode-light #write table thead th {
-    background-color: rgb(236,226,254);
-}
-
-.vscode-dark table tr:nth-child(even) {
-    background: #232323;
-}
-
-.vscode-light table tr:nth-child(even) {
-    background: #F6F7F8;
-}
-
-
-/* TODO: Diagram CSS */
-.diagram-container {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
-
-.diagram-container .diagram-ports-wrapper {
-    display: flex;
-}
-
-.diagram-container .diagram-params {
-    display: flex;
-    justify-content: space-between;
-    border-radius: 0.7em;
-    padding: 15px;
-    margin: 10px 60px;
-    width: 350px;
-    text-align: right;
-}
-
-.diagram-container .diagram-ports {
-    border-radius: 0.7em;
-    padding: 20px 0px;
-    margin: 10px 0px 10px 0px;
-    width: 350px;
-}
-
-.vscode-dark .diagram-params {
-    background-color: rgba(53,59,140);
-    border: solid 4.5px rgb(83,88,157);
-}
-
-.vscode-light .diagram-params {
-    background-color: rgba(180,185,243);
-    border: solid 4.5px rgb(153,157,207);
-}
-
-.vscode-dark .diagram-ports {
-    background-color: rgba(35,102,93);
-    border: solid 4.5px rgb(68,125,117);
-}
-
-.vscode-light .diagram-ports {
-    background-color: rgb(169,239,230);
-    border: solid 4.5px rgb(144,203,196);
-}
-
-
-.diagram-container .digrame-port-item {
-    display: flex;
-    justify-content: space-between;
-    height: 60px;
-}
-
-.diagram-container .i-port-name {
-    font-size: 20px;
-    padding: 3px 8px;
-}
-
-.diagram-container .o-port-name {
-    font-size: 20px;
-    padding: 3px 8px;
-}
-
-.diagram-container .io-port-name {
-    font-size: 20px;
-    padding: 3px 8px;
-
-}
-
-.diagram-container .left-direction {
-    padding-right: 0;
-    padding: 20px 0px;
-    margin: 10px 0 0 10px;
-    width: 105px;
-}
-
-.diagram-container .right-direction {
-    padding-left: 0;
-    padding: 20px 0px;
-    margin: 10px 0 10px 0px;
-    width: 105px;
-}
-
-.diagram-container .arrow-wrapper {
-    height: 60px;
-}
-
-.diagram-container .port-width-left-caption {
-    position: absolute;
-    margin: -10px 35px;
-}
-
-.diagram-container .port-width-right-caption {
-    position: absolute;
-    margin: -10px 10px;
-}
-
-.vscode-dark .diagram-container {
+.vscode-dark table thead th {
     color: white;
 }
 
-.vscode-light .diagram-container {
-    color: black;
+.vscode-dark table td, table th {
+    color: rgb(234, 231, 231);
+}
+
+.vscode-light table thead th {
+    color: white;
+}
+
+.vscode-light table td, table th {
+    color: rgb(16, 16, 16);
+}
+
+.vscode-dark table tr:nth-child(even)
+{
+    background: #20242b;
+}
+
+.vscode-light table tr:nth-child(even)
+{
+    background: #e7e1e1;
 }

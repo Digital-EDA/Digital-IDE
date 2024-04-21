@@ -131,17 +131,17 @@ async function getFullSymbolInfo(document: vscode.TextDocument, range: Range, no
 
     let content = '';
     let is_b_comment = false;
-    let line = range.start.line + 1;
-    const firstLine = range.start.line - 1;
-    console.log('enter getFullSymbolInfo');
-    
+    let line = range.start.line;
+
+    // vscode 的行编号从 0 开始算
+    const firstLine = range.start.line - 1;    
+ 
     while (line) {
         line --;
         content = document.lineAt(line).text;
-
+               
         // 首先判断该行是否是空白
-        let isblank = content.match(nonblank);
-        if (!isblank) {
+        if (content.trim().length === 0) {
             continue; 
         }
 
@@ -150,7 +150,7 @@ async function getFullSymbolInfo(document: vscode.TextDocument, range: Range, no
             if (b_comment_begin_index === -1) {
                 comments.push(content + '\n');
                 continue;
-            }
+            }            
             comments.push(content.slice(b_comment_begin_index, content.length) + '\n');
             is_b_comment = false;
             content = content.slice(0, b_comment_begin_index);
@@ -161,24 +161,22 @@ async function getFullSymbolInfo(document: vscode.TextDocument, range: Range, no
         }
 
         // 判断该行是否存在行注释
-        let l_comment_index = content.indexOf(l_comment_symbol);    
-        
-        if (l_comment_index >= 0) {
-            let before_l_comment = content.slice(0, l_comment_index);
-            if (before_l_comment.match(nonblank)) {
-                // TODO : check again if bug takes place 
-                comments.push(content.slice(l_comment_index, content.length) + '\n');
-                break; 
-            }
-
-            // 否则该行全为该定义的注释
-            comments.push(content + '\n');
-            continue;
-        }
-
+        let l_comment_index = content.indexOf(l_comment_symbol);
         // 判断该行是否存在块注释
         let b_comment_end_index = content.indexOf('*/');
-        if (b_comment_end_index >= 0) {
+
+        if (l_comment_index >= 0) {
+            let before_l_comment = content.slice(0, l_comment_index);
+            // 判断当前的行注释的注释前面是不是还有字符串
+            if (!before_l_comment.match(nonblank) || line === firstLine) {
+                const l_comment = content.slice(l_comment_index, content.length) + '\n';                                
+                comments.push(l_comment);
+                break; 
+            }
+            // 否则该行全为该定义的注释
+            comments.push(content + '\n');
+
+        } else if (b_comment_end_index >= 0) {
             b_comment_end_index += 2; 
             let behind_b_comment = content.slice(b_comment_end_index, content.length);
             behind_b_comment = del_comments(behind_b_comment, l_comment_regExp);
@@ -191,18 +189,12 @@ async function getFullSymbolInfo(document: vscode.TextDocument, range: Range, no
                 }
                 break; 
             }
-
+                        
             comments.push(content + '\n');
             is_b_comment = true;
-            continue;
-        }
-
-        // 说明既不是块注释又不是行注释所以就是到了代码块
-        if (line !== firstLine) {
-            break;
         }
     }
-
+    
     // 清除空前行
     let resultComment = '';
     for (const c of comments.reverse()) {

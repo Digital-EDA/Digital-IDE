@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
+import * as fspath from 'path';
 
 import { AbsPath, opeParam, MainOutput, ReportType } from '../../global';
 import { hdlParam, HdlModule } from '../../hdlParser/core';
@@ -10,6 +11,8 @@ import { MarkdownString, RenderString, RenderType,
 import { hdlPath, hdlFile } from '../../hdlFs';
 
 import { getSymbolComments } from '../lsp/util/feature';
+import { HdlLangID } from '../../global/enum';
+import { makeDiagram } from './diagram';
 
 
 function makeSVGElementByLink(link: AbsPath, caption?: string) {
@@ -22,6 +25,26 @@ function makeSVGElementByLink(link: AbsPath, caption?: string) {
     return '<br>' + mainHtml + '<br><br>\n';
 }
 
+function selectFieldValue(obj: any, subName: string, ws: string, name: string): string {
+    if (subName === 'empty') {
+        return '——';
+    }
+    let value = obj[subName];
+    if (subName === 'instModPath' && value) {
+        value = value.replace(ws, '');
+    }
+
+    if (value && value.trim().length === 0) {
+        return '——';
+    }
+
+    // TODO : 1 not known                
+    if (name === 'ports' && value === '1') {
+        return '——';
+    }
+    return value;
+}
+
 
 function makeTableFromObjArray(md: MarkdownString, array: any[], name: string, fieldNames: string[], displayNames: string[]) {
     const ws = hdlPath.toSlash(opeParam.workspacePath) + '/';
@@ -32,19 +55,7 @@ function makeTableFromObjArray(md: MarkdownString, array: any[], name: string, f
         for (const obj of array) {
             const data = [];
             for (const subName of fieldNames) {
-                let value = obj[subName];
-                if (subName === 'instModPath' && value) {
-                    value = value.replace(ws, '');
-                }
-
-                if (value && value.trim().length === 0) {
-                    value = ' ';
-                }
-
-                // TODO : 1 not known
-                if (name === 'ports' && value === 'Unknown') {
-                    value = '1';
-                }
+                const value = selectFieldValue(obj, subName, ws, name);
                 data.push(value);
             }
             rows.push(data);
@@ -63,7 +74,7 @@ function makeTableFromObjArray(md: MarkdownString, array: any[], name: string, f
  * @param {string} path
  * @param {Array<ModPort|ModParam>} ports
  */
-async function patchComment(path: AbsPath, ports: (HdlModulePort | HdlModuleParam)[]) {
+async function patchComment(path: AbsPath, ports: (HdlModulePort | HdlModuleParam)[]) {    
     if (!ports || !ports.length) {
         return;
     }
@@ -71,7 +82,7 @@ async function patchComment(path: AbsPath, ports: (HdlModulePort | HdlModulePara
     const comments = await getSymbolComments(path, ranges);
     for (let i = 0; i < ports.length; ++ i) {
         let inlineComment = comments[i].replace(/\n/, ' ');
-        if (inlineComment.startsWith('//')) {
+        if (inlineComment.startsWith('//') || inlineComment.startsWith('--')) {
             inlineComment = inlineComment.substring(2);
         }
         ports[i].desc = inlineComment;
@@ -100,33 +111,46 @@ async function getDocsFromModule(module: HdlModule): Promise<MarkdownString> {
     }
 
     const md = new MarkdownString(module.range.start.line);
+    
+    if (module.languageId === HdlLangID.Vhdl) {
+        md.addTitle('Entity: `' + moduleName + '`', 1);
+    } else if (module.languageId === HdlLangID.Verilog) {
+        md.addTitle('Module: `' + moduleName + '`', 1);
+    } else if (module.languageId === HdlLangID.SystemVerilog) {
+        md.addTitle('Module: `' + moduleName + '`', 1);
+    }
+    
     // add module name
-    md.addTitle(moduleName, 1);
     md.addTitle('Basic Info', 2);
+    
     const infos = [
+        `**File:** ${fspath.basename(module.file.path)}`,
         `${portNum} params, ${paramNum} ports`,
         'top module ' + topModuleDesc
     ];
     md.addUnorderedList(infos);
     md.addEnter();
 
+    const diagram = makeDiagram(module.params, module.ports);
+    md.addText(diagram);
+    
     // wait param and port patch
     await paramPP;
     await portPP;
 
     // param section
-    md.addTitle('params', 2);
+    md.addTitle('Params', 2);
     makeTableFromObjArray(md, module.params, 'params', 
-                          ['name', 'init', 'desc'],
-                          ['name', 'init', 'description']);
+                          ['name', 'init', 'empty', 'desc'],
+                          ['Param Name', 'Init', 'Range', 'Description']);
     md.addEnter();
     
 
     // port section
-    md.addTitle('ports', 2);
+    md.addTitle('Ports', 2);
     makeTableFromObjArray(md, module.ports, 'ports', 
                           ['name', 'type', 'width', 'desc'],
-                          ['name', 'type', 'width', 'description']);
+                          ['Port Name', 'Direction', 'Range', 'Description']);
     md.addEnter();
     
 

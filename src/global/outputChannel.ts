@@ -75,11 +75,13 @@ class Output {
 
 const MainOutput = new Output('Digital-IDE');
 const LspOutput = new Output('Digital-IDE Language Server');
-const YosysOutput = new Output('Yosys');
+const YosysOutput = new Output('Digital-IDE Yosys');
+const WaveViewOutput = new Output('Digital-IDE Wave Viewer');
 
 export {
     ReportType,
     MainOutput,
     LspOutput,
-    YosysOutput
+    YosysOutput,
+    WaveViewOutput
 };

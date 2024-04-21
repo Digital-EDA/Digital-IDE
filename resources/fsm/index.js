@@ -40,7 +40,7 @@ class FsmViewer {
     open(uri) {
         this.current_uri = uri;
         const docPath = uri.fsPath.replace(/\\/g, '/');
-        if (this.panel == undefined) {
+        if (this.panel === undefined) {
             this.create();
         }
         this.send(docPath);

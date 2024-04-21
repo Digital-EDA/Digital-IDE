@@ -1,0 +1,13 @@
+<!doctype html><html lang=""><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="icon.png"><title>Vcd Viewer</title><link rel="stylesheet" href="ondark.css"><link rel="stylesheet" href="vscode.css"><link rel="stylesheet" href="vcd.css"><link rel="stylesheet" href="iconfont.css"><script src="vcd.js"></script><script>window.readVcdFile = async () => {
+            const response = await fetch('test.vcd');
+            const blob = await response.blob();
+            const reader = new FileReader();
+            return new Promise((resolve, reject) => {
+                reader.onload = event => {
+                    const fileContent = event.target.result;
+                    const unintarray = new Uint8Array(fileContent);
+                    resolve(unintarray);     
+                };
+                reader.readAsArrayBuffer(blob);
+            });
+        }</script><script defer="defer" src="js/chunk-vendors.9a8e8b73.js"></script><script defer="defer" src="js/app.d35abdbf.js"></script><link href="css/chunk-vendors.915d56aa.css" rel="stylesheet"><link href="css/app.520326c1.css" rel="stylesheet"></head><body><div id="app"></div></body></html>

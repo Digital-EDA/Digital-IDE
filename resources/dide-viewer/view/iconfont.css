@@ -1,0 +1,97 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 4440655 */
+  src: url('iconfont.woff2?t=1713691301672') format('woff2');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-ctrl:before {
+  content: "\e605";
+}
+
+.icon-shift:before {
+  content: "\e626";
+}
+
+.icon-mouse:before {
+  content: "\e69e";
+}
+
+.icon-left-right:before {
+  content: "\e61c";
+}
+
+.icon-up-down:before {
+  content: "\e61d";
+}
+
+.icon-help:before {
+  content: "\e87a";
+}
+
+.icon-parameter:before {
+  content: "\e6be";
+}
+
+.icon-task:before {
+  content: "\e602";
+}
+
+.icon-fork:before {
+  content: "\e735";
+}
+
+.icon-prevent:before {
+  content: "\e69d";
+}
+
+.icon-function:before {
+  content: "\e90e";
+}
+
+.icon-real:before {
+  content: "\e6ec";
+}
+
+.icon-integer:before {
+  content: "\e603";
+}
+
+.icon-string:before {
+  content: "\e614";
+}
+
+.icon-brackets:before {
+  content: "\e613";
+}
+
+.icon-register:before {
+  content: "\e611";
+}
+
+.icon-about:before {
+  content: "\e601";
+}
+
+.icon-setting:before {
+  content: "\e657";
+}
+
+.icon-collections:before {
+  content: "\e689";
+}
+
+.icon-memory-chip:before {
+  content: "\e600";
+}
+
+.icon-wave-square:before {
+  content: "\ebd0";
+}
+

@@ -19,6 +19,7 @@ import * as lspCore from './lsp/core';
 // special function
 import * as FSM from './fsm';
 import * as Netlist from './netlist';
+import * as WaveView from './dide-viewer';
 
 function registerDocumentation(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('digital-ide.hdlDoc.showWebview', hdlDoc.showDocWebview);
@@ -55,7 +56,6 @@ function registerTreeView(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('digital-ide.treeView.arch.openFile', treeView.openFileByUri);
 }
 
-
 function registerLsp(context: vscode.ExtensionContext) {
     const vlogSelector: vscode.DocumentSelector = {scheme: 'file', language: 'verilog'};
     const svlogSelector: vscode.DocumentSelector = {scheme: 'file', language: 'systemverilog'};
@@ -79,7 +79,6 @@ function registerLsp(context: vscode.ExtensionContext) {
     vscode.languages.registerCompletionItemProvider(vlogSelector, lspCompletion.vlogPositionPortProvider, '.');
     vscode.languages.registerCompletionItemProvider(vlogSelector, lspCompletion.vlogCompletionProvider);
     // vscode.languages.registerDocumentSemanticTokensProvider(vlogSelector, lspDocSemantic.vlogDocSenmanticProvider, lspDocSemantic.vlogLegend);
-
 
     
     // vhdl lsp    
@@ -118,10 +117,15 @@ function registerNetlist(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('digital-ide.netlist.show', uri => Netlist.openNetlistViewer(context, uri));
 }
 
+function registerWaveViewer(context: vscode.ExtensionContext) {
+    vscode.commands.registerCommand('digital-ide.waveviewer.show', uri => WaveView.openWaveViewer(context, uri));
+}
+
 export {
     registerFunctionCommands,
     registerLsp,
     registerToolCommands,
     registerFSM,
-    registerNetlist
+    registerNetlist,
+    registerWaveViewer
 };

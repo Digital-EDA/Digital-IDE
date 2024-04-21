@@ -41,6 +41,7 @@
     "digital-ide.vhdl2vlog.title": "vhdl代碼翻譯為verilog代碼",
     "digital-ide.fsm.show.title": "顯示當前文件的FSM圖",
     "digital-ide.netlist.show.title": "顯示當前文件的netlist",
+    "digital-ide.waveviewer.show.title": "Render the vcd in viewer",
     "digital-ide.lsp.vlog.linter.pick.title": "選擇 Verilog 的診斷",  
     "digital-ide.lsp.svlog.linter.pick.title": "選擇 System Verilog 的診斷",  
     "digital-ide.lsp.vhdl.linter.pick.title": "選擇 VHDL 的診斷",  

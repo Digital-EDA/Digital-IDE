@@ -1,6 +1,6 @@
 import { opeParam, OpeParamDefaults } from './opeParam';
 import { PrjInfo, PrjInfoDefaults } from './prjInfo';
-import { MainOutput, LspOutput, YosysOutput, ReportType } from './outputChannel';
+import { MainOutput, LspOutput, YosysOutput, WaveViewOutput, ReportType } from './outputChannel';
 
 import * as Enum from './enum';
 import * as Lang from './lang';
@@ -22,6 +22,7 @@ export {
     MainOutput,
     LspOutput,
     YosysOutput,
+    WaveViewOutput,
     ReportType,
     AllowNull
 };

@@ -15,6 +15,7 @@ async function registerCommand(context: vscode.ExtensionContext) {
     func.registerToolCommands(context);
     func.registerFSM(context);
     func.registerNetlist(context);
+    func.registerWaveViewer(context);
 }
 
 

@@ -75,6 +75,7 @@ def modify_vsix():
     # webview
     copy_dir('./resources/fsm/view', os.path.join(extract_folder, 'extension', 'resources', 'fsm', 'view'))
     copy_dir('./resources/netlist/view', os.path.join(extract_folder, 'extension', 'resources', 'netlist', 'view'))
+    copy_dir('./resources/dide-viewer/view', os.path.join(extract_folder, 'extension', 'resources', 'dide-viewer', 'view'))
 
 
     # remake

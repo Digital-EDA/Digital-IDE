@@ -38,9 +38,18 @@ class WaveViewer {
 
         const previewHtml = this.getWebviewContent();
         if (this.panel && previewHtml) {
+            const dideviewerPath = hdlPath.join(opeParam.extensionPath, 'resources', 'dide-viewer', 'view');
+            const workerAbsPath = hdlPath.join(dideviewerPath, 'worker.js');
             const webviewUri = this.panel.webview.asWebviewUri(uri);
-            this.panel.webview.html = previewHtml.replace('test.vcd', webviewUri.toString());
-                        
+            const workerUri = this.panel.webview.asWebviewUri(vscode.Uri.file(workerAbsPath));            
+            const workerRootUri = this.panel.webview.asWebviewUri(vscode.Uri.file(dideviewerPath));
+
+            let preprocessHtml = previewHtml
+                .replace('test.vcd', webviewUri.toString())
+                .replace('worker.js', workerUri.toString())
+                .replace('<workerRoot>', workerRootUri.toString());
+            this.panel.webview.html = preprocessHtml;
+
             const iconPath = hdlPath.join(opeParam.extensionPath, 'images', 'icon.svg');
             this.panel.iconPath = vscode.Uri.file(iconPath);
         } else {

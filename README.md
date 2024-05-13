@@ -1,6 +1,10 @@
-# Digital IDE - version 0.3.2
+<center>
+<img src="./images/icon.png"/>
+</center>
 
-![](https://img.shields.io/badge/version-0.3.0-blue)
+# Digital IDE - version 0.3.3
+
+![](https://img.shields.io/badge/version-0.3.3-blue)
 ![](https://img.shields.io/badge/engine-wasm-blue)
 ![](https://img.shields.io/badge/Verilog-support-green)
 ![](https://img.shields.io/badge/VHDL-support-green)
@@ -9,7 +13,6 @@
 - [Document (New)](https://sterben.nitcloud.cn/)
 - [中文文档 (New)](https://sterben.nitcloud.cn/zh/)
 - [Video](https://www.bilibili.com/video/BV1t14y1179V/?spm_id_from=333.999.0.0)
-
 
 
 ---
@@ -32,3 +35,11 @@
 - 修复 iverilog 仿真功能中，将重复的路径作为编译参数编译的 bug
 - 修复 iverilog 仿真功能中，将 <code>`include</code> 加入或去除后，无法通过仿真编译的 bug （没有更新 instance 的 instModPathStatus 属性）
 - 修复其他已知 bug
+
+---
+
+## develop
+
+```bash
+python script/command/make_package.py
+```

@@ -8,8 +8,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 Feature
 - 重做了文档化功能，并且添加了参数和接口的 diagram 可视化的渲染模块
-- 增加了波形显示器
-
+- 增加了波形显示器，支持以下特性
+    - 完整的 vcd 支持，对于 IEEE VCD 标准完全支持。
+    - 基于 wasm 的 数据解析 和基于 webgl2 的渲染，拥有接近原生的运行速度。
+    - 主线程渲染和渲染数据的加载实现了调度隔离，再大的 vcd 也不会造成卡顿。
+    - 支持用户自定义调整波形颜色，移动灵敏度等等。
+    - 支持用户自定义搜索信号名称。
 
 Bug 修复
 - Verilog 参数例化位置错误

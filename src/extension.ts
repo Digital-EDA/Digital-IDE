@@ -29,7 +29,7 @@ async function launch(context: vscode.ExtensionContext) {
         hdlMonitor.start();
     });
         
-    MainOutput.report('Digital-IDE has launched, Version: 0.3.2', ReportType.Launch);
+    MainOutput.report('Digital-IDE has launched, Version: 0.3.3', ReportType.Launch);
     MainOutput.report('OS: ' + opeParam.os, ReportType.Launch);
 
     console.log(hdlParam);

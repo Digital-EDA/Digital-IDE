@@ -175,7 +175,7 @@ abstract class RenderString {
         this.type = type;
     }
 
-    abstract render(): string;
+    abstract render(userStyle?: ThemeType): string;
 }
 
 interface MarkdownStringValue {
@@ -262,8 +262,8 @@ class WavedromString extends RenderString {
     add(text: string) {
         this.value += text;
     }
-    render(): string {
-        const style = getThemeColorKind();
+    render(userStyle?: ThemeType): string {
+        const style = userStyle ? userStyle : getThemeColorKind();
         return makeWaveDromSVG(this.value, style);
     }
 };
@@ -328,8 +328,8 @@ async function getWavedromsFromFile(path: string): Promise<WavedromString[] | un
 
     const fileStream = fs.createReadStream(path, 'utf-8');
     const rl = readline.createInterface({
-      input: fileStream,
-      crlfDelay: Infinity
+        input: fileStream,
+        crlfDelay: Infinity
     });
 
     for await (const line of rl) {

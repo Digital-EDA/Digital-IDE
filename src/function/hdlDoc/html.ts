@@ -7,6 +7,7 @@ import { opeParam, MainOutput, AbsPath } from '../../global';
 import { Count, MarkdownString, WavedromString } from './common';
 import { getRenderList, getCurrentRenderList } from './markdown';
 import { hdlPath, hdlIcon, hdlFile } from '../../hdlFs'; 
+import { ThemeType } from '../../global/enum';
 
 const _cache = {
     css : ''
@@ -102,7 +103,7 @@ function makeWavedromRenderErrorHTML() {
  * @description make the html string of a finial display style
  * @param usage in whick module is used
  */
-async function makeShowHTML(usage: string): Promise<string> {
+async function makeShowHTML(usage: 'webview' | 'pdf' | 'html' | 'markdown'): Promise<string> {
     const renderList = await getCurrentRenderList();
     if (!renderList || renderList.length === 0) {
         return '';
@@ -110,9 +111,10 @@ async function makeShowHTML(usage: string): Promise<string> {
 
     // start to render the real html
     let body = '';
+    const userStyle = (usage === 'webview' || usage === 'markdown') ? undefined : ThemeType.Light;
 
     for (const r of renderList) {
-        const renderResult = r.render();
+        const renderResult = r.render(userStyle);
         if (renderResult) {
             if (r instanceof MarkdownString) {
                 body += makeCommonElement(renderResult);

@@ -99,6 +99,10 @@ async function exportCurrentFileDocAsPDF() {
             fs.writeFileSync(tempHtmlPath, html);
             await htmlFile2PdfFile(tempHtmlPath, pdfPath);
             hdlFile.rmSync(tempHtmlPath);
+
+            // 在当前编辑器中打开生成的 pdf
+            vscode.window.showInformationMessage('pdf generated at ' + pdfPath);
+            
         } catch (error) {
             MainOutput.report("error happen in export pdf: " + error, ReportType.Error);
         }

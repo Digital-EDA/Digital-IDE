@@ -10,4 +10,4 @@ out-js/
 *.pyd
 resources/hdlParser/parser.js
 resources/hdlParser/parser.wasm
-resources/dide-viewer/view/
+resources/dide-viewer/view/*

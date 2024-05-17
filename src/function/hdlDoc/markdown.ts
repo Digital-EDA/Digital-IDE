@@ -11,7 +11,7 @@ import { MarkdownString, RenderString, RenderType,
 import { hdlPath, hdlFile } from '../../hdlFs';
 
 import { getSymbolComments } from '../lsp/util/feature';
-import { HdlLangID } from '../../global/enum';
+import { HdlLangID, ThemeType } from '../../global/enum';
 import { makeDiagram } from './diagram';
 
 
@@ -125,7 +125,7 @@ async function getDocsFromModule(module: HdlModule): Promise<MarkdownString> {
     
     const infos = [
         `**File:** ${fspath.basename(module.file.path)}`,
-        `${portNum} params, ${paramNum} ports`,
+        `${paramNum} params, ${portNum} ports`,
         'top module ' + topModuleDesc
     ];
     md.addUnorderedList(infos);
@@ -151,7 +151,7 @@ async function getDocsFromModule(module: HdlModule): Promise<MarkdownString> {
     makeTableFromObjArray(md, module.ports, 'ports', 
                           ['name', 'type', 'width', 'desc'],
                           ['Port Name', 'Direction', 'Range', 'Description']);
-    md.addEnter();
+    md.addEnter();    
     
 
     // dependency section

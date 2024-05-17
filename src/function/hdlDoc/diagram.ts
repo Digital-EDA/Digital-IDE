@@ -6,7 +6,8 @@ import { hdlFile, hdlPath } from "../../hdlFs";
 import { HdlModuleParam, HdlModulePort, HdlModulePortType } from "../../hdlParser/common";
 import { getThemeColorKind } from "./common";
 
-const arrowSvgCache: Record<string, string> = {
+
+const lightArrowSvgCache: Record<string, string> = {
     'left': '',
     'right': '',
     'left-right': '',
@@ -14,10 +15,21 @@ const arrowSvgCache: Record<string, string> = {
     'right-dot': ''
 };
 
+const darkArrowSvgCache: Record<string, string> = {
+    'left': '',
+    'right': '',
+    'left-right': '',
+    'left-dot': '',
+    'right-dot': ''
+};
+
+
 function getArrowSvgString(name: 'left' | 'right' | 'left-right' | 'left-dot' | 'right-dot'): string {
+    const themeType = getThemeColorKind();
+    const arrowSvgCache = (themeType === ThemeType.Light) ? lightArrowSvgCache: darkArrowSvgCache;
+    
     let svgString = arrowSvgCache[name];
     if (svgString.length === 0) {
-        const themeType = getThemeColorKind();
         const iconFile = name + '-arrow.svg';
         const svgDir = hdlPath.join(opeParam.extensionPath, 'images', 'svg');
         const svgPath = hdlPath.join(svgDir, themeType, iconFile);

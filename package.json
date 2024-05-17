@@ -693,6 +693,11 @@
                     "when": "resourceLangId == vhdl",
                     "command": "digital-ide.vhdl2vlog",
                     "group": "navigation@9"
+                },
+                {
+                    "when": "resourceLangId == verilog || resourceLangId == systemverilog || resourceLangId == vhdl",
+                    "command": "digital-ide.hdlDoc.exportFile",
+                    "group": "navigation@10"
                 }
             ],
             "explorer/context": [
@@ -735,6 +740,11 @@
                     "when": "resourceLangId == vhdl",
                     "command": "digital-ide.vhdl2vlog",
                     "group": "navigation@12"
+                },
+                {
+                    "when": "resourceLangId == verilog || resourceLangId == systemverilog || resourceLangId == vhdl",
+                    "command": "digital-ide.hdlDoc.exportFile",
+                    "group": "navigation@13"
                 }
             ]
         },

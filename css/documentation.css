@@ -566,21 +566,21 @@ img {
 .diagram-container .digrame-port-item {
     display: flex;
     justify-content: space-between;
-    height: 60px;
+    height: 40px;
 }
 
 .diagram-container .i-port-name {
-    font-size: 20px;
+    font-size: 16px;
     padding: 3px 8px;
 }
 
 .diagram-container .o-port-name {
-    font-size: 20px;
+    font-size: 16px;
     padding: 3px 8px;
 }
 
 .diagram-container .io-port-name {
-    font-size: 20px;
+    font-size: 16px;
     padding: 3px 8px;
 
 }
@@ -600,7 +600,7 @@ img {
 }
 
 .diagram-container .arrow-wrapper {
-    height: 60px;
+    height: 40px;
 }
 
 .diagram-container .port-width-left-caption {

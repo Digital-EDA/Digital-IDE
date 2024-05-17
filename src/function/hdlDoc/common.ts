@@ -52,7 +52,14 @@ function catString(...strings: string[]): string {
     return strings.join('');
 }
 
+const ThemeColorConfig : { specify: undefined | ThemeType } = {
+    specify: undefined
+};
+
 function getThemeColorKind(): ThemeType {
+    if (ThemeColorConfig.specify !== undefined) {
+        return ThemeColorConfig.specify;
+    }
     const currentColorKind = vscode.window.activeColorTheme.kind;
     if (currentColorKind === vscode.ColorThemeKind.Dark || 
         currentColorKind === vscode.ColorThemeKind.HighContrast) {
@@ -175,7 +182,7 @@ abstract class RenderString {
         this.type = type;
     }
 
-    abstract render(): string;
+    abstract render(userStyle?: ThemeType): string;
 }
 
 interface MarkdownStringValue {
@@ -328,8 +335,8 @@ async function getWavedromsFromFile(path: string): Promise<WavedromString[] | un
 
     const fileStream = fs.createReadStream(path, 'utf-8');
     const rl = readline.createInterface({
-      input: fileStream,
-      crlfDelay: Infinity
+        input: fileStream,
+        crlfDelay: Infinity
     });
 
     for await (const line of rl) {
@@ -390,5 +397,6 @@ export {
     makeWaveDromSVG,
     getWavedromsFromFile,
     getThemeColorKind,
-    Count
+    Count,
+    ThemeColorConfig
 };

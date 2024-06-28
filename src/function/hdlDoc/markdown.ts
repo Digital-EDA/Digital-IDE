@@ -48,13 +48,15 @@ function selectFieldValue(obj: any, subName: string, ws: string, name: string): 
 
 function makeTableFromObjArray(md: MarkdownString, array: any[], name: string, fieldNames: string[], displayNames: string[]) {
     const ws = hdlPath.toSlash(opeParam.workspacePath) + '/';
+    console.log('enter showhtml');
+    
     if (array.length === 0) {
         md.addText(`no ${name} info`);
     } else {
         const rows = [];
         for (const obj of array) {
             const data = [];
-            for (const subName of fieldNames) {
+            for (const subName of fieldNames) {                
                 const value = selectFieldValue(obj, subName, ws, name);
                 data.push(value);
             }
@@ -97,7 +99,7 @@ async function patchComment(path: AbsPath, ports: (HdlModulePort | HdlModulePara
 async function getDocsFromModule(module: HdlModule): Promise<MarkdownString> {
     const moduleName = module.name;
     const portNum = module.ports.length;
-    const paramNum = module.params.length;
+    const paramNum = module.params.length;    
     
     // add desc can optimizer in the future version
     const paramPP = patchComment(module.path, module.params);

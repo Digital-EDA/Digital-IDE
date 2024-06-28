@@ -570,17 +570,17 @@ img {
 }
 
 .diagram-container .i-port-name {
-    font-size: 16px;
+    font-size: 18px;
     padding: 3px 8px;
 }
 
 .diagram-container .o-port-name {
-    font-size: 16px;
+    font-size: 18px;
     padding: 3px 8px;
 }
 
 .diagram-container .io-port-name {
-    font-size: 16px;
+    font-size: 18px;
     padding: 3px 8px;
 
 }
@@ -605,12 +605,14 @@ img {
 
 .diagram-container .port-width-left-caption {
     position: absolute;
-    margin: -10px 35px;
+    margin: -5px 10px;
+    font-size: 14px;
 }
 
 .diagram-container .port-width-right-caption {
     position: absolute;
-    margin: -10px 10px;
+    margin: -5px 10px;
+    font-size: 14px;
 }
 
 .vscode-dark .diagram-container {

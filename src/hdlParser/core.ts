@@ -477,7 +477,6 @@ class HdlModule {
     public createHdlInstance(rawHdlInstance: common.RawHdlInstance): HdlInstance {
         const instModName = rawHdlInstance.type;
         
-        
         if (this.languageId === HdlLangID.Verilog || this.languageId === HdlLangID.SystemVerilog) {
             const searchResult = this.searchInstModPath(instModName);
             const hdlInstance = new HdlInstance(rawHdlInstance.name,
@@ -525,7 +524,11 @@ class HdlModule {
         }
     }
 
-    public makeNameToInstances() {        
+    public makeNameToInstances() {
+        if (this.name === 'u_reg_cfg') {
+            console.log('[u_reg_cfg debug]');
+            console.log(this.rawInstances);
+        }    
         if (this.rawInstances !== undefined) {            
             this.nameToInstances.clear();
             for (const inst of this.rawInstances) {

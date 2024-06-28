@@ -4,7 +4,7 @@
     <g>
         <path d="M 101 21 L 25.47 21" fill="none" stroke="rgb(0, 0, 0)" stroke-width="3"
             stroke-miterlimit="10" pointer-events="stroke" />
-        <path d="M 45.24 10 L 23.24 21 L 45.24 32" fill="none" stroke="rgb(0, 0, 0)"
+        <path d="M 35.24 13 L 23.24 21 L 35.24 29" fill="none" stroke="rgb(0, 0, 0)"
             stroke-width="3" stroke-miterlimit="10" pointer-events="all" />
     </g>
 </svg>

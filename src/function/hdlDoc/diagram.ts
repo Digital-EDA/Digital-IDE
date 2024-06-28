@@ -80,8 +80,8 @@ function makeDiagramPortWrapper(ports: HdlModulePort[]): string {
     const leftPorts = ports.filter(port => port.type === HdlModulePortType.Input || port.type === HdlModulePortType.Inout);
     const rightPorts = ports.filter(port => port.type === HdlModulePortType.Output);
 
-    const leftDirection = makeLeftDirection(leftPorts);
-    const diagramPorts = makeDiagramPorts(leftPorts, rightPorts);
+    const leftDirection = makeLeftDirection(leftPorts);    
+    const diagramPorts = makeDiagramPorts(leftPorts, rightPorts);    
     const rightDirection = makeRightDirection(rightPorts);
     
     const diagramPortWrapper = `<div class="diagram-ports-wrapper">${leftDirection}${diagramPorts}${rightDirection}</div>`;
@@ -177,7 +177,7 @@ function makeDiagramPorts(leftPorts: HdlModulePort[], rightPorts: HdlModulePort[
         diagramePorts += diagramPortItem;
     }
     while (rightIndex < rightPorts.length) {
-        const rightPortName = makePortName(leftPorts[leftIndex ++]);
+        const rightPortName = makePortName(rightPorts[rightIndex ++]);        
         const diagramPortItem = `<div class="digrame-port-item"><div></div>${rightPortName}</div>`;
         diagramePorts += diagramPortItem;
     }
@@ -185,7 +185,7 @@ function makeDiagramPorts(leftPorts: HdlModulePort[], rightPorts: HdlModulePort[
 }
 
 function makeRightDirection(rightPorts: HdlModulePort[]): string {
-    let rightDirection = '';
+    let rightDirection = '';    
     for (const port of rightPorts) {
         const portCaption = makePortCaption(port, 'right');
         let portArrow = makePortArrow(port, 'right');

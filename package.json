@@ -748,6 +748,18 @@
                 }
             ]
         },
+        "customEditors": [
+            {
+                "viewType": "digital-ide.vcd.viewer",
+                "displayName": "Digital Viewer",
+                "selector": [
+                    {
+                        "filenamePattern": "*.vcd"
+                    }
+                ],
+                "priority": "default"
+            }
+        ],
         "viewsContainers": {
             "activitybar": [
                 {

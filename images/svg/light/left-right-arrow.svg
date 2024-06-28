@@ -4,9 +4,9 @@
     <g>
         <path d="M 97.53 22 L 26.47 22" fill="none" stroke="rgb(0, 0, 0)" stroke-width="3"
             stroke-miterlimit="10" pointer-events="stroke" />
-        <path d="M 77.76 33 L 99.76 22 L 77.76 11" fill="none" stroke="rgb(0, 0, 0)"
+        <path d="M 87.76 30 L 99.76 22 L 87.76 14" fill="none" stroke="rgb(0, 0, 0)"
             stroke-width="3" stroke-miterlimit="10" pointer-events="all" />
-        <path d="M 46.24 11 L 24.24 22 L 46.24 33" fill="none" stroke="rgb(0, 0, 0)"
+        <path d="M 36.24 14 L 24.24 22 L 36.24 30" fill="none" stroke="rgb(0, 0, 0)"
             stroke-width="3" stroke-miterlimit="10" pointer-events="all" />
     </g>
 </svg>

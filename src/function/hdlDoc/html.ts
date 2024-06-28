@@ -104,6 +104,7 @@ function makeWavedromRenderErrorHTML() {
  * @param usage in whick module is used
  */
 async function makeShowHTML(usage: 'webview' | 'pdf' | 'html' | 'markdown'): Promise<string> {
+
     // start to render the real html
     let body = '';
     const userStyle = (usage === 'webview' || usage === 'markdown') ? undefined : ThemeType.Light;
@@ -113,7 +114,7 @@ async function makeShowHTML(usage: 'webview' | 'pdf' | 'html' | 'markdown'): Pro
     if (!renderList || renderList.length === 0) {
         return '';
     }
-
+    
     for (const r of renderList) {
         const renderResult = r.render();
         if (renderResult) {

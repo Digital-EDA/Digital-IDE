@@ -1159,6 +1159,7 @@
         "state-machine-cat": "^9.2.5",
         "temp": "^0.9.4",
         "vscode-textmate": "^9.0.0",
-        "wavedrom": "^2.9.1"
+        "wavedrom": "^2.9.1",
+        "vscode-languageclient": "^7.0.0"
     }
 }

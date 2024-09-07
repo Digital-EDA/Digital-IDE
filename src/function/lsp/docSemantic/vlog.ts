@@ -13,11 +13,7 @@ class VlogDocSenmanticProvider implements vscode.DocumentSemanticTokensProvider 
     public async provideDocumentSemanticTokens(document: vscode.TextDocument, token: vscode.CancellationToken): Promise<vscode.SemanticTokens | null | undefined> {
         // TODO : finish this
         const tokensBuilder = new vscode.SemanticTokensBuilder(vlogLegend);        
-        // const filePath = document.fileName;
-        // const vlogAll = await HdlSymbol.all(filePath);
-        // if (vlogAll) {
-        //     this.prepareTokensBuilder(tokensBuilder, vlogAll);
-        // }
+
         return tokensBuilder.build();
     }
 

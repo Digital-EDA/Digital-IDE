@@ -7,6 +7,8 @@ import * as func from './function';
 import { hdlMonitor } from './monitor';
 import { extensionUrl } from '../resources/hdlParser';
 
+import * as lspClient from './function/lsp-client';
+
 async function registerCommand(context: vscode.ExtensionContext) {
     manager.registerManagerCommands(context);
 
@@ -16,6 +18,8 @@ async function registerCommand(context: vscode.ExtensionContext) {
     func.registerFSM(context);
     func.registerNetlist(context);
     func.registerWaveViewer(context);
+
+    lspClient.activate(context);
 }
 
 
@@ -56,4 +60,6 @@ export function activate(context: vscode.ExtensionContext) {
     launch(context);
 }
 
-export function deactivate() {}
+export function deactivate() {
+    lspClient.deactivate();
+}

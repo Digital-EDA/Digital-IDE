@@ -1,9 +1,15 @@
+<<<<<<< HEAD
 library
 node_modules
 out
 ./*.log
 ./*.str
 dist
+=======
+out
+dist
+node_modules
+>>>>>>> 199b7a8af3ea01baea4b20c89273a490dc0dc9d2
 script/__pycache__
 .vscode-test/
 *.vsix

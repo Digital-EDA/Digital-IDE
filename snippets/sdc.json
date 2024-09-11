@@ -1,6 +1,10 @@
 {  
     "ILA_CORE": {
+<<<<<<< HEAD
         "prefix": "ila",
+=======
+        "prefix": "create_ILA_CORE",
+>>>>>>> 199b7a8af3ea01baea4b20c89273a490dc0dc9d2
         "body": [
             "set_property C_CLK_INPUT_FREQ_HZ  ${1:100000000} [get_debug_cores dbg_hub]",
             "set_property C_ENABLE_CLK_DIVIDER false     [get_debug_cores dbg_hub]",
@@ -9,7 +13,11 @@
         ]
     },
     "Debug_CORE": {
+<<<<<<< HEAD
         "prefix": "debug",
+=======
+        "prefix": "create_Debug_CORE",
+>>>>>>> 199b7a8af3ea01baea4b20c89273a490dc0dc9d2
         "body": [
             "create_debug_core u_ila_${1:0} ila",
             "set_property ALL_PROBE_SAME_MU true  [get_debug_cores u_ila_$1]",

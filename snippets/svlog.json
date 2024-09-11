@@ -198,7 +198,11 @@
             "reg [${1:32}:0]      cnt$2 = 0;",
             "reg             ${3:impulse};",
             "parameter       SET_TIME = $1'd$4;",
+<<<<<<< HEAD
             "always@(posedge clcok) begin",
+=======
+            "always@(posedge clk) begin",
+>>>>>>> 199b7a8af3ea01baea4b20c89273a490dc0dc9d2
             "    if (cnt$2 == SET_TIME) begin",
             "        cnt$2 <= $1'd0;",
             "        $3 <= 1'd1;",
@@ -216,7 +220,11 @@
         "body": [
             "reg [${1:3}:0]      cnt$2 = 0;",
             "reg                 clk_div$2;",
+<<<<<<< HEAD
             "always@(posedge ${3:clcok}) begin",
+=======
+            "always@(posedge ${3:clk}) begin",
+>>>>>>> 199b7a8af3ea01baea4b20c89273a490dc0dc9d2
             "    if (cnt$2 == ${4:3}) begin",
             "        cnt$2 <= $1'd0;",
             "        clk_div$2 <= ~clk_div$2;",
@@ -237,9 +245,15 @@
             "wire gate$2_pose =  gate$2 & ~gate$2_buf;",
             "wire gate$2_nege =  ~gate$2 & gate$2_buf;",
     
+<<<<<<< HEAD
             "always@(posedge clcok) begin",
             "    gate$2 <= ${1:signal};",
             "    gate$2_buf <= gate$2;",
+=======
+            "always@(posedge clk) begin",
+            "   gate$2 <= ${1:signal};",
+            "   gate$2_buf <= gate$2;",
+>>>>>>> 199b7a8af3ea01baea4b20c89273a490dc0dc9d2
             "end"
         ]
     },
@@ -263,8 +277,13 @@
         "body": [
             "reg  rst_n_s1, rst_n_s2;",
             "wire rst_n",
+<<<<<<< HEAD
             "always @ (posedge clcok or negedge rstn) begin",
             "    if (!rstn) begin",
+=======
+            "always @ (posedge clk or negedge sys_rst_n) begin",
+            "    if (sys_rst_n) begin",
+>>>>>>> 199b7a8af3ea01baea4b20c89273a490dc0dc9d2
             "        rst_n_s2 <= 1'b0;",
             "        rst_n_s1 <= 1'b0;",
             "    end",
@@ -274,7 +293,11 @@
             "end",
             "assign rst_n = rst_n_s2;"
         ],
+<<<<<<< HEAD
         "description" : "Asynchronous rstn synchronous release (intel device)"
+=======
+        "description" : "Asynchronous sys_rst_n synchronous release (intel device)"
+>>>>>>> 199b7a8af3ea01baea4b20c89273a490dc0dc9d2
     },
 
     "reset": {
@@ -282,8 +305,13 @@
         "body": [
             "reg  rst_s1, rst_s2;",
             "wire rst",
+<<<<<<< HEAD
             "always @ (posedge clcok or posedge reset) begin",
             "    if (reset) begin",
+=======
+            "always @ (posedge clk or posedge sys_rst) begin",
+            "    if (sys_rst) begin",
+>>>>>>> 199b7a8af3ea01baea4b20c89273a490dc0dc9d2
             "        rst_s2 <= 1'b0;",
             "        rst_s1 <= 1'b0;",
             "    end",
@@ -293,11 +321,19 @@
             "end",
             "assign rst = rst_s2;"
         ],
+<<<<<<< HEAD
         "description" : "Asynchronous reset synchronous release (xilinx device)"
     },
         
     "initial sim": {
         "prefix": "dump",
+=======
+        "description" : "Asynchronous sys_rst synchronous release (xilinx device)"
+    },
+        
+    "initial sim": {
+        "prefix": "inits",
+>>>>>>> 199b7a8af3ea01baea4b20c89273a490dc0dc9d2
         "body": [
             "initial begin",
             "   \\$dumpfile(\"wave.vcd\");",
@@ -369,17 +405,29 @@
     "alwaysposclk": {
         "prefix": "alclk",
         "body": [
+<<<<<<< HEAD
             "always @(posedge clcok) begin",
             "    $1;",
             "end"
         ],
         "description": "always @(posedge clcok) directly"
+=======
+            "always @(posedge clk) begin",
+            "    $1;",
+            "end"
+        ],
+        "description": "always @(posedge clk) directly"
+>>>>>>> 199b7a8af3ea01baea4b20c89273a490dc0dc9d2
     },
 
     "alwayssyncrst": {
         "prefix": "alsync",
         "body": [
+<<<<<<< HEAD
             "always @(posedge clcok) begin",
+=======
+            "always @(posedge clk) begin",
+>>>>>>> 199b7a8af3ea01baea4b20c89273a490dc0dc9d2
             "    if(rst) begin",
             "        $1 <= 0;",
             "    end",
@@ -394,7 +442,11 @@
     "alwaysasyncrst": {
         "prefix": "alasync",
         "body": [
+<<<<<<< HEAD
             "always @(posedge clcok or posedge rst) begin",
+=======
+            "always @(posedge clk or posedge rst) begin",
+>>>>>>> 199b7a8af3ea01baea4b20c89273a490dc0dc9d2
             "    if(rst) begin",
             "        $1 <= 0;",
             "    end",
@@ -409,7 +461,11 @@
     "alwayssyncrstn": {
         "prefix": "alsyncn",
         "body": [
+<<<<<<< HEAD
             "always @(posedge clcok) begin",
+=======
+            "always @(posedge clk) begin",
+>>>>>>> 199b7a8af3ea01baea4b20c89273a490dc0dc9d2
             "    if(!rst_n) begin",
             "        $1 <= 0;",
             "    end",
@@ -424,7 +480,11 @@
     "alwaysasyncrstn": {
         "prefix": "alasyncn",
         "body": [
+<<<<<<< HEAD
             "always @(posedge clcok or negedge rst_n) begin",
+=======
+            "always @(posedge clk or negedge rst_n) begin",
+>>>>>>> 199b7a8af3ea01baea4b20c89273a490dc0dc9d2
             "    if(!rst_n) begin",
             "        $1 <= 0;",
             "    end",
@@ -464,7 +524,11 @@
             "    parameter    INPUT_WIDTH  = ${2:12},",
             "    parameter    OUTPUT_WIDTH = $2",
             ") (",
+<<<<<<< HEAD
             "    input      clcok,",
+=======
+            "    input      clk,",
+>>>>>>> 199b7a8af3ea01baea4b20c89273a490dc0dc9d2
             "    input      RST,",
             "    input  [INPUT_WIDTH - 1 : 0]    ${3:data_i},",
             "    output [OUTPUT_WIDTH - 1 : 0]   ${4:data_o}",
@@ -479,7 +543,11 @@
         "prefix": "mod",
         "body": [
             "module ${1:moduleName} (",
+<<<<<<< HEAD
             "    input      clcok,",
+=======
+            "    input      clk,",
+>>>>>>> 199b7a8af3ea01baea4b20c89273a490dc0dc9d2
             "    input      rst,",
             "    $2",
             ");",

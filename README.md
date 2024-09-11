@@ -42,8 +42,12 @@
 
 ```bash
 python script/command/make_package.py
+<<<<<<< HEAD
 ```
 
 ## library更新
 
 library的更新不会随着Digital-IDE的git一起保存，是专门去拉取更新的，但是打包要一起打包进插件之中。
+=======
+```
+>>>>>>> 199b7a8af3ea01baea4b20c89273a490dc0dc9d2

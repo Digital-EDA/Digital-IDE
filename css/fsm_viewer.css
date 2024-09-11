@@ -1,0 +1,207 @@
+body::-webkit-scrollbar {
+    width: 2em;
+}
+
+body::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    outline: 1px solid slategrey;
+}
+
+:root {
+    --light-foreground-color: black;
+    --dark-foreground-color: whitesmoke;
+    --high-contrast-foreground-color: whitesmoke;
+}
+
+h1,
+h2,
+h3,
+table {
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+td,
+th,
+h1,
+h2,
+h3 {
+    color: black;
+}
+
+h1,
+h2 {
+    font-weight: bold;
+}
+
+tr:hover {
+    background-color: #ddd;
+}
+
+td,
+th {
+    border: 1px solid grey
+}
+
+p {
+    color: black;
+}
+
+p {
+    margin: 5%;
+}
+
+th {
+    background-color: #ffd78c;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+html,
+body {
+    height: 100%;
+    overflow: hidden;
+    overflow-y: auto;
+    color: black;
+}
+
+body {
+    background: white;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    cursor: default;
+}
+
+.toolbar {
+    overflow: visible;
+    width: 100%;
+    top: 0;
+    position: absolute;
+    color: black;
+    display: flex;
+    font: 12px "Segoe UI", sans-serif;
+    padding: 0.25em;
+    white-space: nowrap;
+    z-index: 2;
+}
+
+.left-panel,
+.center-panel,
+.right-panel {
+    align-items: center;
+    display: flex;
+    flex: 1;
+}
+
+.center-panel {
+    justify-content: center;
+}
+
+.right-panel {
+    justify-content: flex-end;
+}
+
+.button {
+    background: dimgray;
+    border: none;
+    box-sizing: border-box;
+    color: whitesmoke;
+    cursor: default;
+    font: inherit;
+    margin: 0.25em;
+    outline: none !important;
+    padding: 0.5em;
+    text-align: center;
+    text-decoration: none !important;
+    transition: background ease-out 125ms, color ease-out 125ms;
+    user-select: none;
+    width: 10em;
+    border-radius: .7em;
+}
+
+.button:hover {
+    background: darkgray;
+    box-shadow: inset rgba(255, 255, 255, 0.25) 0 0 1em;
+    color: black;
+    cursor: pointer;
+    border-radius: .7em;
+}
+
+.fancy-checkbox {
+    font-size: 20px;
+    margin: 10px;
+    border-radius: .7em;
+}
+
+.fancy-checkbox:hover {
+    cursor: pointer;
+}
+
+
+.fancy-checkbox>input {
+    display: none;
+    cursor: pointer;
+}
+
+.separator {
+    width: 1em;
+}
+
+#zoom {
+    color: white;
+    margin: 0.5em;
+}
+
+#workspace {
+    cursor: crosshair;
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    user-select: none;
+}
+
+#workspace:focus {
+    outline: none;
+}
+
+#image {
+    box-shadow: rgba(0, 0, 0, 0.6) 0 0 3em;
+    max-height: none;
+    max-width: none;
+    position: absolute;
+}
+
+#status {
+    align-items: center;
+    background: rgba(0, 0, 0, 0.85);
+    color: white;
+    display: flex;
+    font: 16px Monaco, Menlo, Consolas, monospace;
+    height: 100%;
+    justify-content: center;
+    margin: 0;
+    position: absolute;
+    width: 100%;
+    z-index: 1;
+}
+
+#status:empty {
+    display: none;
+}
+
+#message {
+    font-weight: bold;
+    font-size: 26px !important;
+}
+
+#code {
+    color: #424242;
+}

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>netlist view</title>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script type="text/javascript" src="../../public/jquery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="../../public/svg-pan-zoom.min.js"></script>
+    <script type="text/javascript" src="../../public/full.render.js"></script>
+    <script type="text/javascript" src="../../public/viz.js"></script>
+    <script type="text/javascript" src="../../public/elk.bundled.js"></script>
+    <script type="text/javascript" src="../../public/jquery.ztree.core.min.js"></script>
+    
+    <script type="text/javascript" src="./render.js"></script>
+    <script type="text/javascript" src="./netlist_view.js"></script>
+
+    <!-- <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'> -->
+    <link rel="stylesheet" href="../../../css/boxicons.2.0.7.min.css">
+    <link rel="stylesheet" href="../../../css/netlist_tree_style.css" type="text/css">
+    <link rel="stylesheet" href="../../../css/netlist_style.css" type="text/css">
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="logo-details">
+            <i class='bx bx-microchip'></i>
+            <span class="logo_name">Coding Lab</span>
+        </div>
+        <ul class="nav-links">
+            <li>
+                <div class="iocn-link">
+                    <a href="#">
+                        <i class='bx bx-export'></i>
+                        <span class="link_name">Export</span>
+                    </a>
+                    <i class='bx bxs-chevron-down arrow'></i>
+                </div>
+                <ul class="sub-menu">
+                    <li><a class="link_name" href="#">Export</a></li>
+                    <li id="export-as-svg"><a href="#">save as svg</a></li>
+                    <li id="export-as-png"><a href="#">save as png</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">
+                    <i class='bx bx-line-chart'></i>
+                    <span class="link_name">Chart</span>
+                </a>
+                <ul class="sub-menu blank">
+                    <li><a class="link_name" href="#">Chart</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">
+                    <i class='bx bx-cog'></i>
+                    <span class="link_name">Setting</span>
+                </a>
+                <ul class="sub-menu blank">
+                    <li><a class="link_name" href="#">Setting</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div class="home-section">
+        <div class="home-content">
+            <i class='bx bx-menu'></i>
+            <span class="text">Digital IDE</span>
+        </div>
+        <div class="main" style="display:flex;">
+            <ul id="netTree" class="ztree"></ul>
+            <div class="container" id="netlist_container">
+                <div id="component">
+                    <div style="display: flex;justify-content: space-between">
+                        <div>
+                            <button id=last>last </button>
+                            <button id=next>next </button>
+                        </div>
+                        <div>
+                            <label for=synthStyle >
+                                <font size="3" color="black">Synth Style:</font>
+                            </label>
+                            <select id=synthStyle>
+                                <option value=0>Before Behavioral Synth</option>
+                                <option value=1>After Behavioral Synth</option>
+                                <option value=2>After RTL Synth</option>
+                            </select>
+                            <button id='exec'>exec</button>
+                            <button id='debug'>debug</button>
+                        </div>
+                    </div>
+                    <div class="output" id="output"></div>
+                </div>
+                <div class="canvas" id="netlist_canvas"></div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<script>
+    function initSidebar() {
+        let arrow = document.querySelectorAll(".arrow");
+        for (var i = 0; i < arrow.length; i++) {
+            arrow[i].addEventListener("click", (e) => {
+                let arrowParent = e.target.parentElement.parentElement;
+                arrowParent.classList.toggle("showMenu");
+            });
+        }
+
+        let sidebar = document.querySelector(".sidebar");
+        let sidebarBtn = document.querySelector(".bx-menu");
+
+        sidebar.classList.toggle("close");
+        sidebarBtn.addEventListener("click", () => {
+            sidebar.classList.toggle("close");
+        });
+    }
+    initSidebar();
+
+    var Render = new render();
+    Render.init();
+    const vscode = acquireVsCodeApi();
+    
+    function export_message(type) {
+        vscode.postMessage({
+            command: 'export',
+            type: type,
+            svg: Render.svg
+        });
+    };
+
+    function exec(style) {
+        vscode.postMessage({
+            command: 'exec',
+            mode: style.value,
+        });
+    }
+
+    exec(document.getElementById('synthStyle'));
+
+    document.getElementById("debug").onclick = () => {
+        vscode.postMessage({
+            command: 'debug',
+            value: 'hello world',
+            svg: Render.svg
+        });
+    }
+
+    document.getElementById("exec").onclick = () => {
+        exec(document.getElementById('synthStyle'));
+    };
+
+    document.getElementById("export-as-svg").onclick = () => {
+        export_message("svg");
+    };
+    document.getElementById("export-as-png").onclick = () => {
+        export_message("png");
+    };
+
+    window.addEventListener('message', event => {
+        const message = event.data;
+        const command = message.command;
+        const netlist = JSON.parse(message.netlist);
+        console.log(typeof netlist);
+        console.log(netlist);
+                
+        switch (command) {
+            case 'netlist' : 
+                Render.showNetlist(netlist, true);
+            break;
+        }
+    });
+</script>

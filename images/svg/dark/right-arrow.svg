@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+    width="125px" height="45px" viewBox="-0.5 -0.5 125 45">
+    <defs />
+    <g>
+        <path d="M 21 21 L 96.53 21" fill="none" stroke="rgb(255, 255, 255)" stroke-width="3"
+            stroke-miterlimit="10" pointer-events="stroke" />
+        <path d="M 86.76 29 L 98.76 21 L 86.76 13" fill="none" stroke="rgb(255, 255, 255)"
+            stroke-width="3" stroke-miterlimit="10" pointer-events="all" />
+    </g>
+</svg>

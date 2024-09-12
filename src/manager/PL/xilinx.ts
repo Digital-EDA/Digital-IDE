@@ -179,7 +179,7 @@ class XilinxOperation {
     create(scripts: string[]) {
         scripts.push(`set_param general.maxThreads 8`);
         scripts.push(`create_project ${this.prjInfo.name} ${this.prjInfo.path} -part ${this.prjInfo.device} -force`);
-        scripts.push(`set_property SOURCE_SET source_1   [get_filesets sim_1]`);
+        scripts.push(`set_property SOURCE_SET sources_1   [get_filesets sim_1]`);
         scripts.push(`set_property top_lib xil_defaultlib [get_filesets sim_1]`);
         scripts.push(`update_compile_order -fileset sim_1 -quiet`);
     }
@@ -229,7 +229,7 @@ class XilinxOperation {
     
             const bdPaths = [
                 hdlPath.join(this.HWPath, 'bd'),
-                hdlPath.join(this.prjInfo.path, this.prjInfo.name + '.src', 'source_1', 'bd')
+                hdlPath.join(this.prjInfo.path, this.prjInfo.name + '.src', 'sources_1', 'bd')
             ];
 
             hdlFile.pickFileRecursive(bdPaths, [], (filePath) => {
@@ -257,7 +257,7 @@ class XilinxOperation {
         // 导入ip设计源文件
         const ipPaths = [
             hdlPath.join(this.HWPath, 'ip'),
-            hdlPath.join(this.prjInfo.path, this.prjInfo.name + '.src', 'source_1', 'ip')
+            hdlPath.join(this.prjInfo.path, this.prjInfo.name + '.src', 'sources_1', 'ip')
         ];
 
         hdlFile.pickFileRecursive(ipPaths, [], filePath => {

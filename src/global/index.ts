@@ -4,6 +4,7 @@ import { MainOutput, LspOutput, YosysOutput, WaveViewOutput, ReportType } from '
 
 import * as Enum from './enum';
 import * as Lang from './lang';
+import { LspClient } from './lsp';
 
 type AbsPath = string;
 type RelPath = string;
@@ -24,5 +25,6 @@ export {
     YosysOutput,
     WaveViewOutput,
     ReportType,
-    AllowNull
+    AllowNull,
+    LspClient
 };

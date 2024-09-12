@@ -18,13 +18,8 @@ async function registerCommand(context: vscode.ExtensionContext) {
     func.registerFSM(context);
     func.registerNetlist(context);
     func.registerWaveViewer(context);
-<<<<<<< HEAD
     lspClient.activate(context);
-    lspClient.activateVHDL(context);
-=======
-
-    lspClient.activate(context);
->>>>>>> 199b7a8af3ea01baea4b20c89273a490dc0dc9d2
+    // lspClient.activateVHDL(context);
 }
 
 
@@ -67,8 +62,5 @@ export function activate(context: vscode.ExtensionContext) {
 
 export function deactivate() {
     lspClient.deactivate();
-<<<<<<< HEAD
-    lspClient.deactivateVHDL();
-=======
->>>>>>> 199b7a8af3ea01baea4b20c89273a490dc0dc9d2
+    // lspClient.deactivateVHDL();
 }

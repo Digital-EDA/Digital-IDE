@@ -9,6 +9,8 @@ import { ToolChainType, LibraryState, XilinxIP,
 import { PrjInfoSchema } from './propertySchema';
 import assert = require('assert');
 import * as hdlPath from '../hdlFs/path';
+import { hdlDir } from '../hdlFs';
+import { MainOutput } from './outputChannel';
 
 
 type AbsPath = string;
@@ -265,7 +267,9 @@ class PrjInfo implements PrjInfoMeta {
             if (fs.existsSync(uniformPath)) {
                 return uniformPath;
             } else {
-                vscode.window.showErrorMessage('path ' + uniformPath + ' not exist!');
+                hdlDir.mkdir(uniformPath);
+                MainOutput.report("create dir: " + uniformPath);
+                // vscode.window.showErrorMessage('path ' + uniformPath + ' not exist!');
                 return undefined;
             }
         } else {

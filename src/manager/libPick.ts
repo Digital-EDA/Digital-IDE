@@ -7,6 +7,7 @@ import { PrjInfo, RawPrjInfo } from '../global/prjInfo';
 import { HdlLangID } from '../global/enum';
 import { hdlFile, hdlPath } from '../hdlFs';
 import { getIconConfig } from '../hdlFs/icons';
+import { getLanguageId } from '../hdlFs/file';
 
 type MissPathType = { path?: string };
 type LibPickItem = vscode.QuickPickItem & MissPathType;
@@ -76,14 +77,14 @@ class LibPick {
     }
 
     private getReadmeText(path: AbsPath, fileName: string): string | undefined {
-        const mdPath1 = hdlPath.join(path, fileName, 'readme.md');
-        if (fs.existsSync(mdPath1)) {
-            return hdlFile.readFile(mdPath1);
+        const allowReadmeFile = ['readme.md', 'README.md', 'readme', 'README', 'readme.txt']
+        for (const readmeFile of allowReadmeFile) {
+            const mdpath = hdlPath.join(path, fileName, readmeFile);
+            if (fs.existsSync(mdpath)) {
+                return hdlFile.readFile(mdpath);
+            }
         }
-        const mdPath2 = hdlPath.join(path, fileName, 'README.md');
-        if (fs.existsSync(mdPath2)) {
-            return hdlFile.readFile(mdPath2);
-        }
+
         return undefined;
     }
 
@@ -96,14 +97,32 @@ class LibPick {
             items.push(this.backQuickPickItem);
         }
 
-        for (const fileName of fs.readdirSync(path)) {
+        for (const fileName of fs.readdirSync(path)) {            
             const filePath = hdlPath.join(path, fileName);
-            const themeIcon = this.getPathIcon(filePath);
-            const label = themeIcon + " " + fileName;
-            const mdText = this.getReadmeText(path, fileName);
-            const description = mdText ? mdText : '';
-            const buttons = [{iconPath: getIconConfig('import'), tooltip: 'import everything in ' + fileName}];
-            items.push({label, description, path: filePath, buttons});
+            if (hdlFile.isFile(filePath)) {
+                const fileLangId = getLanguageId(filePath);
+                if (fileLangId === HdlLangID.Unknown) {
+                    // 不是 hdl 直接跳过
+                    continue;
+                }
+
+                const themeIcon = this.getPathIcon(filePath);
+                const label = themeIcon + " " + fileName;
+                const buttons = [{iconPath: getIconConfig('import'), tooltip: 'import everything in ' + fileName}];
+                items.push({label, description: '', path: filePath, buttons});
+            } else if (hdlFile.isDir(filePath)) {
+                if (['.git', '.github', '.vscode'].includes(fileName)) {
+                    continue;
+                }
+                const themeIcon = this.getPathIcon(filePath);
+                const label = themeIcon + " " + fileName;
+                // 寻找 fileName 下的 readme，fileName 在这里是一个 文件夹
+                const mdText = this.getReadmeText(path, fileName);
+                const description = mdText ? mdText : '';
+                const buttons = [{iconPath: getIconConfig('import'), tooltip: 'import everything in ' + fileName}];
+                items.push({label, description, path: filePath, buttons});
+            }
+
         }
         return items;
     }

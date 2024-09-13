@@ -248,11 +248,11 @@ class HdlParam {
     }
 
     public async initialize(hdlFiles: AbsPath[] | Generator<AbsPath>) {
-        // await this.initHdlFiles(hdlFiles);
+        await this.initHdlFiles(hdlFiles);
         
-        // for (const hdlFile of this.getAllHdlFiles()) {
-        //     hdlFile.makeInstance();
-        // }        
+        for (const hdlFile of this.getAllHdlFiles()) {
+            hdlFile.makeInstance();
+        }        
     }
 
     public getTopModulesByType(type: string): HdlModule[] {

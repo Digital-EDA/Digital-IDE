@@ -79,9 +79,11 @@ function makeTableFromObjArray(md: MarkdownString, array: any[], name: string, f
 async function patchComment(path: AbsPath, ports: (HdlModulePort | HdlModuleParam)[]) {    
     if (!ports || !ports.length) {
         return;
-    }
+    } 
     const ranges = ports.map(port => port.range);
     const comments = await getSymbolComments(path, ranges);
+    console.log(ranges);
+    
     for (let i = 0; i < ports.length; ++ i) {
         let inlineComment = comments[i].replace(/\n/, ' ');
         if (inlineComment.startsWith('//') || inlineComment.startsWith('--')) {

@@ -593,7 +593,10 @@
                 {
                     "command": "digital-ide.tool.icarus.simulateFile",
                     "group": "inline@1",
-                    "when": "view == digital-ide-treeView-arch && viewItem == file"
+                    "when": "view == digital-ide-treeView-arch && viewItem == file",
+                    "args": {
+                        "file": "${viewItem}"
+                    }
                 },
                 {
                     "command": "digital-ide.netlist.show",

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import * as vscode from 'vscode';
-import { AbsPath } from '../../../global';
+import { AbsPath, LspOutput } from '../../../global';
 import { HdlLangID } from '../../../global/enum';
 import { hdlPath, hdlFile } from '../../../hdlFs';
 import { Range } from '../../../hdlParser/common';
@@ -126,19 +126,161 @@ function bin2float(bin: string, exp: number, fra: number): number | undefined {
     }
 }
 
+function getFullSymbolInfoVlog(document: vscode.TextDocument, range: Range) {
+    const comments = [];
+    const currentLine = range.start.line;
+    const currentText = document.lineAt(currentLine).text;
+
+    // 往上找到第一个非空行
+    let nearestFloatLine = currentLine - 1;
+    while (nearestFloatLine >= 0) {
+        const linetext = document.lineAt(nearestFloatLine).text.trim();
+        if (linetext.length > 0) {
+            break;
+        }
+        nearestFloatLine --;
+    }
+
+    if (nearestFloatLine >= 0) {
+        const floatLineText = document.lineAt(nearestFloatLine).text.trim();
+
+        // 情况 1.1：上面的单行注释
+        if (floatLineText.includes('//')) {
+            const singleLineCommentStartIndex = floatLineText.indexOf('//');
+            if (singleLineCommentStartIndex === 0) {
+                const comment = floatLineText.substring(singleLineCommentStartIndex + 2);
+                if (comment !== undefined && comment.length > 0) {
+                    comments.push(comment);
+                }
+            }
+        }
+
+        // 情况 1.2：上面的多行注释
+        if (floatLineText.includes('*/')) {
+            const commentEndIndex = floatLineText.indexOf('*/');
+            if (!floatLineText.includes('/*') || floatLineText.indexOf('/*') === 0) {
+                let comment = '';
+                for (let lineno = nearestFloatLine; lineno >= 0; -- lineno) {
+                    const linetext = document.lineAt(lineno).text;
+                    const commentStartIndex = linetext.indexOf('/*');
+    
+                    if (commentStartIndex > -1 && (lineno < nearestFloatLine || commentEndIndex > commentStartIndex)) {
+                        let clearLineText = linetext.substring(commentStartIndex + 2).trim();                        
+                        
+                        if (lineno === nearestFloatLine) {
+                            clearLineText = clearLineText.substring(0, clearLineText.indexOf('*/'));
+                        }
+
+                        if (clearLineText.startsWith('*')) {
+                            clearLineText = clearLineText.substring(1).trim();
+                        }
+                        if (clearLineText.length > 0) {
+                            comment = clearLineText + '\n\n' + comment;
+                        }
+                        break;
+                    } else {
+                        let clearLineText = linetext.trim();
+                        if (lineno === nearestFloatLine) {
+                            clearLineText = clearLineText.substring(0, clearLineText.indexOf('*/'));
+                        }
+
+                        if (clearLineText.startsWith('*')) {
+                            clearLineText = clearLineText.substring(1).trim();
+                        }
+
+                        if (clearLineText.length > 0) {
+                            comment = clearLineText + '\n\n' + comment;
+                        }
+                    }
+                }
+                
+                comment = comment.trim();
+                if (comment.length > 0) {
+                    comments.push(comment);
+                }
+            }
+
+        }
+    }
+
+
+
+    // 情况 2.1：单行注释
+    if (currentText.includes('//')) {
+        const singleLineCommentStartIndex = currentText.indexOf('//');
+        const comment = currentText.substring(singleLineCommentStartIndex + 2);
+        if (comment !== undefined && comment.length > 0) {
+            comments.push(comment);
+        }
+    }
+
+    // 情况 2.2：多行注释
+    if (currentText.includes('/*')) {
+        const commentStartIndex = currentText.indexOf('/*');
+        let comment = '';
+        for (let lineno = currentLine; lineno < document.lineCount; ++ lineno) {
+            const linetext = document.lineAt(lineno).text;
+            const commentEndIndex = linetext.indexOf('*/');
+            if (commentEndIndex > -1 && (lineno > currentLine || commentEndIndex > commentStartIndex)) {
+                let clearLineText = linetext.substring(0, commentEndIndex).trim();
+
+                if (lineno === currentLine) {
+                    clearLineText = clearLineText.substring(clearLineText.indexOf('/*') + 2).trim();
+                }
+
+                if (clearLineText.startsWith('*')) {
+                    clearLineText = clearLineText.substring(1).trim();
+                }
+                comment += clearLineText + '\n';
+                break;
+            } else {
+                let clearLineText = linetext.trim();
+                if (clearLineText.startsWith('*')) {
+                    clearLineText = clearLineText.substring(1).trim();
+                }
+                comment += clearLineText + '\n';
+            }
+        }
+
+        comment = comment.trim();
+        if (comment.length > 0) {
+            comments.push(comment);
+        }
+    }
+
+    return comments;
+}
+
+function getFullSymbolInfoVhdl() {
+    const comments = [];
+
+}
+
 async function getFullSymbolInfo(document: vscode.TextDocument, range: Range, nonblank: RegExp, l_comment_symbol: string, l_comment_regExp: RegExp): Promise<string> {
     const comments = [];
 
+    if (document.languageId !== 'vhdl') {
+        comments.push(...getFullSymbolInfoVlog(document, range));
+        let resultComment = '';
+        for (const c of comments.reverse()) {
+            resultComment += c.trim() + '\n';
+        }
+    
+        return resultComment;
+    } 
+
+
     let content = '';
     let is_b_comment = false;
-    let line = range.start.line;
+    let line = range.start.line + 1;
 
     // vscode 的行编号从 0 开始算
-    const firstLine = range.start.line - 1;    
+    const firstLine = range.start.line - 1;
  
     while (line) {
         line --;
         content = document.lineAt(line).text;
+        LspOutput.report(content);
                
         // 首先判断该行是否是空白
         if (content.trim().length === 0) {

@@ -200,10 +200,19 @@ class ToolTreeProvider extends BaseCommandTreeProvider {
 
         // remove prjPath & .xil
         const prjPath = opeParam.prjInfo.arch.prjPath;
+        
         const xilFolder = hdlPath.join(workspacePath, '.Xil');
-        hdlDir.rmdir(prjPath);
-        hdlDir.rmdir(xilFolder);
+        
+        if (prjPath !== opeParam.workspacePath) {
+            hdlDir.rmdir(prjPath);
+            hdlDir.rmdir(xilFolder);
+            MainOutput.report("remove dir : " + prjPath);
+            MainOutput.report("remove dir : " + xilFolder);
+        } else {
+            vscode.window.showWarningMessage("arch.prjPath is the same as the workspace path, the clean will delete the project, please check your arch.prjPath!");
+        }
 
+        
         // move bd * ip
         const plName = opeParam.prjInfo.prjName.PL;
         const targetPath = fspath.dirname(opeParam.prjInfo.arch.hardware.src);
@@ -211,13 +220,16 @@ class ToolTreeProvider extends BaseCommandTreeProvider {
         const sourceBdPath = `${workspacePath}/prj/xilinx/${plName}.srcs/sources_1/bd`;
 
         hdlDir.mvdir(sourceIpPath, targetPath, true);
+        MainOutput.report("move dir from " + sourceIpPath + " to " + targetPath);
+
         hdlDir.mvdir(sourceBdPath, targetPath, true);
+        MainOutput.report("move dir from " + sourceBdPath + " to " + targetPath);
 
         const ignores = hdlIgnore.getIgnoreFiles();
-
         const strFiles = hdlFile.pickFileRecursive(workspacePath, ignores, p => p.endsWith('.str'));
         for (const path of strFiles) {
             hdlFile.removeFile(path);
+            MainOutput.report("remove file " + path);
         }
 
         const logFiles = hdlFile.pickFileRecursive(workspacePath, ignores, p => p.endsWith('.log'));

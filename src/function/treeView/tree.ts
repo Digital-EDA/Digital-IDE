@@ -14,7 +14,7 @@ interface ModuleDataItem {
     icon: string,           // 图标
     name: string,           // module name
     type: string,
-    range: Range | null,   
+    range: Range | undefined | null,   
     path: AbsPath | undefined,      // path of the file
     parent: ModuleDataItem | null   // parent file
 }
@@ -213,18 +213,19 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
         if (!element.path) {
             return [];
         }
-
+        
         const moduleDataItemList: ModuleDataItem[] = [];
         const targetModule = hdlParam.getHdlModule(element.path, element.name);
 
         if (targetModule) {
             for (const instance of targetModule.getAllInstances()) {
+                // 所有的例化模块都定向到它的定义文件上                
                 const item: ModuleDataItem = {
                     icon: 'file',
                     type: instance.name,
                     name: instance.type,
-                    range: instance.range,
-                    path: instance.parentMod.path,
+                    range: instance.module?.range,
+                    path: instance.module?.path,
                     parent: element
                 };
 

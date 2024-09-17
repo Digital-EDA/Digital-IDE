@@ -110,12 +110,12 @@ class VlogHoverProvider implements vscode.HoverProvider {
          * 
          */
         if (util.isPositionInput(lineText, position.character)) {
-            console.log('enter position input');
+            // console.log('enter position input');
             const currentInstResult = util.filterInstanceByPosition(position, scopeSymbols.symbols, currentModule);
             if (!currentInstResult || !currentInstResult.instModPath) {
                 return null;
             }
-            console.log(currentInstResult);
+            // console.log(currentInstResult);
             
             const instParamPromise = util.getInstParamByPosition(currentInstResult, position, targetWord);
             const instPortPromise = util.getInstPortByPosition(currentInstResult, position, targetWord);
@@ -155,7 +155,7 @@ class VlogHoverProvider implements vscode.HoverProvider {
             const paramDesc = util.makeParamDesc(paramResult);
             content.appendCodeblock(paramDesc, HdlLangID.Verilog);
             if (paramComment) {
-                content.appendCodeblock(paramComment, HdlLangID.Verilog);
+                content.appendMarkdown(paramComment);
             }
             return new vscode.Hover(content);
         }        
@@ -170,7 +170,7 @@ class VlogHoverProvider implements vscode.HoverProvider {
             
             content.appendCodeblock(portDesc, HdlLangID.Verilog);            
             if (portComment) {
-                content.appendCodeblock(portComment, HdlLangID.Verilog);
+                content.appendMarkdown(portComment);
             }
             return new vscode.Hover(content);
         }

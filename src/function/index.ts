@@ -20,6 +20,7 @@ import * as lspCore from './lsp/core';
 import * as FSM from './fsm';
 import * as Netlist from './netlist';
 import * as WaveView from './dide-viewer';
+import { ModuleDataItem } from './treeView/tree';
 
 function registerDocumentation(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('digital-ide.hdlDoc.showWebview', hdlDoc.showDocWebview);
@@ -30,7 +31,9 @@ function registerDocumentation(context: vscode.ExtensionContext) {
 function registerSimulation(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('digital-ide.tool.instance', sim.instantiation);
     vscode.commands.registerCommand('digital-ide.tool.testbench', sim.testbench);
-    vscode.commands.registerCommand('digital-ide.tool.icarus.simulateFile', sim.Icarus.simulateFile);
+    vscode.commands.registerCommand('digital-ide.tool.icarus.simulateFile', (view: ModuleDataItem) => {
+        sim.Icarus.simulateFile(view);
+    });
 }
 
 function registerFunctionCommands(context: vscode.ExtensionContext) {
@@ -82,10 +85,10 @@ function registerLsp(context: vscode.ExtensionContext) {
 
     
     // vhdl lsp    
-    // vscode.languages.registerDocumentSymbolProvider(vhdlSelector, lspDocSymbol.vhdlDocSymbolProvider);
-    // vscode.languages.registerDefinitionProvider(vhdlSelector, lspDefinition.vhdlDefinitionProvider);
-    // vscode.languages.registerHoverProvider(vhdlSelector, lspHover.vhdlHoverProvider);
-    // vscode.languages.registerCompletionItemProvider(vhdlSelector, lspCompletion.vhdlCompletionProvider);
+    vscode.languages.registerDocumentSymbolProvider(vhdlSelector, lspDocSymbol.vhdlDocSymbolProvider);
+    vscode.languages.registerDefinitionProvider(vhdlSelector, lspDefinition.vhdlDefinitionProvider);
+    vscode.languages.registerHoverProvider(vhdlSelector, lspHover.vhdlHoverProvider);
+    vscode.languages.registerCompletionItemProvider(vhdlSelector, lspCompletion.vhdlCompletionProvider);
     
 
     // tcl lsp

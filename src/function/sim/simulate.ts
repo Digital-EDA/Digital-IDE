@@ -9,6 +9,7 @@ import { getSelectItem } from './instance';
 import { ToolChainType } from '../../global/enum';
 import { HdlModule } from '../../hdlParser/core';
 import { Path } from '../../../resources/hdlParser';
+import { ModuleDataItem } from '../treeView/tree';
 
 interface SimulateConfig {
     mod : string,   // 设置的顶层模块              
@@ -84,7 +85,7 @@ class Simulate {
         const setting = vscode.workspace.getConfiguration();
 
         // make simulation dir
-        const defaultSimulationDir = hdlPath.join(opeParam.prjInfo.arch.prjPath, 'simulation', 'icarus');
+        const defaultSimulationDir = hdlPath.join(opeParam.prjInfo.arch.prjPath, 'icarus');
         simConfig.simulationHome = setting.get('digital-ide.function.simulate.simulationHome', '');
         if (!fs.existsSync(simConfig.simulationHome)) {
             simConfig.simulationHome = defaultSimulationDir;
@@ -357,33 +358,24 @@ class IcarusSimulate extends Simulate {
         this.simulateByHdlModule(hdlModule);
     }
 
-    public async simulateFile() {
-        const editor = vscode.window.activeTextEditor;
-        if (!editor) {
+    public async simulateFile(view: ModuleDataItem) {
+        if (!view.path) {
+            MainOutput.report('module ' + view.name + ' is not a hdlFile', ReportType.Error, true);
             return;
         }
-        const uri = editor.document.uri;
-        const path = hdlPath.toSlash(uri.fsPath);
 
-        const currentFile = hdlParam.getHdlFile(path);
+        const currentFile = hdlParam.getHdlFile(view.path);
         if (!currentFile) {
-            MainOutput.report('path ' + path + ' is not a hdlFile', ReportType.Error, true);
+            MainOutput.report('path ' + view.path + ' is not a hdlFile', ReportType.Error, true);
             return;
         }
-        const items = getSelectItem(currentFile.getAllHdlModules());
-        if (items.length) {
-            let selectModule: HdlModule;
-            if (items.length === 1) {
-                selectModule = items[0].module;
-            } else {
-                const select = await vscode.window.showQuickPick(items, {placeHolder: 'choose a top module'});
-                if (select) {
-                    selectModule = select.module;
-                } else {
-                    return;
-                }
-            }
-            this.simulateByHdlModule(selectModule);
+
+        const targetModule = currentFile.getAllHdlModules().filter(mod => mod.name === view.name)[0];
+        if (targetModule !== undefined) {
+            this.simulateByHdlModule(targetModule);
+        } else {
+            MainOutput.report('There is no module named ' + view.name + ' in ' + view.path, ReportType.Error, true);
+            return;
         }
     }
 }
@@ -395,8 +387,8 @@ namespace Icarus {
         await icarus.simulateModule(hdlModule);
     }
     
-    export async function simulateFile() {
-        await icarus.simulateFile();
+    export async function simulateFile(view: ModuleDataItem) {
+        await icarus.simulateFile(view);
     }
 };
 

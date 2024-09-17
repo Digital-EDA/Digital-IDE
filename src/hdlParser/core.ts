@@ -254,7 +254,7 @@ class HdlParam {
         
         // for (const hdlFile of this.getAllHdlFiles()) {
         //     hdlFile.makeInstance();
-        // }        
+        // }
     }
 
     public getTopModulesByType(type: string): HdlModule[] {

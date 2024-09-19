@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-import { opeParam, MainOutput, AbsPath, ReportType } from './global';
+import { opeParam, MainOutput, AbsPath, ReportType, LspClient } from './global';
 import { hdlParam } from './hdlParser';
 import * as manager from './manager';
 import * as func from './function';
@@ -8,6 +8,8 @@ import { hdlMonitor } from './monitor';
 import { extensionUrl } from '../resources/hdlParser';
 
 import * as lspClient from './function/lsp-client';
+
+
 
 async function registerCommand(context: vscode.ExtensionContext) {
     manager.registerManagerCommands(context);
@@ -18,7 +20,9 @@ async function registerCommand(context: vscode.ExtensionContext) {
     func.registerFSM(context);
     func.registerNetlist(context);
     func.registerWaveViewer(context);
+
     lspClient.activate(context);
+    await LspClient.MainClient?.onReady();
     // lspClient.activateVHDL(context);
 }
 
@@ -32,7 +36,7 @@ async function launch(context: vscode.ExtensionContext) {
         await registerCommand(context);
         hdlMonitor.start();
     });
-        
+
     MainOutput.report('Digital-IDE has launched, Version: 0.3.3', ReportType.Launch);
     MainOutput.report('OS: ' + opeParam.os, ReportType.Launch);
 

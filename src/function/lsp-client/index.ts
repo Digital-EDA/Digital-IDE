@@ -9,9 +9,7 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
 import { platform } from "os";
-
-let client: LanguageClient;
-let vhdlClient: LanguageClient;
+import { LspClient } from '../../global';
 
 function getLspServerExecutionName() {
     const osname = platform();
@@ -58,21 +56,22 @@ export function activate(context: vscode.ExtensionContext) {
         ],
     };
 
-    client = new LanguageClient(
+    const client = new LanguageClient(
         "Digital LSP",
         "Digital LSP",
         serverOptions,
         clientOptions
     );
-
+    LspClient.MainClient = client;
+    
     client.start();
 }
 
 export function deactivate(): Thenable<void> | undefined {
-    if (!client) {
+    if (!LspClient.MainClient) {
         return undefined;
     }
-    return client.stop();
+    return LspClient.MainClient.stop();
 }
 
 
@@ -117,19 +116,20 @@ export function activateVHDL(context: vscode.ExtensionContext) {
         ],
     };
 
-    client = new LanguageClient(
+    const client = new LanguageClient(
         "Digital LSP VHDL",
         "Digital LSP VHDL",
         serverOptions,
         clientOptions
     );
 
+    LspClient.VhdlClient = client;
     client.start();
 }
 
 export function deactivateVHDL(): Thenable<void> | undefined {
-    if (!vhdlClient) {
+    if (!LspClient.VhdlClient) {
         return undefined;
     }
-    return vhdlClient.stop();
+    return LspClient.VhdlClient.stop();
 }

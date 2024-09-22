@@ -395,7 +395,16 @@ async function getSymbolComments(path: string, ranges: Range[]): Promise<string[
     const commentPromises = [];
     const comments = [];
     for (const range of ranges) {
-        const commentP = getFullSymbolInfo(document, range, nonblank, l_comment_symbol, l_comment_regExp);
+        // TODO: 后端修改后移除这里
+        const adjustRange: Range = {
+            start: {
+                line: range.start.line - 1,
+                character: range.start.character
+            },
+            end: range.end
+        };
+        
+        const commentP = getFullSymbolInfo(document, adjustRange, nonblank, l_comment_symbol, l_comment_regExp);
         commentPromises.push(commentP);
     }
 

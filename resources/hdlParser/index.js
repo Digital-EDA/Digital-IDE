@@ -51,7 +51,7 @@ async function callParser(path, func) {
         // console.log(res);
 
         debug.compute += Date.now() - s3;
-        console.log(path, debug);
+        // console.log(path, debug);
         return JSON.parse(res);
     } catch (error) {
         console.log(`errors happen when call wasm, path: ${path}, errors: ${error}, input params: (${path}, ${func})`);

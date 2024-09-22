@@ -12,8 +12,6 @@ import * as lspClient from './function/lsp-client';
 
 
 async function registerCommand(context: vscode.ExtensionContext) {
-    manager.registerManagerCommands(context);
-
     func.registerFunctionCommands(context);
     func.registerLsp(context);
     func.registerToolCommands(context);
@@ -30,12 +28,22 @@ async function registerCommand(context: vscode.ExtensionContext) {
 async function launch(context: vscode.ExtensionContext) {
     await vscode.window.withProgress({
         location: vscode.ProgressLocation.Window,
+        title: 'Register Command (Digtial-IDE)'
+    }, async () => {
+        await registerCommand(context);
+    });
+
+    await vscode.window.withProgress({
+        location: vscode.ProgressLocation.Window,
         title: 'Initialization (Digtial-IDE)'
     }, async () => {
         await manager.prjManage.initialise(context);
-        await registerCommand(context);
+        manager.registerManagerCommands(context);
+
         hdlMonitor.start();
     });
+
+
 
     MainOutput.report('Digital-IDE has launched, Version: 0.3.3', ReportType.Launch);
     MainOutput.report('OS: ' + opeParam.os, ReportType.Launch);

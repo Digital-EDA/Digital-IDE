@@ -1,9 +1,53 @@
-import { Fast, vlogAll, vlogFast, vhdlAll, svFast, svAll, vhdlFast, All } from '../../resources/hdlParser';
+import * as vscode from 'vscode';
+import { Fast, vlogAll, vhdlAll, svAll, vhdlFast, All } from '../../resources/hdlParser';
 import { hdlFile } from '../hdlFs';
 import { HdlLangID } from '../global/enum';
-import { AbsPath } from '../global';
+import { AbsPath, LspClient } from '../global';
+import { DoFastRequestType, ITextDocumentItem, CustomParamRequestType } from '../global/lsp';
+import { RawHdlModule } from './common';
+
+async function doFastApi(path: string): Promise<Fast | undefined> {
+    try {
+        const client = LspClient.MainClient;
+        const langID = hdlFile.getLanguageId(path);
+        if (client) {
+            const response = await client.sendRequest(DoFastRequestType, { path }) as { fast: any };
+            if (response.fast instanceof Array) {
+                const rawModules = response.fast as RawHdlModule[];
+                return {
+                    content: rawModules,
+                    languageId: langID,
+                    macro: {
+                        errors: [],
+                        defines: [],
+                        includes: [],
+                        invalid: []
+                    }
+                };
+            }
+        }
+    } catch (error) {
+        console.error("error happen when run doFastApi, " + error);
+        return undefined;
+    }
+}
+
+async function vlogFast(path: string): Promise<Fast | undefined> {
+    const fast = await doFastApi(path);
+    return fast;
+}
+
+async function svFast(path: string): Promise<Fast | undefined> {
+    const fast = await doFastApi(path);
+    return fast;
+}
 
 namespace HdlSymbol {
+    /**
+     * @description 计算出模块级的信息
+     * @param path 文件绝对路径
+     * @returns 
+     */
     export function fast(path: AbsPath): Promise<Fast | undefined> {
         const langID = hdlFile.getLanguageId(path);
         switch (langID) {
@@ -14,6 +58,11 @@ namespace HdlSymbol {
         }
     }
 
+    /**
+     * @description 0.4.0 后丢弃
+     * @param path 文件绝对路径
+     * @returns 
+     */
     export function all(path: AbsPath): Promise<All | undefined> {
         const langID = hdlFile.getLanguageId(path);
         switch (langID) {

@@ -525,10 +525,6 @@ class HdlModule {
     }
 
     public makeNameToInstances() {
-        if (this.name === 'u_reg_cfg') {
-            console.log('[u_reg_cfg debug]');
-            console.log(this.rawInstances);
-        }    
         if (this.rawInstances !== undefined) {            
             this.nameToInstances.clear();
             for (const inst of this.rawInstances) {

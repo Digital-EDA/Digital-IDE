@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-import { opeParam, MainOutput, AbsPath, ReportType, LspClient } from './global';
+import { opeParam, MainOutput, AbsPath, ReportType, LspClient, IProgress } from './global';
 import { hdlParam } from './hdlParser';
 import * as manager from './manager';
 import * as func from './function';
@@ -25,7 +25,6 @@ async function registerCommand(context: vscode.ExtensionContext) {
     // lspClient.activateVHDL(context);
 }
 
-
 async function launch(context: vscode.ExtensionContext) {
     await vscode.window.withProgress({
         location: vscode.ProgressLocation.Window,
@@ -37,9 +36,9 @@ async function launch(context: vscode.ExtensionContext) {
     await vscode.window.withProgress({
         location: vscode.ProgressLocation.Window,
         title: 'Initialization (Digtial-IDE)'
-    }, async () => {
+    }, async (progress: vscode.Progress<IProgress>, token: vscode.CancellationToken) => {
         // 初始化解析
-        await manager.prjManage.initialise(context);
+        await manager.prjManage.initialise(context, progress);
         
         // 这里是因为 pl 对象在 initialise 完成初始化，此处再注册它的行为
         manager.registerManagerCommands(context);

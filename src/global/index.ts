@@ -11,6 +11,12 @@ type RelPath = string;
 
 type AllowNull<T> = T | null;
 
+
+interface IProgress {
+    message?: string,
+    increment?: number
+}
+
 export {
     opeParam,
     OpeParamDefaults,
@@ -26,5 +32,6 @@ export {
     WaveViewOutput,
     ReportType,
     AllowNull,
-    LspClient
+    LspClient,
+    IProgress
 };

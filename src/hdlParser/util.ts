@@ -11,12 +11,14 @@ async function doFastApi(path: string): Promise<Fast | undefined> {
         const client = LspClient.MainClient;
         const langID = hdlFile.getLanguageId(path);
         if (client) {
+            console.log(client.initializeResult);
             const response = await client.sendRequest(DoFastRequestType, { path });
             response.languageId = langID;
             return response;
         }
     } catch (error) {
         console.error("error happen when run doFastApi, " + error);
+        console.error("error file path: " + path);
         return undefined;
     }
 }

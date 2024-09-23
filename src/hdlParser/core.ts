@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-import { AbsPath, opeParam } from '../global';
+import { AbsPath, IProgress, opeParam } from '../global';
 import { HdlLangID } from '../global/enum';
 import { MainOutput, ReportType } from '../global/outputChannel';
 
@@ -241,14 +241,44 @@ class HdlParam {
         }
     }
 
-    public async initHdlFiles(hdlFiles: AbsPath[] | Generator<AbsPath>) {
-        for (const path of hdlFiles) {
-            await this.doHdlFast(path);
+    public async initHdlFiles(hdlFiles: AbsPath[], progress?: vscode.Progress<IProgress>) {
+        let count: number = 0;
+        let fileNum = hdlFiles.length;
+        const parallelChunk = 5;
+
+        const pools: { id: number, promise: Promise<void> }[] = [];
+
+        vscode.window.showInformationMessage("files to handle: " + fileNum);
+
+        async function consumePools() {
+            for (const p of pools) {
+                const increment = Math.floor(p.id / fileNum * 100);
+                await p.promise;
+                console.log("handle id " + p.id + ' increment: ' + increment);
+                
+                progress?.report({ message: `build module tree ${p.id}/${fileNum}`, increment });
+            }
+            pools.length = 0;
         }
+
+        for (const path of hdlFiles) {
+            count ++;
+            const p = this.doHdlFast(path);
+            pools.push({ id: count, promise: p });
+            if (pools.length % parallelChunk === 0) {
+                // 消费并发池
+                await consumePools();
+            }
+        }
+
+        if (pools.length > 0) {
+            await consumePools();
+        }
+    
     }
 
-    public async initialize(hdlFiles: AbsPath[] | Generator<AbsPath>) {        
-        await this.initHdlFiles(hdlFiles);
+    public async initialize(hdlFiles: AbsPath[], progress: vscode.Progress<IProgress>) {        
+        await this.initHdlFiles(hdlFiles, progress);
         
         for (const hdlFile of this.getAllHdlFiles()) {
             hdlFile.makeInstance();

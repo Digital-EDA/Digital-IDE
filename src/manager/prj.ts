@@ -2,7 +2,7 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 
-import { AbsPath, MainOutput, opeParam, ReportType } from '../global';
+import { AbsPath, IProgress, MainOutput, opeParam, ReportType } from '../global';
 import { PathSet } from '../global/util';
 import { RawPrjInfo } from '../global/prjInfo';
 import { hdlDir, hdlFile, hdlPath } from '../hdlFs';
@@ -136,7 +136,7 @@ class PrjManage {
 
     
 
-    public async initialise(context: vscode.ExtensionContext, countTimeCost: boolean = true) {
+    public async initialise(context: vscode.ExtensionContext, progress: vscode.Progress<IProgress>, countTimeCost: boolean = true) {
         if (countTimeCost) {
             console.time('launch');
         }        
@@ -147,7 +147,7 @@ class PrjManage {
         const hdlFiles = await this.getPrjHardwareFiles();
         MainOutput.report(`finish collect ${hdlFiles.length} hdl files`, ReportType.Info);
         
-        await hdlParam.initialize(hdlFiles);
+        await hdlParam.initialize(hdlFiles, progress);
         const unhandleNum = hdlParam.getUnhandleInstanceNumber();
         MainOutput.report(`finish analyse ${hdlFiles.length} hdl files, find ${unhandleNum} unsolved instances`, ReportType.Info);
 

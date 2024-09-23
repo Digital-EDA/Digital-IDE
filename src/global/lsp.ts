@@ -23,7 +23,7 @@ export const LspClient: IDigitalIDELspClient = {
  */
 export const CustomRequestType = new RequestType<void, number, void>('custom/request');
 export const CustomParamRequestType = new RequestType<ICommonParam, number, void>('custom/paramRequest');
-export const DoFastRequestType = new RequestType('api/fast');
+export const DoFastRequestType = new RequestType<IDoFastParam, Fast, void>('api/fast');
 
 export interface ITextDocumentItem {
     uri: vscode.Uri,
@@ -37,5 +37,5 @@ export interface ICommonParam {
 }
 
 export interface IDoFastParam {
-    
+    path: string
 }

@@ -128,7 +128,7 @@ function bin2float(bin: string, exp: number, fra: number): number | undefined {
 
 function getFullSymbolInfoVlog(document: vscode.TextDocument, range: Range) {
     const comments = [];
-    const currentLine = range.start.line;
+    const currentLine = range.start.line - 1;
     const currentText = document.lineAt(currentLine).text;
 
     // 往上找到第一个非空行
@@ -203,8 +203,6 @@ function getFullSymbolInfoVlog(document: vscode.TextDocument, range: Range) {
         }
     }
 
-
-
     // 情况 2.1：单行注释
     if (currentText.includes('//')) {
         const singleLineCommentStartIndex = currentText.indexOf('//');
@@ -262,8 +260,8 @@ async function getFullSymbolInfo(document: vscode.TextDocument, range: Range, no
     if (document.languageId !== 'vhdl') {
         comments.push(...getFullSymbolInfoVlog(document, range));
         let resultComment = '';
-        for (const c of comments.reverse()) {
-            resultComment += c.trim() + '\n';
+        for (const c of comments) {
+            resultComment += c.trim() + '<br>';
         }
     
         return resultComment;

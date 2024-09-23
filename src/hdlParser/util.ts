@@ -11,20 +11,9 @@ async function doFastApi(path: string): Promise<Fast | undefined> {
         const client = LspClient.MainClient;
         const langID = hdlFile.getLanguageId(path);
         if (client) {
-            const response = await client.sendRequest(DoFastRequestType, { path }) as { fast: any };
-            if (response.fast instanceof Array) {
-                const rawModules = response.fast as RawHdlModule[];
-                return {
-                    content: rawModules,
-                    languageId: langID,
-                    macro: {
-                        errors: [],
-                        defines: [],
-                        includes: [],
-                        invalid: []
-                    }
-                };
-            }
+            const response = await client.sendRequest(DoFastRequestType, { path });
+            response.languageId = langID;
+            return response;
         }
     } catch (error) {
         console.error("error happen when run doFastApi, " + error);

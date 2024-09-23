@@ -47,9 +47,7 @@ function selectFieldValue(obj: any, subName: string, ws: string, name: string): 
 
 
 function makeTableFromObjArray(md: MarkdownString, array: any[], name: string, fieldNames: string[], displayNames: string[]) {
-    const ws = hdlPath.toSlash(opeParam.workspacePath) + '/';
-    console.log('enter showhtml');
-    
+    const ws = hdlPath.toSlash(opeParam.workspacePath) + '/';    
     if (array.length === 0) {
         md.addText(`no ${name} info`);
     } else {
@@ -82,7 +80,6 @@ async function patchComment(path: AbsPath, ports: (HdlModulePort | HdlModulePara
     } 
     const ranges = ports.map(port => port.range);
     const comments = await getSymbolComments(path, ranges);
-    console.log(ranges);
     
     for (let i = 0; i < ports.length; ++ i) {
         let inlineComment = comments[i].replace(/\n/, ' ');

@@ -8,6 +8,7 @@ import { hdlMonitor } from './monitor';
 import { extensionUrl } from '../resources/hdlParser';
 
 import * as lspClient from './function/lsp-client';
+import { refreshArchTree } from './function/treeView';
 
 
 
@@ -37,8 +38,14 @@ async function launch(context: vscode.ExtensionContext) {
         location: vscode.ProgressLocation.Window,
         title: 'Initialization (Digtial-IDE)'
     }, async () => {
+        // 初始化解析
         await manager.prjManage.initialise(context);
+        
+        // 这里是因为 pl 对象在 initialise 完成初始化，此处再注册它的行为
         manager.registerManagerCommands(context);
+
+        // 刷新结构树
+        refreshArchTree();
 
         hdlMonitor.start();
     });

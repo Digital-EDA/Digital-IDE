@@ -190,7 +190,6 @@ function makeRightDirection(rightPorts: HdlModulePort[]): string {
         const portCaption = makePortCaption(port, 'right');
         let portArrow = makePortArrow(port, 'right');
         portArrow = portArrow.replace('-0.5 -0.5 125 45', '20 -0.5 125 45');
-        console.log(portArrow);
         
         const arrow = `<div class="arrow-wrapper">${portCaption}${portArrow}</div>`;
         rightDirection += arrow;

@@ -26,16 +26,18 @@ async function registerCommand(context: vscode.ExtensionContext) {
 }
 
 async function launch(context: vscode.ExtensionContext) {
+    const { t } = vscode.l10n;
+
     await vscode.window.withProgress({
         location: vscode.ProgressLocation.Window,
-        title: 'Register Command (Digtial-IDE)'
+        title: t('progress.register-command')
     }, async () => {
         await registerCommand(context);
     });
 
     await vscode.window.withProgress({
         location: vscode.ProgressLocation.Window,
-        title: 'Initialization (Digtial-IDE)'
+        title: t('progress.initialization')
     }, async (progress: vscode.Progress<IProgress>, token: vscode.CancellationToken) => {
         // 初始化解析
         await manager.prjManage.initialise(context, progress);
@@ -50,8 +52,7 @@ async function launch(context: vscode.ExtensionContext) {
     });
 
 
-
-    MainOutput.report('Digital-IDE has launched, Version: 0.3.3', ReportType.Launch);
+    MainOutput.report('Digital-IDE has launched, Version: 0.4.0', ReportType.Launch);
     MainOutput.report('OS: ' + opeParam.os, ReportType.Launch);
 
     console.log(hdlParam);
@@ -64,9 +65,9 @@ async function launch(context: vscode.ExtensionContext) {
         // don't show in next time
         welcomeSetting.update('show', false, vscode.ConfigurationTarget.Global);
         const res = await vscode.window.showInformationMessage(
-            'Thanks for using Digital-IDE ❤️. Your star will be our best motivation! 😊',
-            { title: 'Star', value: true },
-            { title: 'Refuse', value: false },
+            t('welcome.title'),
+            { title: t('welcome.star'), value: true },
+            { title: t('welcome.refuse'), value: false },
         );
         if (res?.value) {
             vscode.env.openExternal(vscode.Uri.parse(extensionUrl));

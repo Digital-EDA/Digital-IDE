@@ -1,9 +1,12 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import * as vscode from 'vscode';
 import * as fs from 'fs';
+import * as fspath from 'path';
 
 import { opeParam } from '../global';
-import { hdlFile } from '../hdlFs';
+import { hdlFile, hdlPath } from '../hdlFs';
+import { ModuleDataItem } from './treeView/tree';
+import { hdlParam } from '../hdlParser';
 
 async function insertTextToUri(uri: vscode.Uri, text: string, position?: vscode.Position) {
     if (!position) {
@@ -70,8 +73,47 @@ async function transformOldPpy() {
     }
 }
 
+async function askUserToSaveFilelist(filelist: string[]) {
+    const topModulePath = filelist[0];
+    const defaultSaveName = fspath.basename(topModulePath, fspath.extname(topModulePath));
+    const defaultSavePath = hdlPath.join(opeParam.workspacePath, defaultSaveName + '.f');
+
+    const uri = await vscode.window.showSaveDialog({
+        filters: {
+            'All Files': ['*']
+        },
+        saveLabel: 'save',
+        defaultUri: vscode.Uri.file(defaultSavePath)
+    });
+
+
+}
+
+/**
+ * @description 导出当前 module 的 filelist
+ * @param view treeview 中的模块对象
+ */
+function exportFilelist(view: ModuleDataItem) {
+    const fileset = new Set<string>();
+    if (view.path !== undefined) {
+        const deps = hdlParam.getAllDependences(view.path, view.name);
+        if (deps) {
+            deps.others.forEach(path => fileset.add(path));
+            deps.include.forEach(path => fileset.add(path));
+            const filelist = [view.path];
+            filelist.push(...fileset);
+
+        } else {
+            vscode.window.showErrorMessage('fail to get deps of view ' + view.name);
+        }
+    } else {
+        vscode.window.showErrorMessage('cannot find path for current module');
+    }
+
+}
 
 export {
     insertTextToUri,
-    transformOldPpy
+    transformOldPpy,
+    exportFilelist
 };

@@ -4,8 +4,9 @@
     "description": "all in one vscode plugin for Verilog/VHDL development",
     "publisher": "sterben",
     "homepage": "https://digital-eda.github.io/DIDE-doc-Cn",
-    "version": "0.3.3",
+    "version": "0.4.0",
     "main": "./out/extension",
+    "l10n": "./l10n",
     "icon": "images/icon.png",
     "engines": {
         "vscode": "^1.72.0"
@@ -345,6 +346,15 @@
                 }
             },
             {
+                "command": "digital-ide.tool.export-filelist",
+                "title": "%digital-ide.tool.export-filelist.title%",
+                "category": "Digital-IDE",
+                "icon": {
+                    "light": "images/svg/light/export.svg",
+                    "dark": "images/svg/dark/export.svg"
+                }
+            },
+            {
                 "command": "digital-ide.pickLibrary",
                 "title": "%digital-ide.pickLibrary.title%",
                 "icon": {
@@ -616,7 +626,18 @@
                 {
                     "command": "digital-ide.tool.icarus.simulateFile",
                     "group": "navigation@3",
-                    "when": "view == digital-ide-treeView-arch && viewItem == file"
+                    "when": "view == digital-ide-treeView-arch && viewItem == file",
+                    "args": {
+                        "file": "${viewItem}"
+                    }
+                },
+                {
+                    "command": "digital-ide.tool.export-filelist",
+                    "group": "navigation@4",
+                    "when": "view == digital-ide-treeView-arch && viewItem == file",
+                    "args": {
+                        "file": "${viewItem}"
+                    }
                 }
             ],
             "editor/title": [

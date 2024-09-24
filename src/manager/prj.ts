@@ -2,7 +2,7 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 
-import { AbsPath, IProgress, MainOutput, opeParam, ReportType } from '../global';
+import { AbsPath, IProgress, LspClient, MainOutput, opeParam, ReportType } from '../global';
 import { PathSet } from '../global/util';
 import { RawPrjInfo } from '../global/prjInfo';
 import { hdlDir, hdlFile, hdlPath } from '../hdlFs';
@@ -13,6 +13,9 @@ import { PsManage } from './PS';
 import { hdlIgnore } from './ignore';
 import { ppyAction } from '../monitor/event';
 import { hdlMonitor } from '../monitor';
+import { NotificationType } from 'vscode-jsonrpc';
+import { refreshArchTree } from '../function/treeView';
+import { Fast } from '../../resources/hdlParser';
 
 interface RefreshPrjConfig {
     mkdir: boolean
@@ -150,6 +153,28 @@ class PrjManage {
         await hdlParam.initialize(hdlFiles, progress);
         const unhandleNum = hdlParam.getUnhandleInstanceNumber();
         MainOutput.report(`finish analyse ${hdlFiles.length} hdl files, find ${unhandleNum} unsolved instances`, ReportType.Info);
+
+        // 完成后端向前端发送消息的注册
+        const mainClient = LspClient.MainClient;
+        if (mainClient !== undefined) {            
+            await mainClient.onReady();
+            mainClient.onNotification('update/fast', async (params: any) => {
+                try {
+                    const fast = params.fast as Fast;
+                    const path = params.path as string;
+                    console.log("[receive notification] path: " + path);
+                    hdlParam.updateFast(path, fast);
+                    refreshArchTree();
+                } catch (error) {
+                    console.error("error happen when update fast: " + error);
+                }
+            });
+
+            // mainClient.onNotification('update/string', async (params: any) => {
+            //     console.log('[StringNotificationType] receive from backend');
+            //     console.log(params);
+            // });
+        }
 
         this.pl = new PlManage();
 

@@ -1,0 +1,9 @@
+{
+    "hello": "hello in English",
+    "welcome.title": "Thanks for using Digital-IDE ❤️. Your star will be our best motivation! 😊",
+    "welcome.star": "Star",
+    "welcome.refuse": "Refuse",
+    "progress.register-command": "(Digital IDE) Register Command",
+    "progress.initialization": "(Digital IDE) Initialization",
+    "progress.build-module-tree": "build module tree"
+}

@@ -45,5 +45,6 @@
     "digital-ide.lsp.vlog.linter.pick.title": "select a diagnostic for verilog",
     "digital-ide.lsp.svlog.linter.pick.title": "select a diagnostic for systemverilog verilog",
     "digital-ide.lsp.vhdl.linter.pick.title": "select a diagnostic for vhdl",
-    "digital-ide.lsp.systemverilog.linter.pick.title": "select a diagnostic for systemverilog"
+    "digital-ide.lsp.systemverilog.linter.pick.title": "select a diagnostic for systemverilog",
+    "digital-ide.tool.export-filelist.title": "export filelist"
 }

@@ -119,12 +119,15 @@ class HdlAction extends BaseAction {
     async change(path: string, m: HdlMonitor): Promise<void> {
         console.log('HdlAction change');
         path = hdlPath.toSlash(path);
+        const langID = hdlFile.getLanguageId(path);
 
         // TODO : check performance
-        await this.updateSymbolStorage(path);
+        if (langID === HdlLangID.Vhdl) {
+            await this.updateSymbolStorage(path);
+            await this.updateHdlParam(path);
+        }
         await this.updateLinter(path);
 
-        await this.updateHdlParam(path);
         refreshArchTree();
     }
 
@@ -148,7 +151,7 @@ class HdlAction extends BaseAction {
 
     async updateHdlParam(path: string) {
         const moduleFile = hdlParam.getHdlFile(path);
-    
+
         if (!moduleFile) {
             return;
         }
@@ -183,8 +186,6 @@ class HdlAction extends BaseAction {
             }
         }
 
-        
-    
         // 3. delete module not visited yet
         for (const moduleName of uncheckedModuleNames) {
             moduleFile.deleteHdlModule(moduleName);

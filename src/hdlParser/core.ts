@@ -7,7 +7,7 @@ import { MainOutput, ReportType } from '../global/outputChannel';
 import * as common from './common';
 import { hdlFile, hdlPath } from '../hdlFs';
 import { HdlSymbol } from './util';
-import { vhdlFast } from '../../resources/hdlParser';
+import { Fast, vhdlFast } from '../../resources/hdlParser';
 
 class HdlParam {
     private readonly topModules : Set<HdlModule> = new Set<HdlModule>();
@@ -242,13 +242,13 @@ class HdlParam {
     }
 
     public async initHdlFiles(hdlFiles: AbsPath[], progress?: vscode.Progress<IProgress>) {
+        const { t } = vscode.l10n;
         let count: number = 0;
         let fileNum = hdlFiles.length;
         const parallelChunk = 5;
 
         const pools: { id: number, promise: Promise<void> }[] = [];
-
-        vscode.window.showInformationMessage("files to handle: " + fileNum);
+        const reportTitle = t('progress.build-module-tree');
 
         async function consumePools() {
             for (const p of pools) {
@@ -256,7 +256,7 @@ class HdlParam {
                 await p.promise;
                 console.log("handle id " + p.id + ' increment: ' + increment);
                 
-                progress?.report({ message: `build module tree ${p.id}/${fileNum}`, increment });
+                progress?.report({ message: reportTitle + ` ${p.id}/${fileNum}`, increment });
             }
             pools.length = 0;
         }
@@ -345,6 +345,42 @@ class HdlParam {
             for (const module of moduleFile.getAllHdlModules()) {
                 module.solveUnhandleInstance();
             }
+        }
+    }
+
+    public updateFast(path: string, fast: Fast) {
+        const moduleFile = this.getHdlFile(path);
+        if (moduleFile === undefined) {
+            return;
+        }
+
+        // 1. update marco directly
+        moduleFile.updateMacro(fast.macro);
+        
+        // 2. update modules one by one
+        const uncheckedModuleNames = new Set<string>();
+        for (const name of moduleFile.getAllModuleNames()) {
+            uncheckedModuleNames.add(name);
+        }
+    
+        for (const rawHdlModule of fast.content) {
+            const moduleName = rawHdlModule.name;            
+            if (uncheckedModuleNames.has(moduleName)) {     
+                // match the same module, check then
+                const originalModule = moduleFile.getHdlModule(moduleName);
+                uncheckedModuleNames.delete(moduleName);
+                originalModule?.update(rawHdlModule);                
+            } else {                                    
+                // no matched, create it
+                const newModule = moduleFile.createHdlModule(rawHdlModule);
+                newModule.makeNameToInstances();
+                newModule.solveUnhandleInstance();
+            }
+        }
+
+        // 3. delete module not visited yet
+        for (const moduleName of uncheckedModuleNames) {
+            moduleFile.deleteHdlModule(moduleName);
         }
     }
 };

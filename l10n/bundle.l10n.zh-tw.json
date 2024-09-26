@@ -5,5 +5,6 @@
     "welcome.refuse": "Refuse",
     "progress.register-command": "(Digital IDE) Register Command",
     "progress.initialization": "(Digital IDE) Initialization",
-    "progress.build-module-tree": "build module tree"
+    "progress.build-module-tree": "build module tree",
+    "fail.save-file": "fail to save file"
 }

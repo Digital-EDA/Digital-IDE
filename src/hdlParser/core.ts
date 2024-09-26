@@ -242,38 +242,50 @@ class HdlParam {
     }
 
     public async initHdlFiles(hdlFiles: AbsPath[], progress?: vscode.Progress<IProgress>) {
-        const { t } = vscode.l10n;
+        const { t } = vscode.l10n;        
         let count: number = 0;
         let fileNum = hdlFiles.length;
         const parallelChunk = 5;
 
-        const pools: { id: number, promise: Promise<void> }[] = [];
+        const pools: { id: number, promise: Promise<void>, path: string }[] = [];
         const reportTitle = t('progress.build-module-tree');
 
-        async function consumePools() {
-            for (const p of pools) {
-                const increment = Math.floor(p.id / fileNum * 100);
-                await p.promise;
-                console.log("handle id " + p.id + ' increment: ' + increment);
-                
-                progress?.report({ message: reportTitle + ` ${p.id}/${fileNum}`, increment });
-            }
-            pools.length = 0;
-        }
-
+        progress?.report({ message: reportTitle + ` ${1}/${fileNum}`, increment: 0 });
         for (const path of hdlFiles) {
             count ++;
-            const p = this.doHdlFast(path);
-            pools.push({ id: count, promise: p });
-            if (pools.length % parallelChunk === 0) {
-                // 消费并发池
-                await consumePools();
-            }
+            console.log('send request: ' + path);
+            await this.doHdlFast(path);
+            console.log('finish request: ' + path);
         }
+        
+        // async function consumePools() {
+        //     for (const p of pools) {
+        //         const increment = Math.floor(p.id / fileNum * 100);
 
-        if (pools.length > 0) {
-            await consumePools();
-        }
+        //         console.log('wait ' + p.path);
+        //         await p.promise;
+        //         console.log("handle id " + p.id + ' increment: ' + increment);
+                
+        //         progress?.report({ message: reportTitle + ` ${p.id}/${fileNum}`, increment });
+        //     }
+        //     pools.length = 0;
+        // }
+
+        // for (const path of hdlFiles) {
+        //     count ++;
+        //     console.log('send request: ' + path);
+            
+        //     const p = this.doHdlFast(path);
+        //     pools.push({ id: count, promise: p, path });
+        //     if (pools.length % parallelChunk === 0) {
+        //         // 消费并发池
+        //         await consumePools();
+        //     }
+        // }
+
+        // if (pools.length > 0) {
+        //     await consumePools();
+        // }
     
     }
 
@@ -370,7 +382,7 @@ class HdlParam {
                 const originalModule = moduleFile.getHdlModule(moduleName);
                 uncheckedModuleNames.delete(moduleName);
                 originalModule?.update(rawHdlModule);                
-            } else {                                    
+            } else {             
                 // no matched, create it
                 const newModule = moduleFile.createHdlModule(rawHdlModule);
                 newModule.makeNameToInstances();

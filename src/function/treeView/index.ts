@@ -5,12 +5,18 @@ import { hardwareTreeProvider, softwareTreeProvider, toolTreeProvider } from './
 import { moduleTreeProvider, ModuleDataItem  } from './tree';
 import { Range } from '../../hdlParser/common';
 
-async function openFileAtPosition(uri: vscode.Uri, line: number, character: number) {
+
+async function openFileAtPosition(uri: vscode.Uri, range: Range) {
     const document = await vscode.workspace.openTextDocument(uri);
-    const editor = await vscode.window.showTextDocument(document);
-    const position = new vscode.Position(line, character);
-    editor.selection = new vscode.Selection(position, position);
-    editor.revealRange(new vscode.Range(position, position));
+    const start = new vscode.Position(range.start.line - 1, range.start.character - 1);
+    const end = new vscode.Position(range.end.line - 1, range.end.character - 1);
+
+    await vscode.window.showTextDocument(
+        document,
+        {
+            selection: new vscode.Range(start, end)
+        }
+    );
 }
 
 function openFileByUri(path: string, range: Range) {
@@ -18,10 +24,10 @@ function openFileByUri(path: string, range: Range) {
         vscode.window.showErrorMessage(`${path} not support jump yet`);
         return;
     }
+
     if (hdlPath.exist(path)) {
         const uri = vscode.Uri.file(path);
-        const start = range.start;
-        openFileAtPosition(uri, start.line - 1, start.character);
+        openFileAtPosition(uri, range);
     }
 }
 

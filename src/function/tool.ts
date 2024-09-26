@@ -74,6 +74,8 @@ async function transformOldPpy() {
 }
 
 async function askUserToSaveFilelist(filelist: string[]) {
+    const { t } = vscode.l10n;
+
     const topModulePath = filelist[0];
     const defaultSaveName = fspath.basename(topModulePath, fspath.extname(topModulePath));
     const defaultSavePath = hdlPath.join(opeParam.workspacePath, defaultSaveName + '.f');
@@ -86,7 +88,18 @@ async function askUserToSaveFilelist(filelist: string[]) {
         defaultUri: vscode.Uri.file(defaultSavePath)
     });
 
+    if (uri === undefined) {
+        return;
+    }
+    const filePath = uri.path;
+    const fileContent = filelist.join('\n');
 
+    try {
+        fs.writeFileSync(filePath, fileContent);
+
+    } catch (error) {
+        vscode.window.showErrorMessage(t('fail.save-file') + ': ' + error);
+    }
 }
 
 /**
@@ -102,7 +115,7 @@ function exportFilelist(view: ModuleDataItem) {
             deps.include.forEach(path => fileset.add(path));
             const filelist = [view.path];
             filelist.push(...fileset);
-
+            askUserToSaveFilelist(filelist);
         } else {
             vscode.window.showErrorMessage('fail to get deps of view ' + view.name);
         }

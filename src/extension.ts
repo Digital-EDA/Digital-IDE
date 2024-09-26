@@ -34,7 +34,7 @@ async function launch(context: vscode.ExtensionContext) {
     }, async () => {
         await registerCommand(context);
     });
-
+    
     await vscode.window.withProgress({
         location: vscode.ProgressLocation.Window,
         title: t('progress.initialization')

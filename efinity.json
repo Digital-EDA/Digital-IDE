@@ -1,0 +1,635 @@
+{
+    "efx:project": {
+        "_attributes": {
+            "xmlns:efx": "http://www.efinixinc.com/enf_proj",
+            "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+            "name": "Ti60_Demo",
+            "description": "",
+            "last_change": "1724637727",
+            "sw_version": "2023.2.307",
+            "last_run_state": "pass",
+            "last_run_flow": "bitstream",
+            "config_result_in_sync": "sync",
+            "design_ood": "sync",
+            "place_ood": "sync",
+            "route_ood": "sync",
+            "xsi:schemaLocation": "http://www.efinixinc.com/enf_proj enf_proj.xsd"
+        },
+        "efx:device_info": {
+            "efx:family": {
+                "_attributes": {
+                    "name": "Titanium"
+                }
+            },
+            "efx:device": {
+                "_attributes": {
+                    "name": "Ti60F100S3F2"
+                }
+            },
+            "efx:timing_model": {
+                "_attributes": {
+                    "name": "C4"
+                }
+            }
+        },
+        "efx:design_info": {
+            "_attributes": {
+                "def_veri_version": "verilog_2k",
+                "def_vhdl_version": "vhdl_2008"
+            },
+            "efx:top_module": {
+                "_attributes": {
+                    "name": "example_top"
+                }
+            },
+            "efx:design_file": [
+                {
+                    "_attributes": {
+                        "name": "example_top.v",
+                        "version": "default",
+                        "library": "default"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "src/Reset.v",
+                        "version": "default",
+                        "library": "default"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "src/uart_index/precise_divider.v",
+                        "version": "default",
+                        "library": "default"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "src/uart_index/uart_transfer.v",
+                        "version": "default",
+                        "library": "default"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "src/uart_index/uart_receiver.v",
+                        "version": "default",
+                        "library": "default"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "src/uart_index/integer_divider.v",
+                        "version": "default",
+                        "library": "default"
+                    }
+                }
+            ],
+            "efx:top_vhdl_arch": {
+                "_attributes": {
+                    "name": ""
+                }
+            }
+        },
+        "efx:constraint_info": {
+            "efx:sdc_file": {
+                "_attributes": {
+                    "name": "Ti60_Demo.pt.sdc"
+                }
+            },
+            "efx:inter_file": {
+                "_attributes": {
+                    "name": ""
+                }
+            }
+        },
+        "efx:sim_info": {},
+        "efx:misc_info": {},
+        "efx:ip_info": {
+            "efx:ip": {
+                "_attributes": {
+                    "instance_name": "FIFO_4Kx8",
+                    "path": "ip/FIFO_4Kx8/settings.json"
+                },
+                "efx:ip_src_file": {
+                    "_attributes": {
+                        "name": "FIFO_4Kx8.v"
+                    }
+                }
+            }
+        },
+        "efx:synthesis": {
+            "_attributes": {
+                "tool_name": "efx_map"
+            },
+            "efx:param": [
+                {
+                    "_attributes": {
+                        "name": "work_dir",
+                        "value": "prj/work_syn",
+                        "value_type": "e_string"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "write_efx_verilog",
+                        "value": "on",
+                        "value_type": "e_bool"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "mode",
+                        "value": "speed",
+                        "value_type": "e_option"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "max_ram",
+                        "value": "-1",
+                        "value_type": "e_integer"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "max_mult",
+                        "value": "-1",
+                        "value_type": "e_integer"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "infer-clk-enable",
+                        "value": "3",
+                        "value_type": "e_option"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "infer-sync-set-reset",
+                        "value": "1",
+                        "value_type": "e_option"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "fanout-limit",
+                        "value": "0",
+                        "value_type": "e_integer"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "seq_opt",
+                        "value": "0",
+                        "value_type": "e_option"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "retiming",
+                        "value": "0",
+                        "value_type": "e_option"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "dsp-mac-packing",
+                        "value": "1",
+                        "value_type": "e_option"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "dsp-input-regs-packing",
+                        "value": "1",
+                        "value_type": "e_option"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "dsp-output-regs-packing",
+                        "value": "1",
+                        "value_type": "e_option"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "bram_output_regs_packing",
+                        "value": "1",
+                        "value_type": "e_option"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "blast_const_operand_adders",
+                        "value": "1",
+                        "value_type": "e_option"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "operator-sharing",
+                        "value": "0",
+                        "value_type": "e_option"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "optimize-adder-tree",
+                        "value": "0",
+                        "value_type": "e_option"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "pack-luts-to-comb4",
+                        "value": "0",
+                        "value_type": "e_option"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "min-sr-fanout",
+                        "value": "0",
+                        "value_type": "e_integer"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "min-ce-fanout",
+                        "value": "0",
+                        "value_type": "e_integer"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "seq-opt-sync-only",
+                        "value": "0",
+                        "value_type": "e_option"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "blackbox-error",
+                        "value": "1",
+                        "value_type": "e_option"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "allow-const-ram-index",
+                        "value": "0",
+                        "value_type": "e_option"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "hdl-compile-unit",
+                        "value": "1",
+                        "value_type": "e_option"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "create-onehot-fsms",
+                        "value": "0",
+                        "value_type": "e_option"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "mult-decomp-retime",
+                        "value": "0",
+                        "value_type": "e_option"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "optimize-zero-init-rom",
+                        "value": "1",
+                        "value_type": "e_option"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "insert-carry-skip",
+                        "value": "0",
+                        "value_type": "e_option"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "mult-auto-pipeline",
+                        "value": "0",
+                        "value_type": "e_option"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "use-logic-for-small-mem",
+                        "value": "64",
+                        "value_type": "e_integer"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "use-logic-for-small-rom",
+                        "value": "64",
+                        "value_type": "e_integer"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "include",
+                        "value": "ip/FIFO_4Kx8",
+                        "value_type": "e_string"
+                    }
+                }
+            ]
+        },
+        "efx:place_and_route": {
+            "_attributes": {
+                "tool_name": "efx_pnr"
+            },
+            "efx:param": [
+                {
+                    "_attributes": {
+                        "name": "work_dir",
+                        "value": "prj/work_pnr",
+                        "value_type": "e_string"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "verbose",
+                        "value": "off",
+                        "value_type": "e_bool"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "load_delaym",
+                        "value": "on",
+                        "value_type": "e_bool"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "optimization_level",
+                        "value": "CONGESTION_1",
+                        "value_type": "e_option"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "seed",
+                        "value": "1",
+                        "value_type": "e_integer"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "placer_effort_level",
+                        "value": "1",
+                        "value_type": "e_option"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "max_threads",
+                        "value": "32",
+                        "value_type": "e_integer"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "beneficial_skew",
+                        "value": "on",
+                        "value_type": "e_option"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "print_critical_path",
+                        "value": "10",
+                        "value_type": "e_integer"
+                    }
+                }
+            ]
+        },
+        "efx:bitstream_generation": {
+            "_attributes": {
+                "tool_name": "efx_pgm"
+            },
+            "efx:param": [
+                {
+                    "_attributes": {
+                        "name": "mode",
+                        "value": "active",
+                        "value_type": "e_option"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "width",
+                        "value": "2",
+                        "value_type": "e_option"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "cold_boot",
+                        "value": "off",
+                        "value_type": "e_bool"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "cascade",
+                        "value": "off",
+                        "value_type": "e_option"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "enable_roms",
+                        "value": "on",
+                        "value_type": "e_option"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "spi_low_power_mode",
+                        "value": "off",
+                        "value_type": "e_bool"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "io_weak_pullup",
+                        "value": "on",
+                        "value_type": "e_bool"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "oscillator_clock_divider",
+                        "value": "DIV8",
+                        "value_type": "e_option"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "enable_crc_check",
+                        "value": "on",
+                        "value_type": "e_bool"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "bitstream_compression",
+                        "value": "on",
+                        "value_type": "e_bool"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "active_capture_clk_edge",
+                        "value": "negedge",
+                        "value_type": "e_option"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "release_tri_then_reset",
+                        "value": "on",
+                        "value_type": "e_bool"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "enable_external_master_clock",
+                        "value": "off",
+                        "value_type": "e_bool"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "jtag_usercode",
+                        "value": "0xFFFFFFFF",
+                        "value_type": "e_string"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "generate_bit",
+                        "value": "on",
+                        "value_type": "e_bool"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "generate_bitbin",
+                        "value": "on",
+                        "value_type": "e_bool"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "generate_hex",
+                        "value": "on",
+                        "value_type": "e_bool"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "generate_hexbin",
+                        "value": "on",
+                        "value_type": "e_bool"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "four_byte_addressing",
+                        "value": "off",
+                        "value_type": "e_bool"
+                    }
+                }
+            ]
+        },
+        "efx:debugger": {
+            "efx:param": [
+                {
+                    "_attributes": {
+                        "name": "work_dir",
+                        "value": "prj/work_dbg",
+                        "value_type": "e_string"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "auto_instantiation",
+                        "value": "off",
+                        "value_type": "e_bool"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "profile",
+                        "value": "NONE",
+                        "value_type": "e_string"
+                    }
+                }
+            ]
+        },
+        "efx:security": {
+            "efx:param": [
+                {
+                    "_attributes": {
+                        "name": "enable_bitstream_encrypt",
+                        "value": "off",
+                        "value_type": "e_bool"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "enable_bitstream_auth",
+                        "value": "off",
+                        "value_type": "e_bool"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "encryption_key_file",
+                        "value": "NONE",
+                        "value_type": "e_string"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "auth_key_file",
+                        "value": "NONE",
+                        "value_type": "e_string"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "randomize_iv_value",
+                        "value": "off",
+                        "value_type": "e_bool"
+                    }
+                },
+                {
+                    "_attributes": {
+                        "name": "iv_value",
+                        "value": "",
+                        "value_type": "e_string"
+                    }
+                }
+            ]
+        }
+    }
+}

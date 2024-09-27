@@ -27,7 +27,9 @@ async function registerCommand(context: vscode.ExtensionContext) {
 
 async function launch(context: vscode.ExtensionContext) {
     const { t } = vscode.l10n;
-
+    console.log(t('welcome.title'));
+    console.log(t('click.join-qq-group') + ' https://qm.qq.com/q/1M655h3GsA');   
+    
     await vscode.window.withProgress({
         location: vscode.ProgressLocation.Window,
         title: t('progress.register-command')

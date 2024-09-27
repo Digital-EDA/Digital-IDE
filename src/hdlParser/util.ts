@@ -11,7 +11,10 @@ async function doFastApi(path: string): Promise<Fast | undefined> {
         const client = LspClient.MainClient;
         const langID = hdlFile.getLanguageId(path);
         if (client) {
+            console.log('send request ' + path);
             const response = await client.sendRequest(DoFastRequestType, { path });            
+            console.log('receive response ' + path);
+            
             response.languageId = langID;
             return response;
         }

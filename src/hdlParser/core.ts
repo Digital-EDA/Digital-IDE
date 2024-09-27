@@ -253,9 +253,7 @@ class HdlParam {
         progress?.report({ message: reportTitle + ` ${1}/${fileNum}`, increment: 0 });
         for (const path of hdlFiles) {
             count ++;
-            console.log('send request: ' + path);
             await this.doHdlFast(path);
-            console.log('finish request: ' + path);
         }
         
         // async function consumePools() {

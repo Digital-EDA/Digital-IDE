@@ -1,10 +1,11 @@
 {
-    "hello": "hello in English",
-    "welcome.title": "Thanks for using Digital-IDE ❤️. Your star will be our best motivation! 😊",
-    "welcome.star": "Star",
-    "welcome.refuse": "Refuse",
-    "progress.register-command": "(Digital IDE) Register Command",
-    "progress.initialization": "(Digital IDE) Initialization",
-    "progress.build-module-tree": "build module tree",
-    "fail.save-file": "fail to save file"
+    "hello": "你好",
+    "welcome.title": "感謝使用 Digital-IDE ❤️。您的支持將是我們最大的動力！😊",
+    "welcome.star": "支持",
+    "welcome.refuse": "拒絕",
+    "progress.register-command": "(Digital IDE) 註冊命令",
+    "progress.initialization": "(Digital IDE) 初始化",
+    "progress.build-module-tree": "構建模塊樹",
+    "fail.save-file": "保存文件失敗",
+    "click.join-qq-group": "点击链接加入QQ群一起讨论"
 }

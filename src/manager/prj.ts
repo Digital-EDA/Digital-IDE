@@ -156,7 +156,7 @@ class PrjManage {
 
         // 完成后端向前端发送消息的注册
         const mainClient = LspClient.MainClient;
-        if (mainClient !== undefined) {            
+        if (mainClient !== undefined) {
             await mainClient.onReady();
             mainClient.onNotification('update/fast', async (params: any) => {
                 try {

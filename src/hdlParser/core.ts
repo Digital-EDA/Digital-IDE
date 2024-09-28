@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import * as os from 'os';
 
 import { AbsPath, IProgress, opeParam } from '../global';
 import { HdlLangID } from '../global/enum';
@@ -245,45 +246,42 @@ class HdlParam {
         const { t } = vscode.l10n;        
         let count: number = 0;
         let fileNum = hdlFiles.length;
-        const parallelChunk = 5;
+
+        // TODO: 找出最合理的核心数
+        const parallelChunk = Math.min(os.cpus().length, 32);
+        console.log("use cpu: " + parallelChunk);
+        
 
         const pools: { id: number, promise: Promise<void>, path: string }[] = [];
         const reportTitle = t('progress.build-module-tree');
 
         progress?.report({ message: reportTitle + ` ${1}/${fileNum}`, increment: 0 });
+
+        async function consumePools() {
+            for (const p of pools) {
+                const increment = Math.floor(p.id / fileNum * 100);
+                await p.promise;
+                console.log("handle id " + p.id + ' increment: ' + increment);                
+                progress?.report({ message: reportTitle + ` ${p.id}/${fileNum}`, increment });
+            }
+            pools.length = 0;
+        }
+
         for (const path of hdlFiles) {
             count ++;
-            await this.doHdlFast(path);
-        }
-        
-        // async function consumePools() {
-        //     for (const p of pools) {
-        //         const increment = Math.floor(p.id / fileNum * 100);
-
-        //         console.log('wait ' + p.path);
-        //         await p.promise;
-        //         console.log("handle id " + p.id + ' increment: ' + increment);
-                
-        //         progress?.report({ message: reportTitle + ` ${p.id}/${fileNum}`, increment });
-        //     }
-        //     pools.length = 0;
-        // }
-
-        // for (const path of hdlFiles) {
-        //     count ++;
-        //     console.log('send request: ' + path);
+            console.log('send request: ' + path);
             
-        //     const p = this.doHdlFast(path);
-        //     pools.push({ id: count, promise: p, path });
-        //     if (pools.length % parallelChunk === 0) {
-        //         // 消费并发池
-        //         await consumePools();
-        //     }
-        // }
+            const p = this.doHdlFast(path);
+            pools.push({ id: count, promise: p, path });
+            if (pools.length % parallelChunk === 0) {
+                // 消费并发池
+                await consumePools();
+            }
+        }
 
-        // if (pools.length > 0) {
-        //     await consumePools();
-        // }
+        if (pools.length > 0) {
+            await consumePools();
+        }
     
     }
 

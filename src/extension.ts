@@ -22,7 +22,6 @@ async function registerCommand(context: vscode.ExtensionContext) {
 
     lspClient.activate(context);
     await LspClient.MainClient?.onReady();
-    // lspClient.activateVHDL(context);
 }
 
 async function launch(context: vscode.ExtensionContext) {
@@ -83,5 +82,4 @@ export function activate(context: vscode.ExtensionContext) {
 
 export function deactivate() {
     lspClient.deactivate();
-    // lspClient.deactivateVHDL();
 }

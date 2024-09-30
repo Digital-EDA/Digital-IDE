@@ -20,6 +20,7 @@ function getLspServerExecutionName() {
     return 'digital-lsp';
 }
 
+
 export function activate(context: vscode.ExtensionContext) {
     const lspServerName = getLspServerExecutionName();
     const lspServerPath = context.asAbsolutePath(
@@ -52,6 +53,10 @@ export function activate(context: vscode.ExtensionContext) {
             {
                 scheme: 'file',
                 language: 'verilog'
+            },
+            {
+                scheme: 'file',
+                language: 'vhdl'
             }
         ],
     };
@@ -74,62 +79,3 @@ export function deactivate(): Thenable<void> | undefined {
     return LspClient.MainClient.stop();
 }
 
-
-function getLspServerExecutionNameVHDL() {
-    const osname = platform();
-    if (osname === 'win32') {
-        return 'vhdl_ls.exe';
-    }
-
-    return 'vhdl_ls';
-}
-
-export function activateVHDL(context: vscode.ExtensionContext) {
-    const lspServerName = getLspServerExecutionNameVHDL();
-    const lspServerPath = context.asAbsolutePath(
-        path.join('resources', 'dide-lsp', 'server', lspServerName)
-    );
-
-    if (fs.existsSync(lspServerPath)) {
-        console.log('lsp server found at ' + lspServerPath);
-    } else {
-        console.error('cannot found lsp server at ' + lspServerPath);
-    }
-    
-    const run: Executable = {
-        command: lspServerPath,
-    };
-
-    // If the extension is launched in debug mode then the debug server options are used
-    // Otherwise the run options are used
-    let serverOptions: ServerOptions = {
-        run,
-        debug: run,
-    };
-
-    let clientOptions: LanguageClientOptions = {
-        documentSelector: [
-            {
-                scheme: 'file',
-                language: 'vhdl' 
-            }
-        ],
-    };
-
-    const client = new LanguageClient(
-        "Digital LSP VHDL",
-        "Digital LSP VHDL",
-        serverOptions,
-        clientOptions
-    );
-
-    LspClient.VhdlClient = client;
-    client.start();
-}
-
-export function deactivateVHDL(): Thenable<void> | undefined {
-    if (!LspClient.VhdlClient) {
-        return undefined;
-    }
-    return LspClient.VhdlClient.stop();
-}

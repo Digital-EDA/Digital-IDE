@@ -59,6 +59,9 @@ export function activate(context: vscode.ExtensionContext) {
                 language: 'vhdl'
             }
         ],
+        markdown: {
+            isTrusted: true
+        }
     };
 
     const client = new LanguageClient(
@@ -67,15 +70,15 @@ export function activate(context: vscode.ExtensionContext) {
         serverOptions,
         clientOptions
     );
-    LspClient.MainClient = client;
+    LspClient.DigitalIDE = client;
     
     client.start();
 }
 
 export function deactivate(): Thenable<void> | undefined {
-    if (!LspClient.MainClient) {
+    if (!LspClient.DigitalIDE) {
         return undefined;
     }
-    return LspClient.MainClient.stop();
+    return LspClient.DigitalIDE.stop();
 }
 

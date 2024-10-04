@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { Fast, vlogAll, vhdlAll, svAll, vhdlFast, All } from '../../resources/hdlParser';
+import { Fast, vlogAll, vhdlAll, svAll, All } from '../../resources/hdlParser';
 import { hdlFile } from '../hdlFs';
 import { HdlLangID } from '../global/enum';
 import { AbsPath, LspClient } from '../global';
@@ -8,7 +8,7 @@ import { RawHdlModule } from './common';
 
 async function doFastApi(path: string): Promise<Fast | undefined> {
     try {
-        const client = LspClient.MainClient;
+        const client = LspClient.DigitalIDE;
         const langID = hdlFile.getLanguageId(path);
         if (client) {
             const response = await client.sendRequest(DoFastRequestType, { path });            
@@ -28,6 +28,11 @@ async function vlogFast(path: string): Promise<Fast | undefined> {
 }
 
 async function svFast(path: string): Promise<Fast | undefined> {
+    const fast = await doFastApi(path);
+    return fast;
+}
+
+async function vhdlFast(path: string): Promise<Fast | undefined> {
     const fast = await doFastApi(path);
     return fast;
 }

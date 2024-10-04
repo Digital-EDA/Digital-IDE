@@ -13,11 +13,13 @@
 		["module", "endmodule"],
 		["task", "endtask"]
 	],
-
 	"autoClosingPairs": [
 		{"open":"(", "close":")", "notIn":["string", "comment"]},
 		{"open":"[", "close":"]", "notIn":["string", "comment"]},
 		{"open":"{", "close":"}", "notIn":["string", "comment"]},
 		{"open":"\"", "close":"\"", "notIn":["string", "comment"]}
-	]
+	],
+    "onTypeFormatting": {
+        "autoFormatTriggerCharacters": ["\n"]
+    }
 }

@@ -46,5 +46,6 @@
     "digital-ide.lsp.svlog.linter.pick.title": "選擇 System Verilog 的診斷",
     "digital-ide.lsp.vhdl.linter.pick.title": "選擇 VHDL 的診斷",
     "digital-ide.lsp.systemverilog.linter.pick.title": "選擇 SystemVerilog 的診斷",
-    "digital-ide.tool.export-filelist.title": "導出 filelist"
+    "digital-ide.tool.export-filelist.title": "導出 filelist",
+    "digital-ide.treeview": "Digital IDE: 模块树"
 }

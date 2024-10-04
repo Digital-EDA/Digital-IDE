@@ -257,6 +257,15 @@ class HdlParam {
 
         progress?.report({ message: reportTitle + ` ${1}/${fileNum}`, increment: 0 });
 
+        // for (const path of hdlFiles) {
+        //     count ++;
+        //     console.log('send request: ' + path);
+            
+        //     await this.doHdlFast(path);
+        //     const increment = Math.floor(count / fileNum * 100);
+        //     progress?.report({ message: reportTitle + ` ${count}/${fileNum}`, increment });
+        // }
+
         async function consumePools() {
             for (const p of pools) {
                 const increment = Math.floor(p.id / fileNum * 100);
@@ -575,7 +584,7 @@ class HdlModule {
                                                 this.path,
                                                 common.InstModPathStatus.Current,
                                                 rawHdlInstance.instparams,
-                                                this.ports[0].range,
+                                                rawHdlInstance.instports,
                                                 rawHdlInstance.range,
                                                 this);
             hdlInstance.module = this;

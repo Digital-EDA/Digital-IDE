@@ -85,10 +85,10 @@ function registerLsp(context: vscode.ExtensionContext) {
 
     
     // vhdl lsp    
-    vscode.languages.registerDocumentSymbolProvider(vhdlSelector, lspDocSymbol.vhdlDocSymbolProvider);
-    vscode.languages.registerDefinitionProvider(vhdlSelector, lspDefinition.vhdlDefinitionProvider);
-    vscode.languages.registerHoverProvider(vhdlSelector, lspHover.vhdlHoverProvider);
-    vscode.languages.registerCompletionItemProvider(vhdlSelector, lspCompletion.vhdlCompletionProvider);
+    // vscode.languages.registerDocumentSymbolProvider(vhdlSelector, lspDocSymbol.vhdlDocSymbolProvider);
+    // vscode.languages.registerDefinitionProvider(vhdlSelector, lspDefinition.vhdlDefinitionProvider);
+    // vscode.languages.registerHoverProvider(vhdlSelector, lspHover.vhdlHoverProvider);
+    // vscode.languages.registerCompletionItemProvider(vhdlSelector, lspCompletion.vhdlCompletionProvider);
     
 
     // tcl lsp

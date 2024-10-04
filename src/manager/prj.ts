@@ -155,7 +155,7 @@ class PrjManage {
         MainOutput.report(`finish analyse ${hdlFiles.length} hdl files, find ${unhandleNum} unsolved instances`, ReportType.Info);
 
         // 完成后端向前端发送消息的注册
-        const mainClient = LspClient.MainClient;
+        const mainClient = LspClient.DigitalIDE;
         if (mainClient !== undefined) {
             await mainClient.onReady();
             mainClient.onNotification('update/fast', async (params: any) => {

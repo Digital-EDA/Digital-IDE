@@ -21,7 +21,7 @@ async function registerCommand(context: vscode.ExtensionContext) {
     func.registerWaveViewer(context);
 
     lspClient.activate(context);
-    await LspClient.MainClient?.onReady();
+    await LspClient.DigitalIDE?.onReady();
 }
 
 async function launch(context: vscode.ExtensionContext) {

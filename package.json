@@ -293,6 +293,11 @@
                     "description": "auto declare output type nets in the scope when instantiation happens.",
                     "type": "boolean",
                     "default": true
+                },
+                "fpga-support.onTypeFormattingTriggerCharacters": {
+                    "type": "array",
+                    "default": ["\n"],
+                    "description": "Trigger characters for onTypeFormatting"
                 }
             }
         },
@@ -788,7 +793,7 @@
             "activitybar": [
                 {
                     "id": "TreeView",
-                    "title": "Digital-IDE: TreeView",
+                    "title": "%digital-ide.treeview%",
                     "icon": "images/svg/view.svg"
                 }
             ]

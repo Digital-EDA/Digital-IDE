@@ -4,12 +4,12 @@ import { Fast } from '../../resources/hdlParser';
 
 
 interface IDigitalIDELspClient {
-    MainClient?: LanguageClient,
+    DigitalIDE?: LanguageClient,
     VhdlClient?: LanguageClient
 }
 
 export const LspClient: IDigitalIDELspClient = {
-    MainClient: undefined,
+    DigitalIDE: undefined,
     VhdlClient: undefined
 };
 

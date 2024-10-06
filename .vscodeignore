@@ -13,5 +13,6 @@ script
 resources/**/*.js
 resources/**/*.d.ts
 resources/**/*.wasm
+resources/dide-lsp/server
 tsconfig.json
 design

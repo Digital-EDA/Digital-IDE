@@ -296,7 +296,9 @@
                 },
                 "fpga-support.onTypeFormattingTriggerCharacters": {
                     "type": "array",
-                    "default": ["\n"],
+                    "default": [
+                        "\n"
+                    ],
                     "description": "Trigger characters for onTypeFormatting"
                 }
             }
@@ -1183,14 +1185,17 @@
         "webpack-cli": "^5.1.4"
     },
     "dependencies": {
+        "axios": "^1.7.7",
         "chokidar": "^3.5.3",
         "puppeteer-core": "^19.4.1",
         "showdown": "^2.1.0",
         "state-machine-cat": "^9.2.5",
+        "tar": "^7.4.3",
         "temp": "^0.9.4",
         "vscode-jsonrpc": "^8.2.1",
         "vscode-languageclient": "^7.0.0",
         "vscode-textmate": "^9.0.0",
-        "wavedrom": "^2.9.1"
+        "wavedrom": "^2.9.1",
+        "zlib": "^1.0.5"
     }
 }

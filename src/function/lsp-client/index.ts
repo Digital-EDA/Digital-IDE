@@ -9,7 +9,10 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
 import { platform } from "os";
-import { LspClient } from '../../global';
+import { IProgress, LspClient } from '../../global';
+import axios from "axios";
+import { getGiteeDownloadLink, getPlatformPlatformSignature } from "./cdn";
+
 
 function getLspServerExecutionName() {
     const osname = platform();
@@ -20,8 +23,36 @@ function getLspServerExecutionName() {
     return 'digital-lsp';
 }
 
+async function checkAndDownload(context: vscode.ExtensionContext, progress: vscode.Progress<IProgress>, version: string): boolean {
+    const { t } = vscode.l10n;
+    
+    const versionFolderPath = context.asAbsolutePath(
+        path.join('resources', 'dide-lsp', 'server', version)
+    );
 
-export function activate(context: vscode.ExtensionContext) {
+    const serverPath = path.join(versionFolderPath, getLspServerExecutionName());
+    if (fs.existsSync(versionFolderPath) && fs.existsSync(serverPath)) {
+        return true;
+    }
+
+    // 流式下载
+    progress.report({ message: t('progress.download-digital-lsp') });
+    const signature = getPlatformPlatformSignature().toString();
+    const giteeDownloadLink = getGiteeDownloadLink(signature, version)
+    console.log('download link ', giteeDownloadLink);
+    
+    const response = await axios.get(giteeDownloadLink, { responseType: 'stream' });
+    const totalLength = response.headers['content-length'];
+    console.log('totalLength ', totalLength);
+    
+
+    return false;
+}
+
+export async function activate(context: vscode.ExtensionContext, progress: vscode.Progress<IProgress>, version: string) {
+    await checkAndDownload(context, progress, version);
+
+
     const lspServerName = getLspServerExecutionName();
     const lspServerPath = context.asAbsolutePath(
         path.join('resources', 'dide-lsp', 'server', lspServerName)

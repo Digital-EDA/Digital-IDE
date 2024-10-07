@@ -3,9 +3,11 @@
     "welcome.title": "Thanks for using Digital-IDE ❤️. Your star will be our best motivation! 😊",
     "welcome.star": "Star",
     "welcome.refuse": "Refuse",
-    "progress.register-command": "(Digital IDE) Register Command",
-    "progress.initialization": "(Digital IDE) Initialization",
-    "progress.build-module-tree": "build module tree",
+    "progress.register-command": "Register Command",
+    "progress.active-lsp-server": "Activate LSP Server",
+    "progress.initialization": "Initialization",
+    "progress.build-module-tree": "Build Module Tree",
+    "progress.download-digital-lsp": "Download Digital LSP",
     "fail.save-file": "fail to save file",
     "click.join-qq-group": "Click the link to join the QQ group"
 }

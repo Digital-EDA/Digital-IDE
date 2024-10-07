@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import * as fs from 'fs';
 
 import { opeParam, MainOutput, AbsPath, ReportType, LspClient, IProgress } from './global';
 import { hdlParam } from './hdlParser';
@@ -19,21 +20,39 @@ async function registerCommand(context: vscode.ExtensionContext) {
     func.registerFSM(context);
     func.registerNetlist(context);
     func.registerWaveViewer(context);
+}
 
-    lspClient.activate(context);
-    await LspClient.DigitalIDE?.onReady();
+function getVersion(context: vscode.ExtensionContext): string {
+    let extensionPath = context.extensionPath;
+    let packagePath = extensionPath + '/package.json';
+    if (!fs.existsSync(packagePath)) {
+        return '0.4.0';
+    }
+    let packageMeta = fs.readFileSync(packagePath, { encoding: 'utf-8' });
+    let packageJson = JSON.parse(packageMeta);
+    return packageJson.version;
 }
 
 async function launch(context: vscode.ExtensionContext) {
     const { t } = vscode.l10n;
     console.log(t('welcome.title'));
     console.log(t('click.join-qq-group') + ' https://qm.qq.com/q/1M655h3GsA');   
+    const versionString = getVersion(context);
     
     await vscode.window.withProgress({
         location: vscode.ProgressLocation.Window,
         title: t('progress.register-command')
     }, async () => {
         await registerCommand(context);
+
+    });
+
+    await vscode.window.withProgress({
+        location: vscode.ProgressLocation.Window,
+        title: t('progress.active-lsp-server')
+    }, async (progress: vscode.Progress<IProgress>, token: vscode.CancellationToken) => {
+        await lspClient.activate(context, progress, versionString);
+        await LspClient.DigitalIDE?.onReady();
     });
     
     await vscode.window.withProgress({
@@ -53,7 +72,7 @@ async function launch(context: vscode.ExtensionContext) {
     });
 
 
-    MainOutput.report('Digital-IDE has launched, Version: 0.4.0', ReportType.Launch);
+    MainOutput.report('Digital-IDE has launched, Version: ' + versionString, ReportType.Launch);
     MainOutput.report('OS: ' + opeParam.os, ReportType.Launch);
 
     console.log(hdlParam);

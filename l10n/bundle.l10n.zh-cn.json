@@ -4,8 +4,10 @@
     "welcome.star": "支持",
     "welcome.refuse": "拒绝",
     "progress.register-command": "(Digital IDE) 注册命令",
+    "progress.active-lsp-server": "Activate LSP Server",
     "progress.initialization": "(Digital IDE) 初始化",
     "progress.build-module-tree": "构建模块树",
+    "progress.download-digital-lsp": "Download Digital LSP",
     "fail.save-file": "保存文件失败",
     "click.join-qq-group": "点击链接加入QQ群一起讨论"
 }

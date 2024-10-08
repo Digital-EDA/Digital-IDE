@@ -12,7 +12,6 @@ import * as lspClient from './function/lsp-client';
 import { refreshArchTree } from './function/treeView';
 
 
-
 async function registerCommand(context: vscode.ExtensionContext) {
     func.registerFunctionCommands(context);
     func.registerLsp(context);
@@ -44,7 +43,6 @@ async function launch(context: vscode.ExtensionContext) {
         title: t('progress.register-command')
     }, async () => {
         await registerCommand(context);
-
     });
 
     await lspClient.activate(context, versionString);

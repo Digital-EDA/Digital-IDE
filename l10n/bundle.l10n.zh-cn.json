@@ -3,11 +3,14 @@
     "welcome.title": "感谢使用 Digital-IDE ❤️。您的支持将是我们最大的动力！😊",
     "welcome.star": "支持",
     "welcome.refuse": "拒绝",
-    "progress.register-command": "(Digital IDE) 注册命令",
-    "progress.active-lsp-server": "Activate LSP Server",
-    "progress.initialization": "(Digital IDE) 初始化",
+    "progress.register-command": "Digital IDE 注册命令",
+    "progress.active-lsp-server": "Digital IDE 激活语言服务器",
+    "progress.initialization": "Digital IDE 初始化",
     "progress.build-module-tree": "构建模块树",
-    "progress.download-digital-lsp": "Download Digital LSP",
+    "progress.download-digital-lsp": "下载 Digital IDE 语言服务器",
+    "progress.choose-best-download-source": "选择最佳下载源",
+    "progress.extract-digital-lsp": "解压 Digital LSP 语言服务器",
+    "error.download-digital-lsp": "无法下载 Digital LSP 语言服务器，检查你的网络后重启 vscode，或者请手动去下方地址下载 https://github.com/Digital-EDA/Digital-IDE/releases/tag/",
     "fail.save-file": "保存文件失败",
     "click.join-qq-group": "点击链接加入QQ群一起讨论"
 }

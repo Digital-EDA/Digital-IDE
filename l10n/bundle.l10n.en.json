@@ -8,6 +8,9 @@
     "progress.initialization": "Initialization",
     "progress.build-module-tree": "Build Module Tree",
     "progress.download-digital-lsp": "Download Digital LSP",
+    "progress.choose-best-download-source": "Choose Best Download Source",
+    "progress.extract-digital-lsp": "Extract Digital LSP",
+    "error.download-digital-lsp": "Fail to download digital lsp server, check your network and reload vscode. You can also visit following site and download manually: https://github.com/Digital-EDA/Digital-IDE/releases/tag/",
     "fail.save-file": "fail to save file",
     "click.join-qq-group": "Click the link to join the QQ group"
 }

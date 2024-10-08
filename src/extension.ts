@@ -47,13 +47,8 @@ async function launch(context: vscode.ExtensionContext) {
 
     });
 
-    await vscode.window.withProgress({
-        location: vscode.ProgressLocation.Window,
-        title: t('progress.active-lsp-server')
-    }, async (progress: vscode.Progress<IProgress>, token: vscode.CancellationToken) => {
-        await lspClient.activate(context, progress, versionString);
-        await LspClient.DigitalIDE?.onReady();
-    });
+    await lspClient.activate(context, versionString);
+    await LspClient.DigitalIDE?.onReady();
     
     await vscode.window.withProgress({
         location: vscode.ProgressLocation.Window,

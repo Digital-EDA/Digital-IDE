@@ -6,15 +6,14 @@ import { hdlParam } from './hdlParser';
 import * as manager from './manager';
 import * as func from './function';
 import { hdlMonitor } from './monitor';
-import { extensionUrl } from '../resources/hdlParser';
 
 import * as lspClient from './function/lsp-client';
 import { refreshArchTree } from './function/treeView';
 
 
-async function registerCommand(context: vscode.ExtensionContext) {
+async function registerCommand(context: vscode.ExtensionContext, version: string) {
     func.registerFunctionCommands(context);
-    func.registerLsp(context);
+    func.registerLsp(context, version);
     func.registerToolCommands(context);
     func.registerFSM(context);
     func.registerNetlist(context);
@@ -42,7 +41,7 @@ async function launch(context: vscode.ExtensionContext) {
         location: vscode.ProgressLocation.Window,
         title: t('progress.register-command')
     }, async () => {
-        await registerCommand(context);
+        await registerCommand(context, versionString);
     });
 
     await lspClient.activate(context, versionString);
@@ -83,7 +82,7 @@ async function launch(context: vscode.ExtensionContext) {
             { title: t('welcome.refuse'), value: false },
         );
         if (res?.value) {
-            vscode.env.openExternal(vscode.Uri.parse(extensionUrl));
+            vscode.env.openExternal(vscode.Uri.parse('https://github.com/Digital-EDA/Digital-IDE'));
         }
     }
 }

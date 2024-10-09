@@ -552,6 +552,11 @@
                 "title": "%digital-ide.lsp.systemverilog.linter.pick.title%"
             },
             {
+                "command": "digital-ide.digital-lsp.download",
+                "category": "Digital-IDE",
+                "title": "%digital-ide.digital-lsp.download.title%"
+            },
+            {
                 "command": "digital-ide.vhdl2vlog",
                 "title": "%digital-ide.vhdl2vlog.title%",
                 "category": "Digital-IDE",

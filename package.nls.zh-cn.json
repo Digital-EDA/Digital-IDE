@@ -47,5 +47,6 @@
     "digital-ide.lsp.vhdl.linter.pick.title": "选择 VHDL 的诊断",
     "digital-ide.lsp.systemverilog.linter.pick.title": "选择 SystemVerilog 的诊断",
     "digital-ide.tool.export-filelist.title": "导出 filelist",
-    "digital-ide.treeview": "Digital IDE: 模块树"
+    "digital-ide.treeview": "Digital IDE: 模块树",
+    "digital-ide.digital-lsp.download.title": "下载 Digital 语言服务器"
 }

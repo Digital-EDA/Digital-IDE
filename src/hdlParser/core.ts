@@ -8,7 +8,6 @@ import { MainOutput, ReportType } from '../global/outputChannel';
 import * as common from './common';
 import { hdlFile, hdlPath } from '../hdlFs';
 import { HdlSymbol } from './util';
-import { Fast, vhdlFast } from '../../resources/hdlParser';
 
 class HdlParam {
     private readonly topModules : Set<HdlModule> = new Set<HdlModule>();
@@ -365,7 +364,7 @@ class HdlParam {
         }
     }
 
-    public updateFast(path: string, fast: Fast) {
+    public updateFast(path: string, fast: common.Fast) {
         const moduleFile = this.getHdlFile(path);
         if (moduleFile === undefined) {
             return;

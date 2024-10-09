@@ -1,8 +1,6 @@
 import * as vscode from 'vscode';
-import { All } from '../../../../resources/hdlParser';
 import { isVerilogFile, isVhdlFile } from '../../../hdlFs/file';
 import { Position } from '../../../hdlParser/common';
-import { hdlSymbolStorage } from '../core';
 import { BaseLinter } from './base';
 import { LspOutput, ReportType } from '../../../global';
 
@@ -15,13 +13,13 @@ class DefaultVlogLinter implements BaseLinter {
 
     async lint(document: vscode.TextDocument): Promise<void> {
         const filePath = document.fileName;
-        const vlogAll = await hdlSymbolStorage.getSymbol(filePath);
-        // console.log('lint all finish');
+        // const vlogAll = await hdlSymbolStorage.getSymbol(filePath);
+        // // console.log('lint all finish');
 
-        if (vlogAll) {
-            const diagnostics = this.provideDiagnostics(document, vlogAll);
-            this.diagnostic.set(document.uri, diagnostics);
-        }
+        // if (vlogAll) {
+        //     const diagnostics = this.provideDiagnostics(document, vlogAll);
+        //     this.diagnostic.set(document.uri, diagnostics);
+        // }
     }   
 
     private provideDiagnostics(document: vscode.TextDocument, all: All): vscode.Diagnostic[] {
@@ -88,13 +86,13 @@ class DefaultVhdlLinter implements BaseLinter {
 
     async lint(document: vscode.TextDocument): Promise<void> {
         const filePath = document.fileName;
-        const vhdlAll = await hdlSymbolStorage.getSymbol(filePath);
-        // console.log('lint all finish');
+        // const vhdlAll = await hdlSymbolStorage.getSymbol(filePath);
+        // // console.log('lint all finish');
         
-        if (vhdlAll) {
-            const diagnostics = this.provideDiagnostics(document, vhdlAll);
-            this.diagnostic.set(document.uri, diagnostics);
-        }
+        // if (vhdlAll) {
+        //     const diagnostics = this.provideDiagnostics(document, vhdlAll);
+        //     this.diagnostic.set(document.uri, diagnostics);
+        // }
     }
 
     private provideDiagnostics(document: vscode.TextDocument, all: All): vscode.Diagnostic[] {

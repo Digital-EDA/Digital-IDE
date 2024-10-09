@@ -2,6 +2,7 @@
 import * as vscode from 'vscode';
 
 import { AbsPath, RelPath } from '../global';
+import { HdlLangID } from '../global/enum';
 
 interface Position {
     // row/line of the cursor, index from 0
@@ -191,6 +192,18 @@ interface CommentResult {
     length: number
 }
 
+interface Fast {
+    content: RawHdlModule[]
+    languageId: string
+    macro: Macro
+}
+
+interface All {
+    content: RawSymbol[]
+    languageId: HdlLangID
+    macro: Macro
+    error: Error[]
+}
 
 export {
     Position,
@@ -212,5 +225,7 @@ export {
     HdlDependence,
     RawSymbol,
     CommentResult,
-    makeVscodePosition
+    makeVscodePosition,
+    Fast,
+    All
 };

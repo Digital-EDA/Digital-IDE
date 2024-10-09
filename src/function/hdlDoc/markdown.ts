@@ -91,7 +91,6 @@ async function patchComment(path: AbsPath, ports: (HdlModulePort | HdlModulePara
             inlineComment = inlineComment.substring(2);
         }
         ports[i].desc = inlineComment;
-        console.log(inlineComment);
     }
 }
 
@@ -103,8 +102,8 @@ async function patchComment(path: AbsPath, ports: (HdlModulePort | HdlModulePara
 async function getDocsFromModule(module: HdlModule): Promise<MarkdownString> {
     const moduleName = module.name;
     const portNum = module.ports.length;
-    const paramNum = module.params.length;    
-    
+    const paramNum = module.params.length;
+        
     // add desc can optimizer in the future version
     const paramPP = patchComment(module.path, module.params);
     const portPP = patchComment(module.path, module.ports);

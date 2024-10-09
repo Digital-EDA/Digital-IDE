@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { LanguageClient, RequestType, ProtocolConnection } from 'vscode-languageclient/node';
-import { Fast } from '../../resources/hdlParser';
+import { Fast } from '../hdlParser/common';
 
 
 interface IDigitalIDELspClient {
@@ -24,6 +24,7 @@ export const LspClient: IDigitalIDELspClient = {
 export const CustomRequestType = new RequestType<void, number, void>('custom/request');
 export const CustomParamRequestType = new RequestType<ICommonParam, number, void>('custom/paramRequest');
 export const DoFastRequestType = new RequestType<IDoFastParam, Fast, void>('api/fast');
+export const UpdateFastRequestType = new RequestType<IDoFastParam, Fast, void>('api/update-fast');
 
 export interface ITextDocumentItem {
     uri: vscode.Uri,

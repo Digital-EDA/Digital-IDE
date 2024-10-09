@@ -1,26 +1,23 @@
 import * as vscode from 'vscode';
+import * as path from 'path';
 
 import * as hdlDoc from './hdlDoc';
 import * as sim from './sim';
 import * as treeView from './treeView';
 
 import * as lspCompletion from './lsp/completion';
-import * as lspDocSymbol from './lsp/docSymbol';
-import * as lspDefinition from './lsp/definition';
-import * as lspHover from './lsp/hover';
 import * as lspFormatter from '../../resources/formatter';
 import * as lspTranslator from '../../resources/translator';
-import * as lspDocSemantic from './lsp/docSemantic';
 import * as lspLinter from './lsp/linter';
 
 import * as tool from './tool';
-import * as lspCore from './lsp/core';
 
 // special function
 import * as FSM from './fsm';
 import * as Netlist from './netlist';
 import * as WaveView from './dide-viewer';
 import { ModuleDataItem } from './treeView/tree';
+import { downloadLsp } from './lsp-client';
 
 function registerDocumentation(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('digital-ide.hdlDoc.showWebview', hdlDoc.showDocWebview);
@@ -59,7 +56,16 @@ function registerTreeView(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('digital-ide.treeView.arch.openFile', treeView.openFileByUri);
 }
 
-function registerLsp(context: vscode.ExtensionContext) {
+function registerLsp(context: vscode.ExtensionContext, version: string) {
+
+    // lsp download
+    vscode.commands.registerCommand('digital-ide.digital-lsp.download', () => {
+        const versionFolderPath = context.asAbsolutePath(
+            path.join('resources', 'dide-lsp', 'server', version)
+        );
+        downloadLsp(context, version, versionFolderPath)
+    });
+
     const vlogSelector: vscode.DocumentSelector = {scheme: 'file', language: 'verilog'};
     const svlogSelector: vscode.DocumentSelector = {scheme: 'file', language: 'systemverilog'};
     const vhdlSelector: vscode.DocumentSelector = {scheme: 'file', language: 'vhdl'};
@@ -96,7 +102,6 @@ function registerLsp(context: vscode.ExtensionContext) {
 
     // lsp linter
     // make first symbols in workspace
-    lspCore.hdlSymbolStorage.initialise();
     lspLinter.vlogLinterManager.initialise();
     lspLinter.vhdlLinterManager.initialise();
     lspLinter.svlogLinterManager.initialise();

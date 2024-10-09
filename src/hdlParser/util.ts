@@ -1,10 +1,11 @@
 import * as vscode from 'vscode';
-import { Fast, vlogAll, vhdlAll, svAll, All } from '../../resources/hdlParser';
 import { hdlFile } from '../hdlFs';
 import { HdlLangID } from '../global/enum';
 import { AbsPath, LspClient } from '../global';
-import { DoFastRequestType, ITextDocumentItem, CustomParamRequestType } from '../global/lsp';
-import { RawHdlModule } from './common';
+import { DoFastRequestType, ITextDocumentItem, CustomParamRequestType, UpdateFastRequestType } from '../global/lsp';
+import { Fast, RawHdlModule } from './common';
+
+
 
 async function doFastApi(path: string): Promise<Fast | undefined> {
     try {
@@ -22,20 +23,22 @@ async function doFastApi(path: string): Promise<Fast | undefined> {
     }
 }
 
-async function vlogFast(path: string): Promise<Fast | undefined> {
-    const fast = await doFastApi(path);
-    return fast;
+async function updateFastApi(path: string): Promise<Fast | undefined> {
+    try {
+        const client = LspClient.DigitalIDE;
+        const langID = hdlFile.getLanguageId(path);
+        if (client) {
+            const response = await client.sendRequest(UpdateFastRequestType, { path });            
+            response.languageId = langID;
+            return response;
+        }
+    } catch (error) {
+        console.error("error happen when run doFastApi, " + error);
+        console.error("error file path: " + path);
+        return undefined;
+    }
 }
 
-async function svFast(path: string): Promise<Fast | undefined> {
-    const fast = await doFastApi(path);
-    return fast;
-}
-
-async function vhdlFast(path: string): Promise<Fast | undefined> {
-    const fast = await doFastApi(path);
-    return fast;
-}
 
 namespace HdlSymbol {
     /**
@@ -46,24 +49,21 @@ namespace HdlSymbol {
     export function fast(path: AbsPath): Promise<Fast | undefined> {
         const langID = hdlFile.getLanguageId(path);
         switch (langID) {
-            case HdlLangID.Verilog: return vlogFast(path);
-            case HdlLangID.Vhdl: return vhdlFast(path);
-            case HdlLangID.SystemVerilog: return svFast(path);
+            case HdlLangID.Verilog:
+            case HdlLangID.Vhdl:
+            case HdlLangID.SystemVerilog:
+                return doFastApi(path);
             default: return new Promise(resolve => resolve(undefined));
         }
     }
 
-    /**
-     * @description 0.4.0 后丢弃
-     * @param path 文件绝对路径
-     * @returns 
-     */
-    export function all(path: AbsPath): Promise<All | undefined> {
+    export function updateFast(path: AbsPath): Promise<Fast | undefined> {
         const langID = hdlFile.getLanguageId(path);
         switch (langID) {
-            case HdlLangID.Verilog: return vlogAll(path);
-            case HdlLangID.Vhdl: return vhdlAll(path);
-            case HdlLangID.SystemVerilog: return svAll(path);
+            case HdlLangID.Verilog:
+            case HdlLangID.Vhdl:
+            case HdlLangID.SystemVerilog: 
+                return updateFastApi(path);
             default: return new Promise(resolve => resolve(undefined));
         }
     }

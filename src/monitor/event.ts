@@ -13,7 +13,6 @@ import { prjManage } from '../manager';
 import { libManage } from '../manager/lib';
 import type { HdlMonitor } from './index';
 import { HdlLangID, ToolChainType } from '../global/enum';
-import { hdlSymbolStorage } from '../function/lsp/core';
 import { vlogLinterManager, vhdlLinterManager, svlogLinterManager } from '../function/lsp/linter';
 
 enum Event {
@@ -71,7 +70,6 @@ class HdlAction extends BaseAction {
         console.log('HdlAction add', path);
 
         path = hdlPath.toSlash(path);
-
         this.updateLinter(path);
 
         // check if it has been created
@@ -92,7 +90,7 @@ class HdlAction extends BaseAction {
         // operation to process unlink of hdl files can be deleted in <processLibFiles>
         path = hdlPath.toSlash(path);
         hdlParam.deleteHdlFile(path);
-        console.log(hdlParam);
+
         refreshArchTree();
 
         const uri = vscode.Uri.file(path);
@@ -119,22 +117,14 @@ class HdlAction extends BaseAction {
     async change(path: string, m: HdlMonitor): Promise<void> {
         console.log('HdlAction change');
         path = hdlPath.toSlash(path);
-        const langID = hdlFile.getLanguageId(path);
 
-        // TODO : check performance
-        if (langID === HdlLangID.Vhdl) {
-            await this.updateSymbolStorage(path);
-            await this.updateHdlParam(path);
-        }
+        await this.updateHdlParam(path);
         await this.updateLinter(path);
 
         refreshArchTree();
     }
 
-    async updateSymbolStorage(path: string) {
-        hdlSymbolStorage.updateSymbol(path);
-    }
-
+    // 下一个版本丢弃，完全由后端承担这部分功能
     async updateLinter(path: string) {
         const uri = vscode.Uri.file(path);
         const document = await vscode.workspace.openTextDocument(uri);
@@ -156,7 +146,9 @@ class HdlAction extends BaseAction {
             return;
         }
     
-        const fast = await HdlSymbol.fast(path);
+        const fast = await HdlSymbol.updateFast(path);
+        console.log('get update fast');
+        
         if (!fast) {
             // vscode.window.showErrorMessage('error happen when parse ' + path + '\nFail to update');
             return;

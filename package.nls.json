@@ -47,5 +47,6 @@
     "digital-ide.lsp.vhdl.linter.pick.title": "select a diagnostic for vhdl",
     "digital-ide.lsp.systemverilog.linter.pick.title": "select a diagnostic for systemverilog",
     "digital-ide.tool.export-filelist.title": "export filelist",
-    "digital-ide.treeview": "Digital IDE: TreeView"
+    "digital-ide.treeview": "Digital IDE: TreeView",
+    "digital-ide.digital-lsp.download.title": "Download Digital LSP"
 }

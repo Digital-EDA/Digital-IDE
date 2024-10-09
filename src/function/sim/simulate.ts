@@ -231,7 +231,7 @@ class IcarusSimulate extends Simulate {
 
         const simLibPaths = this.getSimLibArr(this.toolChain);
 
-        const macroIncludeArgs = this.makeMacroIncludeArguments(iverilogCompileOptions.includes);
+        const macroIncludeArgs = this.makeMacroIncludeArguments(iverilogCompileOptions.includes);        
         const dependenceArgs = this.makeDependenceArguments(dependences);
         const thirdLibraryArgs = this.makeThirdLibraryArguments(simLibPaths);
 
@@ -244,6 +244,11 @@ class IcarusSimulate extends Simulate {
         const outVvpPath = makeSafeArgPath(hdlPath.join(simConfig.simulationHome, 'out.vvp'));      
         const mainPath = makeSafeArgPath(path);
 
+        // console.log(macroIncludeArgs);
+        // console.log(thirdLibraryDirArgs);
+        // console.log(dependenceArgs);
+        // console.log(thirdLibraryFileArgs);
+        
         const cmd = `${iverilogPath} ${argu} -o ${outVvpPath} -s ${name} ${macroIncludeArgs} ${thirdLibraryDirArgs} ${mainPath} ${dependenceArgs} ${thirdLibraryFileArgs}`;
         MainOutput.report(cmd, ReportType.Run);
         return cmd;

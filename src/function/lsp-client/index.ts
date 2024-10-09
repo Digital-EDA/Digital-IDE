@@ -14,7 +14,7 @@ import { platform } from "os";
 import { IProgress, LspClient } from '../../global';
 import axios, { AxiosResponse } from "axios";
 import { chooseBestDownloadSource, getGiteeDownloadLink, getGithubDownloadLink, getPlatformPlatformSignature } from "./cdn";
-import { hdlDir } from "../../hdlFs";
+import { hdlDir, hdlPath } from "../../hdlFs";
 
 function getLspServerExecutionName() {
     const osname = platform();
@@ -39,7 +39,13 @@ function extractTarGz(filePath: string, outputDir: string): Promise<void> {
     inputStream.pipe(gunzip).pipe(extract);
 
     return new Promise((resolve, reject) => {
-        extract.on('finish', resolve);
+        extract.on('finish', () => {
+            for (const file of fs.readdirSync(outputDir)) {
+                const filePath = hdlPath.join(outputDir, file);
+                fs.chmodSync(filePath, '755');
+            }
+            resolve();
+        });
         extract.on('error', reject);
     })
 }
@@ -104,7 +110,9 @@ export async function downloadLsp(context: vscode.ExtensionContext, version: str
         }, reportInterval);
 
         const signature = getPlatformPlatformSignature().toString();
-        const downloadLink = await chooseBestDownloadSource(signature, version, timeout);        
+        const downloadLink = await chooseBestDownloadSource(signature, version, timeout);
+        console.log('choose download link: ' + downloadLink);
+              
         clearInterval(intervalHandler);
         return downloadLink
     });

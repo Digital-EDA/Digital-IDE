@@ -179,7 +179,7 @@ class HdlParam {
             } else if (status === common.InstModPathStatus.Others && inst.instModPath) {
                 dependencies.others.push(inst.instModPath);
             }
-            const instDependencies = this.getAllDependences(inst.module.path, inst.module.name);
+            const instDependencies = this.getAllDependences(inst.module.path, inst.module.name);            
             if (instDependencies) {
                 dependencies.current.push(...instDependencies.current);
                 dependencies.include.push(...instDependencies.include);
@@ -561,7 +561,7 @@ class HdlModule {
         const instModName = rawHdlInstance.type;
         
         if (this.languageId === HdlLangID.Verilog || this.languageId === HdlLangID.SystemVerilog) {
-            const searchResult = this.searchInstModPath(instModName);
+            const searchResult = this.searchInstModPath(instModName);            
             const hdlInstance = new HdlInstance(rawHdlInstance.name,
                                                 rawHdlInstance.type,
                                                 searchResult.path,
@@ -643,6 +643,11 @@ class HdlModule {
         }
     }
 
+    /**
+     * @description 计算出当前 instance 和父组件的 包含关系
+     * @param instModName instance 的名字
+     * @returns InstModPathSearchResult
+     */
     private searchInstModPath(instModName: string): common.InstModPathSearchResult {        
         // search path of instance
         // priority:  "current file" -> "included files" -> "other hdls in the project"
@@ -661,7 +666,10 @@ class HdlModule {
         // search included file
         for (const include of this.file.macro.includes) {
             const absIncludePath = hdlPath.rel2abs(this.path, include.path);
+            console.log(absIncludePath);
             const includeFile = hdlParam.getHdlFile(absIncludePath);
+            console.log(includeFile);
+            
             if (includeFile) {
                 excludeFile.add(includeFile);
                 if (includeFile.hasHdlModule(instModName)) {

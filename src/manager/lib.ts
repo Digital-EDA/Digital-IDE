@@ -5,12 +5,13 @@ import * as fspath from 'path';
 import { AbsPath, opeParam } from '../global';
 import { hdlDir, hdlFile, hdlPath } from '../hdlFs';
 import { Library } from '../global/prjInfo';
-import { Path } from '../../resources/hdlParser';
 import { LibraryState } from '../global/enum';
 import { PathSet } from '../global/util';
 import { hdlIgnore } from './ignore';
 import { hdlParam } from '../hdlParser';
 import { refreshArchTree } from '../function/treeView';
+
+type Path = string;
 
 interface LibFileChange {
     add: AbsPath[],

@@ -1,6 +1,6 @@
-import { vlogDocSenmanticProvider, vlogLegend } from './vlog';
+// import { vlogDocSenmanticProvider, vlogLegend } from './vlog';
 
-export {
-    vlogDocSenmanticProvider,
-    vlogLegend
-};
+// export {
+//     vlogDocSenmanticProvider,
+//     vlogLegend
+// };

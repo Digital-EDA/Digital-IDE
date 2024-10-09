@@ -15,7 +15,7 @@ import { ppyAction } from '../monitor/event';
 import { hdlMonitor } from '../monitor';
 import { NotificationType } from 'vscode-jsonrpc';
 import { refreshArchTree } from '../function/treeView';
-import { Fast } from '../../resources/hdlParser';
+import { Fast } from '../hdlParser/common';
 
 interface RefreshPrjConfig {
     mkdir: boolean

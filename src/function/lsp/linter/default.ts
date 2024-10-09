@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { isVerilogFile, isVhdlFile } from '../../../hdlFs/file';
-import { Position } from '../../../hdlParser/common';
+import { All, Position } from '../../../hdlParser/common';
 import { BaseLinter } from './base';
 import { LspOutput, ReportType } from '../../../global';
 

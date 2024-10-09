@@ -1,7 +1,7 @@
-import { vlogDefinitionProvider } from './vlog';
-import { vhdlDefinitionProvider } from './vhdl';
+// import { vlogDefinitionProvider } from './vlog';
+// import { vhdlDefinitionProvider } from './vhdl';
 
 export {
-    vlogDefinitionProvider,
-    vhdlDefinitionProvider
+    // vlogDefinitionProvider,
+    // vhdlDefinitionProvider
 };

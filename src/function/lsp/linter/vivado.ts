@@ -2,11 +2,12 @@ import * as vscode from "vscode";
 import * as fs from 'fs';
 
 import { LspOutput, ReportType, opeParam } from "../../../global";
-import { Path } from "../../../../resources/hdlParser";
 import { hdlFile, hdlPath } from "../../../hdlFs";
 import { easyExec } from "../../../global/util";
 import { BaseLinter } from "./base";
 import { HdlLangID } from "../../../global/enum";
+
+type Path = string;
 
 class VivadoLinter implements BaseLinter {
     diagnostic: vscode.DiagnosticCollection;

@@ -8,8 +8,9 @@ import { hdlDir, hdlFile, hdlPath } from '../../hdlFs';
 import { getSelectItem } from './instance';
 import { ToolChainType } from '../../global/enum';
 import { HdlModule } from '../../hdlParser/core';
-import { Path } from '../../../resources/hdlParser';
 import { ModuleDataItem } from '../treeView/tree';
+
+type Path = string;
 
 interface SimulateConfig {
     mod : string,   // 设置的顶层模块              

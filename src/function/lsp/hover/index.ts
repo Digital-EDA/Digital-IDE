@@ -1,7 +1,7 @@
-import { vlogHoverProvider } from './vlog';
-import { vhdlHoverProvider } from './vhdl';
+// import { vlogHoverProvider } from './vlog';
+// import { vhdlHoverProvider } from './vhdl';
 
-export {
-    vlogHoverProvider,
-    vhdlHoverProvider
-};
+// export {
+//     vlogHoverProvider,
+//     vhdlHoverProvider
+// };

@@ -2,7 +2,6 @@ import * as vscode from "vscode";
 import * as fs from 'fs';
 
 import { LspOutput, ReportType, opeParam } from "../../../global";
-import { Path } from "../../../../resources/hdlParser";
 import { hdlFile, hdlPath } from "../../../hdlFs";
 import { easyExec } from "../../../global/util";
 import { BaseLinter } from "./base";
@@ -125,7 +124,7 @@ class ModelsimLinter implements BaseLinter {
         }
     }
 
-    public getExecutableFilePath(langID: HdlLangID): string | Path | undefined {
+    public getExecutableFilePath(langID: HdlLangID): string | undefined {
         // modelsim install path stored in prj.modelsim.install.path
         const modelsimConfig = vscode.workspace.getConfiguration('digital-ide.prj.modelsim');
         const modelsimInstallPath = modelsimConfig.get('install.path', '');
@@ -156,7 +155,7 @@ class ModelsimLinter implements BaseLinter {
     }
 
 
-    public async setExecutableFilePath(executorPath: string | Path | undefined, langID: HdlLangID): Promise<boolean> {
+    public async setExecutableFilePath(executorPath: string | undefined, langID: HdlLangID): Promise<boolean> {
         if (executorPath === undefined) {
             return false;
         }

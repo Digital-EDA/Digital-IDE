@@ -18,6 +18,7 @@ function getWebviewContent(panel?: vscode.WebviewPanel): string | undefined {
 
 class WaveViewer {
     context: vscode.ExtensionContext;
+    openFileUri?: vscode.Uri;
     panel?: vscode.WebviewPanel;
     constructor(context: vscode.ExtensionContext) {
         this.context = context;
@@ -28,6 +29,7 @@ class WaveViewer {
     }
 
     private create(uri: vscode.Uri) {
+        this.openFileUri = uri;
         this.panel = vscode.window.createWebviewPanel(
             'Wave Viewer',
             'Wave Viewer',
@@ -64,14 +66,31 @@ class WaveViewer {
 
             const iconPath = hdlPath.join(opeParam.extensionPath, 'images', 'icon.svg');
             this.panel.iconPath = vscode.Uri.file(iconPath);
+            this.registerMessageEvent();
         } else {
             WaveViewOutput.report('preview html in <WaveViewer.create> is empty', ReportType.Warn);
         }
     }
 
+    // vscode 前端向 webview 发送消息
     public send(uri: vscode.Uri) {
         this.panel?.webview.postMessage({
 
+        });
+    }
+
+    // vscode 前端接受 webview 的消息
+    private registerMessageEvent() {
+        this.panel?.webview.onDidReceiveMessage(message => {
+            const { command, data } = message;
+            
+            switch (command) {
+                case 'save-view':
+                    break;
+            
+                default:
+                    break;
+            }
         });
     }
 }

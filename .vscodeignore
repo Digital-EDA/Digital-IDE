@@ -16,3 +16,4 @@ resources/**/*.wasm
 resources/dide-lsp/server
 tsconfig.json
 design
+lib

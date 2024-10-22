@@ -130,7 +130,10 @@ function registerNetlist(context: vscode.ExtensionContext) {
 
 function registerWaveViewer(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('digital-ide.waveviewer.show', uri => WaveView.openWaveViewer(context, uri));
-    vscode.window.registerCustomEditorProvider('digital-ide.vcd.viewer', WaveView.vcdViewerProvider,
+
+    // 通过 customEditors 来配置
+    const vcdViewerProvider = new WaveView.VcdViewerProvider(context);
+    vscode.window.registerCustomEditorProvider('digital-ide.vcd.viewer', vcdViewerProvider,
         {
             webviewOptions: {
                 retainContextWhenHidden: true,

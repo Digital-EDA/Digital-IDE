@@ -669,7 +669,7 @@
                     "group": "navigation@3"
                 },
                 {
-                    "when": "editorLangId == vcd",
+                    "when": "editorLangId == vcd || editorLangId == view",
                     "command": "digital-ide.waveviewer.show",
                     "group": "navigation@4"
                 },
@@ -716,7 +716,7 @@
                     "group": "navigation@6"
                 },
                 {
-                    "when": "resourceLangId == vcd",
+                    "when": "resourceLangId == vcd || resourceLangId == vcd",
                     "command": "digital-ide.waveviewer.show",
                     "group": "navigation@7"
                 },
@@ -763,7 +763,7 @@
                     "group": "navigation@9"
                 },
                 {
-                    "when": "resourceLangId == vcd",
+                    "when": "resourceLangId == vcd || resourceLangId == view",
                     "command": "digital-ide.waveviewer.show",
                     "group": "navigation@10"
                 },
@@ -791,6 +791,9 @@
                 "selector": [
                     {
                         "filenamePattern": "*.vcd"
+                    },
+                    {
+                        "filenamePattern": "*.view"
                     }
                 ],
                 "priority": "default"
@@ -969,6 +972,16 @@
                 "icon": {
                     "dark": "./images/svg/dark/vcd.svg",
                     "light": "./images/svg/light/vcd.svg"
+                }
+            },
+            {
+                "id": "view",
+                "extensions": [
+                    ".view"
+                ],
+                "icon": {
+                    "dark": "./images/svg/dark/view.svg",
+                    "light": "./images/svg/light/view.svg"
                 }
             },
             {

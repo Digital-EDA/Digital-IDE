@@ -11,6 +11,14 @@
     "progress.choose-best-download-source": "Choose Best Download Source",
     "progress.extract-digital-lsp": "Extract Digital LSP",
     "error.download-digital-lsp": "Fail to download digital lsp server, check your network and reload vscode",
-    "fail.save-file": "保存文件失敗",
+    "fail.save-file": "保存文件失败",
+    "save": "保存",
+    "save-as-view": "另存为视图文件",
+    "vcd-view-file": "vcd 视图文件",
+    "all-file": "所有文件",
+    "load": "加载",
+    "load-view-file": "加载视图文件",
+    "bad-view-file": "视图文件已损坏",
+    "unexist-direct-vcd-file": "视图文件指向的 vcd 文件不存在",
     "click.join-qq-group": "点击链接加入QQ群一起讨论"
 }

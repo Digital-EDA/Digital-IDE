@@ -17,3 +17,4 @@ resources/dide-lsp/server
 tsconfig.json
 design
 lib
+*.vcd

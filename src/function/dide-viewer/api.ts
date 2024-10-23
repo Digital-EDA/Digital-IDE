@@ -3,6 +3,8 @@ import * as vscode from 'vscode';
 import * as url from 'url';
 import { BSON } from 'bson';
 import * as path from 'path';
+import * as os from 'os';
+import { getIconConfig } from '../../hdlFs/icons';
 
 export interface SaveViewData {
     originVcdFile: string,
@@ -34,9 +36,11 @@ function extractFilepath(webviewUri: string) {
     }
     const parsedUrl = new url.URL(webviewUri);    
     const pathname = decodeURIComponent(parsedUrl.pathname);
-    if (pathname.startsWith('/')) {
+    const platform = os.platform();
+    if (platform === 'win32' && pathname.startsWith('/')) {
         return pathname.slice(1);
     }
+
     return pathname;
 }
 
@@ -106,6 +110,9 @@ export async function saveViewAs(data: any, uri: vscode.Uri, panel: vscode.Webvi
             const buffer = BSON.serialize(originPayload);            
             fs.writeFileSync(savePath, buffer);
 
+            panel.title = path.basename(savePath);
+            panel.iconPath = getIconConfig('view');
+
             // 创建新的缓存 savePath 会成为新的 originVcdViewFile
             mergePayloadCache(savePath, payload);
 
@@ -153,6 +160,9 @@ export async function loadView(data: any, uri: vscode.Uri, panel: vscode.Webview
         if (viewUri) {
             const viewPath = viewUri[0].fsPath;
             const buffer = fs.readFileSync(viewPath);
+            panel.title = path.basename(viewPath);
+            panel.iconPath = getIconConfig('view');
+
             const recoverJson = BSON.deserialize(buffer);
             panel.webview.postMessage({
                 command: 'load-view',

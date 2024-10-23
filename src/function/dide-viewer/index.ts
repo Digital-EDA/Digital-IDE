@@ -6,6 +6,7 @@ import { hdlFile, hdlPath } from '../../hdlFs';
 import { opeParam, ReportType, WaveViewOutput } from '../../global';
 import { LaunchFiles, loadView, saveView, saveViewAs } from './api';
 import { BSON } from 'bson';
+import { getIconConfig } from '../../hdlFs/icons';
 
 function getWebviewContent(context: vscode.ExtensionContext, panel?: vscode.WebviewPanel): string | undefined {
     const dideviewerPath = hdlPath.join(context.extensionPath, 'resources', 'dide-viewer', 'view');
@@ -49,10 +50,6 @@ class WaveViewer {
             this.panel = undefined;
         }, null, this.context.subscriptions);
 
-        this.panel.webview.onDidReceiveMessage(message => {
-            console.log(message);
-        }, null, this.context.subscriptions);
-
         const context = this.context;
         const previewHtml = getWebviewContent(context, this.panel);
         if (this.panel && previewHtml) {
@@ -69,9 +66,7 @@ class WaveViewer {
                 .replace('worker.js', worker)
                 .replace('<root>', root);
             this.panel.webview.html = preprocessHtml;
-
-            const iconPath = hdlPath.join(context.extensionPath, 'images', 'icon.svg');
-            this.panel.iconPath = vscode.Uri.file(iconPath);
+            this.panel.iconPath = getIconConfig('view');
             registerMessageEvent(this.panel, uri);
         } else {
             WaveViewOutput.report('preview html in <WaveViewer.create> is empty', ReportType.Warn);
@@ -137,9 +132,7 @@ class VcdViewerProvider implements vscode.CustomEditorProvider {
                 .replace('worker.js', worker)
                 .replace('<root>', root);
             webviewPanel.webview.html = preprocessHtml;
-
-            const iconPath = hdlPath.join(context.extensionPath, 'images', 'icon.svg');
-            webviewPanel.iconPath = vscode.Uri.file(iconPath);
+            webviewPanel.iconPath = getIconConfig('view');
         } else {
             WaveViewOutput.report('preview html in <WaveViewer.create> is empty', ReportType.Warn);
         }

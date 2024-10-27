@@ -196,6 +196,9 @@ class ToolTreeProvider extends BaseCommandTreeProvider {
     }
 
     public async clean() {
+        console.log('current removed');
+        return;
+        
         const workspacePath = opeParam.workspacePath;
 
         // remove prjPath & .xil
@@ -212,7 +215,6 @@ class ToolTreeProvider extends BaseCommandTreeProvider {
             vscode.window.showWarningMessage("arch.prjPath is the same as the workspace path, the clean will delete the project, please check your arch.prjPath!");
         }
 
-        
         // move bd * ip
         const plName = opeParam.prjInfo.prjName.PL;
         const targetPath = fspath.dirname(opeParam.prjInfo.arch.hardware.src);

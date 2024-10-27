@@ -12,6 +12,7 @@
     "progress.extract-digital-lsp": "Extract Digital LSP",
     "error.download-digital-lsp": "Fail to download digital lsp server, check your network and reload vscode",
     "error.save-file": "保存文件失败",
+    "warning.ppy-already-exist": "property.json 已经存在了！",
     "save": "保存",
     "save-as-view": "另存为视图文件",
     "vcd-view-file": "vcd 视图文件",

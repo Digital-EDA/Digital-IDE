@@ -394,11 +394,6 @@
                 "title": "%digital-ide.treeView.arch.openFile.title%"
             },
             {
-                "command": "digital-ide.tool.clean",
-                "category": "tool",
-                "title": "%digital-ide.tool.clean.title%"
-            },
-            {
                 "command": "digital-ide.soft.launch",
                 "category": "tool",
                 "title": "%digital-ide.soft.launch.title%"

@@ -42,7 +42,7 @@ function registerFunctionCommands(context: vscode.ExtensionContext) {
 function registerTreeView(context: vscode.ExtensionContext) {
     // register normal tree
     vscode.window.registerTreeDataProvider('digital-ide-treeView-arch', treeView.moduleTreeProvider);
-    vscode.window.registerTreeDataProvider('digital-ide-treeView-tool', treeView.toolTreeProvider);
+    // vscode.window.registerTreeDataProvider('digital-ide-treeView-tool', treeView.toolTreeProvider);
     vscode.window.registerTreeDataProvider('digital-ide-treeView-hardware', treeView.hardwareTreeProvider);
     // vscode.window.registerTreeDataProvider('digital-ide-treeView-software', treeView.softwareTreeProvider);
 

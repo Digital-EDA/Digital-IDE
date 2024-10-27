@@ -103,31 +103,34 @@ class LibManage {
                 del.push(...this.curr.list);
                 
                 // copy file from remote to local
-                const remotePathList = this.getLibFiles(LibraryState.Remote);
-                this.remote2Local(remotePathList, (src, dist) => {
-                    hdlParam.deleteHdlFile(src);
-                    hdlFile.copyFile(src, dist);
-                });
+
+                // TODO: 从新版本删除所有涉及删除的功能 
+                // const remotePathList = this.getLibFiles(LibraryState.Remote);
+                // this.remote2Local(remotePathList, (src, dist) => {
+                //     hdlParam.deleteHdlFile(src);
+                //     hdlFile.copyFile(src, dist);
+                // });
 
             break;   
             case 'local-remote':
                 add.push(...this.next.list);
 
-                // delete local files & data structure in hdlParam (async)
-                await this.deleteLocalFiles();
+                // TODO: 从新版本删除所有涉及删除的功能
+                // // delete local files & data structure in hdlParam (async)
+                // await this.deleteLocalFiles();
 
             break;
             case 'local-local':
                 add.push(...diffElement(this.next.list, this.curr.list));
                 del.push(...diffElement(this.curr.list, this.next.list));
 
-                this.remote2Local(add, (src, dist) => {
-                    hdlFile.copyFile(src, dist);
-                });
+                // this.remote2Local(add, (src, dist) => {
+                //     hdlFile.copyFile(src, dist);
+                // });
 
-                this.remote2Local(del, (src, dist) => {                    
-                    hdlFile.removeFile(dist);
-                });
+                // this.remote2Local(del, (src, dist) => {                    
+                //     hdlFile.removeFile(dist);
+                // });
             break;
             default: break;
         }

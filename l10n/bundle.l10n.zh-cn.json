@@ -12,6 +12,7 @@
     "progress.extract-digital-lsp": "解压 Digital LSP 语言服务器",
     "error.download-digital-lsp": "无法下载 Digital LSP 语言服务器，检查你的网络后重启 vscode，或者请手动去下方地址下载 https://github.com/Digital-EDA/Digital-IDE/releases/tag/",
     "error.save-file": "保存文件失败",
+    "warning.ppy.already-exist": "property.json 已经存在了！",
     "save": "保存",
     "save-as-view": "另存为视图文件",
     "vcd-view-file": "vcd 视图文件",

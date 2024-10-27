@@ -100,6 +100,8 @@ interface Arch {
     prjPath: AbsPath
     hardware: SrcPath & SimPath & DataPath
     software: SrcPath & DataPath
+    // 'standard' | 'xilinx' | 'null' | 'custom'
+    structure: string
 };
 
 interface Soc {
@@ -398,9 +400,14 @@ class PrjInfo implements PrjInfoMeta {
     }
 
     public updateArch(arch?: Arch) {
+        const { t } = vscode.l10n;
         const workspacePath = this._workspacePath;
         if (arch) {
-            this.updatePathWisely(this.arch, 'prjPath', arch.prjPath);            
+            // 如果配置中存在，直接根据用户配置的项来赋值
+            this.arch.structure = 'custom';
+
+            this.updatePathWisely(this.arch, 'prjPath', arch.prjPath);
+
             if (arch.hardware) {
                 this.updatePathWisely(this.arch.hardware, 'src', arch.hardware.src);
                 this.updatePathWisely(this.arch.hardware, 'sim', arch.hardware.sim);
@@ -412,28 +419,45 @@ class PrjInfo implements PrjInfoMeta {
                 this.updatePathWisely(this.arch.software, 'data', arch.software.data);
             }
         } else {
-            let hardwarePath: AbsPath = join(workspacePath, 'user');
-            let softwarePath: AbsPath = join(workspacePath, 'user', 'Software');
+            // 如果没有，采用默认配置：https://nc-ai-lab.feishu.cn/wiki/IXTnw1K6giLApukuBITcfLitnKg
+            /**
+            "arch" : {
+                "structure" : "standard",
+                "prjPath": "${workspace}/prj",
+                "hardware" : {
+                    "src"  : "${workspace}/user/src",  // 放置设计源文件，注: src上一级为IP&bd
+                    "sim"  : "${workspace}/user/sim",  // 放置仿真文件，会直接反应在树状结构上
+                    "data" : "${workspace}/user/data"  // 放置约束、数据文件，约束会自动添加进vivado工程
+                },
+                "software" : {
+                    "src"  : "${workspace}/user/sdk",
+                    "data" : "${workspace}/user/sdk/data"
+                }
+            },
+             */
+            this.arch.structure = 'standard';
+            this.arch.prjPath = join(workspacePath, 'prj');
+
+            this.arch.hardware.src = join(workspacePath, 'user', 'src');
+            this.arch.hardware.sim = join(workspacePath, 'user', 'sim');
+            this.arch.hardware.data = join(workspacePath, 'user', 'data');
+
             const socCore = this._soc.core;
             if (socCore && socCore !== 'none') {
-                hardwarePath = join(hardwarePath, 'Hardware');
-                this.arch.software.src = join(softwarePath, 'src');
-                this.arch.software.data = join(softwarePath, 'data');
+                this.arch.software.src = join(workspacePath, 'user', 'sdk');
+                this.arch.software.data = join(workspacePath, 'user', 'sdk', 'data');
             }
-
-            this.arch.prjPath = join(workspacePath, 'prj');
-            this.arch.hardware.src = join(hardwarePath, 'src');
-            this.arch.hardware.sim = join(hardwarePath, 'sim');
-            this.arch.hardware.data = join(hardwarePath, 'data');
         }
         
         // if path is '', set as workspace
+        this.setDefaultValue(this.arch, 'structure', 'null');
+        this.setDefaultValue(this.arch, 'prjPath', workspacePath);
+
         this.setDefaultValue(this.arch.hardware, 'src', workspacePath);
         this.setDefaultValue(this.arch.hardware, 'sim', this.arch.hardware.src);
         this.setDefaultValue(this.arch.hardware, 'data', workspacePath);
         this.setDefaultValue(this.arch.software, 'src', workspacePath);
         this.setDefaultValue(this.arch.software, 'data', workspacePath);
-        this.setDefaultValue(this.arch, 'prjPath', workspacePath);
     }
 
     public checkArchDirExist() {

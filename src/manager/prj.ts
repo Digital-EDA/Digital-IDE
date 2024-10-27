@@ -87,18 +87,7 @@ class PrjManage {
             const rawPrjInfo = hdlFile.readJSON(propertyJsonPath) as RawPrjInfo;
             opeParam.mergePrjInfo(rawPrjInfo);
         } else {
-            const res = await vscode.window.showInformationMessage(
-                "property.json is not detected, do you want to create one ?",
-                { title: 'Yes', value: true },
-                { title: 'No', value: false }
-            );
-            if (res?.value) {
-                await this.generatePropertyJson();
-                const rawPrjInfo = hdlFile.readJSON(propertyJsonPath) as RawPrjInfo;
-                opeParam.mergePrjInfo(rawPrjInfo);
-            } else {
-                refreshPrjConfig.mkdir = false;
-            }
+            refreshPrjConfig.mkdir = false;
         }
 
         return refreshPrjConfig;

@@ -1,0 +1,10 @@
+{
+    "plugin-conflict": {
+        "question": "digital ide会和其他的verilog插件冲突吗",
+        "answer": "会，如果是同样注册了 vlog, vhdl, sv, vcd 语言高亮等服务器的插件会和 Digital IDE 冲突，比如 Teros, WaveTrace。因为 vscode 不知道同一个编程语言，到底应该启动哪个插件来提供服务"
+    },
+    "": {
+        "question": "",
+        "answer": ""
+    }
+}

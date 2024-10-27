@@ -11,7 +11,7 @@
     "progress.choose-best-download-source": "选择最佳下载源",
     "progress.extract-digital-lsp": "解压 Digital LSP 语言服务器",
     "error.download-digital-lsp": "无法下载 Digital LSP 语言服务器，检查你的网络后重启 vscode，或者请手动去下方地址下载 https://github.com/Digital-EDA/Digital-IDE/releases/tag/",
-    "fail.save-file": "保存文件失败",
+    "error.save-file": "保存文件失败",
     "save": "保存",
     "save-as-view": "另存为视图文件",
     "vcd-view-file": "vcd 视图文件",
@@ -19,6 +19,6 @@
     "load": "加载",
     "load-view-file": "加载视图文件",
     "bad-view-file": "视图文件已损坏",
-    "unexist-direct-vcd-file": "视图文件指向的 vcd 文件不存在",
+    "error.unexist-direct-vcd-file": "视图文件指向的 vcd 文件不存在",
     "click.join-qq-group": "点击链接加入QQ群一起讨论"
 }

@@ -4,7 +4,7 @@ import * as childProcess from 'child_process';
 
 import { AbsPath } from ".";
 
-class PathSet {
+export class PathSet {
     files: Set<AbsPath> = new Set<AbsPath>();
     add(path: AbsPath) {
         this.files.add(path);
@@ -23,7 +23,7 @@ class PathSet {
  * @param setA 
  * @param setB 
  */
-function isSameSet<T>(setA: Set<T>, setB: Set<T>): boolean {
+export function isSameSet<T>(setA: Set<T>, setB: Set<T>): boolean {
     if (setA.size !== setB.size) {
         return false;
     }
@@ -47,7 +47,7 @@ interface ExecutorOutput {
  * @param args argruments
  * @returns { Promise<ExecutorOutput> }
  */
-async function easyExec(executor: string, args: string[]): Promise<ExecutorOutput> {
+export async function easyExec(executor: string, args: string[]): Promise<ExecutorOutput> {
     const allArguments = [executor, ...args];
     const command = allArguments.join(' ');
 
@@ -63,7 +63,7 @@ async function easyExec(executor: string, args: string[]): Promise<ExecutorOutpu
 /**
  * Tracks all webviews.
  */
-class WebviewCollection {
+export class WebviewCollection {
 	private readonly _webviews = new Set<{
 		readonly resource: string;
 		readonly webviewPanel: vscode.WebviewPanel;
@@ -94,9 +94,11 @@ class WebviewCollection {
 	}
 }
 
-export {
-    PathSet,
-    isSameSet,
-    easyExec,
-    WebviewCollection
-};
+
+export function replacePlaceholders(template: string, ...args: string[]): string {
+    return template.replace(/\$(\d+)/g, (match, p1) => {
+        const index = parseInt(p1, 10) - 1;
+        return args[index] !== undefined ? args[index] : match;
+    });
+}
+

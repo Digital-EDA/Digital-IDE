@@ -221,7 +221,7 @@ function getViewLaunchFiles(context: vscode.ExtensionContext, uri: vscode.Uri, p
         if (recoverJson.originVcdFile) {
             const vcdPath = recoverJson.originVcdFile;
             if (!fs.existsSync(vcdPath)) {
-                return new Error(t('unexist-direct-vcd-file') + ':' + vcdPath);
+                return new Error(t('error.unexist-direct-vcd-file') + ':' + vcdPath);
             }
             const vcd = panel.webview.asWebviewUri(vscode.Uri.file(recoverJson.originVcdFile)).toString();
             const view = panel.webview.asWebviewUri(uri).toString();

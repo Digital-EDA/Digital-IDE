@@ -74,7 +74,7 @@ class Output {
 }
 
 const MainOutput = new Output('Digital-IDE');
-const LspOutput = new Output('Digital-IDE Language Server');
+const LspOutput = new Output('Digital-IDE Linter');
 const YosysOutput = new Output('Digital-IDE Yosys');
 const WaveViewOutput = new Output('Digital-IDE Wave Viewer');
 

@@ -125,9 +125,6 @@ class LibManage {
                     hdlFile.copyFile(src, dist);
                 });
 
-                this.remote2Local(del, (src, dist) => {                    
-                    hdlFile.removeFile(dist);
-                });
             break;
             default: break;
         }

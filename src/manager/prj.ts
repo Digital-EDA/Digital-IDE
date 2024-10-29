@@ -221,72 +221,18 @@ class PrjManage {
         const defaultPrjPath = hdlPath.join(opeParam.workspacePath, 'prj');
         hdlDir.mkdir(defaultPrjPath);
 
-        // basic path
-        const userPath = hdlPath.join(opeParam.workspacePath, 'user');
-        const softwarePath = hdlPath.join(userPath, 'Software');
-        const hardwarePath = hdlPath.join(userPath, 'Hardware');
-
-        const nextmode = this.getNextMode(rawPrjInfo);        
-        const currmode = this.getCurrentMode(softwarePath, hardwarePath);
+        // 如果 soc.core 有效，那么就是 LS，否则是 PL
+        const nextmode = this.getNextMode(rawPrjInfo);
         
-        if (currmode === nextmode) {
-            const hardware = opeParam.prjInfo.arch.hardware;
-            const software = opeParam.prjInfo.arch.software;
-            
-            hdlDir.mkdir(hardware.src);
-            hdlDir.mkdir(hardware.sim);
-            hdlDir.mkdir(hardware.data);
-            if (currmode === 'LS') {
-                hdlDir.mkdir(software.src);
-                hdlDir.mkdir(software.data);
-            }
-        } else if (currmode === "PL" && nextmode === "LS") {
-            hdlDir.mkdir(hardwarePath);
-
-            for (const path of fs.readdirSync(userPath)) {
-                const filePath = hdlPath.join(userPath, path);
-                if (filePath !== 'Hardware') {
-                    hdlDir.mvdir(filePath, hardwarePath, true);
-                }
-            }
-
-            const softwareDataPath = hdlPath.join(softwarePath, 'data');
-            const softwareSrcPath = hdlPath.join(softwarePath, 'src');
-
-            hdlDir.mkdir(softwareDataPath);
-            hdlDir.mkdir(softwareSrcPath);
-        }
-        else if (currmode === "LS" && nextmode === "PL") {
-            const needNotice = vscode.workspace.getConfiguration().get('digital-ide.prj.file.structure.notice', true);
-            if (needNotice) {
-                const res = await vscode.window.showWarningMessage(
-                    "Software will be deleted.",
-                    { modal: true },
-                    { title: 'Yes', value: true },
-                    { title: 'No', value: false }
-                );
-                if (res?.value) {
-                    hdlDir.rmdir(softwarePath);
-                }
-            } else {
-                hdlDir.rmdir(softwarePath);
-            }
-
-            if (fs.existsSync(hardwarePath)) {
-                for (const path of fs.readdirSync(hardwarePath)) {
-                    const filePath = hdlPath.join(hardwarePath, path);
-                    hdlDir.mvdir(filePath, userPath, true);
-                }
-                hdlDir.rmdir(hardwarePath);
-            }
-
-            const userSrcPath = hdlPath.join(userPath, 'src');
-            const userSimPath = hdlPath.join(userPath, 'sim');
-            const userDataPath = hdlPath.join(userPath, 'data');
-
-            hdlDir.mkdir(userSrcPath);
-            hdlDir.mkdir(userSimPath);
-            hdlDir.mkdir(userDataPath);
+        const hardware = opeParam.prjInfo.arch.hardware;
+        const software = opeParam.prjInfo.arch.software;
+        
+        hdlDir.mkdir(hardware.src);
+        hdlDir.mkdir(hardware.sim);
+        hdlDir.mkdir(hardware.data);
+        if (nextmode === 'LS') {
+            hdlDir.mkdir(software.src);
+            hdlDir.mkdir(software.data);
         }
     }
 

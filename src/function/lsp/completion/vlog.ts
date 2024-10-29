@@ -335,7 +335,7 @@ import { instanceVlogCode } from '../../sim/instance';
 //             clItem.detail = 'module';
 //             suggestModules.push(clItem);
 //         }
-    
+
 //         return suggestModules;
 //     }
 

@@ -7,5 +7,8 @@
         "out": true // set this to false to include "out" folder in search results
     },
     // Turn off tsc task auto detection since we have the necessary tasks as npm scripts
-    "typescript.tsc.autoDetect": "off"
+    "typescript.tsc.autoDetect": "off",
+    "i18n-haru.root": "l10n",
+    "i18n-haru.main": "zh-cn",
+    "i18n-haru.line-hint-max-length": 20
 }

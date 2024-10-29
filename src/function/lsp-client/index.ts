@@ -101,7 +101,7 @@ export async function downloadLsp(context: vscode.ExtensionContext, version: str
     
     const downloadLink = await vscode.window.withProgress({
         location: vscode.ProgressLocation.Notification,
-        title: t('progress.choose-best-download-source')
+        title: t('info.progress.choose-best-download-source')
     }, async (progress: vscode.Progress<IProgress>, token: vscode.CancellationToken) => {
         let timeout = 3000;
         let reportInterval = 500;
@@ -119,7 +119,7 @@ export async function downloadLsp(context: vscode.ExtensionContext, version: str
 
     const tarGzFilePath = await vscode.window.withProgress({
         location: vscode.ProgressLocation.Notification,
-        title: t('progress.download-digital-lsp')
+        title: t('info.progress.download-digital-lsp')
     }, async (progress: vscode.Progress<IProgress>, token: vscode.CancellationToken) => {
         progress.report({ increment: 0 });
         const response = await axios.get(downloadLink, { responseType: 'stream' });
@@ -128,13 +128,13 @@ export async function downloadLsp(context: vscode.ExtensionContext, version: str
 
     await vscode.window.withProgress({
         location: vscode.ProgressLocation.Notification,
-        title: t('progress.extract-digital-lsp')
+        title: t('info.progress.extract-digital-lsp')
     }, async (progress: vscode.Progress<IProgress>, token: vscode.CancellationToken) => {
         if (fs.existsSync(tarGzFilePath)) {
             console.log('check finish, begin to extract');
             await extractTarGz(tarGzFilePath, versionFolderPath);
         } else {
-            vscode.window.showErrorMessage(t('error.download-digital-lsp') + version);
+            vscode.window.showErrorMessage(t('error.lsp.download-digital-lsp') + version);
         }
     });
 

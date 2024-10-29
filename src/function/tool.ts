@@ -98,7 +98,7 @@ async function askUserToSaveFilelist(filelist: string[]) {
         fs.writeFileSync(filePath, fileContent);
 
     } catch (error) {
-        vscode.window.showErrorMessage(t('error.save-file') + ': ' + error);
+        vscode.window.showErrorMessage(t('error.filelist.save-file') + ': ' + error);
     }
 }
 

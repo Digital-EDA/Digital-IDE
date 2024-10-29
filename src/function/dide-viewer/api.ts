@@ -78,7 +78,8 @@ function getFilename(file: string) {
 
 export async function saveViewAs(data: any, uri: vscode.Uri, panel: vscode.WebviewPanel) {
     const { t } = vscode.l10n;
-    
+
+
     try {
         // 先保存原来的文件 payload 一定是 all
         let { originVcdFile, originVcdViewFile, payload } = data;
@@ -95,13 +96,13 @@ export async function saveViewAs(data: any, uri: vscode.Uri, panel: vscode.Webvi
         // 询问新的路径        
         const defaultFilename = getFilename(payload.originVcdFile);
         const vcdFilters: Record<string, string[]> = {};
-        vcdFilters[t('vcd-view-file')] = ['view'];
-        vcdFilters[t('all-file')] = ['*'];
-
+        vcdFilters[t('info.vcd-viewer.vcd-view-file')] = ['view'];
+        vcdFilters[t('info.vcd-viewer.all-file')] = ['*'];
+        
         const saveUri = await vscode.window.showSaveDialog({
-            title: t('save-as-view'),
+            title: t('info.vcd-viewer.save-as-view'),
             defaultUri: vscode.Uri.file(path.join(rootPath, defaultFilename)),
-            saveLabel: t('save'),
+            saveLabel: t('info.vcd-viewer.save'),
             filters: vcdFilters
         });
 
@@ -144,13 +145,13 @@ export async function loadView(data: any, uri: vscode.Uri, panel: vscode.Webview
 
         const defaultFolder = path.dirname(vcdPath);
         const vcdFilters: Record<string, string[]> = {};
-        vcdFilters[t('vcd-view-file')] = ['view'];
-        vcdFilters[t('all-file')] = ['*'];
+        vcdFilters[t('info.vcd-viewer.vcd-view-file')] = ['view'];
+        vcdFilters[t('info.vcd-viewer.all-file')] = ['*'];
 
         const viewUri = await vscode.window.showOpenDialog({
-            title: t('load-view-file'),
+            title: t('info.vcd-viewer.load.title'),
             defaultUri: vscode.Uri.file(defaultFolder),
-            openLabel: t('load'),
+            openLabel: t('info.vcd-viewer.load.button'),
             canSelectFiles: true,
             canSelectMany: false,
             canSelectFolders: false,

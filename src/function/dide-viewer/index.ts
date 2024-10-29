@@ -221,14 +221,14 @@ function getViewLaunchFiles(context: vscode.ExtensionContext, uri: vscode.Uri, p
         if (recoverJson.originVcdFile) {
             const vcdPath = recoverJson.originVcdFile;
             if (!fs.existsSync(vcdPath)) {
-                return new Error(t('error.unexist-direct-vcd-file') + ':' + vcdPath);
+                return new Error(t('error.vcd-viewer.unexist-direct-vcd-file') + ':' + vcdPath);
             }
             const vcd = panel.webview.asWebviewUri(vscode.Uri.file(recoverJson.originVcdFile)).toString();
             const view = panel.webview.asWebviewUri(uri).toString();
 
             return { vcd, view, worker, root };
         } else {
-            return new Error(t('bad-view-file') + ':' + entryPath);
+            return new Error(t('error.vcd-viewer.bad-view-file') + ':' + entryPath);
         }
     }
     return new Error('unsupported languages');

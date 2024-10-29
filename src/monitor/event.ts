@@ -281,15 +281,16 @@ class PpyAction extends BaseAction {
 
     public async refreshHdlMonitor(m: HdlMonitor, originalHdlFiles: AbsPath[]) {           
         m.remakeHdlMonitor();
+        const { t } = vscode.l10n;
         const newFiles = await prjManage.getPrjHardwareFiles();
         const { addFiles, delFiles } = this.diffNewOld(newFiles, originalHdlFiles);
 
         const options: vscode.ProgressOptions = { location: vscode.ProgressLocation.Notification };
-        options.title = 'update HdlParam';
+        options.title = t('info.monitor.update-hdlparam');
         await vscode.window.withProgress(options, async () => await this.updateHdlParam(addFiles, delFiles));
 
         if (opeParam.prjInfo.toolChain === ToolChainType.Xilinx) {
-            options.title = 'update PL';
+            options.title = t('info.monitor.update-pl');
             await vscode.window.withProgress(options, async () => await this.updatePL(addFiles, delFiles));
         }
     }

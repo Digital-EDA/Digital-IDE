@@ -252,7 +252,7 @@ class HdlParam {
         
 
         const pools: { id: number, promise: Promise<void>, path: string }[] = [];
-        const reportTitle = t('progress.build-module-tree');
+        const reportTitle = t('info.progress.build-module-tree');
 
         progress?.report({ message: reportTitle + ` ${1}/${fileNum}`, increment: 0 });
 

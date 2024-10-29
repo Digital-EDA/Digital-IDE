@@ -33,13 +33,13 @@ function getVersion(context: vscode.ExtensionContext): string {
 
 async function launch(context: vscode.ExtensionContext) {
     const { t } = vscode.l10n;
-    console.log(t('welcome.title'));
-    console.log(t('click.join-qq-group') + ' https://qm.qq.com/q/1M655h3GsA');   
+    console.log(t('info.welcome.title'));
+    console.log(t('info.welcome.join-qq-group') + ' https://qm.qq.com/q/1M655h3GsA');   
     const versionString = getVersion(context);
     
     await vscode.window.withProgress({
         location: vscode.ProgressLocation.Window,
-        title: t('progress.register-command')
+        title: t('info.progress.register-command')
     }, async () => {
         await registerCommand(context, versionString);
     });
@@ -49,7 +49,7 @@ async function launch(context: vscode.ExtensionContext) {
     
     await vscode.window.withProgress({
         location: vscode.ProgressLocation.Window,
-        title: t('progress.initialization')
+        title: t('info.progress.initialization')
     }, async (progress: vscode.Progress<IProgress>, token: vscode.CancellationToken) => {
         // 初始化解析
         await manager.prjManage.initialise(context, progress);
@@ -77,9 +77,9 @@ async function launch(context: vscode.ExtensionContext) {
         // don't show in next time
         welcomeSetting.update('show', false, vscode.ConfigurationTarget.Global);
         const res = await vscode.window.showInformationMessage(
-            t('welcome.title'),
-            { title: t('welcome.star'), value: true },
-            { title: t('welcome.refuse'), value: false },
+            t('info.welcome.title'),
+            { title: t('info.welcome.star'), value: true },
+            { title: t('info.welcome.refuse'), value: false },
         );
         if (res?.value) {
             vscode.env.openExternal(vscode.Uri.parse('https://github.com/Digital-EDA/Digital-IDE'));

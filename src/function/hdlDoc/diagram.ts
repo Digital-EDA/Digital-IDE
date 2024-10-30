@@ -194,6 +194,7 @@ function makeRightDirection(rightPorts: HdlModulePort[]): string {
         const arrow = `<div class="arrow-wrapper">${portCaption}${portArrow}</div>`;
         rightDirection += arrow;
     }
+
     return `<div class="right-direction">${rightDirection}</div>`;
 }
 

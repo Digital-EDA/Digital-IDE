@@ -281,6 +281,7 @@ class PpyAction extends BaseAction {
 
     public async refreshHdlMonitor(m: HdlMonitor, originalHdlFiles: AbsPath[]) {           
         m.remakeHdlMonitor();
+
         const { t } = vscode.l10n;
         const newFiles = await prjManage.getPrjHardwareFiles();
         const { addFiles, delFiles } = this.diffNewOld(newFiles, originalHdlFiles);

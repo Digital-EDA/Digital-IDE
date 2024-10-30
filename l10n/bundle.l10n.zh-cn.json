@@ -1,16 +1,16 @@
 {
     "info.test.hello": "你好",
-    "info.welcome.title": "感谢使用 Digital-IDE ❤️。您的支持将是我们最大的动力！😊",
-    "info.welcome.star": "支持",
+    "info.welcome.title": "感谢使用 Digital-IDE ❤️。您的星标将是我们最大的动力！😊",
+    "info.welcome.star": "点亮星标",
     "info.welcome.refuse": "拒绝",
-    "info.progress.register-command": "Digital IDE 注册命令",
-    "info.progress.active-lsp-server": "Digital IDE 激活语言服务器",
-    "info.progress.initialization": "Digital IDE 初始化",
+    "info.progress.register-command": "注册命令",
+    "info.progress.active-lsp-server": "激活 LSP 服务器",
+    "info.progress.initialization": "初始化",
     "info.progress.build-module-tree": "构建模块树",
-    "info.progress.download-digital-lsp": "下载 Digital IDE 语言服务器",
+    "info.progress.download-digital-lsp": "下载 Digital LSP",
     "info.progress.choose-best-download-source": "选择最佳下载源",
-    "info.progress.extract-digital-lsp": "解压 Digital LSP 语言服务器",
-    "error.lsp.download-digital-lsp": "无法下载 Digital LSP 语言服务器，检查你的网络后重启 vscode，或者请手动去下方地址下载 https://github.com/Digital-EDA/Digital-IDE/releases/tag/",
+    "info.progress.extract-digital-lsp": "提取 Digital LSP",
+    "error.lsp.download-digital-lsp": "下载 digital lsp 服务器失败，请检查您的网络并重新加载 vscode。您也可以访问以下站点手动下载：https://github.com/Digital-EDA/Digital-IDE/releases/tag/",
     "error.filelist.save-file": "保存文件失败",
     "warning.ppy.already-exist": "property.json 已经存在了！",
     "info.monitor.update-hdlparam": "更新 HdlParam",
@@ -23,5 +23,6 @@
     "info.vcd-viewer.load.title": "加载视图文件",
     "error.vcd-viewer.bad-view-file": "视图文件已损坏",
     "error.vcd-viewer.unexist-direct-vcd-file": "视图文件指向的 vcd 文件不存在",
-    "info.welcome.join-qq-group": "点击链接加入QQ群一起讨论"
+    "info.welcome.join-qq-group": "点击链接加入 QQ 群",
+    "info.level.test": "这是一个简单的样例"
 }

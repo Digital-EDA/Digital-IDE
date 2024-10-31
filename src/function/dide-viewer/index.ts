@@ -59,12 +59,13 @@ class WaveViewer {
                 return;
             }
 
-            const { vcd, view, worker, root } = launchFiles;
+            const { vcd, view, wasm, vcdjs, worker, root } = launchFiles;
             let preprocessHtml = previewHtml
                 .replace('test.vcd', vcd)
                 .replace('test.view', view)
-                .replace('worker.js', worker)
-                .replace('<root>', root);
+                .replace('vcd.js', vcdjs)
+                .replace('vcd.wasm', wasm)
+                .replace('worker.js', worker);
             this.panel.webview.html = preprocessHtml;
             this.panel.iconPath = getIconConfig('view');
             registerMessageEvent(this.panel, uri);
@@ -125,12 +126,14 @@ class VcdViewerProvider implements vscode.CustomEditorProvider {
                 return;
             }
 
-            const { vcd, view, worker, root } = launchFiles;
+            const { vcd, view, wasm, vcdjs, worker, root } = launchFiles;
             let preprocessHtml = previewHtml
                 .replace('test.vcd', vcd)
                 .replace('test.view', view)
-                .replace('worker.js', worker)
-                .replace('<root>', root);
+                .replace('vcd.js', vcdjs)
+                .replace('vcd.wasm', wasm)
+                .replace('worker.js', worker);            
+
             webviewPanel.webview.html = preprocessHtml;
             webviewPanel.iconPath = getIconConfig('view');
         } else {
@@ -199,13 +202,15 @@ function registerMessageEvent(panel: vscode.WebviewPanel, uri: vscode.Uri) {
  * @returns 
  */
 function getViewLaunchFiles(context: vscode.ExtensionContext, uri: vscode.Uri, panel: vscode.WebviewPanel): LaunchFiles | Error {
-    const { t } = vscode.l10n;
-    console.log(uri.fsPath);
-    
+    const { t } = vscode.l10n;    
     const entryPath = uri.fsPath;
     const dideviewerPath = hdlPath.join(context.extensionPath, 'resources', 'dide-viewer', 'view');
     const workerAbsPath = hdlPath.join(dideviewerPath, 'worker.js');
+    const vcdjsAbsPath = hdlPath.join(dideviewerPath, 'vcd.js');
+    const wasmAbsPath = hdlPath.join(dideviewerPath, 'vcd.wasm');
     const worker = panel.webview.asWebviewUri(vscode.Uri.file(workerAbsPath)).toString();
+    const vcdjs = panel.webview.asWebviewUri(vscode.Uri.file(vcdjsAbsPath)).toString();
+    const wasm = panel.webview.asWebviewUri(vscode.Uri.file(wasmAbsPath)).toString();
     const root = panel.webview.asWebviewUri(vscode.Uri.file(dideviewerPath)).toString();
 
     // 根据打开文件的类型来判断资源加载方案
@@ -214,7 +219,7 @@ function getViewLaunchFiles(context: vscode.ExtensionContext, uri: vscode.Uri, p
         const vcd = panel.webview.asWebviewUri(uri).toString();
         const view = panel.webview.asWebviewUri(vscode.Uri.file(defaultViewPath)).toString();
 
-        return { vcd, view, worker, root };
+        return { vcd, view, wasm, vcdjs, worker, root };
     } else if (entryPath.endsWith('.view')) {
         const buffer = fs.readFileSync(entryPath);
         const recoverJson = BSON.deserialize(buffer);
@@ -226,7 +231,7 @@ function getViewLaunchFiles(context: vscode.ExtensionContext, uri: vscode.Uri, p
             const vcd = panel.webview.asWebviewUri(vscode.Uri.file(recoverJson.originVcdFile)).toString();
             const view = panel.webview.asWebviewUri(uri).toString();
 
-            return { vcd, view, worker, root };
+            return { vcd, view, wasm, vcdjs, worker, root };
         } else {
             return new Error(t('error.vcd-viewer.bad-view-file') + ':' + entryPath);
         }

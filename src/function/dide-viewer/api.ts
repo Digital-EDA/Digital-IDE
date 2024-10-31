@@ -15,7 +15,9 @@ export interface SaveViewData {
 export interface LaunchFiles {
     vcd: string,
     view: string,
+    vcdjs: string,
     worker: string,
+    wasm: string,
     root: string
 }
 

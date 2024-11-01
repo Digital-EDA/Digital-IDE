@@ -181,6 +181,7 @@ export async function activate(context: vscode.ExtensionContext, version: string
                 language: 'vhdl'
             }
         ],
+        progressOnInitialization: true,
         markdown: {
             isTrusted: true
         }
@@ -194,7 +195,7 @@ export async function activate(context: vscode.ExtensionContext, version: string
     );
     LspClient.DigitalIDE = client;
     
-    client.start();
+    await client.start();
 }
 
 export function deactivate(): Thenable<void> | undefined {

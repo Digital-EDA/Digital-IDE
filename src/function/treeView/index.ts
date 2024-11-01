@@ -7,9 +7,9 @@ import { Range } from '../../hdlParser/common';
 
 
 async function openFileAtPosition(uri: vscode.Uri, range: Range) {
-    const document = await vscode.workspace.openTextDocument(uri);
-    const start = new vscode.Position(range.start.line - 1, range.start.character - 1);
-    const end = new vscode.Position(range.end.line - 1, range.end.character - 1);
+    const document = await vscode.workspace.openTextDocument(uri);    
+    const start = new vscode.Position(range.start.line, range.start.character);
+    const end = new vscode.Position(range.end.line, range.end.character);
 
     await vscode.window.showTextDocument(
         document,
@@ -19,7 +19,7 @@ async function openFileAtPosition(uri: vscode.Uri, range: Range) {
     );
 }
 
-function openFileByUri(path: string, range: Range) {
+function openFileByUri(path: string, range: Range) {    
     if (range === undefined) {
         vscode.window.showErrorMessage(`${path} not support jump yet`);
         return;

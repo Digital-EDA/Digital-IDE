@@ -1207,7 +1207,7 @@
         "tar": "^7.4.3",
         "temp": "^0.9.4",
         "vscode-jsonrpc": "^8.2.1",
-        "vscode-languageclient": "^7.0.0",
+        "vscode-languageclient": "^9.0.1",
         "vscode-textmate": "^9.0.0",
         "wavedrom": "^2.9.1",
         "zlib": "^1.0.5"

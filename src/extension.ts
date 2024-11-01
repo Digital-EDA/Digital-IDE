@@ -45,8 +45,7 @@ async function launch(context: vscode.ExtensionContext) {
     });
 
     await lspClient.activate(context, versionString);
-    await LspClient.DigitalIDE?.onReady();
-    
+        
     await vscode.window.withProgress({
         location: vscode.ProgressLocation.Window,
         title: t('info.progress.initialization')

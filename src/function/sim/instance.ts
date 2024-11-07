@@ -302,8 +302,6 @@ function instanceByLangID(module: HdlModule): string {
 async function instantiation() {
     const module = await selectModuleFromAll();    
     if (module) {
-        console.log(module);
-
         const code = instanceByLangID(module);        
         const editor = vscode.window.activeTextEditor;
         if (editor) {

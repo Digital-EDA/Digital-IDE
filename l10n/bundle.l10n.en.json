@@ -24,5 +24,6 @@
     "error.vcd-viewer.bad-view-file": "View file is corrupted",
     "error.vcd-viewer.unexist-direct-vcd-file": "The vcd file pointed to by the view file does not exist",
     "info.welcome.join-qq-group": "Click the link to join the QQ group",
-    "info.level.test": "This is a simple example"
+    "info.level.test": "This is a simple example",
+    "info.progress.build-ip-module-tree": "构建 IP 模块树"
 }

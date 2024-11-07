@@ -613,7 +613,6 @@ class PrjInfo implements PrjInfoMeta {
         } else if (srcPath === '') {
             return workspace;
         }
-        console.log(hdlPath.join(workspace, srcPath));
         
         return hdlPath.join(workspace, srcPath);
     }

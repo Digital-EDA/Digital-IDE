@@ -24,5 +24,6 @@
     "error.vcd-viewer.bad-view-file": "ビューファイルが破損しています",
     "error.vcd-viewer.unexist-direct-vcd-file": "ビューファイルが指す vcd ファイルは存在しません",
     "info.welcome.join-qq-group": "リンクをクリックして QQ グループに参加",
-    "info.level.test": "これは簡単な例です"
+    "info.level.test": "これは簡単な例です",
+    "info.progress.build-ip-module-tree": "构建 IP 模块树"
 }

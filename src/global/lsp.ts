@@ -37,6 +37,11 @@ export interface ICommonParam {
     param: string
 }
 
+export type DoFastFileType = 'common' | 'ip' | 'primitives';
+export type DoFastToolChainType = 'xilinx' | 'efinity' | 'intel';
+
 export interface IDoFastParam {
-    path: string
+    path: string,
+    fileType: DoFastFileType,
+    toolChain: DoFastToolChainType
 }

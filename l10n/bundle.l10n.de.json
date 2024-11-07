@@ -24,5 +24,6 @@
     "error.vcd-viewer.bad-view-file": "Ansichtsdatei ist beschädigt",
     "error.vcd-viewer.unexist-direct-vcd-file": "Die von der Ansichtsdatei referenzierte vcd-Datei existiert nicht",
     "info.welcome.join-qq-group": "Klicken Sie auf den Link, um der QQ-Gruppe beizutreten",
-    "info.level.test": "Dies ist ein einfaches Beispiel"
+    "info.level.test": "Dies ist ein einfaches Beispiel",
+    "info.progress.build-ip-module-tree": "构建 IP 模块树"
 }

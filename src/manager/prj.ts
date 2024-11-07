@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import * as vscode from 'vscode';
 import * as fs from 'fs';
+import * as fspath from 'path';
 
 import { AbsPath, IProgress, LspClient, MainOutput, opeParam, ReportType } from '../global';
 import { PathSet } from '../global/util';
@@ -94,7 +95,11 @@ class PrjManage {
     }
 
     /**
-     * get all the hdl files that to be parsed in the project
+     * @description 获取所有的用户 hdl 文件，包括：
+     * - sim
+     * - src
+     * - common lib
+     * - custom lib
      * @returns 
      */
     public async getPrjHardwareFiles(): Promise<AbsPath[]> {
@@ -126,47 +131,76 @@ class PrjManage {
         return hdlFiles;
     }
 
-    
+    /**
+     * @description 获取当前项目中所有的 IP 文件夹
+     */
+    public async getPrjIPs() {
+        const toolchain = opeParam.prjInfo.toolChain;
+        
+        switch (toolchain) {
+            case 'xilinx':
+                return this.getXilinxIPs();
+                break;
+        
+            default:
+                break;
+        }
+        return [];
+    }
+
+    public getXilinxIPs() {
+        const srcFolder = opeParam.prjInfo.arch.hardware.src;
+        const ipFolder = hdlPath.resolve(srcFolder, '../ip');
+        const validIPs: string[] = [];
+        if (fs.existsSync(ipFolder) && hdlFile.isDir(ipFolder)) {
+            for (const folder of fs.readdirSync(ipFolder)) {
+                const folderPath = hdlPath.join(ipFolder, folder);
+                if (this.isValidXilinxIP(folderPath)) {
+                    validIPs.push(folderPath);
+                }
+            }
+        }
+        return validIPs;
+    }
+
+    public isValidXilinxIP(folderPath: string): boolean {
+        const folderName = fspath.basename(folderPath);
+        const descriptionFile = folderName + '.vho';
+        const descriptionFilePath = hdlPath.join(folderPath, descriptionFile);
+        return fs.existsSync(descriptionFilePath);
+    }
 
     public async initialise(context: vscode.ExtensionContext, progress: vscode.Progress<IProgress>, countTimeCost: boolean = true) {
         if (countTimeCost) {
             console.time('launch');
-        }        
+        }
+
+        // 初始化 OpeParam
+        // 包含基本的插件的文件系统信息、用户配置文件和系统配置文件的合并数据结构
         const refreshPrjConfig = await this.initOpeParam(context);
         MainOutput.report('finish initialise opeParam', ReportType.Info);
         prjManage.refreshPrjFolder(refreshPrjConfig);
         
-        const hdlFiles = await this.getPrjHardwareFiles();
-        MainOutput.report(`finish collect ${hdlFiles.length} hdl files`, ReportType.Info);
+        // 解析 hdl 文件，构建 hdlParam
+        const hdlFiles = await this.getPrjHardwareFiles();        
+        await hdlParam.initializeHdlFiles(hdlFiles, progress);
+
+        // 根据 toolchain 解析合法的 IP，构建 hdlParam
+        const IPsPath = await this.getPrjIPs();
+        await hdlParam.initializeIPsPath(IPsPath, progress);
+
+        // TODO: 解析原语并构建
         
-        await hdlParam.initialize(hdlFiles, progress);
+
+        // 构建 instance 解析
+        await hdlParam.makeAllInstance();
+
+        // 分析依赖关系错位情况
         const unhandleNum = hdlParam.getUnhandleInstanceNumber();
         MainOutput.report(`finish analyse ${hdlFiles.length} hdl files, find ${unhandleNum} unsolved instances`, ReportType.Info);
 
-        // 完成后端向前端发送消息的注册
-        const mainClient = LspClient.DigitalIDE;
-        if (mainClient !== undefined) {
-            await mainClient.onReady();
-            mainClient.onNotification('update/fast', async (params: any) => {
-                try {
-                    const fast = params.fast as Fast;
-                    const path = params.path as string;
-                    console.log("[receive notification] path: " + path);
-                    hdlParam.updateFast(path, fast);
-                    refreshArchTree();
-                } catch (error) {
-                    console.error("error happen when update fast: " + error);
-                }
-            });
-
-            // mainClient.onNotification('update/string', async (params: any) => {
-            //     console.log('[StringNotificationType] receive from backend');
-            //     console.log(params);
-            // });
-        }
 
         this.pl = new PlManage();
-
         // TODO : finish it later
         // this.ps = new PsManage();
         MainOutput.report('create pl', ReportType.Info);

@@ -146,8 +146,8 @@ class HdlAction extends BaseAction {
             return;
         }
     
-        const fast = await HdlSymbol.updateFast(path);
-        console.log('get update fast');
+        const fast = await HdlSymbol.fast(path, 'common');
+        console.log('update fast: ' + path);
         
         if (!fast) {
             // vscode.window.showErrorMessage('error happen when parse ' + path + '\nFail to update');

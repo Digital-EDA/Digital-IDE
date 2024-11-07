@@ -8,6 +8,7 @@ import { MainOutput, ReportType } from '../global/outputChannel';
 import * as common from './common';
 import { hdlFile, hdlPath } from '../hdlFs';
 import { HdlSymbol } from './util';
+import { DoFastFileType } from '../global/lsp';
 
 class HdlParam {
     private readonly topModules : Set<HdlModule> = new Set<HdlModule>();
@@ -52,7 +53,7 @@ class HdlParam {
      */
     public async addHdlPath(path: AbsPath) {
         path = hdlPath.toSlash(path);
-        await this.initHdlFiles([path]);
+        await this.doHdlFast(path, 'common');
         const hdlFile = this.getHdlFile(path);
         if (!hdlFile) {
             MainOutput.report('error happen when we attempt to add file by path: ' + path, ReportType.Error);
@@ -225,15 +226,16 @@ class HdlParam {
         }
     }
 
-    private async doHdlFast(path: AbsPath) {
+    private async doHdlFast(path: AbsPath, fileType: DoFastFileType) {
         try {
-            const fast = await HdlSymbol.fast(path);
+            const fast = await HdlSymbol.fast(path, fileType);
             if (fast) {
                 const languageId = hdlFile.getLanguageId(path);
                 new HdlFile(path,
                             languageId,
                             fast.macro,
-                            fast.content);
+                            fast.content,
+                            fast.fileType);
             }
         } catch (error) {
             MainOutput.report('Error happen when parse ' + path, ReportType.Error);
@@ -241,29 +243,18 @@ class HdlParam {
         }
     }
 
-    public async initHdlFiles(hdlFiles: AbsPath[], progress?: vscode.Progress<IProgress>) {
+
+    public async initializeHdlFiles(hdlFiles: AbsPath[], progress: vscode.Progress<IProgress>) {        
         const { t } = vscode.l10n;        
         let count: number = 0;
         let fileNum = hdlFiles.length;
 
-        // TODO: 找出最合理的核心数
         const parallelChunk = Math.min(os.cpus().length, 32);
         console.log("use cpu: " + parallelChunk);
-        
 
         const pools: { id: number, promise: Promise<void>, path: string }[] = [];
         const reportTitle = t('info.progress.build-module-tree');
-
-        progress?.report({ message: reportTitle + ` ${1}/${fileNum}`, increment: 0 });
-
-        // for (const path of hdlFiles) {
-        //     count ++;
-        //     console.log('send request: ' + path);
-            
-        //     await this.doHdlFast(path);
-        //     const increment = Math.floor(count / fileNum * 100);
-        //     progress?.report({ message: reportTitle + ` ${count}/${fileNum}`, increment });
-        // }
+        progress.report({ message: reportTitle + ` ${1}/${fileNum}`, increment: 0 });
 
         async function consumePools() {
             for (const p of pools) {
@@ -279,7 +270,7 @@ class HdlParam {
             count ++;
             console.log('send request: ' + path);
             
-            const p = this.doHdlFast(path);
+            const p = this.doHdlFast(path, 'common');
             pools.push({ id: count, promise: p, path });
             if (pools.length % parallelChunk === 0) {
                 // 消费并发池
@@ -290,12 +281,49 @@ class HdlParam {
         if (pools.length > 0) {
             await consumePools();
         }
-    
     }
 
-    public async initialize(hdlFiles: AbsPath[], progress: vscode.Progress<IProgress>) {        
-        await this.initHdlFiles(hdlFiles, progress);
+    public async initializeIPsPath(IPsPath: string[], progress: vscode.Progress<IProgress>) {
+        const { t } = vscode.l10n;        
+        let count: number = 0;
+        let fileNum = IPsPath.length;
+
+        const parallelChunk = Math.min(os.cpus().length, 32);
+        console.log("use cpu: " + parallelChunk);
+
+        const pools: { id: number, promise: Promise<void>, path: string }[] = [];
         
+        const reportTitle = t('info.progress.build-ip-module-tree');
+        progress.report({ message: reportTitle + ` ${1}/${fileNum}`, increment: 0 });
+
+        async function consumePools() {
+            for (const p of pools) {
+                const increment = Math.floor(p.id / fileNum * 100);
+                await p.promise;
+                console.log("handle id " + p.id + ' increment: ' + increment);                
+                progress?.report({ message: reportTitle + ` ${p.id}/${fileNum}`, increment });
+            }
+            pools.length = 0;
+        }
+
+        for (const path of IPsPath) {
+            count ++;
+            console.log('send request: ' + path);
+            
+            const p = this.doHdlFast(path, 'ip');
+            pools.push({ id: count, promise: p, path });
+            if (pools.length % parallelChunk === 0) {
+                // 消费并发池
+                await consumePools();
+            }
+        }
+
+        if (pools.length > 0) {
+            await consumePools();
+        }
+    }
+
+    public async makeAllInstance() {
         for (const hdlFile of this.getAllHdlFiles()) {
             hdlFile.makeInstance();
         }
@@ -352,7 +380,7 @@ class HdlParam {
 
     public async addHdlFile(path: AbsPath) {
         path = hdlPath.toSlash(path);
-        await this.initHdlFiles([path]);
+        await this.doHdlFast(path, 'common');
         const moduleFile = this.getHdlFile(path);
         if (!moduleFile) {
             MainOutput.report('error happen when create moduleFile ' + path, ReportType.Warn);
@@ -665,9 +693,7 @@ class HdlModule {
         // search included file
         for (const include of this.file.macro.includes) {
             const absIncludePath = hdlPath.rel2abs(this.path, include.path);
-            console.log(absIncludePath);
             const includeFile = hdlParam.getHdlFile(absIncludePath);
-            console.log(includeFile);
             
             if (includeFile) {
                 excludeFile.add(includeFile);
@@ -810,18 +836,21 @@ class HdlFile {
     public path: string;
     public languageId: HdlLangID;
     public type: common.HdlFileType;
+    public doFastType: DoFastFileType;
     public macro: common.Macro;
     private readonly nameToModule: Map<string, HdlModule>;
 
     constructor(path: string, 
                 languageId: HdlLangID, 
                 macro: common.Macro, 
-                modules: common.RawHdlModule[]) {
+                modules: common.RawHdlModule[],
+                doFastType: DoFastFileType) {
 
         this.path = path;
         this.languageId = languageId;
         this.macro = macro;
         this.type = hdlFile.getHdlFileType(path);
+        this.doFastType = doFastType;
 
         // add to global hdlParam
         hdlParam.setHdlFile(this);

@@ -269,6 +269,7 @@ class XilinxOperation {
         // 导入非本地的设计源文件
         const HDLFiles = hdlParam.getAllHdlFiles();
         for (const file of HDLFiles) {
+            // TODO: 新增library的add_files
             if (file.type === "src") {
                 scripts.push(`add_files ${file.path} -quiet`);
             }

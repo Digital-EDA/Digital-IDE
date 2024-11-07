@@ -24,5 +24,6 @@
     "error.vcd-viewer.bad-view-file": "視圖文件已損壞",
     "error.vcd-viewer.unexist-direct-vcd-file": "視圖文件指向的 vcd 文件不存在",
     "info.welcome.join-qq-group": "點擊鏈接加入 QQ 群",
-    "info.level.test": "這是一個簡單的樣例"
+    "info.level.test": "這是一個簡單的樣例",
+    "info.progress.build-ip-module-tree": "构建 IP 模块树"
 }

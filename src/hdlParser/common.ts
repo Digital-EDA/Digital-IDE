@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 
 import { AbsPath, RelPath } from '../global';
 import { HdlLangID } from '../global/enum';
+import { DoFastFileType } from '../global/lsp';
 
 interface Position {
     // row/line of the cursor, index from 0
@@ -35,8 +36,9 @@ enum HdlFileType {
     Src = 'src', 
     Sim = 'sim',
     LocalLib = 'local_lib',
-    RemoteLib = 'remote_lib' 
+    RemoteLib = 'remote_lib'
 };
+
 enum InstModPathStatus {Current, Include, Others, Unknown};
 // enum SymbolType {
 //     Module = 'module',
@@ -195,7 +197,8 @@ interface CommentResult {
 interface Fast {
     content: RawHdlModule[]
     languageId: string
-    macro: Macro
+    macro: Macro,
+    fileType: DoFastFileType
 }
 
 interface All {

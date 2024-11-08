@@ -165,7 +165,7 @@ class PrjManage {
 
     public isValidXilinxIP(folderPath: string): boolean {
         const folderName = fspath.basename(folderPath);
-        const descriptionFile = folderName + '.vho';
+        const descriptionFile = folderName + '.xci';
         const descriptionFilePath = hdlPath.join(folderPath, descriptionFile);
         return fs.existsSync(descriptionFilePath);
     }
@@ -182,14 +182,14 @@ class PrjManage {
         prjManage.refreshPrjFolder(refreshPrjConfig);
         
         // 解析 hdl 文件，构建 hdlParam
-        const hdlFiles = await this.getPrjHardwareFiles();        
+        const hdlFiles = await this.getPrjHardwareFiles();           
         await hdlParam.initializeHdlFiles(hdlFiles, progress);
 
         // 根据 toolchain 解析合法的 IP，构建 hdlParam
         const IPsPath = await this.getPrjIPs();
         await hdlParam.initializeIPsPath(IPsPath, progress);
 
-        // TODO: 解析原语并构建
+        // TODO: 解析原语并构建，向后端索要原语缓存
         
 
         // 构建 instance 解析

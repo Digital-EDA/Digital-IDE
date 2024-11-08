@@ -7,6 +7,7 @@ import { HdlFileType, Range } from '../../hdlParser/common';
 import { hdlFile, hdlPath } from '../../hdlFs';
 import { xilinx, itemModes, otherModes } from './common';
 import { getIconConfig } from '../../hdlFs/icons';
+import { DoFastFileType } from '../../global/lsp';
 
 let needExpand = true;
 
@@ -14,9 +15,10 @@ interface ModuleDataItem {
     icon: string,           // 图标
     name: string,           // module name
     type: string,
-    range: Range | undefined | null,   
+    doFastFileType: DoFastFileType | undefined,
+    range: Range | undefined,   
     path: AbsPath | undefined,      // path of the file
-    parent: ModuleDataItem | null   // parent file
+    parent: ModuleDataItem | undefined   // parent file
 }
 
 interface FirstTopItem {
@@ -65,8 +67,26 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
             src: null,
             sim: null,
         };
-        this.srcRootItem = {icon: 'src', type: HdlFileType.Src, name: 'src', range: null, path: '', parent: null};
-        this.simRootItem = {icon: 'sim', type: HdlFileType.Sim, name: 'sim', range: null, path: '', parent: null};
+
+        this.srcRootItem = {
+            icon: 'src',
+            type: HdlFileType.Src,
+            doFastFileType: undefined,
+            name: 'src',
+            range: undefined,
+            path: '',
+            parent: undefined
+        };
+
+        this.simRootItem = {
+            icon: 'sim',
+            type: HdlFileType.Sim,
+            doFastFileType: undefined,
+            name: 'sim',
+            range: undefined,
+            path: '',
+            parent: undefined
+        };
     }
 
     public refresh(element?: ModuleDataItem) {
@@ -125,7 +145,7 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
         treeItem.command = {
             title: "Open this HDL File",
             command: 'digital-ide.treeView.arch.openFile',
-            arguments: [element.path, element.range],
+            arguments: [element.path, element.range, element],
         };
 
         return treeItem;
@@ -135,7 +155,7 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
         if (element) {
             const name = element.name;
             if (name === 'sim' || name === 'src') {
-                element.parent = null;
+                element.parent = undefined;
                 return this.getTopModuleItemList(element);
             } else {
                 return this.getInstanceItemList(element);
@@ -158,10 +178,11 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
         const hardwarePath = opeParam.prjInfo.arch.hardware;
         const moduleType = element.name as keyof (SrcPath & SimPath);
 
-        const topModules = hdlParam.getTopModulesByType(moduleType);
+        const topModules = hdlParam.getTopModulesByType(moduleType);        
         const topModuleItemList = topModules.map<ModuleDataItem>(module => ({
-            icon: 'top',
+            icon: this.judgeTopModuleIconByDoFastType(module.file.doFastType),
             type: moduleType,
+            doFastFileType: module.file.doFastType,
             name: module.name,
             range: module.range,
             path: module.path,
@@ -180,6 +201,8 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
             const icon = this.makeFirstTopIconName(type);
             const range = firstTop.range;
             const parent = element;
+            // TODO: check
+            const doFastFileType = undefined;
 
             const tops = topModuleItemList.filter(item => item.path === path && item.name === name);
             const adjustItemList = [];
@@ -198,7 +221,7 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
             } else {
                 // mean the selected top is not an original top module
                 // create it and add it to the head of *topModuleItemList*
-                const selectedTopItem: ModuleDataItem = {icon, type, name, range, path, parent};
+                const selectedTopItem: ModuleDataItem = {icon, type, name, range, path, parent, doFastFileType};
                 adjustItemList.push(selectedTopItem);
                 adjustItemList.push(...topModuleItemList);
             }
@@ -219,14 +242,16 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
 
         if (targetModule) {
             for (const instance of targetModule.getAllInstances()) {
-                // 所有的例化模块都定向到它的定义文件上                
+                // 所有的例化模块都定向到它的定义文件上
+                
                 const item: ModuleDataItem = {
                     icon: 'file',
                     type: instance.name,
                     name: instance.type,
                     range: instance.module?.range,
                     path: instance.module?.path,
-                    parent: element
+                    parent: element,
+                    doFastFileType: instance.getDoFastFileType
                 };
 
                 if (item.type === element.type &&            // 防止递归
@@ -260,6 +285,10 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
             return 'File Error';
         }
 
+        if (item.doFastFileType === 'ip') {
+            return 'ip';
+        }
+
         if (hdlPath.exist(item.path)) {
             if (!item.path?.includes(workspacePath)) {
                 return 'remote';
@@ -274,6 +303,19 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
                 return 'File Error';
             }
         }
+    }
+
+    private judgeTopModuleIconByDoFastType(doFastType: DoFastFileType): string {
+        switch (doFastType) {
+            case 'common':
+                return 'top';
+        
+            case 'ip':
+                return 'ip';
+            case 'primitives':
+                return 'celllib';
+        }
+        return 'top';
     }
 
     public getItemType(item: ModuleDataItem): string | null {

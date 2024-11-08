@@ -25,5 +25,6 @@
     "error.vcd-viewer.unexist-direct-vcd-file": "The vcd file pointed to by the view file does not exist",
     "info.welcome.join-qq-group": "Click the link to join the QQ group",
     "info.level.test": "This is a simple example",
-    "info.progress.build-ip-module-tree": "构建 IP 模块树"
+    "info.progress.build-ip-module-tree": "构建 IP 模块树",
+    "info.treeview.ip-no-active.message": "当前 IP 还未激活，请通过 Xilinx 工具链将 XCI 文件生成完整的 IP 核"
 }

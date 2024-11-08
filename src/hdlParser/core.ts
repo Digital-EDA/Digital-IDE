@@ -230,7 +230,7 @@ class HdlParam {
         try {
             const fast = await HdlSymbol.fast(path, fileType);
             if (fast) {
-                const languageId = hdlFile.getLanguageId(path);
+                const languageId = this.getRealLanguageId(path, fast.fileType);
                 new HdlFile(path,
                             languageId,
                             fast.macro,
@@ -241,6 +241,13 @@ class HdlParam {
             MainOutput.report('Error happen when parse ' + path, ReportType.Error);
             MainOutput.report('Reason: ' + error, ReportType.Error);
         }
+    }
+
+    private getRealLanguageId(path: string, fileType: DoFastFileType): HdlLangID {
+        if (fileType === 'ip' && opeParam.prjInfo.toolChain === 'xilinx') {
+            return HdlLangID.Vhdl;
+        }
+        return hdlFile.getLanguageId(path);
     }
 
 
@@ -267,9 +274,7 @@ class HdlParam {
         }
 
         for (const path of hdlFiles) {
-            count ++;
-            console.log('send request: ' + path);
-            
+            count ++;            
             const p = this.doHdlFast(path, 'common');
             pools.push({ id: count, promise: p, path });
             if (pools.length % parallelChunk === 0) {
@@ -307,9 +312,7 @@ class HdlParam {
         }
 
         for (const path of IPsPath) {
-            count ++;
-            console.log('send request: ' + path);
-            
+            count ++;            
             const p = this.doHdlFast(path, 'ip');
             pools.push({ id: count, promise: p, path });
             if (pools.length % parallelChunk === 0) {
@@ -439,8 +442,8 @@ class HdlInstance {
     instModPathStatus: common.InstModPathStatus;    // status of the instance (current, include, others)
     instparams: common.InstRange;                   // range of params
     instports: common.InstRange;                    // range of ports
-    parentMod: HdlModule;                           // HdlModule that the instance serves
-    module: HdlModule | undefined;                  // module
+    parentMod: HdlModule;                           // 例化模块例化地点的外层 module
+    module: HdlModule | undefined;                  // 例化模块的定义模块
 
     constructor(name: string, 
                 type: string,
@@ -510,6 +513,10 @@ class HdlInstance {
 
         this.instModPath = this.parentMod.path;
         this.instModPathStatus = this.parentMod.solveInstModPathStatus();
+    }
+
+    public get getDoFastFileType(): DoFastFileType | undefined {
+        return this.module?.file.doFastType;
     }
 };
 
@@ -706,7 +713,10 @@ class HdlModule {
         // search other files in the project
         for (const hdlFile of hdlParam.getAllHdlFiles()) {
             if (!excludeFile.has(hdlFile) && hdlFile.hasHdlModule(instModName)) {
-                return {path: hdlFile.path, status: common.InstModPathStatus.Others};
+                return {
+                    path: hdlFile.path,
+                    status: common.InstModPathStatus.Others
+                };
             }
         }
 

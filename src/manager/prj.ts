@@ -175,11 +175,6 @@ class PrjManage {
             console.time('launch');
         }
 
-        // 初始化 OpeParam
-        // 包含基本的插件的文件系统信息、用户配置文件和系统配置文件的合并数据结构
-        const refreshPrjConfig = await this.initOpeParam(context);
-        MainOutput.report('finish initialise opeParam', ReportType.Info);
-        prjManage.refreshPrjFolder(refreshPrjConfig);
         
         // 解析 hdl 文件，构建 hdlParam
         const hdlFiles = await this.getPrjHardwareFiles();           

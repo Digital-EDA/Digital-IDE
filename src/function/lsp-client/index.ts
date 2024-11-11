@@ -11,7 +11,7 @@ import * as fs from 'fs';
 import * as zlib from 'zlib';
 import * as tar from 'tar';
 import { platform } from "os";
-import { IProgress, LspClient } from '../../global';
+import { IProgress, LspClient, opeParam } from '../../global';
 import axios, { AxiosResponse } from "axios";
 import { chooseBestDownloadSource, getGiteeDownloadLink, getGithubDownloadLink, getPlatformPlatformSignature } from "./cdn";
 import { hdlDir, hdlPath } from "../../hdlFs";
@@ -166,11 +166,21 @@ export async function activate(context: vscode.ExtensionContext, version: string
         debug: run,
     };
 
+    let workspaceFolder: undefined | { uri: vscode.Uri, name: string, index: number } = undefined;
+    if (vscode.workspace.workspaceFolders) {
+        const currentWsFolder = vscode.workspace.workspaceFolders[0];
+        workspaceFolder = currentWsFolder;
+    }
+
+    let extensionPath = hdlPath.toSlash(context.extensionPath);
+ 
+    vscode.window.showInformationMessage("toolchain: " + opeParam.prjInfo.toolChain);
+
     let clientOptions: LanguageClientOptions = {
         documentSelector: [
             {
                 scheme: 'file',
-                language: 'systemverilog' 
+                language: 'systemverilog'
             },
             {
                 scheme: 'file',
@@ -183,7 +193,13 @@ export async function activate(context: vscode.ExtensionContext, version: string
         ],
         progressOnInitialization: true,
         markdown: {
-            isTrusted: true
+            isTrusted: true,
+            supportHtml: true
+        },
+        workspaceFolder,
+        initializationOptions: {
+            extensionPath,
+            toolChain: opeParam.prjInfo.toolChain
         }
     };
 

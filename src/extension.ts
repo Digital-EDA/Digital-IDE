@@ -44,7 +44,23 @@ async function launch(context: vscode.ExtensionContext) {
         await registerCommand(context, versionString);
     });
 
-    await lspClient.activate(context, versionString);
+    await vscode.window.withProgress({
+        location: vscode.ProgressLocation.Window,
+        title: t('info.progress.initialize-configure')        
+    }, async () => {
+        // 初始化 OpeParam
+        // 包含基本的插件的文件系统信息、用户配置文件和系统配置文件的合并数据结构
+        const refreshPrjConfig = await manager.prjManage.initOpeParam(context);
+        MainOutput.report('finish initialise opeParam', ReportType.Info);
+        manager.prjManage.refreshPrjFolder(refreshPrjConfig);
+    });
+
+    await vscode.window.withProgress({
+        location: vscode.ProgressLocation.Window,
+        title: "启动 Digital LSP 语言服务器"
+    }, async () => {
+        await lspClient.activate(context, versionString);
+    });
         
     await vscode.window.withProgress({
         location: vscode.ProgressLocation.Window,
@@ -63,9 +79,7 @@ async function launch(context: vscode.ExtensionContext) {
     });
 
 
-    MainOutput.report('Digital-IDE has launched, Version: ' + versionString, ReportType.Launch);
-    MainOutput.report('OS: ' + opeParam.os, ReportType.Launch);
-
+    MainOutput.report('Digital-IDE 已经启动，当前版本：' + versionString, ReportType.Launch);
     console.log(hdlParam);
     
     // show welcome information (if first install)

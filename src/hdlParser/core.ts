@@ -7,8 +7,9 @@ import { MainOutput, ReportType } from '../global/outputChannel';
 
 import * as common from './common';
 import { hdlFile, hdlPath } from '../hdlFs';
-import { HdlSymbol } from './util';
+import { defaultMacro, defaultRange, doPrimitivesJudgeApi, HdlSymbol } from './util';
 import { DoFastFileType } from '../global/lsp';
+
 
 class HdlParam {
     private readonly topModules : Set<HdlModule> = new Set<HdlModule>();
@@ -474,13 +475,24 @@ class HdlInstance {
 
         if (instModPath) {
             this.module = hdlParam.getHdlModule(instModPath, instModName);
-            
+
             // add refer for module 
             this.module?.addGlobalReferedInstance(this);
             // if module and parent module share the same source (e.g both in src folder)
             if (this.isSameSource()) {
                 this.module?.addLocalReferedInstance(this);
             }
+        } else {            
+            doPrimitivesJudgeApi(instModName).then(isPrimitive => {                
+                if (isPrimitive) {
+                    // 构造 fake hdlfile
+                    if (opeParam.prjInfo.toolChain === 'xilinx') {
+                        const fakeModule = new HdlModule(
+                            XilinxPrimitivesHdlFile, instModName, defaultRange, [], [], []);
+                        this.module = fakeModule;
+                    }
+                }
+            });
         }
     }
 
@@ -526,7 +538,8 @@ class HdlModule {
     range: common.Range;
     params: common.HdlModuleParam[];
     ports: common.HdlModulePort[];
-    private rawInstances: common.RawHdlInstance[] | undefined;
+    public rawInstances: common.RawHdlInstance[] | undefined;
+    // TODO: 此处无法采用 instance name 作为主键，是因为 verilog 允许 instance name 同名出现
     private nameToInstances: Map<string, HdlInstance>;
     private unhandleInstances: Set<HdlInstance>;
     private globalRefers: Set<HdlInstance>;
@@ -575,8 +588,12 @@ class HdlModule {
         return this.file.languageId;
     }
 
-    public getInstance(name: string): HdlInstance | undefined {
-        return this.nameToInstances.get(name);
+    public makeInstanceKey(instanceName: string, moduleName: string): string {
+        return instanceName + '-' + moduleName;
+    }
+
+    public getInstance(name: string, moduleName: string): HdlInstance | undefined {
+        return this.nameToInstances.get(this.makeInstanceKey(name, moduleName));
     }
 
     public getAllInstances(): HdlInstance[] {
@@ -593,7 +610,7 @@ class HdlModule {
 
     public createHdlInstance(rawHdlInstance: common.RawHdlInstance): HdlInstance {
         const instModName = rawHdlInstance.type;
-        
+
         if (this.languageId === HdlLangID.Verilog || this.languageId === HdlLangID.SystemVerilog) {
             const searchResult = this.searchInstModPath(instModName);            
             const hdlInstance = new HdlInstance(rawHdlInstance.name,
@@ -609,7 +626,8 @@ class HdlModule {
                 this.addUnhandleInstance(hdlInstance);
             }
             if (this.nameToInstances) {
-                this.nameToInstances.set(rawHdlInstance.name, hdlInstance);
+                const key = this.makeInstanceKey(rawHdlInstance.name, rawHdlInstance.type);
+                this.nameToInstances.set(key, hdlInstance);
             }
             return hdlInstance; 
         } else if (this.languageId === HdlLangID.Vhdl) {
@@ -623,7 +641,8 @@ class HdlModule {
                                                 this);
             hdlInstance.module = this;
             if (this.nameToInstances) {
-                this.nameToInstances.set(rawHdlInstance.name, hdlInstance);
+                const key = this.makeInstanceKey(rawHdlInstance.name, rawHdlInstance.type);
+                this.nameToInstances.set(key, hdlInstance);
             }           
             return hdlInstance;
         } else {
@@ -644,8 +663,9 @@ class HdlModule {
     public makeNameToInstances() {
         if (this.rawInstances !== undefined) {            
             this.nameToInstances.clear();
+
             for (const inst of this.rawInstances) {
-                this.createHdlInstance(inst);
+                const instance = this.createHdlInstance(inst);
             }
             // this.rawInstances = undefined;
         } else {
@@ -654,8 +674,8 @@ class HdlModule {
         }
     }
 
-    public deleteInstanceByName(name: string) {
-        const inst = this.getInstance(name);
+    public deleteInstanceByName(instanceName: string, moduleName: string) {
+        const inst = this.getInstance(instanceName, moduleName);
         this.deleteInstance(inst);
     }
 
@@ -664,7 +684,8 @@ class HdlModule {
             this.deleteUnhandleInstance(inst);
             hdlParam.deleteUnhandleInstance(inst);
             if (this.nameToInstances) {
-                this.nameToInstances.delete(inst.name);
+                const key = this.makeInstanceKey(inst.name, inst.type);
+                this.nameToInstances.delete(key);
             }
             // delete reference from instance's instMod
             const instMod = inst.module;
@@ -819,25 +840,27 @@ class HdlModule {
         this.params = newModule.params;
         this.range = newModule.range;        
         // compare and make change to instance
-        const uncheckedInstanceNames = new Set<string>();
+        const uncheckedInstanceNames = new Map<string, HdlInstance>();
         for (const inst of this.getAllInstances()) {
-            uncheckedInstanceNames.add(inst.name);
+            const key = this.makeInstanceKey(inst.name, inst.type);
+            uncheckedInstanceNames.set(key, inst);
         }
 
         for (const newInst of newModule.instances) {
-            if (uncheckedInstanceNames.has(newInst.name)) {     
+            const newInstKey = this.makeInstanceKey(newInst.name, newInst.type);
+            if (uncheckedInstanceNames.has(newInstKey)) {     
                 // match exist instance, compare and update
-                const originalInstance = this.getInstance(newInst.name);
+                const originalInstance = this.getInstance(newInst.name, newInst.type);
                 originalInstance?.update(newInst);
-                uncheckedInstanceNames.delete(newInst.name);
+                uncheckedInstanceNames.delete(newInstKey);
             } else {        
                 // unknown instance, create it
                 this.createHdlInstance(newInst);
             }
         }
         // delete Instance that not visited
-        for (const instName of uncheckedInstanceNames) {
-            this.deleteInstanceByName(instName);
+        for (const inst of uncheckedInstanceNames.values()) {
+            this.deleteInstanceByName(inst.name, inst.type);
         }
     }
 };
@@ -944,6 +967,9 @@ class HdlFile {
         this.macro = macro;
     }
 }
+
+export const XilinxPrimitivesHdlFile = new HdlFile('xilinx-primitives', HdlLangID.Verilog, defaultMacro, [], 'primitives');
+
 
 
 export {

@@ -25,6 +25,7 @@ const PPY_REPLACE: Record<string, string> = {
     PRJ_NAME: 'prjName',
     ARCH: 'arch',
     SOC: 'soc',
+    SOC_MODE: 'soc',
     enableShowlog: 'enableShowLog',
     Device: 'device'
 };
@@ -64,6 +65,12 @@ async function transformOldPpy() {
             const newName = PPY_REPLACE[oldName];
             oldPpyContent[newName] = oldPpyContent[oldName];
             delete oldPpyContent[oldName];
+        }
+
+        // 老版本的是 SOC_MODE.soc，新版本需要变成 soc.core
+        if (oldPpyContent.soc && oldPpyContent.soc.soc !== undefined) {
+            oldPpyContent.soc.core = oldPpyContent.soc.soc;
+            delete oldPpyContent.soc['soc'];
         }
 
         hdlFile.writeJSON(propertyJsonPath, oldPpyContent);

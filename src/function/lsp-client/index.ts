@@ -15,6 +15,7 @@ import { IProgress, LspClient, opeParam } from '../../global';
 import axios, { AxiosResponse } from "axios";
 import { chooseBestDownloadSource, getGiteeDownloadLink, getGithubDownloadLink, getPlatformPlatformSignature } from "./cdn";
 import { hdlDir, hdlPath } from "../../hdlFs";
+import { registerConfigurationUpdater } from "./config";
 
 function getLspServerExecutionName() {
     const osname = platform();
@@ -141,7 +142,8 @@ export async function downloadLsp(context: vscode.ExtensionContext, version: str
     return false;
 }
 
-export async function activate(context: vscode.ExtensionContext, version: string) {
+export async function activate(context: vscode.ExtensionContext, packageJson: any) {
+    const version = packageJson.version;
     await checkAndDownload(context, version);
 
     const lspServerName = getLspServerExecutionName();
@@ -173,8 +175,6 @@ export async function activate(context: vscode.ExtensionContext, version: string
     }
 
     let extensionPath = hdlPath.toSlash(context.extensionPath);
- 
-    vscode.window.showInformationMessage("toolchain: " + opeParam.prjInfo.toolChain);
 
     let clientOptions: LanguageClientOptions = {
         documentSelector: [
@@ -212,7 +212,12 @@ export async function activate(context: vscode.ExtensionContext, version: string
     LspClient.DigitalIDE = client;
     
     await client.start();
+
+    registerConfigurationUpdater(client, packageJson);
 }
+
+
+
 
 export function deactivate(): Thenable<void> | undefined {
     if (!LspClient.DigitalIDE) {

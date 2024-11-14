@@ -60,6 +60,7 @@ export async function saveView(data: any, uri: vscode.Uri, panel: vscode.Webview
         const originPayload = mergePayloadCache(originVcdViewFile, payload);
 
         const savePath = path.isAbsolute(originVcdViewFile) ? originVcdViewFile : path.join(rootPath, originVcdViewFile);
+        
         const buffer = BSON.serialize(originPayload);
         fs.writeFileSync(savePath, buffer);
     } catch (error) {

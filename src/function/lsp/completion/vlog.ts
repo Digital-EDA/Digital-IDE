@@ -289,8 +289,8 @@ import { instanceVlogCode } from '../../sim/instance';
 //         const suggestModules: vscode.CompletionItem[] = [];
 
 //         const lspVlogConfig = vscode.workspace.getConfiguration('digital-ide.function.lsp.completion.vlog');
-//         const autoAddInclude: boolean = lspVlogConfig.get('autoAddInclude', true);
-//         const completeWholeInstante: boolean = lspVlogConfig.get('completeWholeInstante', true);
+//         const auto-add-include: boolean = lspVlogConfig.get('auto-add-include', true);
+//         const auto-add-output-declaration: boolean = lspVlogConfig.get('auto-add-output-declaration', true);
         
 //         const includePaths = new Set<AbsPath>();
 //         let lastIncludeLine = 0;
@@ -303,9 +303,9 @@ import { instanceVlogCode } from '../../sim/instance';
 //         const insertRange = new vscode.Range(insertPosition, insertPosition);
 //         const fileFolder = hdlPath.resolve(filePath, '..');
 
-//         // used only when completeWholeInstante is true
+//         // used only when auto-add-output-declaration is true
 //         let completePrefix = '';
-//         if (completeWholeInstante) {
+//         if (auto-add-output-declaration) {
 //             const wordRange = document.getWordRangeAtPosition(position);
 //             const countStart = wordRange ? wordRange.start.character : position.character;
 //             const spaceNumber = Math.floor(countStart / 4) * 4;
@@ -319,7 +319,7 @@ import { instanceVlogCode } from '../../sim/instance';
 //             const clItem = new vscode.CompletionItem(module.name, vscode.CompletionItemKind.Class);
 
 //             // feature 1 : auto add include path if there's no corresponding include path
-//             if (autoAddInclude && !includePaths.has(module.path)) {
+//             if (auto-add-include && !includePaths.has(module.path)) {
 //                 const relPath: RelPath = hdlPath.relative(fileFolder, module.path);
 //                 const includeString = '`include "' + relPath + '"\n';
 //                 const textEdit = new vscode.TextEdit(insertRange, includeString);
@@ -327,7 +327,7 @@ import { instanceVlogCode } from '../../sim/instance';
 //             }
 
 //             // feature 2 : auto complete instance
-//             if (completeWholeInstante) {
+//             if (auto-add-output-declaration) {
 //                 const snippetString = instanceVlogCode(module, '', true);
 //                 clItem.insertText = new vscode.SnippetString(snippetString);
 //             }

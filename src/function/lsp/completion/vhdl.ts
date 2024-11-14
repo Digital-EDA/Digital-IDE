@@ -80,8 +80,8 @@ import { hdlPath } from '../../../hdlFs';
 //         const suggestModules: vscode.CompletionItem[] = [];
 
 //         const lspVhdlConfig = vscode.workspace.getConfiguration('digital-ide.function.lsp.completion.vhdl');
-//         const autoAddInclude: boolean = lspVhdlConfig.get('autoAddInclude', true);
-//         const completeWholeInstante: boolean = lspVhdlConfig.get('completeWholeInstante', true);
+//         const auto-add-include: boolean = lspVhdlConfig.get('auto-add-include', true);
+//         const auto-add-output-declaration: boolean = lspVhdlConfig.get('auto-add-output-declaration', true);
         
 //         const includePaths = new Set<AbsPath>();
 //         let lastIncludeLine = 0;
@@ -94,9 +94,9 @@ import { hdlPath } from '../../../hdlFs';
 //         const insertRange = new vscode.Range(insertPosition, insertPosition);
 //         const fileFolder = hdlPath.resolve(filePath, '..');
 
-//         // used only when completeWholeInstante is true
+//         // used only when auto-add-output-declaration is true
 //         let completePrefix = '';
-//         if (completeWholeInstante) {
+//         if (auto-add-output-declaration) {
 //             const wordRange = document.getWordRangeAtPosition(position);
 //             const countStart = wordRange ? wordRange.start.character : position.character;
 //             const spaceNumber = Math.floor(countStart / 4) * 4;
@@ -110,7 +110,7 @@ import { hdlPath } from '../../../hdlFs';
 //         //     const clItem = new vscode.CompletionItem(module.name, vscode.CompletionItemKind.Class);
 
 //         //     // feature 1 : auto add include path if there's no corresponding include path
-//         //     if (autoAddInclude && !includePaths.has(module.path)) {
+//         //     if (auto-add-include && !includePaths.has(module.path)) {
 //         //         const relPath: RelPath = hdlPath.relative(fileFolder, module.path);
 //         //         const includeString = '`include "' + relPath + '"\n';
 //         //         const textEdit = new vscode.TextEdit(insertRange, includeString);
@@ -118,7 +118,7 @@ import { hdlPath } from '../../../hdlFs';
 //         //     }
 
 //         //     // feature 2 : auto complete instance
-//         //     if (completeWholeInstante) {
+//         //     if (auto-add-output-declaration) {
 //         //         const snippetString = instanceVhdlCode(module, '', true);
 //         //         clItem.insertText = new vscode.SnippetString(snippetString);
 //         //     }

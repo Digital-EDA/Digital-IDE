@@ -11,37 +11,41 @@ import * as lspClient from './function/lsp-client';
 import { refreshArchTree } from './function/treeView';
 
 
-async function registerCommand(context: vscode.ExtensionContext, version: string) {
+async function registerCommand(context: vscode.ExtensionContext, packageJson: any) {
     func.registerFunctionCommands(context);
-    func.registerLsp(context, version);
+    func.registerLsp(context, packageJson.version);
     func.registerToolCommands(context);
     func.registerFSM(context);
     func.registerNetlist(context);
     func.registerWaveViewer(context);
 }
 
-function getVersion(context: vscode.ExtensionContext): string {
-    let extensionPath = context.extensionPath;
-    let packagePath = extensionPath + '/package.json';
+function readPackageJson(context: vscode.ExtensionContext): any | undefined {
+    const extensionPath = context.extensionPath;
+    const packagePath = extensionPath + '/package.json';
     if (!fs.existsSync(packagePath)) {
-        return '0.4.0';
+        vscode.window.showErrorMessage("Digital IDE 安装目录已经被污染，请重新安装！");
+        return undefined;
     }
-    let packageMeta = fs.readFileSync(packagePath, { encoding: 'utf-8' });
-    let packageJson = JSON.parse(packageMeta);
-    return packageJson.version;
+    const packageMeta = fs.readFileSync(packagePath, { encoding: 'utf-8' });
+    return JSON.parse(packageMeta);
 }
 
 async function launch(context: vscode.ExtensionContext) {
     const { t } = vscode.l10n;
     console.log(t('info.welcome.title'));
-    console.log(t('info.welcome.join-qq-group') + ' https://qm.qq.com/q/1M655h3GsA');   
-    const versionString = getVersion(context);
+    console.log(t('info.welcome.join-qq-group') + ' https://qm.qq.com/q/1M655h3GsA'); 
+    const packageJson = readPackageJson(context);
+
+    if (packageJson === undefined) {
+        return;
+    }
     
     await vscode.window.withProgress({
         location: vscode.ProgressLocation.Window,
         title: t('info.progress.register-command')
     }, async () => {
-        await registerCommand(context, versionString);
+        await registerCommand(context, packageJson);
     });
 
     await vscode.window.withProgress({
@@ -59,7 +63,7 @@ async function launch(context: vscode.ExtensionContext) {
         location: vscode.ProgressLocation.Window,
         title: "启动 Digital LSP 语言服务器"
     }, async () => {
-        await lspClient.activate(context, versionString);
+        await lspClient.activate(context, packageJson);
     });
         
     await vscode.window.withProgress({
@@ -79,7 +83,7 @@ async function launch(context: vscode.ExtensionContext) {
     });
 
 
-    MainOutput.report('Digital-IDE 已经启动，当前版本：' + versionString, ReportType.Launch);
+    MainOutput.report('Digital-IDE 已经启动，当前版本：' + packageJson.version, ReportType.Launch);
     console.log(hdlParam);
     
     // show welcome information (if first install)

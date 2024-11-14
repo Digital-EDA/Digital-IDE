@@ -43,133 +43,134 @@
                 "digital-ide.welcome.show": {
                     "type": "boolean",
                     "default": true,
-                    "description": "show the welcome text in Digital-IDE"
+                    "description": "%digital-ide.welcome.show.title%"
                 },
                 "digital-ide.dont-show-again.propose.issue": {
                     "type": "boolean",
                     "default": false,
-                    "description": "show the welcome text in Digital-IDE"
+                    "description": "%digital-ide.dont-show-again.propose.issue.title%"
                 },
                 "digital-ide.lib.custom.path": {
                     "type": "string",
                     "default": "",
-                    "description": "path of the dictionary of \"custom\" in library"
+                    "description": "%digital-ide.lib.custom.path.title%"
                 },
                 "digital-ide.prj.file.structure.notice": {
                     "type": "boolean",
                     "default": true,
-                    "description": "notice when change file structure"
+                    "description": "%digital-ide.prj.file.structure.notice.title%"
                 },
                 "digital-ide.prj.vivado.install.path": {
                     "type": "string",
-                    "default": "",
-                    "description": "Set the xilinx install path. Ignore this setting if you add relative path to environment variable PATH \n e.g. : D:/APP/vivado_18_3/Vivado/2018.3/bin \n Default path is C:/Xilinx/Vivado/2018.3/bin"
+                    "default": "C:/Xilinx/Vivado/2018.3/bin",
+                    "description": "%digital-ide.prj.vivado.install.path.title%"
                 },
                 "digital-ide.prj.modelsim.install.path": {
                     "type": "string",
-                    "default": "",
-                    "description": "set the modelsim install path. Ignore this setting if you add relative path to environment variable PATH \n Default path is C:/modeltech64_10.4/win64"
+                    "default": "C:/modeltech64_10.4/win64",
+                    "description": "%digital-ide.prj.modelsim.install.path.title%"
                 },
                 "digital-ide.prj.xilinx.IP.repo.path": {
                     "type": "string",
                     "default": "",
-                    "description": "User-designed IP libraries from xilinx After configuring this property, the plugin will automatically add the path to the IP repo of vivado."
+                    "description": "%digital-ide.prj.xilinx.IP.repo.path.title%"
                 },
                 "digital-ide.prj.xilinx.BD.repo.path": {
                     "type": "string",
                     "default": "",
-                    "description": "User-defined placement path for xilinx block design files"
+                    "description": "%digital-ide.prj.xilinx.BD.repo.path.title%"
                 },
                 "digital-ide.prj.xsdk.install.path": {
                     "type": "string",
-                    "default": ""
+                    "default": "",
+                    "description": "%digital-ide.prj.xsdk.install.path.title%"
                 },
                 "digital-ide.function.doc.webview.backgroundImage": {
                     "type": "string",
                     "default": "",
-                    "description": "url of the background image"
+                    "description": "%digital-ide.function.doc.webview.backgroundImage.title%"
                 },
                 "digital-ide.function.doc.pdf.scale": {
                     "type": "number",
                     "default": 1,
-                    "description": "scale of the exported pdf"
+                    "description": "%digital-ide.function.doc.pdf.scale.title%"
                 },
                 "digital-ide.function.doc.pdf.printBackground": {
                     "type": "boolean",
                     "default": true,
-                    "description": "whether print background"
+                    "description": "%digital-ide.function.doc.pdf.printBackground.title%"
                 },
                 "digital-ide.function.doc.pdf.landscape": {
                     "type": "boolean",
                     "default": false,
-                    "description": "whether export pdf as a landscape style"
+                    "description": "%digital-ide.function.doc.pdf.landscape.title%"
                 },
                 "digital-ide.function.doc.pdf.format": {
                     "type": "string",
                     "default": "A4",
-                    "description": "format of pdf size"
+                    "description": "%digital-ide.function.doc.pdf.format.title%"
                 },
                 "digital-ide.function.doc.pdf.displayHeaderFooter": {
                     "type": "boolean",
                     "default": false,
-                    "description": "display header and footer in the exported pdf"
+                    "description": "%digital-ide.function.doc.pdf.displayHeaderFooter.title%"
                 },
                 "digital-ide.function.doc.pdf.browserPath": {
                     "type": "string",
                     "default": "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
-                    "description": "the absolute path of edge or chrome, we need browser to render pdf"
+                    "description": "%digital-ide.function.doc.pdf.browserPath.title%"
                 },
                 "digital-ide.function.doc.pdf.margin.top": {
                     "type": "number",
                     "default": 0.5,
-                    "description": "top margin of exported pdf, unit cm"
+                    "description": "%digital-ide.function.doc.pdf.margin.top.title%"
                 },
                 "digital-ide.function.doc.pdf.margin.right": {
                     "type": "number",
                     "default": 0.5,
-                    "description": "top margin of exported pdf, unit cm"
+                    "description": "%digital-ide.function.doc.pdf.margin.right.title%"
                 },
                 "digital-ide.function.doc.pdf.margin.bottom": {
                     "type": "number",
                     "default": 0.5,
-                    "description": "top margin of exported pdf, unit cm"
+                    "description": "%digital-ide.function.doc.pdf.margin.bottom.title%"
                 },
                 "digital-ide.function.doc.pdf.margin.left": {
                     "type": "number",
                     "default": 0.5,
-                    "description": "top margin of exported pdf, unit cm"
+                    "description": "%digital-ide.function.doc.pdf.margin.left.title%"
                 },
                 "digital-ide.function.doc.pdf.headerTemplate": {
                     "type": "string",
                     "default": "<div style=\"font-size: 9px; margin-left: 1cm;\"> <span class='title'></span></div> <div style=\"font-size: 9px; margin-left: auto; margin-right: 1cm; \"> <span class='date'></span></div>",
-                    "description": "html template of header, if displayHeaderFooter is set to false, this setting will be ignored"
+                    "description": "%digital-ide.function.doc.pdf.headerTemplate.title%"
                 },
                 "digital-ide.function.doc.pdf.footerTemplate": {
                     "type": "string",
                     "default": "<div style=\"font-size: 9px; margin-left: 1cm;\"> <span class='title'></span></div> <div style=\"font-size: 9px; margin-left: auto; margin-right: 1cm; \"> <span class='date'></span></div>",
-                    "description": "html template of footer, if displayHeaderFooter is set to false, this setting will be ignored"
+                    "description": "%digital-ide.function.doc.pdf.footerTemplate.title%"
                 },
                 "digital-ide.function.simulate.icarus.installPath": {
                     "type": "string",
-                    "description": "Path of install path of iverilog components, if set to \"\", then iverilog and vvp in environment will be used for simulation. Otherwise, ones that in the install path will be used."
+                    "description": "%digital-ide.function.simulate.icarus.installPath.title%"
                 },
                 "digital-ide.function.simulate.simulationHome": {
                     "type": "string",
-                    "description": "Path of simulation folder, .vvp and other file during simulation will be generated here"
+                    "description": "%digital-ide.function.simulate.simulationHome.title%"
                 },
                 "digital-ide.function.simulate.gtkwavePath": {
                     "type": "string",
                     "default": "gtkwave",
-                    "description": "Absolute path of launch path of gtkwave software"
+                    "description": "%digital-ide.function.simulate.gtkwavePath.title%"
                 },
                 "digital-ide.function.simulate.xilinxLibPath": {
                     "type": "string",
-                    "description": "Path of Xilinx library for simulation"
+                    "description": "%digital-ide.function.simulate.xilinxLibPath.title%"
                 },
                 "digital-ide.function.simulate.runInTerminal": {
                     "type": "boolean",
                     "default": false,
-                    "description": "run the simulation command in terminal instead of output"
+                    "description": "%digital-ide.function.simulate.runInTerminal.title%"
                 },
                 "digital-ide.function.lsp.formatter.vlog.default.style": {
                     "type": "string",
@@ -179,15 +180,15 @@
                         "gnu"
                     ],
                     "default": "kr",
-                    "description": "Select the verilog and systemverilog formatter style."
+                    "description": "%digital-ide.function.lsp.formatter.vlog.default.style.title%"
                 },
                 "digital-ide.function.lsp.formatter.vlog.default.args": {
                     "type": "string",
                     "default": "",
-                    "description": "Add verilog formatter arguments here (like istyle)."
+                    "description": "%digital-ide.function.lsp.formatter.vlog.default.args.title%"
                 },
                 "digital-ide.function.lsp.formatter.vhdl.default.keyword-case": {
-                    "description": "Keyword case",
+                    "description": "%digital-ide.function.lsp.formatter.vhdl.default.keyword-case.title%",
                     "type": "string",
                     "default": "LowerCase",
                     "enum": [
@@ -196,12 +197,12 @@
                     ]
                 },
                 "digital-ide.function.lsp.formatter.vhdl.default.align-comments": {
-                    "description": "Align comments",
+                    "description": "%digital-ide.function.lsp.formatter.vhdl.default.align-comments.title%",
                     "type": "boolean",
                     "default": false
                 },
                 "digital-ide.function.lsp.formatter.vhdl.default.type-name-case": {
-                    "description": "Type name case",
+                    "description": "%digital-ide.function.lsp.formatter.vhdl.default.type-name-case.title%",
                     "type": "string",
                     "default": "LowerCase",
                     "enum": [
@@ -210,17 +211,17 @@
                     ]
                 },
                 "digital-ide.function.lsp.formatter.vhdl.default.indentation": {
-                    "description": "Indentation",
+                    "description": "%digital-ide.function.lsp.formatter.vhdl.default.indentation.title%",
                     "type": "number",
                     "default": 4
                 },
-                "digital-ide.function.lsp.completion.vlog.autoAddInclude": {
-                    "description": "`include \"xxx.v\" will be added to the top of the file automatically",
+                "digital-ide.function.lsp.completion.vlog.auto-add-include": {
+                    "description": "%digital-ide.function.lsp.completion.vlog.auto-add-include.title%",
                     "type": "boolean",
                     "default": true
                 },
-                "digital-ide.function.lsp.completion.vlog.completeWholeInstante": {
-                    "description": "complete everything invoking a module needs including paramters and ports",
+                "digital-ide.function.lsp.completion.vlog.auto-add-output-declaration": {
+                    "description": "%digital-ide.function.lsp.completion.vlog.auto-add-output-declaration.title%",
                     "type": "boolean",
                     "default": true
                 },
@@ -237,7 +238,7 @@
                         "default"
                     ],
                     "default": "default",
-                    "description": "choose diagnostor to do linter in editing verilog"
+                    "description": "%digital-ide.function.lsp.linter.vlog.diagnostor.title%"
                 },
                 "digital-ide.function.lsp.linter.svlog.diagnostor": {
                     "type": "string",
@@ -252,7 +253,7 @@
                         "default"
                     ],
                     "default": "default",
-                    "description": "choose diagnostor to do linter in editing verilog"
+                    "description": "%digital-ide.function.lsp.linter.svlog.diagnostor.title%"
                 },
                 "digital-ide.function.lsp.linter.vhdl.diagnostor": {
                     "type": "string",
@@ -267,7 +268,7 @@
                         "default"
                     ],
                     "default": "default",
-                    "description": "choose diagnostor to do linter in editing vhdl"
+                    "description": "%digital-ide.function.lsp.linter.vhdl.diagnostor.title%"
                 },
                 "digital-ide.function.lsp.linter.systemverilog.diagnostor": {
                     "type": "string",
@@ -282,15 +283,15 @@
                         "default"
                     ],
                     "default": "default",
-                    "description": "choose diagnostor to do linter in editing systemverilog"
+                    "description": "%digital-ide.function.lsp.linter.systemverilog.diagnostor.title%"
                 },
                 "digital-ide.function.instantiation.addComment": {
-                    "description": "add comment like // ports, // input, // output when doing instantiation, including completion for module invoking",
+                    "description": "%digital-ide.function.instantiation.addComment.title%",
                     "type": "boolean",
                     "default": true
                 },
                 "digital-ide.function.instantiation.autoNetOutputDeclaration": {
-                    "description": "auto declare output type nets in the scope when instantiation happens.",
+                    "description": "%digital-ide.function.instantiation.autoNetOutputDeclaration.title%",
                     "type": "boolean",
                     "default": true
                 },
@@ -299,7 +300,12 @@
                     "default": [
                         "\n"
                     ],
-                    "description": "Trigger characters for onTypeFormatting"
+                    "description": "%fpga-support.onTypeFormattingTriggerCharacters.title%"
+                },
+                "digital-ide.function.lsp.file-parse-maxsize": {
+                    "type": "integer",
+                    "default": 1,
+                    "description": "%digital-ide.function.lsp.file-parse-maxsize.title%"
                 }
             }
         },

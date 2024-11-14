@@ -13,6 +13,8 @@ export const LspClient: IDigitalIDELspClient = {
     VhdlClient: undefined
 };
 
+
+
 /**
  * @description 构造请求参数
  * RequestType<P, R, E, RO>
@@ -21,10 +23,11 @@ export const LspClient: IDigitalIDELspClient = {
  * E: 请求的错误类型。
  * RO: 请求的可选参数类型。
  */
-export const CustomRequestType = new RequestType<void, number, void>('custom/request');
-export const CustomParamRequestType = new RequestType<ICommonParam, number, void>('custom/paramRequest');
-export const DoFastRequestType = new RequestType<IDoFastParam, Fast, void>('api/fast');
-export const UpdateFastRequestType = new RequestType<IDoFastParam, Fast, void>('api/update-fast');
+export const CustomRequestType =        new RequestType<void, number, void>('custom/request');
+export const CustomParamRequestType =   new RequestType<ICommonParam, number, void>('custom/paramRequest');
+export const DoFastRequestType =        new RequestType<IDoFastParam, Fast, void>('api/fast');
+export const UpdateConfigurationType =  new RequestType<IUpdateConfigurationParam, void, void>('api/update-fast');
+export const DoPrimitivesJudgeType =    new RequestType<IDoPrimitivesJudgeParam, boolean, void>('api/do-primitives-judge');
 
 export interface ITextDocumentItem {
     uri: vscode.Uri,
@@ -35,6 +38,19 @@ export interface ITextDocumentItem {
 
 export interface ICommonParam {
     param: string
+}
+
+export interface IUpdateConfigurationParam {
+    configs: {
+        name: string,
+        value: string | boolean | number
+    }[],
+    configType: string
+}
+
+
+export interface IDoPrimitivesJudgeParam {
+    name: string
 }
 
 export type DoFastFileType = 'common' | 'ip' | 'primitives';

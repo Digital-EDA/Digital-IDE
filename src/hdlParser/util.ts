@@ -1,12 +1,11 @@
 import * as vscode from 'vscode';
 import { hdlFile } from '../hdlFs';
-import { HdlLangID } from '../global/enum';
 import { AbsPath, LspClient, opeParam } from '../global';
-import { DoFastRequestType, ITextDocumentItem, CustomParamRequestType, UpdateFastRequestType, DoFastFileType, DoFastToolChainType } from '../global/lsp';
-import { Fast, RawHdlModule } from './common';
+import { DoFastRequestType, DoFastFileType, DoFastToolChainType, DoPrimitivesJudgeType } from '../global/lsp';
+import { Fast, Macro, Range } from './common';
 
 
-async function doFastApi(path: string, fileType: DoFastFileType): Promise<Fast | undefined> {
+export async function doFastApi(path: string, fileType: DoFastFileType): Promise<Fast | undefined> {
     try {
         const client = LspClient.DigitalIDE;
         const langID = hdlFile.getLanguageId(path);
@@ -23,8 +22,23 @@ async function doFastApi(path: string, fileType: DoFastFileType): Promise<Fast |
     }
 }
 
+export async function doPrimitivesJudgeApi(primitiveName: string): Promise<boolean> {
+    try {
+        const client = LspClient.DigitalIDE;
+        if (client) {
+            const response = await client.sendRequest(DoPrimitivesJudgeType, { name: primitiveName });
+            return response;
+        }
+    } catch (error) {
+        console.error("error happen when run judgePrimitivesApi, " + error);
+        console.error("error query primitive name: " + primitiveName);
+        return false;
+    }
+    return false;
+}
 
-namespace HdlSymbol {
+
+export namespace HdlSymbol {
     /**
      * @description 计算出模块级的信息
      * @param path 文件绝对路径
@@ -35,8 +49,14 @@ namespace HdlSymbol {
     }
 }
 
+export const defaultRange: Range = {
+    start: { line: 0, character: 0 },
+    end: { line: 0, character: 0 }
+};
 
-
-export {
-    HdlSymbol,
+export const defaultMacro: Macro = {
+    errors: [],
+    includes: [],
+    defines: [],
+    invalid: []
 };

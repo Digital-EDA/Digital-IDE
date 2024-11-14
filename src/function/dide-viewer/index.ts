@@ -226,7 +226,15 @@ function getViewLaunchFiles(context: vscode.ExtensionContext, uri: vscode.Uri, p
         if (recoverJson.originVcdFile) {
             const vcdPath = recoverJson.originVcdFile;
             if (!fs.existsSync(vcdPath)) {
-                return new Error(t('error.vcd-viewer.unexist-direct-vcd-file') + ':' + vcdPath);
+                // 如果不存在，去相同目录下寻找同名 vcd
+                const sameFolderVcdPath = entryPath.slice(0, -5) + '.vcd';
+                if (fs.existsSync(sameFolderVcdPath)) {
+                    const vcd = panel.webview.asWebviewUri(vscode.Uri.file(sameFolderVcdPath)).toString();
+                    const view = panel.webview.asWebviewUri(uri).toString();
+                    return { vcd, view, wasm, vcdjs, worker, root };
+                } else {
+                    return new Error(t('error.vcd-viewer.unexist-direct-vcd-file') + ':' + vcdPath);
+                }
             }
             const vcd = panel.webview.asWebviewUri(vscode.Uri.file(recoverJson.originVcdFile)).toString();
             const view = panel.webview.asWebviewUri(uri).toString();

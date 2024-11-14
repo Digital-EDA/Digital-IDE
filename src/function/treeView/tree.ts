@@ -109,6 +109,7 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
 
 
     public getTreeItem(element: ModuleDataItem): vscode.TreeItem | Thenable<vscode.TreeItem> {
+        const { t } = vscode.l10n;
         let itemName = element.name;
         if (itemModes.has(element.icon)) {
             itemName = `${element.type}(${itemName})`;
@@ -135,7 +136,7 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
         // set tooltip
         treeItem.tooltip = element.path;
         if (!treeItem.tooltip) {
-            treeItem.tooltip = "can't find the module of this instance";
+            treeItem.tooltip = t('info.treeview.item.tooltip');
         }
 
         // set iconPath
@@ -196,7 +197,7 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
             if (!this.firstTop[type]) {
                 this.setFirstTop(type, firstTop.name, firstTop.path);
             }
-            const name = this.firstTop[type]!.name;
+            const name = this.firstTop[type]!.name;            
             const path = this.firstTop[type]!.path;
             const icon = this.makeFirstTopIconName(type);
             const range = firstTop.range;
@@ -243,7 +244,6 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
         if (targetModule) {
             for (const instance of targetModule.getAllInstances()) {
                 // 所有的例化模块都定向到它的定义文件上
-                
                 const item: ModuleDataItem = {
                     icon: 'file',
                     type: instance.name,
@@ -287,6 +287,8 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
 
         if (item.doFastFileType === 'ip') {
             return 'ip';
+        } else if (item.doFastFileType === 'primitives') {
+            return 'celllib';
         }
 
         if (hdlPath.exist(item.path)) {

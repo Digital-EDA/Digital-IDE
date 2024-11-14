@@ -106,18 +106,24 @@ class PrjManage {
         const searchPathSet = new PathSet();
         const prjInfo = opeParam.prjInfo;
         const hardwareInfo = prjInfo.arch.hardware;
-        
-        // handle library first
-        const fileChange = await libManage.processLibFiles(prjInfo.library);
-        MainOutput.report(`libManage finish process, add ${fileChange.add.length} files, del ${fileChange.del.length} files`, ReportType.Info);
 
-        // add possible folder to search
-        searchPathSet.checkAdd(prjInfo.hardwareSrcPath);
-        searchPathSet.checkAdd(prjInfo.hardwareSimPath);
-        searchPathSet.checkAdd(hardwareInfo.sim);
-        searchPathSet.checkAdd(prjInfo.getLibraryCommonPaths());
-        searchPathSet.checkAdd(prjInfo.getLibraryCustomPaths());
-                
+        // 根据当前的打开模式来判断
+        if (opeParam.openMode === 'file') {
+            // 如果是单文件模式，需要的操作
+        } else {
+            // 先处理 lib 文件
+            const fileChange = await libManage.processLibFiles(prjInfo.library);
+            MainOutput.report(`libManage finish process, add ${fileChange.add.length} files, del ${fileChange.del.length} files`, ReportType.Info);
+    
+            // 默认搜索路径包括：
+            // src, sim, lib
+            searchPathSet.checkAdd(prjInfo.hardwareSrcPath);
+            searchPathSet.checkAdd(prjInfo.hardwareSimPath);
+            searchPathSet.checkAdd(hardwareInfo.sim);
+            searchPathSet.checkAdd(prjInfo.getLibraryCommonPaths());
+            searchPathSet.checkAdd(prjInfo.getLibraryCustomPaths());
+        }
+                    
         MainOutput.report('<getPrjHardwareFiles> search folders: ', ReportType.Debug);
         searchPathSet.files.forEach(p => MainOutput.report(p, ReportType.Debug));
 
@@ -126,7 +132,6 @@ class PrjManage {
 
         // do search
         const searchPaths = searchPathSet.files;
-        
         const hdlFiles = hdlFile.getHDLFiles(searchPaths, ignores);        
         return hdlFiles;
     }
@@ -177,7 +182,7 @@ class PrjManage {
 
         
         // 解析 hdl 文件，构建 hdlParam
-        const hdlFiles = await this.getPrjHardwareFiles();           
+        const hdlFiles = await this.getPrjHardwareFiles();                  
         await hdlParam.initializeHdlFiles(hdlFiles, progress);
 
         // 根据 toolchain 解析合法的 IP，构建 hdlParam

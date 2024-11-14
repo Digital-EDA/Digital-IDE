@@ -28,7 +28,7 @@ function registerDocumentation(context: vscode.ExtensionContext) {
 function registerSimulation(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('digital-ide.tool.instance', sim.instantiation);
     vscode.commands.registerCommand('digital-ide.tool.testbench', sim.testbench);
-    vscode.commands.registerCommand('digital-ide.tool.icarus.simulateFile', (view: ModuleDataItem) => {
+    vscode.commands.registerCommand('digital-ide.tool.icarus.simulateFile', (view: ModuleDataItem) => {        
         sim.Icarus.simulateFile(view);
     });
 }
@@ -39,13 +39,15 @@ function registerFunctionCommands(context: vscode.ExtensionContext) {
     registerTreeView(context);
 }
 
-function registerTreeView(context: vscode.ExtensionContext) {
-    // register normal tree
-    vscode.window.registerTreeDataProvider('digital-ide-treeView-arch', treeView.moduleTreeProvider);
-    // vscode.window.registerTreeDataProvider('digital-ide-treeView-tool', treeView.toolTreeProvider);
+function registerTreeViewDataProvider(context: vscode.ExtensionContext) {
     vscode.window.registerTreeDataProvider('digital-ide-treeView-hardware', treeView.hardwareTreeProvider);
     // vscode.window.registerTreeDataProvider('digital-ide-treeView-software', treeView.softwareTreeProvider);
+    
+    vscode.window.registerTreeDataProvider('digital-ide-treeView-arch', treeView.moduleTreeProvider);
+    // vscode.window.registerTreeDataProvider('digital-ide-treeView-tool', treeView.toolTreeProvider);
+}
 
+function registerTreeView(context: vscode.ExtensionContext) {
     // constant used in tree
     vscode.commands.executeCommand('setContext', 'TOOL-tree-expand', false);
 
@@ -125,7 +127,13 @@ function registerFSM(context: vscode.ExtensionContext) {
 }
 
 function registerNetlist(context: vscode.ExtensionContext) {
-    vscode.commands.registerCommand('digital-ide.netlist.show', uri => Netlist.openNetlistViewer(context, uri));
+    vscode.commands.registerCommand('digital-ide.netlist.show', uri => {
+        if (typeof uri === 'string') {
+            uri = vscode.Uri.file(uri);
+        }
+        console.log('get uri: ', uri);
+        Netlist.openNetlistViewer(context, uri);
+    });
 }
 
 function registerWaveViewer(context: vscode.ExtensionContext) {
@@ -149,5 +157,6 @@ export {
     registerToolCommands,
     registerFSM,
     registerNetlist,
-    registerWaveViewer
+    registerWaveViewer,
+    registerTreeViewDataProvider
 };

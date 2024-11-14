@@ -1,7 +1,8 @@
 import * as fspath from 'path';
 import * as fs from 'fs';
+import * as os from 'os';
 
-import { AbsPath, RelPath } from '../global';
+import { AbsPath, opeParam, RelPath } from '../global';
 
 /**
  * @param path
@@ -93,6 +94,14 @@ function exist(path: AbsPath | undefined): boolean {
     return fs.existsSync(path);
 }
 
+function toEscapePath(path: AbsPath): AbsPath {
+    if (os.platform() === 'win32') {
+        return path.startsWith('/') ? toSlash(path.slice(1)) : toSlash(path);
+    } else {
+        return toSlash(path);
+    }
+}
+
 export {
     toSlash,
     rel2abs,
@@ -102,5 +111,6 @@ export {
     filename,
     extname,
     basename,
-    exist
+    exist,
+    toEscapePath
 };

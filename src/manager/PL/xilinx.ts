@@ -131,6 +131,8 @@ class XilinxOperation {
      * @param config
      */
     async launch(config: PLConfig): Promise<string | undefined> {
+        const { t } = vscode.l10n;
+
         this.guiLaunched = false;
         const vivadoTerminal = config.terminal;
         if (!vivadoTerminal) {
@@ -140,12 +142,17 @@ class XilinxOperation {
         let scripts: string[] = [];
 
         let prjFilePath = this.prjPath as AbsPath;
+        // 找到所有的 xilinx 工程文件
         const prjFiles = hdlFile.pickFileRecursive(prjFilePath, [], 
-            filePath => filePath.endsWith('.xpr'));
+            filePath => filePath.endsWith('.xpr')
+        );
 
         if (prjFiles.length) {
             if (prjFiles.length > 1) {
-                const selection = await vscode.window.showQuickPick(prjFiles, { placeHolder : "Which project you want to open?" });
+                const selection = await vscode.window.showQuickPick(prjFiles, {
+                    placeHolder : t('info.pl.xilinx.launch.pick-project-placeholder'),
+                    canPickMany: false
+                });
                 if (selection) {
                     this.open(selection, scripts);
                 }

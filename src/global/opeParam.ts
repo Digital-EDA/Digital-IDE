@@ -53,6 +53,7 @@ class OpeParam {
 
     private _firstSrcTopModule: FirstTopModuleDesc = OpeParamDefaults.topModule;
     private _firstSimTopModule: FirstTopModuleDesc = OpeParamDefaults.topModule;
+    private _openMode: 'folder' | 'file' = 'folder';
 
     public get os() : string {
         return this._os;
@@ -103,6 +104,10 @@ class OpeParam {
         return this._prjInfo.arch;
     }
 
+    public get openMode(): 'file' | 'folder' {
+        return this._openMode;
+    }
+
     public setBasicInfo(os: string, 
                         extensionPath: AbsPath, 
                         workspacePath: AbsPath, 
@@ -112,7 +117,6 @@ class OpeParam {
         this._os = os;
 
         assert(fs.existsSync(extensionPath), 'extensionPath ' + extensionPath + ' not exist!');
-        assert(fs.existsSync(workspacePath), 'workspacePath ' + workspacePath + ' not exist!');
         assert(fs.existsSync(propertySchemaPath), 'propertySchemaPath ' + propertySchemaPath + ' not exist!');
         assert(fs.existsSync(propertyInitPath), 'propertyInitPath ' + propertyInitPath + ' not exist!');
 
@@ -121,6 +125,13 @@ class OpeParam {
         this._propertyJsonPath = propertyJsonPath;
         this._propertySchemaPath = propertySchemaPath;
         this._propertyInitPath = propertyInitPath;
+
+        // 如果 workspacePath 为空，说明当前是以单文件形式打开的
+        if (fs.existsSync(workspacePath)) {
+            this._openMode = 'folder';
+        } else {
+            this._openMode = 'file';
+        }
     }
 
     public setFirstSrcTopModule(name: string | null, path: AbsPath | null) {

@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as fspath from 'path';
 
 import { AbsPath, opeParam, MainOutput, ReportType } from '../../global';
-import { hdlParam, HdlModule } from '../../hdlParser/core';
+import { hdlParam, HdlModule, HdlFile } from '../../hdlParser/core';
 import { HdlModulePort, HdlModuleParam } from '../../hdlParser/common';
 
 import { MarkdownString, RenderString, RenderType,
@@ -13,6 +13,7 @@ import { hdlPath, hdlFile } from '../../hdlFs';
 import { getSymbolComments } from '../lsp/util/feature';
 import { HdlLangID, ThemeType } from '../../global/enum';
 import { makeDiagram } from './diagram';
+import { defaultMacro, doFastApi } from '../../hdlParser/util';
 
 
 function makeSVGElementByLink(link: AbsPath, caption?: string) {
@@ -179,16 +180,27 @@ async function getDocsFromModule(module: HdlModule): Promise<MarkdownString> {
  * @param path absolute path of the file
  */
 async function getDocsFromFile(path: AbsPath): Promise<MarkdownString[] | undefined> {
-    const moduleFile = hdlParam.getHdlFile(path);
-    if (!moduleFile) {
-        MainOutput.report('Fail to export documentation of ' + path,
-                          ReportType.Error);
+    const { t } = vscode.l10n;
 
-        const errorMsg = `${path} is not a valid hdl file in our parse list, check your property.json to see if arch.hardware.src is set correctly!
-        \ncurrent parse list: \n${opeParam.prjInfo.hardwareSrcPath}\n${opeParam.prjInfo.hardwareSimPath}`;
-        vscode.window.showErrorMessage(errorMsg);
-        
-        return undefined;
+    let moduleFile = hdlParam.getHdlFile(path);
+    // 没有说明是单文件模式，直接打开解析
+    if (!moduleFile) {
+        const standardPath = hdlPath.toSlash(path);
+        const response = await doFastApi(standardPath, 'common');
+        const langID = hdlFile.getLanguageId(standardPath);
+        moduleFile = new HdlFile(
+            standardPath, langID,
+            response?.macro || defaultMacro,
+            response?.content || [],
+            'common'
+        );
+        // 从 hdlParam 中去除，避免干扰全局
+        hdlParam.removeFromHdlFile(moduleFile);
+
+        // const message = t('error.common.not-valid-hdl-file');
+        // const errorMsg = path + ' ' + message + ' ' + opeParam.prjInfo.hardwareSrcPath + '\n' + opeParam.prjInfo.hardwareSimPath;
+        // vscode.window.showErrorMessage(errorMsg);
+        // return undefined;
     }
     const markdownStringPromises = [];
     for (const module of moduleFile.getAllHdlModules()) {

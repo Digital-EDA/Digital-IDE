@@ -28,5 +28,6 @@
     "info.progress.build-ip-module-tree": "构建 IP 模块树",
     "info.treeview.ip-no-active.message": "当前 IP 还未激活，请通过 Xilinx 工具链将 XCI 文件生成完整的 IP 核",
     "info.progress.initialize-configure": "初始化项目配置",
-    "info.treeview.item.tooltip": "can't find the module of this instance"
+    "info.pl.xilinx.launch.pick-project-placeholder": "Which project you want to open ?",
+    "error.common.not-valid-hdl-file": "is not a valid hdl file in our parse list, check your property.json to see if arch.hardware.src is set correctly!\\ncurrent parse list: \\n"
 }

@@ -28,5 +28,6 @@
     "info.progress.build-ip-module-tree": "构建 IP 模块树",
     "info.treeview.ip-no-active.message": "当前 IP 还未激活，请通过 Xilinx 工具链将 XCI 文件生成完整的 IP 核",
     "info.progress.initialize-configure": "初始化项目配置",
-    "info.treeview.item.tooltip": "无法找到当前实例的模块"
+    "info.pl.xilinx.launch.pick-project-placeholder": "请选择需要打开的工程",
+    "error.common.not-valid-hdl-file": "并不在系统的解析列表中，请检查你的 property.json 配置文件中的 arch.hardware.src 是否被正确设置。当前的解析路径为："
 }

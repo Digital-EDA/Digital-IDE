@@ -370,6 +370,9 @@ class HdlParam {
         return moduleFiles;
     }
 
+    public removeFromHdlFile(hdlFile: HdlFile) {
+        this.pathToHdlFiles.delete(hdlFile.path);
+    }
 
     public deleteHdlFile(path: AbsPath) {
         path = hdlPath.toSlash(path);
@@ -865,7 +868,7 @@ class HdlModule {
     }
 };
 
-class HdlFile {
+export class HdlFile {
     public path: string;
     public languageId: HdlLangID;
     public type: common.HdlFileType;

@@ -6,9 +6,10 @@ import { hdlParam } from '../../hdlParser';
 import { AbsPath, MainOutput, opeParam, ReportType } from '../../global';
 import { hdlDir, hdlFile, hdlPath } from '../../hdlFs';
 import { getSelectItem } from './instance';
-import { ToolChainType } from '../../global/enum';
-import { HdlModule } from '../../hdlParser/core';
+import { HdlLangID, ToolChainType } from '../../global/enum';
+import { HdlFile, HdlModule } from '../../hdlParser/core';
 import { ModuleDataItem } from '../treeView/tree';
+import { defaultMacro, doFastApi } from '../../hdlParser/util';
 
 type Path = string;
 
@@ -334,7 +335,7 @@ class IcarusSimulate extends Simulate {
         if (deps) {
             return deps.others;
         } else {
-            MainOutput.report('Fail to get dependences of path: ' + path + ' name: ' + name, ReportType.Warn);
+            // MainOutput.report('Fail to get dependences of path: ' + path + ' name: ' + name, ReportType.Warn);
             return [];
         }
     }
@@ -342,11 +343,11 @@ class IcarusSimulate extends Simulate {
     private simulateByHdlModule(hdlModule: HdlModule) {
         const name = hdlModule.name;
         const path = hdlModule.path;
-        if (!hdlParam.isTopModule(path, name, false)) {
-            const warningMsg = name + ' in ' + path + ' is not top module';
-            MainOutput.report(warningMsg, ReportType.Warn, true);
-            return;
-        }
+        // if (!hdlParam.isTopModule(path, name, false)) {
+        //     const warningMsg = name + ' in ' + path + ' is not top module';
+        //     MainOutput.report(warningMsg, ReportType.Warn, true);
+        //     return;
+        // }
         const dependences = this.getAllOtherDependences(path, name);
         const simulationCommand = this.getCommand(name, path, dependences);
         if (simulationCommand) {
@@ -364,19 +365,56 @@ class IcarusSimulate extends Simulate {
         this.simulateByHdlModule(hdlModule);
     }
 
+    public async tryGetModuleFromView(view: ModuleDataItem): Promise<HdlModule | undefined> {         
+        if (view.path) {
+            const path = hdlPath.toEscapePath(view.path);
+            const currentFile = hdlParam.getHdlFile(path);
+            if (currentFile) {
+                const modules = currentFile.getAllHdlModules();
+                const targetModule = view.name === undefined ?
+                    modules[0] :
+                    modules.filter(mod => mod.name === view.name)[0];
+
+                if (targetModule) {
+                    return targetModule;
+                }
+            }
+            // 没有获取有效的 module 则重新解析
+            const langID = hdlFile.getLanguageId(path);            
+            if (langID === HdlLangID.Unknown) {
+                return undefined;
+            }
+            const standardPath = hdlPath.toSlash(path);
+
+            console.log('enter [doFastApi]');
+            const response = await doFastApi(standardPath, 'common');
+            console.log('response result: ');
+            console.log(response);
+            
+            const moduleFile = new HdlFile(
+                standardPath, langID,
+                response?.macro || defaultMacro,
+                response?.content || [],
+                'common'
+            );
+            // 从 hdlParam 中去除，避免干扰全局
+            hdlParam.removeFromHdlFile(moduleFile);
+            const modules = moduleFile.getAllHdlModules();
+            const targetModule = view.name === undefined ?
+                modules[0] :
+                modules.filter(mod => mod.name === view.name)[0];
+
+            if (targetModule) {
+                return targetModule;
+            }
+        } else {
+            return undefined;
+        }
+    }
+
     public async simulateFile(view: ModuleDataItem) {
-        if (!view.path) {
-            MainOutput.report('module ' + view.name + ' is not a hdlFile', ReportType.Error, true);
-            return;
-        }
+        const targetModule = await this.tryGetModuleFromView(view);
 
-        const currentFile = hdlParam.getHdlFile(view.path);
-        if (!currentFile) {
-            MainOutput.report('path ' + view.path + ' is not a hdlFile', ReportType.Error, true);
-            return;
-        }
-
-        const targetModule = currentFile.getAllHdlModules().filter(mod => mod.name === view.name)[0];
         if (targetModule !== undefined) {
             this.simulateByHdlModule(targetModule);
         } else {

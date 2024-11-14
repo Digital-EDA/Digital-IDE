@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 
-import { opeParam, MainOutput, AbsPath, ReportType, LspClient, IProgress } from './global';
+import { MainOutput, ReportType, IProgress } from './global';
 import { hdlParam } from './hdlParser';
 import * as manager from './manager';
 import * as func from './function';
@@ -13,6 +13,8 @@ import { refreshArchTree } from './function/treeView';
 
 async function registerCommand(context: vscode.ExtensionContext, packageJson: any) {
     func.registerFunctionCommands(context);
+    func.registerTreeViewDataProvider(context);
+
     func.registerLsp(context, packageJson.version);
     func.registerToolCommands(context);
     func.registerFSM(context);

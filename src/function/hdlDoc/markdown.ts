@@ -31,8 +31,23 @@ function selectFieldValue(obj: any, subName: string, ws: string, name: string): 
         return '——';
     }
     let value = obj[subName];
+
+    // 对于 source ，支持跳转
     if (subName === 'instModPath' && value) {
-        value = value.replace(ws, '');
+            const relativePath = value.replace(ws, '');
+        if (fs.existsSync(value)) {
+            // 判断 类型
+            const hdlFile = hdlParam.getHdlFile(value);
+            if (hdlFile && hdlFile.type === 'remote_lib') {
+                // 如果是 库 文件，做出更加自定义的字面量
+                const libRelPath = value.replace(`${opeParam.extensionPath}/library/`, '');                
+                value = `[library] [${libRelPath}](file://${value})`;
+            } else {
+                value = `[project] [${relativePath}](file://${value})`;
+            }            
+        } else {
+            value = relativePath;
+        }
     }
 
     if (value && value.trim().length === 0) {
@@ -56,7 +71,7 @@ function makeTableFromObjArray(md: MarkdownString, array: any[], name: string, f
         const rows = [];
         for (const obj of array) {
             const data = [];
-            for (const subName of fieldNames) {                
+            for (const subName of fieldNames) {         
                 const value = selectFieldValue(obj, subName, ws, name);
                 data.push(value);
             }
@@ -157,21 +172,18 @@ async function getDocsFromModule(module: HdlModule): Promise<MarkdownString> {
     makeTableFromObjArray(md, module.ports, 'ports', 
                           ['name', 'type', 'width', 'desc'],
                           ['Port Name', 'Direction', 'Range', 'Description']);
-    md.addEnter();    
+    md.addEnter();
     
- 
     // dependency section
     md.addTitle('Dependency', 2);
     const insts = [];
     for (const inst of module.getAllInstances()) {
         insts.push(inst);
     }
-    console.log('文档化 debug');
-    console.log(insts);
     
     makeTableFromObjArray(md, insts, 'Dependencies',
                          ['name', 'type', 'instModPath'],
-                         ['name', 'module', 'path']);
+                         ['name', 'module', 'source']);
 
     md.addEnter();
     return md;

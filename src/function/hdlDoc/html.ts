@@ -29,6 +29,22 @@ function makeFinalHTML(body: string, style: string): string {
         </div>
     </div>
 </body>
+<script>
+const vscode = acquireVsCodeApi();
+
+document.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', (event) => {
+        event.preventDefault();
+        const href = link.getAttribute('href');
+        if (href.startsWith('file://')) {
+            vscode.postMessage({
+                command: 'openFile',
+                filePath: href
+            });
+        }
+    });
+});
+</script>
 <style>
     ${style}
 </style>
@@ -157,7 +173,20 @@ async function showDocWebview() {
 
     webview.iconPath = hdlIcon.getIconConfig('documentation');
     webview.webview.html = await htmlPromise;
-    
+    webview.webview.onDidReceiveMessage(message => {
+        switch (message.command) {
+            case 'openFile':
+                let filePath: string = message.filePath;
+                if (filePath.startsWith('file://')) {
+                    filePath = filePath.slice(7);
+                }
+                console.log('debug, ', filePath);
+                
+                const uri = vscode.Uri.file(filePath);
+                vscode.commands.executeCommand('vscode.open', uri);
+                return;
+        }
+    });
 }
 
 

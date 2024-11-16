@@ -186,7 +186,7 @@ class XilinxOperation {
         
         const onVivadoClose = debounce(() => {
             _this.onVivadoClose();
-        }, 200);
+        }, 100);
 
         function launchScript(): Promise<ChildProcessWithoutNullStreams> {
             // 执行 cmd 启动
@@ -599,7 +599,7 @@ file delete ${scriptPath} -force\n`;
     public addFiles(files: string[], context: PLContext) {
         const { t } = vscode.l10n;
 
-        if (!this.guiLaunched) {
+        if (!this.guiLaunched && files.length > 0) {
             const filesString = files.join("\n");
             HardwareOutput.report(t('info.pl.add-files.title') + '\n' + filesString);
             this.processFileInPrj(files, context, "add_file");
@@ -609,7 +609,7 @@ file delete ${scriptPath} -force\n`;
     public delFiles(files: string[], context: PLContext) {
         const { t } = vscode.l10n;
 
-        if (!this.guiLaunched) {
+        if (!this.guiLaunched && files.length > 0) {
             const filesString = files.join("\n");
             HardwareOutput.report(t('info.pl.del-files.title') + '\n' + filesString);
             this.processFileInPrj(files, context, "remove_files");

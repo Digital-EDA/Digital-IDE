@@ -4,6 +4,6 @@ export async function generateEfinityConfig() {
     
 }
 
-class EfinityOperation {
+export class EfinityOperation {
     
 }

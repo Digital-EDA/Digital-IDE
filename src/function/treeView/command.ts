@@ -196,28 +196,13 @@ class ToolTreeProvider extends BaseCommandTreeProvider {
     }
 
     public async clean() {
-        console.log('current removed');
-        return;
-        
         const workspacePath = opeParam.workspacePath;
-
-        // remove prjPath & .xil
-        const prjPath = opeParam.prjInfo.arch.prjPath;
-        
-        const xilFolder = hdlPath.join(workspacePath, '.Xil');
-        
-        if (prjPath !== opeParam.workspacePath) {
-            hdlDir.rmdir(prjPath);
-            hdlDir.rmdir(xilFolder);
-            MainOutput.report("remove dir : " + prjPath);
-            MainOutput.report("remove dir : " + xilFolder);
-        } else {
-            vscode.window.showWarningMessage("arch.prjPath is the same as the workspace path, the clean will delete the project, please check your arch.prjPath!");
-        }
 
         // move bd * ip
         const plName = opeParam.prjInfo.prjName.PL;
         const targetPath = fspath.dirname(opeParam.prjInfo.arch.hardware.src);
+
+        // TODO: 适配更多的 toolChain
         const sourceIpPath = `${workspacePath}/prj/xilinx/${plName}.srcs/sources_1/ip`;
         const sourceBdPath = `${workspacePath}/prj/xilinx/${plName}.srcs/sources_1/bd`;
 
@@ -226,18 +211,27 @@ class ToolTreeProvider extends BaseCommandTreeProvider {
 
         hdlDir.mvdir(sourceBdPath, targetPath, true);
         MainOutput.report("move dir from " + sourceBdPath + " to " + targetPath);
+                
+        // if (prjPath !== opeParam.workspacePath) {
+        //     hdlDir.rmdir(prjPath);
+        //     hdlDir.rmdir(xilFolder);
+        //     MainOutput.report("remove dir : " + prjPath);
+        //     MainOutput.report("remove dir : " + xilFolder);
+        // } else {
+        //     vscode.window.showWarningMessage("arch.prjPath is the same as the workspace path, the clean will delete the project, please check your arch.prjPath!");
+        // }
 
-        const ignores = hdlIgnore.getIgnoreFiles();
-        const strFiles = hdlFile.pickFileRecursive(workspacePath, ignores, p => p.endsWith('.str'));
-        for (const path of strFiles) {
-            hdlFile.removeFile(path);
-            MainOutput.report("remove file " + path);
-        }
+        // const ignores = hdlIgnore.getIgnoreFiles();
+        // const strFiles = hdlFile.pickFileRecursive(workspacePath, ignores, p => p.endsWith('.str'));
+        // for (const path of strFiles) {
+        //     hdlFile.removeFile(path);
+        //     MainOutput.report("remove file " + path);
+        // }
 
-        const logFiles = hdlFile.pickFileRecursive(workspacePath, ignores, p => p.endsWith('.log'));
-        for (const path of logFiles) {
-            hdlFile.readFile(path);
-        }
+        // const logFiles = hdlFile.pickFileRecursive(workspacePath, ignores, p => p.endsWith('.log'));
+        // for (const path of logFiles) {
+        //     hdlFile.readFile(path);
+        // }
 
         MainOutput.report('finish digital-ide.tool.clean');
     }

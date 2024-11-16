@@ -29,5 +29,13 @@
     "info.treeview.ip-no-active.message": "当前 IP 还未激活，请通过 Xilinx 工具链将 XCI 文件生成完整的 IP 核",
     "info.progress.initialize-configure": "初始化项目配置",
     "info.pl.xilinx.launch.pick-project-placeholder": "请选择需要打开的工程",
-    "error.common.not-valid-hdl-file": "并不在系统的解析列表中，请检查你的 property.json 配置文件中的 arch.hardware.src 是否被正确设置。当前的解析路径为："
+    "error.common.not-valid-hdl-file": "并不在系统的解析列表中，请检查你的 property.json 配置文件中的 arch.hardware.src 是否被正确设置。当前的解析路径为：",
+    "info.pl.gui.open-successfully": "GUI 启动成功",
+    "info.pl.gui.report-title": "启动 GUI ...",
+    "info.pl.exit.title": "正在退出 ...",
+    "info.pl.add-files.title": "添加如下文件到工程",
+    "info.pl.del-files.title": "从项目中删除如下文件",
+    "info.pl.launch.launch-info": "成功启动 Vivado TCL 脚本解释器",
+    "info.pl.launch.progress.launch-tcl.title": "正在启动 Vivado TCL 脚本解释器",
+    "warn.command.transform-old-ppy.unknown-hardwarelib-state": "无法转换 HardwareLIB.state ，原因：未知的 state 枚举："
 }

@@ -4,7 +4,7 @@
  */
 import * as vscode from 'vscode';
 
-import { PLConfig, XilinxOperation } from './xilinx';
+import { PLContext, XilinxOperation } from './xilinx';
 import { BaseManage } from '../common';
 import { opeParam } from '../../global';
 import { ToolChainType } from '../../global/enum';
@@ -12,108 +12,105 @@ import { hdlFile, hdlPath } from '../../hdlFs';
 import { moduleTreeProvider, ModuleDataItem } from '../../function/treeView/tree';
 import { HdlFileType } from '../../hdlParser/common';
 import { PropertySchema } from '../../global/propertySchema';
+import { HardwareOutput, ReportType } from '../../global/outputChannel';
 
 class PlManage extends BaseManage {
-    config: PLConfig;
+    context: PLContext;
 
     constructor() {
         super();
-        this.config = { 
-            tool: 'default', 
+
+        this.context = { 
+            tool: opeParam.prjInfo.toolChain || 'xilinx', 
             path: '',
             ope: new XilinxOperation(),
-            terminal: null
+            terminal: undefined,
+            process: undefined
         };
 
-        if (opeParam.prjInfo.toolChain) {
-            this.config.tool = opeParam.prjInfo.toolChain;
-        }
-
-        const curToolChain = this.config.tool;
+        const curToolChain = this.context.tool;
         if (curToolChain === ToolChainType.Xilinx) {
             const vivadoPath = vscode.workspace.getConfiguration('digital-ide.prj.vivado.install').get('path', '');
             if (hdlFile.isDir(vivadoPath)) {
-                this.config.path = hdlPath.join(hdlPath.toSlash(vivadoPath), 'vivado');
+                this.context.path = hdlPath.join(hdlPath.toSlash(vivadoPath), 'vivado');
                 if (opeParam.os === 'win32') {
-                    this.config.path += '.bat';
+                    this.context.path += '.bat';
                 }
             } else {
-                this.config.path = 'vivado';
+                this.context.path = 'vivado';
             }
         }       
     }
 
     public launch() {
-        this.config.terminal = this.createTerminal('Hardware');
-        this.config.terminal.show(true);
-        this.config.ope.launch(this.config);
+        this.context.ope.launch(this.context);
     }
 
     public simulate() {
-        if (!this.config.terminal) {
+        if (this.context.process === undefined) {
             return;
         }
-        this.config.ope.simulate(this.config);
+        this.context.ope.simulate(this.context);
     }
 
     public simulateCli() {
-        this.config.ope.simulateCli(this.config);
+        this.context.ope.simulateCli(this.context);
     }
 
     public simulateGui() {
-        this.config.ope.simulateGui(this.config);
+        this.context.ope.simulateGui(this.context);
     }
 
     public refresh() {
-        if (!this.config.terminal) {
+        if (this.context.process === undefined) {
             return;
         }
-        this.config.ope.refresh(this.config.terminal);
+        this.context.ope.refresh(this.context);
     }
 
     public build() {
-        this.config.ope.build(this.config);
+        this.context.ope.build(this.context);
     }
 
-
     public synth() {
-        this.config.ope.synth(this.config);
+        this.context.ope.synth(this.context);
     }
 
     public impl() {
-        if (!this.config.terminal) {
+        if (this.context.process === undefined) {
             return null;
         }
-
-        this.config.ope.impl(this.config);
+        this.context.ope.impl(this.context);
     }
 
     public bitstream() {
-        this.config.ope.generateBit(this.config);
+        this.context.ope.generateBit(this.context);
     }
 
     public program() {
-        this.config.ope.program(this.config);
+        this.context.ope.program(this.context);
     }
 
     public gui() {
-        this.config.ope.gui(this.config);
+        this.context.ope.gui(this.context);
     }
 
     public exit() {
-        if (!this.config.terminal) {
-            return null;
+        const { t } = vscode.l10n;
+
+        if (this.context.process === undefined) {
+            return;
         }
 
-        this.config.terminal.show(true);
-        this.config.terminal.sendText(`exit`);
-        this.config.terminal.sendText(`exit`);
-        this.config.terminal = null;
+        HardwareOutput.show();
+        this.context.process.stdin.write('exit\n');
+        HardwareOutput.report(t('info.pl.exit.title'), ReportType.Info);
+        this.context.process = undefined;
     }
 
 
     public setSrcTop(item: ModuleDataItem) {        
-        this.config.ope.setSrcTop(item.name, this.config);
+        this.context.ope.setSrcTop(item.name, this.context);
         const type = moduleTreeProvider.getItemType(item);
         if (type === HdlFileType.Src) {
             moduleTreeProvider.setFirstTop(HdlFileType.Src, item.name, item.path);
@@ -122,7 +119,7 @@ class PlManage extends BaseManage {
     }
 
     public setSimTop(item: ModuleDataItem) {
-        this.config.ope.setSimTop(item.name, this.config);
+        this.context.ope.setSimTop(item.name, this.context);
         const type = moduleTreeProvider.getItemType(item);
         if (type === HdlFileType.Sim) {
             moduleTreeProvider.setFirstTop(HdlFileType.Sim, item.name, item.path);
@@ -132,11 +129,11 @@ class PlManage extends BaseManage {
 
 
     async addFiles(files: string[]) {
-        this.config.ope.addFiles(files, this.config);
+        this.context.ope.addFiles(files, this.context);
     }
 
     async delFiles(files: string[]) {
-        this.config.ope.delFiles(files, this.config);
+        this.context.ope.delFiles(files, this.context);
     }
 
     async addDevice() {

@@ -27,7 +27,13 @@ const PPY_REPLACE: Record<string, string> = {
     SOC: 'soc',
     SOC_MODE: 'soc',
     enableShowlog: 'enableShowLog',
-    Device: 'device'
+    Device: 'device',
+    HardwareLIB: 'library'
+};
+
+const HARDWARD_LIB_STATE_REPLACE: Record<string, string> = {
+    virtual: 'remote',
+    real: 'local'
 };
 
 const PPY_ARCH_REPLACE: Record<string, string> = {
@@ -41,6 +47,7 @@ const PPY_LIB_REPLACE: Record<string, string> = {
 };
 
 async function transformOldPpy() {
+    const { t } = vscode.l10n;
     const propertyJsonPath = opeParam.propertyJsonPath;
     if (fs.existsSync(propertyJsonPath)) {
         const oldPpyContent = hdlFile.readJSON(propertyJsonPath) as Record<any, any>;
@@ -56,6 +63,9 @@ async function transformOldPpy() {
         if (oldPpyContent.library) {
             for (const oldName of Object.keys(PPY_LIB_REPLACE)) {
                 const newName = PPY_LIB_REPLACE[oldName];
+                if (typeof newName !== 'string') {
+                    continue;
+                }
                 oldPpyContent.library[newName] = oldPpyContent.library[oldName];
                 delete oldPpyContent.library[oldName];
             }
@@ -71,6 +81,32 @@ async function transformOldPpy() {
         if (oldPpyContent.soc && oldPpyContent.soc.soc !== undefined) {
             oldPpyContent.soc.core = oldPpyContent.soc.soc;
             delete oldPpyContent.soc['soc'];
+        }
+
+        // 老版本的是 SOC_MODE.bd_file，新版本需要变成 soc.bd
+        if (oldPpyContent.soc && oldPpyContent.soc.bd_file !== undefined) {
+            oldPpyContent.soc.bd = oldPpyContent.soc.bd_file;
+            delete oldPpyContent.soc['bd_file'];
+        }
+
+        // 老版本的是 HardwareLIB，新版本需要变成 library
+        if (oldPpyContent.library) {
+            // 老版本的是 "state": "virtual"
+            if (oldPpyContent.library.state) {
+                const newState = HARDWARD_LIB_STATE_REPLACE[oldPpyContent.library.state];
+                if (typeof newState === 'string') {
+                    oldPpyContent.library.state = newState;
+                } else {
+                    vscode.window.showWarningMessage(t('warn.command.transform-old-ppy.unknown-hardwarelib-state') + oldPpyContent.library.state);
+                }
+            }
+            // 老版本的是 HardwareLIB.common ， 新版本是 library.hardware.common
+            if (oldPpyContent.library.common) {
+                oldPpyContent.library.hardware = {
+                    common: oldPpyContent.library.common
+                };
+                delete oldPpyContent.library['common'];
+            }
         }
 
         hdlFile.writeJSON(propertyJsonPath, oldPpyContent);

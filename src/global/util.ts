@@ -102,3 +102,15 @@ export function replacePlaceholders(template: string, ...args: string[]): string
     });
 }
 
+export function debounce(fn: (...args: any[]) => any, timeout: number) {
+    let timer: NodeJS.Timeout | undefined = undefined;
+
+    return (...args: any[]) => {
+        if (timer) {
+            clearTimeout(timer);
+        }
+        timer = setTimeout(() => {
+            fn(...args);
+        }, timeout);
+    };
+}

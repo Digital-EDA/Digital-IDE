@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import * as vscode from 'vscode';
-import { exec } from 'child_process';
+import { ChildProcessWithoutNullStreams, exec, spawn } from 'child_process';
 import * as fspath from 'path';
 import * as fs from 'fs';
 
@@ -10,7 +10,8 @@ import { hdlFile, hdlDir, hdlPath } from '../../hdlFs';
 import { PropertySchema } from '../../global/propertySchema';
 
 import { XilinxIP } from '../../global/enum';
-import { MainOutput } from '../../global/outputChannel';
+import { HardwareOutput, MainOutput, ReportType } from '../../global/outputChannel';
+import { debounce } from '../../global/util';
 
 interface XilinxCustom {
     ipRepo: AbsPath, 
@@ -22,10 +23,17 @@ interface TopMod {
     sim: string
 };
 
-interface PLConfig {
-    terminal : vscode.Terminal | null,
-    tool? : string,                  // 工具类型
-    path? : string,                  // 第三方工具运行路径
+// Programmable Logic Context for short
+interface PLContext {
+    // 保留启动上下文
+    terminal? : vscode.Terminal,
+    // 目前使用的启动上下文
+    process?: ChildProcessWithoutNullStreams,
+    // 工具类型
+    tool? : string,
+    // 第三方工具运行路径
+    path? : string,
+    // 操作类
     ope : XilinxOperation,
 };
 
@@ -128,17 +136,12 @@ class XilinxOperation {
 
     /**
      * xilinx下的launch运行，打开存在的工程或者再没有工程时进行新建
-     * @param config
+     * @param context
      */
-    async launch(config: PLConfig): Promise<string | undefined> {
+    public async launch(context: PLContext): Promise<string | undefined> {
         const { t } = vscode.l10n;
 
         this.guiLaunched = false;
-        const vivadoTerminal = config.terminal;
-        if (!vivadoTerminal) {
-            return undefined;
-        }
-
         let scripts: string[] = [];
 
         let prjFilePath = this.prjPath as AbsPath;
@@ -173,17 +176,96 @@ class XilinxOperation {
         scripts.push(this.getRefreshCmd());
         scripts.push(`file delete ${tclPath} -force`);
         const tclCommands = scripts.join('\n') + '\n';
-
         hdlFile.writeFile(tclPath, tclCommands);
 
         const argu = `-notrace -nolog -nojournal`;
-        const cmd = `${config.path} -mode tcl -s ${tclPath} ${argu}`;
+        const cmd = `${context.path} -mode tcl -s ${tclPath} ${argu}`;
 
-        vivadoTerminal.show(true);
-        vivadoTerminal.sendText(cmd);
+        
+        const _this = this;
+        
+        const onVivadoClose = debounce(() => {
+            _this.onVivadoClose();
+        }, 200);
+
+        function launchScript(): Promise<ChildProcessWithoutNullStreams> {
+            // 执行 cmd 启动
+            const vivadoProcess = spawn(cmd, [], { shell: true, stdio: 'pipe' });
+
+            vivadoProcess.on('close', () => {
+                onVivadoClose();            
+            });
+            vivadoProcess.on('exit', () => {
+                onVivadoClose();
+            });
+            vivadoProcess.on('disconnect', () => {
+                onVivadoClose();
+            });
+
+            vivadoProcess.stderr.on('data', data => {
+                HardwareOutput.report(data.toString(), ReportType.Error);
+                HardwareOutput.show();
+            });
+
+            let status: 'pending' | 'fulfilled' = 'pending';
+
+            return new Promise(resolve => {
+                vivadoProcess.stdout.on('data', data => {
+                    const message: string = _this.handleMessage(data.toString(), status);                                        
+                    if (status === 'pending') {
+                        HardwareOutput.clear();
+                        HardwareOutput.show();
+                        resolve(vivadoProcess);
+                    }
+                    HardwareOutput.report(message, ReportType.Info);
+                    status = 'fulfilled';
+                });
+            });
+        }
+
+        const process = await vscode.window.withProgress({
+            title: t('info.pl.launch.progress.launch-tcl.title'),
+            location: vscode.ProgressLocation.Notification
+        }, async () => {
+            return await launchScript();
+        });
+
+        context.process = process;
     }
 
-    create(scripts: string[]) {
+    private handleMessage(message: string, status: 'pending' | 'fulfilled'): string {        
+        if (status === 'fulfilled') {
+            return message.trim();
+        } else {
+            const messageBuffer: string[] = [];
+            for (const line of message.trim().split('\n')) {
+                if (line.startsWith('source') && line.includes('.tcl')) {
+                    continue;
+                }
+                messageBuffer.push(line);
+            }
+            const launchInfo = vscode.l10n.t('info.pl.launch.launch-info');
+            messageBuffer.unshift(launchInfo);
+            return messageBuffer.join("\n");
+        }
+    }
+
+    private onVivadoClose() {
+        const workspacePath = opeParam.workspacePath;
+        const plName = opeParam.prjInfo.prjName.PL;
+        const targetPath = fspath.dirname(opeParam.prjInfo.arch.hardware.src);
+
+        const sourceIpPath = `${workspacePath}/prj/xilinx/${plName}.srcs/sources_1/ip`;
+        const sourceBdPath = `${workspacePath}/prj/xilinx/${plName}.srcs/sources_1/bd`;
+
+        hdlDir.mvdir(sourceIpPath, targetPath, true);
+        HardwareOutput.report("move dir from " + sourceIpPath + " to " + targetPath);
+
+        hdlDir.mvdir(sourceBdPath, targetPath, true);
+        HardwareOutput.report("move dir from " + sourceBdPath + " to " + targetPath);
+    }
+
+    public create(scripts: string[]) {
         scripts.push(`set_param general.maxThreads 8`);
         scripts.push(`create_project ${this.prjInfo.name} ${this.prjInfo.path} -part ${this.prjInfo.device} -force`);
         scripts.push(`set_property SOURCE_SET sources_1   [get_filesets sim_1]`);
@@ -191,7 +273,7 @@ class XilinxOperation {
         scripts.push(`update_compile_order -fileset sim_1 -quiet`);
     }
 
-    open(path: AbsPath, scripts: string[]) {
+    public open(path: AbsPath, scripts: string[]) {
         scripts.push(`set_param general.maxThreads 8`);
         scripts.push(`open_project ${path} -quiet`);
     }
@@ -305,68 +387,75 @@ class XilinxOperation {
         return cmd;
     }
 
-    refresh(terminal: vscode.Terminal) {
+    public refresh(context: PLContext) {
         const cmd = this.getRefreshCmd();
-        terminal.sendText(cmd);
+        context.process?.stdin.write(cmd + '\n');
     }
 
-    simulate(config: PLConfig) {
-        this.simulateCli(config);
+    public simulate(context: PLContext) {
+        this.simulateCli(context);
     }
 
-    simulateGui(config: PLConfig) {
+    public simulateGui(context: PLContext) {
         const scriptPath = `${this.xilinxPath}/simulate.tcl`;
+
         const script = `
-        if {[current_sim] != ""} {
-            relaunch_sim -quiet
-        } else {
-            launch_simulation -quiet
-        }
+if {[current_sim] != ""} {
+    relaunch_sim -quiet
+} else {
+    launch_simulation -quiet
+}
 
-        set curr_wave [current_wave_config]
-        if { [string length $curr_wave] == 0 } {
-            if { [llength [get_objects]] > 0} {
-                add_wave /
-                set_property needs_save false [current_wave_config]
-            } else {
-                send_msg_id Add_Wave-1 WARNING "No top level signals found. Simulator will start without a wave window. If you want to open a wave window go to 'File->New Waveform Configuration' or type 'create_wave_config' in the TCL console."
-            }
-        }
-        run 1us
+set curr_wave [current_wave_config]
+if { [string length $curr_wave] == 0 } {
+    if { [llength [get_objects]] > 0} {
+        add_wave /
+        set_property needs_save false [current_wave_config]
+    } else {
+        send_msg_id Add_Wave-1 WARNING "No top level signals found. Simulator will start without a wave window. If you want to open a wave window go to 'File->New Waveform Configuration' or type 'create_wave_config' in the TCL console."
+    }
+}
+run 1us
 
-        start_gui -quiet
-        file delete ${scriptPath} -force\n`;
+start_gui -quiet
+file delete ${scriptPath} -force\n`;
+
         hdlFile.writeFile(scriptPath, script);
         const cmd = `source ${scriptPath} -quiet`;
-        config.terminal?.sendText(cmd);
+        
+        HardwareOutput.report('simulateGui');
+        context.process?.stdin.write(cmd + '\n');
     }
 
-    simulateCli(config: PLConfig) {
+    public simulateCli(context: PLContext) {
         const scriptPath = hdlPath.join(this.xilinxPath, 'simulate.tcl');
         const script = `
-        if {[current_sim] != ""} {
-            relaunch_sim -quiet
-        } else {
-            launch_simulation -quiet
-        }
+if {[current_sim] != ""} {
+    relaunch_sim -quiet
+} else {
+    launch_simulation -quiet
+}
 
-        set curr_wave [current_wave_config]
-        if { [string length $curr_wave] == 0 } {
-            if { [llength [get_objects]] > 0} {
-                add_wave /
-                set_property needs_save false [current_wave_config]
-            } else {
-                send_msg_id Add_Wave-1 WARNING "No top level signals found. Simulator will start without a wave window. If you want to open a wave window go to 'File->New Waveform Configuration' or type 'create_wave_config' in the TCL console."
-            }
-        }
-        run 1us
-        file delete ${scriptPath} -force\n`;
+set curr_wave [current_wave_config]
+if { [string length $curr_wave] == 0 } {
+    if { [llength [get_objects]] > 0} {
+        add_wave /
+        set_property needs_save false [current_wave_config]
+    } else {
+        send_msg_id Add_Wave-1 WARNING "No top level signals found. Simulator will start without a wave window. If you want to open a wave window go to 'File->New Waveform Configuration' or type 'create_wave_config' in the TCL console."
+    }
+}
+run 1us
+file delete ${scriptPath} -force\n`;
+
         hdlFile.writeFile(scriptPath, script);
         const cmd = `source ${scriptPath} -quiet`;
-        config.terminal?.sendText(cmd);
+
+        HardwareOutput.report('simulateCli');
+        context.process?.stdin.write(cmd + '\n');
     }
 
-    synth(config: PLConfig) {
+    public synth(context: PLContext) {
         let quietArg = '';
         if (opeParam.prjInfo.enableShowLog) {
             quietArg = '-quiet';
@@ -377,10 +466,10 @@ class XilinxOperation {
         script += `launch_runs synth_1 ${quietArg} -jobs 4;`;
         script += `wait_on_run synth_1 ${quietArg}`;
 
-        config.terminal?.sendText(script);
+        context.process?.stdin.write(script + '\n');
     }
 
-    impl(config: PLConfig) {
+    impl(context: PLContext) {
         let quietArg = '';
         if (opeParam.prjInfo.enableShowLog) {
             quietArg = '-quiet';
@@ -393,10 +482,10 @@ class XilinxOperation {
         script += `open_run impl_1 ${quietArg};`;
         script += `report_timing_summary ${quietArg}`;
 
-        config.terminal?.sendText(script);
+        context.process?.stdin.write(script + '\n');
     }
 
-    build(config: PLConfig) {
+    build(context: PLContext) {
         let quietArg = '';
         if (this.prjConfig.enableShowLog) {
             quietArg = '-quiet';
@@ -412,7 +501,7 @@ class XilinxOperation {
         script += `open_run impl_1 ${quietArg}\n`;
         script += `report_timing_summary ${quietArg}\n`;
 
-        this.generateBit(config);
+        this.generateBit(context);
 
         const scriptPath = `${this.xilinxPath}/build.tcl`;
         script += `source ${scriptPath} -notrace\n`;
@@ -420,11 +509,12 @@ class XilinxOperation {
         script += `file delete ${scriptPath} -force\n`;
         hdlFile.writeFile(scriptPath, script);
         const cmd = `source ${scriptPath} -quiet`;
-        config.terminal?.sendText(cmd);
+
+        context.process?.stdin.write(cmd + '\n');
     }
 
 
-    generateBit(config: PLConfig) {
+    generateBit(context: PLContext) {
         let scripts: string[] = [];
         let core = this.prjConfig.soc.core;
         let sysdefPath = `${this.prjInfo.path}/${this.prjInfo.name}.runs` + 
@@ -451,97 +541,117 @@ class XilinxOperation {
         script += `file delete ${scriptPath} -force\n`;
         hdlFile.writeFile(scriptPath, script);
         const cmd = `source ${scriptPath} -quiet`;
-        config.terminal?.sendText(cmd);
+
+        context.process?.stdin.write(cmd + '\n');
     }
 
-    program(config: PLConfig) {
+    program(context: PLContext) {
         let scriptPath = `${this.xilinxPath}/program.tcl`;
         let script = `
-        open_hw -quiet
-        connect_hw_server -quiet
-        set found 0
-        foreach hw_target [get_hw_targets] {
-            current_hw_target $hw_target
-            open_hw_target -quiet
-            foreach hw_device [get_hw_devices] {
-                if { [string equal -length 6 [get_property PART $hw_device] ${this.prjInfo.device}] == 1 } {
-                    puts "------Successfully Found Hardware Target with a ${this.prjInfo.device} device------ "
-                    current_hw_device $hw_device
-                    set found 1
-                }
-            }
-            if {$found == 1} {break}
-            close_hw_target
-        }   
-
-        #download the hw_targets
-        if {$found == 0 } {
-            puts "******ERROR : Did not find any Hardware Target with a ${this.prjInfo.device} device****** "
-        } else {
-            set_property PROGRAM.FILE ./[current_project].bit [current_hw_device]
-            program_hw_devices [current_hw_device] -quiet
-            disconnect_hw_server -quiet
+open_hw -quiet
+connect_hw_server -quiet
+set found 0
+foreach hw_target [get_hw_targets] {
+    current_hw_target $hw_target
+    open_hw_target -quiet
+    foreach hw_device [get_hw_devices] {
+        if { [string equal -length 6 [get_property PART $hw_device] ${this.prjInfo.device}] == 1 } {
+            puts "------Successfully Found Hardware Target with a ${this.prjInfo.device} device------ "
+            current_hw_device $hw_device
+            set found 1
         }
-        file delete ${scriptPath} -force\n`;
+    }
+    if {$found == 1} {break}
+    close_hw_target
+}   
+
+#download the hw_targets
+if {$found == 0 } {
+    puts "******ERROR : Did not find any Hardware Target with a ${this.prjInfo.device} device****** "
+} else {
+    set_property PROGRAM.FILE ./[current_project].bit [current_hw_device]
+    program_hw_devices [current_hw_device] -quiet
+    disconnect_hw_server -quiet
+}
+file delete ${scriptPath} -force\n`;
 
         hdlFile.writeFile(scriptPath, script);
         const cmd = `source ${scriptPath} -quiet`;
-        config.terminal?.sendText(cmd);
+
+        context.process?.stdin.write(cmd + '\n');
     }
 
-    public gui(config: PLConfig) {
-        if (config.terminal) {
-            config.terminal.sendText("start_gui -quiet");
+    public async gui(context: PLContext) {
+        const { t } = vscode.l10n;
+
+        if (context.process === undefined) {
+            await this.launch(context);
+        }
+
+        if (context.process) {
+            context.process.stdin.write('start_gui -quiet\n');
+            HardwareOutput.report(t('info.pl.gui.report-title'), ReportType.Info);
+            HardwareOutput.show();
             this.guiLaunched = true;
-        } else {
-            const prjFiles = hdlFile.pickFileRecursive(this.prjPath, [], 
-                filePath => filePath.endsWith('.xpr'));
-
-            const arg = '-notrace -nolog -nojournal';
-            const cmd = `${config.path} -mode gui -s ${prjFiles[0]} ${arg}`;
-            exec(cmd, (error, stdout, stderr) => {
-                if (error !== null) {
-                    vscode.window.showErrorMessage(stderr);
-                } else {
-                    vscode.window.showInformationMessage("GUI open successfully");
-                    this.guiLaunched = true;
-                }
-            });
         }
     }
 
-    public addFiles(files: string[], config: PLConfig) {
+    public addFiles(files: string[], context: PLContext) {
+        const { t } = vscode.l10n;
+
         if (!this.guiLaunched) {
-            this.processFileInPrj(files, config, "add_file");
+            const filesString = files.join("\n");
+            HardwareOutput.report(t('info.pl.add-files.title') + '\n' + filesString);
+            this.processFileInPrj(files, context, "add_file");
         }
     }
 
-    public delFiles(files: string[], config: PLConfig) {
+    public delFiles(files: string[], context: PLContext) {
+        const { t } = vscode.l10n;
+
         if (!this.guiLaunched) {
-            this.processFileInPrj(files, config, "remove_files");
+            const filesString = files.join("\n");
+            HardwareOutput.report(t('info.pl.del-files.title') + '\n' + filesString);
+            this.processFileInPrj(files, context, "remove_files");
         }
     }
 
-    setSrcTop(name: string, config: PLConfig) {
+    /**
+     * @description 设置为 src 顶层文件
+     * @param name 
+     * @param context 
+     */
+    public setSrcTop(name: string, context: PLContext) {
         const cmd = `set_property top ${name} [current_fileset]`;
-        config.terminal?.sendText(cmd);
+        context.process?.stdin.write(cmd + '\n');
     }
 
-    setSimTop(name: string, config: PLConfig) {
+    /**
+     * @description 设置为 sim 顶层文件
+     * @param name 
+     * @param context 
+     */
+    public setSimTop(name: string, context: PLContext) {
         const cmd = `set_property top ${name} [get_filesets sim_1]`;
-        config.terminal?.sendText(cmd);
+        context.process?.stdin.write(cmd + '\n');
     }
 
-    processFileInPrj(files: string[], config: PLConfig, command: string) {
-        const terminal = config.terminal;
-        if (terminal) {
-            for (const file of files) {
-                terminal.sendText(command + ' ' + file);
-            }
+    /**
+     * @description 为输入的每一个文件在 TCL 解释器中执行 command
+     * @param files 
+     * @param context 
+     * @param command 
+     */
+    public processFileInPrj(files: string[], context: PLContext, command: string) {
+        if (context.process === undefined) {
+            return;
+        }
+        for (const file of files) {
+            context.process.stdin.write(command + ' ' + file + '\n');
         }
     }
 
-    xExecShowLog(logPath: AbsPath) {
+    public xExecShowLog(logPath: AbsPath) {
         let logPathList = ["runme", "xvlog", "elaborate"];
         let fileName = fspath.basename(logPath, ".log");
 
@@ -599,7 +709,7 @@ class XilinxBd {
         this.bdRepo = this.setting.get('digital-ide.prj.xilinx.BD.repo.path', '');
     }
     
-    getConfig() {
+    public getConfig() {
         this.extensionPath = opeParam.extensionPath;
         this.xbdPath = hdlPath.join(this.extensionPath, 'lib', 'bd', 'xilinx');
         this.schemaPath = opeParam.propertySchemaPath;
@@ -608,7 +718,7 @@ class XilinxBd {
         this.bdRepo = this.setting.get('digital-ide.prj.xilinx.BD.repo.path', '');
     }
 
-    async overwrite(uri: vscode.Uri): Promise<void> {
+    public async overwrite(uri: vscode.Uri): Promise<void> {
         this.getConfig();
         // 获取当前bd file的路径
         const select = await vscode.window.showQuickPick(this.bdEnum);
@@ -633,7 +743,7 @@ class XilinxBd {
         }
     }
 
-    add(uri: vscode.Uri) {
+    public add(uri: vscode.Uri) {
         this.getConfig();
         // 获取当前bd file的路径
         let docPath = hdlPath.toSlash(uri.fsPath);
@@ -664,7 +774,7 @@ class XilinxBd {
     }
 
     
-    delete() {
+    public delete() {
         this.getConfig();
         vscode.window.showQuickPick(this.bdEnum).then(select => {
             // the user canceled the select
@@ -685,7 +795,7 @@ class XilinxBd {
         });
     }
 
-    load() {
+    public load() {
         this.getConfig();
         if (hdlFile.isDir(this.bdRepo)) {
             for (const file of fs.readdirSync(this.bdRepo)) {
@@ -845,5 +955,5 @@ export {
     XilinxOperation,
     tools,
     XilinxBd,
-    PLConfig
+    PLContext
 };

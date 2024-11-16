@@ -4,7 +4,7 @@
     "patterns": [
         {
             "name": "digital-ide.Info",
-            "match": "(\\[Info - (.*)\\])(.*)",
+            "match": "^(\\[Info - (.*?)\\])(.*)",
             "captures": {
                 "1": {
                     "name": "token.info-token"
@@ -16,7 +16,7 @@
         },
         {
             "name": "digital-ide.Error",
-            "match": "(\\[Error - (.*)\\])(.*)",
+            "match": "^(\\[Error - (.*?)\\])(.*)",
             "captures": {
                 "1": {
                     "name": "token.error-token"
@@ -31,7 +31,7 @@
         },
         {
             "name": "digital-ide.Warn",
-            "match": "(\\[Warn - (.*)\\])(.*)",
+            "match": "^(\\[Warn - (.*?)\\])(.*)",
             "captures": {
                 "1": {
                     "name": "token.warn-token"
@@ -46,7 +46,7 @@
         },
         {
             "name": "digital-ide.Debug",
-            "match": "(\\[Debug - (.*)\\])([\\s\\S]*)",
+            "match": "^(\\[Debug - (.*?)\\])([\\s\\S]*)",
             "captures": {
                 "1": {
                     "name": "token.debug-token"
@@ -61,7 +61,7 @@
         },
         {
             "name": "digital-ide.Run",
-            "match": "(\\[Run - (.*)\\])([\\s\\S]*)",
+            "match": "^(\\[Run - (.*?)\\])([\\s\\S]*)",
             "captures": {
                 "1": {
                     "name": "token.info-token"
@@ -73,7 +73,7 @@
         },
         {
             "name": "digital-ide.Launch",
-            "match": "(\\[Launch - (.*)\\])([\\s\\S]*)",
+            "match": "^(\\[Launch - (.*?)\\])([\\s\\S]*)",
             "captures": {
                 "1": {
                     "name": "keyword.launch-token"

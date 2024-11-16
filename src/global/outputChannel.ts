@@ -71,17 +71,25 @@ class Output {
     public show() {
         this._output.show(true);
     }
+
+    public clear() {
+        this._output.clear();
+    }
 }
 
 const MainOutput = new Output('Digital-IDE');
 const LspOutput = new Output('Digital-IDE Linter');
 const YosysOutput = new Output('Digital-IDE Yosys');
 const WaveViewOutput = new Output('Digital-IDE Wave Viewer');
+const HardwareOutput = new Output('Digital-IDE Hareware');
+const HardwareErrorOutput = new Output('Digital-IDE Hareware Error');
 
 export {
     ReportType,
     MainOutput,
     LspOutput,
     YosysOutput,
-    WaveViewOutput
+    WaveViewOutput,
+    HardwareOutput,
+    HardwareErrorOutput
 };

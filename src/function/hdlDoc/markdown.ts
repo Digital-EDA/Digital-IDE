@@ -159,13 +159,16 @@ async function getDocsFromModule(module: HdlModule): Promise<MarkdownString> {
                           ['Port Name', 'Direction', 'Range', 'Description']);
     md.addEnter();    
     
-
+ 
     // dependency section
     md.addTitle('Dependency', 2);
     const insts = [];
     for (const inst of module.getAllInstances()) {
         insts.push(inst);
     }
+    console.log('文档化 debug');
+    console.log(insts);
+    
     makeTableFromObjArray(md, insts, 'Dependencies',
                          ['name', 'type', 'instModPath'],
                          ['name', 'module', 'path']);

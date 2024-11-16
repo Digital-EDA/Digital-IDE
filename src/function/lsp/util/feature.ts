@@ -128,7 +128,7 @@ function bin2float(bin: string, exp: number, fra: number): number | undefined {
 
 function getFullSymbolInfoVlog(document: vscode.TextDocument, range: Range) {
     const comments = [];
-    const currentLine = range.start.line - 1;
+    const currentLine = range.start.line;
     const currentText = document.lineAt(currentLine).text;
 
     // 往上找到第一个非空行

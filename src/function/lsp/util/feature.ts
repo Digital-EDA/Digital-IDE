@@ -132,7 +132,7 @@ function getFullSymbolInfoVlog(document: vscode.TextDocument, range: Range) {
     const currentText = document.lineAt(currentLine).text;
 
     // 往上找到第一个非空行
-    let nearestFloatLine = currentLine - 1;
+    let nearestFloatLine = currentLine - 1;    
     while (nearestFloatLine >= 0) {
         const linetext = document.lineAt(nearestFloatLine).text.trim();
         if (linetext.length > 0) {
@@ -392,17 +392,8 @@ async function getSymbolComments(path: string, ranges: Range[]): Promise<string[
     const document = await documentPromise;
     const commentPromises = [];
     const comments = [];
-    for (const range of ranges) {
-        // TODO: 后端修改后移除这里
-        const adjustRange: Range = {
-            start: {
-                line: range.start.line - 1,
-                character: range.start.character
-            },
-            end: range.end
-        };
-        
-        const commentP = getFullSymbolInfo(document, adjustRange, nonblank, l_comment_symbol, l_comment_regExp);
+    for (const range of ranges) {        
+        const commentP = getFullSymbolInfo(document, range, nonblank, l_comment_symbol, l_comment_regExp);
         commentPromises.push(commentP);
     }
 

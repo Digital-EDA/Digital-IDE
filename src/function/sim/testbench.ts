@@ -4,6 +4,7 @@ import { MainOutput, opeParam } from '../../global';
 import { hdlPath, hdlFile} from '../../hdlFs';
 import { HdlModule, hdlParam } from '../../hdlParser/core';
 import { instanceByLangID, getSelectItem } from './instance';
+import { HdlLangID } from '../../global/enum';
 
 function overwrite() {
     const options = {
@@ -15,7 +16,7 @@ function overwrite() {
     vscode.window.showTextDocument(uri, options);
 }
 
-function generateTestbenchFile(module: HdlModule) {
+function generateTestbenchFile(langID: HdlLangID, module: HdlModule) {
     const tbSrcPath = hdlPath.join(opeParam.extensionPath, 'lib', 'testbench.v');
     const tbDisPath = hdlPath.join(opeParam.prjInfo.arch.hardware.sim, 'testbench.v');
 
@@ -36,7 +37,7 @@ function generateTestbenchFile(module: HdlModule) {
         const line = lines[index];
         content += line + '\n';
         if (line.indexOf("//Instance ") !== -1) {
-            content += instanceByLangID(module) + '\n';
+            content += instanceByLangID(langID, module) + '\n';
         }
     }
     try {
@@ -58,7 +59,8 @@ async function testbench() {
         placeHolder: 'Select a Module to generate testbench'
     };
     const path = hdlPath.toSlash(uri.fsPath);
-    
+    const langID = hdlFile.getLanguageId(path);
+
     if (!hdlFile.isHDLFile(path)) {
         return;
     }
@@ -75,7 +77,7 @@ async function testbench() {
     const items = getSelectItem(currentHdlModules);
     const select = await vscode.window.showQuickPick(items, option);
     if (select) {
-        generateTestbenchFile(items[0].module);
+        generateTestbenchFile(langID, items[0].module);
     }
 }
 

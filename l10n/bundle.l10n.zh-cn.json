@@ -42,7 +42,7 @@
     "info.dide-doc.dependency": "依赖性",
     "info.dide-doc.ports": "端口",
     "info.dide-doc.parameters": "参数",
-    "info.dide-doc.source": "源",
+    "info.dide-doc.source": "源地址",
     "info.dide-doc.basic-info.parameter": "parameter",
     "info.dide-doc.basic-info.port": "port",
     "info.dide-doc.basic-info.top-module": "顶层模块",
@@ -58,5 +58,6 @@
     "info.dide-doc.no-parameter-info": "没有参数信息",
     "info.dide-doc.no-port-info": "没有端口信息",
     "info.dide-doc.no-dep-info": "没有依赖信息",
-    "info.dide-doc.source.cannot-find": "无法找到"
+    "info.dide-doc.source.cannot-find": "无法找到",
+    "info.command.instantiation.pick-title": "选择一个模块"
 }

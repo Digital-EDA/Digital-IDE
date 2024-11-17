@@ -1066,6 +1066,13 @@
                     "fontCharacter": "\\e7a8"
                 }
             },
+            "instance-systemverilog":{
+                "description": "icon of system-verilog in TOOL.instance",
+                "default": {
+                    "fontPath": "./images/icons/iconfont.woff2",
+                    "fontCharacter": "\\e7a8"
+                }
+            },
             "instance-vhdl": {
                 "description": "icon of verilog in TOOL.instance",
                 "default": {

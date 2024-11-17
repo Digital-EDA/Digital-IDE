@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 
 import { hdlIcon } from "../../hdlFs";
 import { exportCurrentFileDocAsMarkdown, exportProjectDocAsMarkdown } from './markdown';
-import { exportCurrentFileDocAsHTML, exportProjectDocAsHTML, showDocWebview } from './html';
+import { exportCurrentFileDocAsHTML, exportProjectDocAsHTML, showDocWebview, makeDocWebview } from './html';
 import { exportCurrentFileDocAsPDF, exportProjectDocAsPDF } from './pdf';
 
 const availableFormat = [
@@ -25,8 +25,15 @@ class ExportFunctionItem {
     }
 };
 
+export interface IDocManagerItem {
+    panel: vscode.WebviewPanel,
+    fileChangeDisposer: vscode.Disposable
+}
+
+export const docManager = new Map<string, IDocManagerItem>();
+
 function registerFileDocExport(context: vscode.ExtensionContext) {
-    vscode.commands.registerCommand('digital-ide.hdlDoc.exportFile', async () => {
+    vscode.commands.registerCommand('digital-ide.hdlDoc.exportFile', async uri => {
         const option = {
             placeHolder: 'Select an Export Format'
         };
@@ -38,7 +45,7 @@ function registerFileDocExport(context: vscode.ExtensionContext) {
 
         const item = await vscode.window.showQuickPick(items, option);
 		if (item) {
-            item.exportFunc();
+            item.exportFunc(uri);
         }
 	});
 }
@@ -64,5 +71,6 @@ function registerProjectDocExport(context: vscode.ExtensionContext) {
 export {
     registerFileDocExport,
     registerProjectDocExport,
-    showDocWebview
+    showDocWebview,
+    makeDocWebview
 };

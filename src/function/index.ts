@@ -18,9 +18,44 @@ import * as Netlist from './netlist';
 import * as WaveView from './dide-viewer';
 import { ModuleDataItem } from './treeView/tree';
 import { downloadLsp } from './lsp-client';
+import { hdlPath } from '../hdlFs';
+import { LspClient, opeParam } from '../global';
+import { DoFastToolChainType, SyncFastRequestType } from '../global/lsp';
+import { makeDocBody } from './hdlDoc/html';
 
 function registerDocumentation(context: vscode.ExtensionContext) {
-    vscode.commands.registerCommand('digital-ide.hdlDoc.showWebview', hdlDoc.showDocWebview);
+    vscode.commands.registerCommand('digital-ide.hdlDoc.showWebview', async (uri: vscode.Uri) => {
+        const standardPath = hdlPath.toSlash(uri.fsPath);
+        const item = hdlDoc.docManager.get(standardPath);
+        if (item) {
+            // 展示 webview
+            item.panel.reveal(vscode.ViewColumn.Two);
+        } else {
+            const panel = await hdlDoc.makeDocWebview(uri, context);
+            // TODO: 注册文件变动监听
+            const fileChangeDisposer = vscode.window.onDidChangeActiveTextEditor(async event => {
+                // const client = LspClient.DigitalIDE;
+                // if (client && event?.document) {
+                //     const path = hdlPath.toSlash(event.document.fileName);
+                //     const fileType = 'common';
+                //     const toolChain = opeParam.prjInfo.toolChain as DoFastToolChainType;
+                //     const fast = await client.sendRequest(SyncFastRequestType, { path, fileType, toolChain });
+                //     if (fast) {
+                //         const renderBody = await makeDocBody(uri, 'webview');                
+                //         panel.webview.postMessage({
+                //             command: 'do-render',
+                //             body: renderBody
+                //         });
+                //     }
+                // }
+            });
+            hdlDoc.docManager.set(standardPath, { panel, fileChangeDisposer });
+            panel.onDidDispose(event => {
+                hdlDoc.docManager.delete(standardPath);
+                fileChangeDisposer.dispose();
+            });
+        }
+    });
     hdlDoc.registerFileDocExport(context);
     hdlDoc.registerProjectDocExport(context);
 }

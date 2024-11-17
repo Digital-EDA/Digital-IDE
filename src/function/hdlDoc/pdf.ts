@@ -59,7 +59,7 @@ async function htmlFile2PdfFile(htmlPath: AbsPath, pdfPath: AbsPath) {
     await browser.close();
 }
 
-async function exportCurrentFileDocAsPDF() {
+async function exportCurrentFileDocAsPDF(uri: vscode.Uri) {
     const editor = vscode.window.activeTextEditor;
     if (!editor) {
         return;
@@ -73,7 +73,7 @@ async function exportCurrentFileDocAsPDF() {
         title: '[Digital-IDE]: Export ' + currentFilePath + '...'
     }, async progress => {
         try {
-            const html = await makeShowHTML("pdf");
+            const html = await makeShowHTML(uri, "pdf");
 
             if (!html) {
                 return;

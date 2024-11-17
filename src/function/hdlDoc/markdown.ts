@@ -3,8 +3,8 @@ import * as fs from 'fs';
 import * as fspath from 'path';
 
 import { AbsPath, opeParam, MainOutput, ReportType } from '../../global';
-import { hdlParam, HdlModule, HdlFile } from '../../hdlParser/core';
-import { HdlModulePort, HdlModuleParam } from '../../hdlParser/common';
+import { hdlParam, HdlModule, HdlFile, HdlInstance } from '../../hdlParser/core';
+import { HdlModulePort, HdlModuleParam, InstModPathStatus } from '../../hdlParser/common';
 
 import { MarkdownString, RenderString, RenderType,
          mergeSortByLine, getWavedromsFromFile, Count, WavedromString } from './common';
@@ -26,27 +26,31 @@ function makeSVGElementByLink(link: AbsPath, caption?: string) {
     return '<br>' + mainHtml + '<br><br>\n';
 }
 
-function selectFieldValue(obj: any, subName: string, ws: string, name: string): string {
+function selectFieldValue(obj: any, subName: string, ws: string, name: string, isSingleFile: boolean): string {
     if (subName === 'empty') {
         return '——';
     }
     let value = obj[subName];
 
     // 对于 source ，支持跳转
-    if (subName === 'instModPath' && value) {
-            const relativePath = value.replace(ws, '');
+    if (subName === 'instModPath') {
+        // 如果是单文件，则直接返回 ——
+        if (isSingleFile) {
+            return '——';
+        }
+        const relativePath = value.replace(ws, '');        
         if (fs.existsSync(value)) {
             // 判断 类型
             const hdlFile = hdlParam.getHdlFile(value);
             if (hdlFile && hdlFile.type === 'remote_lib') {
                 // 如果是 库 文件，做出更加自定义的字面量
                 const libRelPath = value.replace(`${opeParam.extensionPath}/library/`, '');                
-                value = `[library] [${libRelPath}](file://${value})`;
+                value = `(library) [${libRelPath}](file://${value})`;
             } else {
-                value = `[project] [${relativePath}](file://${value})`;
+                value = `(project) [${relativePath}](file://${value})`;
             }            
         } else {
-            value = relativePath;
+            value = '(unknown) ' + vscode.l10n.t('info.dide-doc.source.cannot-find');
         }
     }
 
@@ -62,26 +66,29 @@ function selectFieldValue(obj: any, subName: string, ws: string, name: string): 
 }
 
 
-function makeTableFromObjArray(md: MarkdownString, array: any[], name: string, fieldNames: string[], displayNames: string[]) {
+function makeTableFromObjArray(
+    md: MarkdownString,
+    array: any[],
+    name: string,
+    fieldNames: string[],
+    displayNames: string[],
+    isSingleFile: boolean
+) {
     const ws = hdlPath.toSlash(opeParam.workspacePath) + '/';
     
-    if (array.length === 0) {
-        md.addText(`no ${name} info`);
+    const rows = [];
+    for (const obj of array) {
+        const data = [];
+        for (const subName of fieldNames) {         
+            const value = selectFieldValue(obj, subName, ws, name, isSingleFile);
+            data.push(value);
+        }
+        rows.push(data);
+    }
+    if (displayNames) {
+        md.addTable(displayNames, rows);
     } else {
-        const rows = [];
-        for (const obj of array) {
-            const data = [];
-            for (const subName of fieldNames) {         
-                const value = selectFieldValue(obj, subName, ws, name);
-                data.push(value);
-            }
-            rows.push(data);
-        }
-        if (displayNames) {
-            md.addTable(displayNames, rows);
-        } else {
-            md.addTable(fieldNames, rows);
-        }
+        md.addTable(fieldNames, rows);
     }
 }
 
@@ -116,6 +123,8 @@ async function patchComment(path: AbsPath, ports: (HdlModulePort | HdlModulePara
  * @param module 
  */
 async function getDocsFromModule(module: HdlModule): Promise<MarkdownString> {
+    const { t } = vscode.l10n;
+
     const moduleName = module.name;
     const portNum = module.ports.length;
     const paramNum = module.params.length;
@@ -124,32 +133,35 @@ async function getDocsFromModule(module: HdlModule): Promise<MarkdownString> {
     const paramPP = patchComment(module.path, module.params);
     const portPP = patchComment(module.path, module.ports);
 
-    let topModuleDesc = '';
-    if (hdlParam.isTopModule(module.path, module.name)) {
-        topModuleDesc = '√';
-    } else {
-        topModuleDesc = '×';
-    }
-
     const md = new MarkdownString(module.range.start.line);
     
     if (module.languageId === HdlLangID.Vhdl) {
-        md.addTitle('Entity: `' + moduleName + '`', 1);
+        md.addTitle(moduleName + `<span class="title-introduction">VHDL ${t('info.dide-doc.entity')}</span>`, 1);
     } else if (module.languageId === HdlLangID.Verilog) {
-        md.addTitle('Module: `' + moduleName + '`', 1);
+        md.addTitle(moduleName + `<span class="title-introduction">Verilog ${t('info.dide-doc.module')}</span>`, 1);
     } else if (module.languageId === HdlLangID.SystemVerilog) {
-        md.addTitle('Module: `' + moduleName + '`', 1);
+        md.addTitle(moduleName + `<span class="title-introduction">SystemVerilog ${t('info.dide-doc.module')}</span>`, 1);
     }
     
     // add module name
-    md.addTitle('Basic Info', 2);
     
+    // md.addTitle(t('info.hdl-doc.markdown.basic-info'), 2);
+
     const infos = [
-        `**File:** ${fspath.basename(module.file.path)}`,
-        `${paramNum} params, ${portNum} ports`,
-        'top module ' + topModuleDesc
+        '<span class="iconfont icon-verilog" />' + ' ' + fspath.basename(module.file.path),
+        '<span class="iconfont icon-parameter" />' + ' ' + `${paramNum}`,
+        '<span class="iconfont icon-port" />' + ' ' + `${portNum}`
     ];
-    md.addUnorderedList(infos);
+
+    if (hdlParam.isTopModule(module.path, module.name)) {
+        infos.push('<span class="iconfont icon-top-module" />' + ' ' + '√');
+    } else {
+        infos.push('<span class="iconfont icon-top-module" />' + ' ' + '×');
+    }
+
+    // md.addUnorderedList(infos);
+    md.addText(infos.join("&emsp;"));
+
     md.addEnter();
 
     const diagram = makeDiagram(module.params, module.ports);
@@ -159,32 +171,94 @@ async function getDocsFromModule(module: HdlModule): Promise<MarkdownString> {
     await paramPP;
     await portPP;
 
+    // 判断是否为单文件
+    let isSingleFile = false;
+    if (!opeParam.workspacePath || !fs.existsSync(opeParam.workspacePath)) {
+        isSingleFile = true;
+    } else {
+        const workspacePath = opeParam.workspacePath;
+        const modulePath = module.path;
+        isSingleFile = !modulePath.startsWith(workspacePath);
+    }
+    
     // param section
-    md.addTitle('Params', 2);
-    makeTableFromObjArray(md, module.params, 'params', 
-                          ['name', 'init', 'empty', 'desc'],
-                          ['Param Name', 'Init', 'Range', 'Description']);
+    md.addTitle(t('info.dide-doc.parameters'), 2);
+    if (module.params.length > 0) {
+        makeTableFromObjArray(md, module.params, 'params', 
+            ['name', 'init', 'empty', 'desc'],
+            // 'Param Name', 'Init', 'Range', 'Description'
+            [
+              t('info.dide-doc.param-name'),
+              t('info.dide-doc.parameter-init'),
+              t('info.dide-doc.range'),
+              t('info.dide-doc.description')
+            ],
+            isSingleFile);
+    } else {
+        md.addText(t('info.dide-doc.no-parameter-info'));
+    }
+
+    md.addEnter();
     md.addEnter();
     
 
     // port section
-    md.addTitle('Ports', 2);
-    makeTableFromObjArray(md, module.ports, 'ports', 
-                          ['name', 'type', 'width', 'desc'],
-                          ['Port Name', 'Direction', 'Range', 'Description']);
+    md.addTitle(t('info.dide-doc.ports'), 2);
+    if (module.ports.length > 0) {
+        makeTableFromObjArray(md, module.ports, 'ports', 
+            ['name', 'type', 'width', 'desc'],
+            // 'Port Name', 'Direction', 'Range', 'Description'
+            [
+              t('info.dide-doc.port-name'),
+              t('info.dide-doc.direction'),
+              t('info.dide-doc.range'),
+              t('info.dide-doc.description')
+            ],
+            isSingleFile);
+    } else {
+        md.addText(t('info.dide-doc.no-port-info'));
+    }
+
+    md.addEnter();
     md.addEnter();
     
     // dependency section
-    md.addTitle('Dependency', 2);
-    const insts = [];
-    for (const inst of module.getAllInstances()) {
-        insts.push(inst);
-    }
+    md.addTitle(t('info.dide-doc.dependency'), 2);
     
-    makeTableFromObjArray(md, insts, 'Dependencies',
-                         ['name', 'type', 'instModPath'],
-                         ['name', 'module', 'source']);
+    let insts = module.getAllInstances();
+    // 对于单文件模式而言，未进行 instance 搜索，所以insts必然是空的
+    if (isSingleFile && insts.length === 0 && module.rawInstances) {
+        insts = module.rawInstances.map(rawInstance => new HdlInstance(
+            rawInstance.name,
+            rawInstance.type,
+            undefined,
+            InstModPathStatus.Unknown,
+            rawInstance.instparams,
+            rawInstance.instports,
+            rawInstance.range,
+            module
+        ));
+    }
 
+    // 根据 start 进行排序
+    insts.sort((a, b) => a.range.start.line - b.range.start.line);
+    
+    if (insts.length > 0) {
+        makeTableFromObjArray(md, insts, 'Dependencies',
+            ['name', 'type', 'instModPath'],
+            // 'name', 'module', 'source'
+            [
+               t('info.dide-doc.module-name'),
+               t('info.dide-doc.module'),
+               t("info.dide-doc.source")
+            ],
+            isSingleFile);
+    } else {
+        md.addText(t('info.dide-doc.no-dep-info'));
+    }
+
+
+    md.addEnter();
     md.addEnter();
     return md;
 }
@@ -252,13 +326,9 @@ async function getRenderList(path: AbsPath): Promise<RenderString[] | undefined>
 /**
  * @description return render list of current file 
  */
-async function getCurrentRenderList(): Promise<RenderString[] | undefined> {
-    const editor = vscode.window.activeTextEditor;
-    if (editor) {
-        const currentFilePath = hdlPath.toSlash(editor.document.fileName);        
-        return await getRenderList(currentFilePath);
-    }
-    return;
+async function getCurrentRenderList(uri: vscode.Uri): Promise<RenderString[] | undefined> {
+    const currentFilePath = hdlPath.toSlash(uri.fsPath);     
+    return await getRenderList(currentFilePath);
 }
 
 async function exportCurrentFileDocAsMarkdown() {

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital IDE Document</title>
+    <link rel="stylesheet" href="documentation.css">
+    <link rel="stylesheet" href="iconfont.css">
+</head>
+<body>
+    <div id="wrapper">
+        <div id="write"></div>
+    </div>
+</body>
+<script>
+const vscode = acquireVsCodeApi();
+
+
+function enableHrefVscodeOpen() {
+    // 自定义超链接
+    document.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', (event) => {
+            event.preventDefault();
+            const href = link.getAttribute('href');
+            if (href.startsWith('file://')) {
+                vscode.postMessage({
+                    command: 'openFile',
+                    filePath: href
+                });
+            }
+        });
+    });
+}
+
+
+
+window.addEventListener('message', event => {
+    const response = event.data;
+    const { command, body } = response;    
+    switch (command) {
+        case 'do-render':
+            doRender(body);
+            break;
+    
+        default:
+            break;
+    }
+});
+
+window.onload = async () => {    
+    vscode.postMessage({
+        command: 'do-render'
+    });
+}
+
+function doRender(body) {
+    document.getElementById('write').innerHTML = body;
+    enableHrefVscodeOpen();
+}
+
+
+</script>
+</html>

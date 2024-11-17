@@ -26,14 +26,21 @@ export const LspClient: IDigitalIDELspClient = {
 export const CustomRequestType =        new RequestType<void, number, void>('custom/request');
 export const CustomParamRequestType =   new RequestType<ICommonParam, number, void>('custom/paramRequest');
 export const DoFastRequestType =        new RequestType<IDoFastParam, Fast, void>('api/fast');
-export const UpdateConfigurationType =  new RequestType<IUpdateConfigurationParam, void, void>('api/update-fast');
+export const UpdateConfigurationType =  new RequestType<IUpdateConfigurationParam, void, void>('api/update-configuration');
 export const DoPrimitivesJudgeType =    new RequestType<IDoPrimitivesJudgeParam, boolean, void>('api/do-primitives-judge');
+export const SyncFastRequestType =      new RequestType<ISyncFastParam, Fast, void>('api/sync-fast');
 
 export interface ITextDocumentItem {
     uri: vscode.Uri,
     languageId: string,
     version: number,
     text: string
+}
+
+export interface ISyncFastParam {
+    path: string,
+    fileType: DoFastFileType,
+    toolChain: DoFastToolChainType
 }
 
 export interface ICommonParam {

@@ -1,6 +1,7 @@
 import * as assert from 'assert';
 import * as vscode from 'vscode';
 import * as fs from 'fs';
+import * as fspath from 'path';
 
 import { opeParam, MainOutput, AbsPath } from '../../global';
 
@@ -100,7 +101,7 @@ function getDocCssString() {
     if (_cache.css) {
         return _cache.css;
     } else {
-        const cssPath = hdlPath.join(opeParam.extensionPath, 'css/documentation.css');
+        const cssPath = hdlPath.join(opeParam.extensionPath, 'resources/dide-doc/documentation.css');
         const cssString = fs.readFileSync(cssPath, 'utf-8');
         _cache.css = cssString;
         return cssString;
@@ -114,19 +115,18 @@ function makeWavedromRenderErrorHTML() {
 </div><br>`;
 }
 
-
 /**
- * @description make the html string of a finial display style
- * @param usage in whick module is used
+ * @description 生成制作一个 webview 的 html 代码
+ * @param usage 
  */
-async function makeShowHTML(usage: 'webview' | 'pdf' | 'html' | 'markdown'): Promise<string> {
-
+export async function makeDocBody(uri: vscode.Uri, usage: 'webview' | 'pdf' | 'html' | 'markdown'): Promise<string> {
     // start to render the real html
     let body = '';
     const userStyle = (usage === 'webview' || usage === 'markdown') ? undefined : ThemeType.Light;
     ThemeColorConfig.specify = userStyle;
 
-    const renderList = await getCurrentRenderList();
+    const renderList = await getCurrentRenderList(uri);
+        
     if (!renderList || renderList.length === 0) {
         return '';
     }
@@ -144,13 +144,26 @@ async function makeShowHTML(usage: 'webview' | 'pdf' | 'html' | 'markdown'): Pro
         }
     }
 
+    return body;
+}
+
+
+/**
+ * @description 制作用于生成 pdf 等的文档
+ * @param usage in whick module is used
+ */
+async function makeShowHTML(uri: vscode.Uri, usage: 'webview' | 'pdf' | 'html' | 'markdown'): Promise<string> {
+    const body = await makeDocBody(uri, usage);
+
     // add css
     let cssString = getDocCssString();
-    if (usage === 'webview') {          // if invoked by webview, change background image
+    if (usage === 'webview') {
+        // if invoked by webview, change background image
         const webviewConfig = vscode.workspace.getConfiguration("digital-ide.function.doc.webview");
         const imageUrl = webviewConfig.get('backgroundImage', '');
         cssString = cssString.replace("--backgroundImage", imageUrl);
-    } else if (usage === 'pdf') {      // if invoked by pdf, transform .vscode-light to #write
+    } else if (usage === 'pdf') {
+        // if invoked by pdf, transform .vscode-light to #write
         cssString = cssString.replace(/\.vscode-light/g, '#write');
     }
     const html = makeFinalHTML(body, cssString);
@@ -159,8 +172,11 @@ async function makeShowHTML(usage: 'webview' | 'pdf' | 'html' | 'markdown'): Pro
     return html;
 }
 
-async function showDocWebview() {
-    const htmlPromise = makeShowHTML("webview");
+/**
+ * @description 生成展示文档化的 webview
+ */
+async function showDocWebview(uri: vscode.Uri) {
+    const htmlPromise = makeShowHTML(uri, "webview");
     const webview = vscode.window.createWebviewPanel(
         'TOOL.doc.webview.show', 
         'document',
@@ -172,6 +188,7 @@ async function showDocWebview() {
     );
 
     webview.iconPath = hdlIcon.getIconConfig('documentation');
+
     webview.webview.html = await htmlPromise;
     webview.webview.onDidReceiveMessage(message => {
         switch (message.command) {
@@ -179,9 +196,7 @@ async function showDocWebview() {
                 let filePath: string = message.filePath;
                 if (filePath.startsWith('file://')) {
                     filePath = filePath.slice(7);
-                }
-                console.log('debug, ', filePath);
-                
+                }                
                 const uri = vscode.Uri.file(filePath);
                 vscode.commands.executeCommand('vscode.open', uri);
                 return;
@@ -189,6 +204,57 @@ async function showDocWebview() {
     });
 }
 
+function getWebviewContent(context: vscode.ExtensionContext, panel?: vscode.WebviewPanel): string | undefined {
+    const didedocPath = hdlPath.join(context.extensionPath, 'resources', 'dide-doc');
+    const htmlIndexPath = hdlPath.join(didedocPath, 'index.html');
+    const html = hdlFile.readFile(htmlIndexPath)?.replace(/(<link.+?href="|<script.+?src="|<img.+?src=")(.+?)"/g, (m, $1, $2) => {
+        const absLocalPath = fspath.resolve(didedocPath, $2);
+        const webviewUri = panel?.webview.asWebviewUri(vscode.Uri.file(absLocalPath));
+        const replaceHref = $1 + webviewUri?.toString() + '"';
+        return replaceHref;
+    });
+    return html;
+}
+
+export async function makeDocWebview(uri: vscode.Uri, context: vscode.ExtensionContext): Promise<vscode.WebviewPanel> {
+    const panel = vscode.window.createWebviewPanel(
+        'TOOL.doc.webview.show', 
+        'document',
+        vscode.ViewColumn.Two,
+        {
+            enableScripts: true,            // enable JS
+            retainContextWhenHidden: true,  // unchange webview when hidden, prevent extra refresh
+        }
+    );
+
+    panel.iconPath = hdlIcon.getIconConfig('documentation');
+    
+    const html = getWebviewContent(context, panel);
+    if (html === undefined) {
+        return panel;
+    }
+
+    panel.webview.html = html;
+    panel.webview.onDidReceiveMessage(async message => {
+        switch (message.command) {
+            case 'openFile':
+                let filePath: string = message.filePath;
+                if (filePath.startsWith('file://')) {
+                    filePath = filePath.slice(7);
+                }                
+                vscode.commands.executeCommand('vscode.open', vscode.Uri.file(filePath));
+                return;
+            case 'do-render':
+                const renderBody = await makeDocBody(uri, 'webview');                
+                panel.webview.postMessage({
+                    command: 'do-render',
+                    body: renderBody
+                });
+                return;
+        }
+    });
+    return panel;
+}
 
 async function exportCurrentFileDocAsHTML() {
     if (vscode.window.activeColorTheme.kind !== vscode.ColorThemeKind.Light) {

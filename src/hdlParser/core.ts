@@ -526,7 +526,7 @@ class HdlInstance {
         this.instparams = newInstance.instparams;
         this.instports = newInstance.instports;
 
-        this.instModPath = this.parentMod.path;
+        this.instModPath = this.module?.path || '';
         this.instModPathStatus = this.parentMod.solveInstModPathStatus();
     }
 
@@ -615,7 +615,7 @@ class HdlModule {
         const instModName = rawHdlInstance.type;
 
         if (this.languageId === HdlLangID.Verilog || this.languageId === HdlLangID.SystemVerilog) {
-            const searchResult = this.searchInstModPath(instModName);            
+            const searchResult = this.searchInstModPath(instModName);       
             const hdlInstance = new HdlInstance(rawHdlInstance.name,
                                                 rawHdlInstance.type,
                                                 searchResult.path,

@@ -22,7 +22,6 @@ import { hdlPath } from '../hdlFs';
 import { LspClient, opeParam } from '../global';
 import { DoFastToolChainType, SyncFastRequestType } from '../global/lsp';
 import { makeDocBody } from './hdlDoc/html';
-import { State } from 'vscode-languageclient';
 
 function registerDocumentation(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('digital-ide.hdlDoc.showWebview', async (uri: vscode.Uri) => {
@@ -92,6 +91,7 @@ function registerTreeView(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('digital-ide.treeView.arch.collapse', treeView.collapseTreeView);
     vscode.commands.registerCommand('digital-ide.treeView.arch.refresh', treeView.refreshArchTree);
     vscode.commands.registerCommand('digital-ide.treeView.arch.openFile', treeView.openFileByUri);
+    vscode.commands.registerCommand('digital-ide.tool.clean', treeView.clean);
 }
 
 function registerLsp(context: vscode.ExtensionContext, version: string) {

@@ -187,9 +187,13 @@ class XilinxOperation {
             _this.onVivadoClose();
         }, 100);
 
-        function launchScript(): Promise<ChildProcessWithoutNullStreams> {
+        function launchScript(): Promise<ChildProcessWithoutNullStreams | undefined> {
+            if (!opeParam.workspacePath) {
+                return Promise.resolve(undefined);
+            }
             // 执行 cmd 启动
-            const vivadoProcess = spawn(cmd, [], { shell: true, stdio: 'pipe' });
+            console.log('spawn process in ', opeParam.workspacePath);
+            const vivadoProcess = spawn(cmd, [], { shell: true, stdio: 'pipe', cwd: opeParam.workspacePath });
 
             vivadoProcess.on('close', () => {
                 onVivadoClose();            

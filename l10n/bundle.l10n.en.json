@@ -59,5 +59,6 @@
     "info.dide-doc.no-port-info": "No port information",
     "info.dide-doc.no-dep-info": "No dependency information",
     "info.dide-doc.source.cannot-find": "Cannot find",
-    "info.command.instantiation.pick-title": "Select a Module"
+    "info.command.instantiation.pick-title": "Select a Module",
+    "warn.command.clean.prjPath-is-workspace": "arch.prjPath is the same as the workspace path, the clean will delete the project, please check your arch.prjPath!"
 }

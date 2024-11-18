@@ -592,6 +592,11 @@
                 },
                 "category": "Digital-IDE",
                 "title": "%digital-ide.waveviewer.show.title%"
+            },
+            {
+                "command": "digital-ide.tool.clean",
+                "category": "Digital-IDE",
+                "title": "%digital-ide.tool.clean.title%"
             }
         ],
         "menus": {
@@ -1066,7 +1071,7 @@
                     "fontCharacter": "\\e7a8"
                 }
             },
-            "instance-systemverilog":{
+            "instance-systemverilog": {
                 "description": "icon of system-verilog in TOOL.instance",
                 "default": {
                     "fontPath": "./images/icons/iconfont.woff2",

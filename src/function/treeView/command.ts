@@ -6,6 +6,7 @@ import { MainOutput, opeParam } from '../../global';
 import { hdlDir, hdlFile, hdlPath } from '../../hdlFs';
 import { getIconConfig } from '../../hdlFs/icons';
 import { hdlIgnore } from '../../manager/ignore';
+import { t } from '../../i18n';
 
 interface CommandDataItem {
     name: string,
@@ -191,18 +192,16 @@ class ToolTreeProvider extends BaseCommandTreeProvider {
             }
         };
         super(config, 'TOOL');
-
-        vscode.commands.registerCommand('digital-ide.tool.clean', this.clean);
     }
 
     public async clean() {
         const workspacePath = opeParam.workspacePath;
+        const prjPath = opeParam.prjStructure.prjPath;
 
         // move bd * ip
         const plName = opeParam.prjInfo.prjName.PL;
         const targetPath = fspath.dirname(opeParam.prjInfo.arch.hardware.src);
 
-        // TODO: 适配更多的 toolChain
         const sourceIpPath = `${workspacePath}/prj/xilinx/${plName}.srcs/sources_1/ip`;
         const sourceBdPath = `${workspacePath}/prj/xilinx/${plName}.srcs/sources_1/bd`;
 
@@ -212,30 +211,73 @@ class ToolTreeProvider extends BaseCommandTreeProvider {
         hdlDir.mvdir(sourceBdPath, targetPath, true);
         MainOutput.report("move dir from " + sourceBdPath + " to " + targetPath);
                 
-        // if (prjPath !== opeParam.workspacePath) {
-        //     hdlDir.rmdir(prjPath);
-        //     hdlDir.rmdir(xilFolder);
-        //     MainOutput.report("remove dir : " + prjPath);
-        //     MainOutput.report("remove dir : " + xilFolder);
-        // } else {
-        //     vscode.window.showWarningMessage("arch.prjPath is the same as the workspace path, the clean will delete the project, please check your arch.prjPath!");
-        // }
+        if (prjPath !== opeParam.workspacePath) {
+            hdlDir.rmdir(prjPath);
+            const xilFolder = hdlPath.join(opeParam.workspacePath, '.Xil');
+            hdlDir.rmdir(xilFolder);
+            MainOutput.report("remove dir : " + prjPath);
+            MainOutput.report("remove dir : " + xilFolder);
+        } else {
+            vscode.window.showWarningMessage(t('warn.command.clean.prjPath-is-workspace'));
+        }
 
-        // const ignores = hdlIgnore.getIgnoreFiles();
-        // const strFiles = hdlFile.pickFileRecursive(workspacePath, ignores, p => p.endsWith('.str'));
-        // for (const path of strFiles) {
-        //     hdlFile.removeFile(path);
-        //     MainOutput.report("remove file " + path);
-        // }
+        const ignores = hdlIgnore.getIgnoreFiles();
+        const strFiles = hdlFile.pickFileRecursive(workspacePath, ignores, p => p.endsWith('.str'));
+        for (const path of strFiles) {
+            hdlFile.removeFile(path);
+            MainOutput.report("remove file " + path);
+        }
 
-        // const logFiles = hdlFile.pickFileRecursive(workspacePath, ignores, p => p.endsWith('.log'));
-        // for (const path of logFiles) {
-        //     hdlFile.readFile(path);
-        // }
+        const logFiles = hdlFile.pickFileRecursive(workspacePath, ignores, p => p.endsWith('.log'));
+        for (const path of logFiles) {
+            hdlFile.readFile(path);
+        }
 
         MainOutput.report('finish digital-ide.tool.clean');
     }
 
+}
+
+export async function clean() {
+    const workspacePath = opeParam.workspacePath;
+    const prjPath = opeParam.prjStructure.prjPath;
+
+    // move bd * ip
+    const plName = opeParam.prjInfo.prjName.PL;
+    const targetPath = fspath.dirname(opeParam.prjInfo.arch.hardware.src);
+
+    const sourceIpPath = `${workspacePath}/prj/xilinx/${plName}.srcs/sources_1/ip`;
+    const sourceBdPath = `${workspacePath}/prj/xilinx/${plName}.srcs/sources_1/bd`;
+
+    hdlDir.mvdir(sourceIpPath, targetPath, true);
+    MainOutput.report("move dir from " + sourceIpPath + " to " + targetPath);
+
+    hdlDir.mvdir(sourceBdPath, targetPath, true);
+    MainOutput.report("move dir from " + sourceBdPath + " to " + targetPath);
+            
+    if (prjPath !== opeParam.workspacePath) {
+        hdlDir.rmdir(prjPath);
+        const xilFolder = hdlPath.join(opeParam.workspacePath, '.Xil');
+        hdlDir.rmdir(xilFolder);
+        MainOutput.report("remove dir : " + prjPath);
+        MainOutput.report("remove dir : " + xilFolder);
+    } else {
+        vscode.window.showWarningMessage(t('warn.command.clean.prjPath-is-workspace'));
+    }
+
+    const ignores = hdlIgnore.getIgnoreFiles();
+    const strFiles = hdlFile.pickFileRecursive(workspacePath, ignores, p => p.endsWith('.str'));
+    for (const path of strFiles) {
+        hdlFile.removeFile(path);
+        MainOutput.report("remove file " + path);
+    }
+
+    const logFiles = hdlFile.pickFileRecursive(workspacePath, ignores, p => p.endsWith('.log'));
+    for (const path of logFiles) {
+        hdlFile.readFile(path);
+    }
+
+    MainOutput.report('finish digital-ide.tool.clean');
 }
 
 

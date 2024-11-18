@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as fspath from 'path';
 import { hdlFile, hdlPath } from '../../hdlFs';
 
-import { hardwareTreeProvider, softwareTreeProvider, toolTreeProvider } from './command';
+import { clean, hardwareTreeProvider, softwareTreeProvider, toolTreeProvider } from './command';
 import { moduleTreeProvider, ModuleDataItem  } from './tree';
 import { Range } from '../../hdlParser/common';
 import { MainOutput, opeParam, ReportType } from '../../global';
@@ -90,5 +90,6 @@ export {
     expandTreeView,
     collapseTreeView,
     openFileByUri,
-    refreshArchTree
+    refreshArchTree,
+    clean
 };

@@ -7,6 +7,7 @@ import { opeParam } from '../global';
 import { hdlFile, hdlPath } from '../hdlFs';
 import { ModuleDataItem } from './treeView/tree';
 import { hdlParam } from '../hdlParser';
+import { t } from '../i18n';
 
 async function insertTextToUri(uri: vscode.Uri, text: string, position?: vscode.Position) {
     if (!position) {
@@ -47,7 +48,6 @@ const PPY_LIB_REPLACE: Record<string, string> = {
 };
 
 async function transformOldPpy() {
-    const { t } = vscode.l10n;
     const propertyJsonPath = opeParam.propertyJsonPath;
     if (fs.existsSync(propertyJsonPath)) {
         const oldPpyContent = hdlFile.readJSON(propertyJsonPath) as Record<any, any>;
@@ -117,7 +117,6 @@ async function transformOldPpy() {
 }
 
 async function askUserToSaveFilelist(filelist: string[]) {
-    const { t } = vscode.l10n;
 
     const topModulePath = filelist[0];
     const defaultSaveName = fspath.basename(topModulePath, fspath.extname(topModulePath));

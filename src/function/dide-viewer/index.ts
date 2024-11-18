@@ -7,6 +7,7 @@ import { opeParam, ReportType, WaveViewOutput } from '../../global';
 import { LaunchFiles, loadView, saveView, saveViewAs } from './api';
 import { BSON } from 'bson';
 import { getIconConfig } from '../../hdlFs/icons';
+import { t } from '../../i18n';
 
 function getWebviewContent(context: vscode.ExtensionContext, panel?: vscode.WebviewPanel): string | undefined {
     const dideviewerPath = hdlPath.join(context.extensionPath, 'resources', 'dide-viewer', 'view');
@@ -202,7 +203,6 @@ function registerMessageEvent(panel: vscode.WebviewPanel, uri: vscode.Uri) {
  * @returns 
  */
 function getViewLaunchFiles(context: vscode.ExtensionContext, uri: vscode.Uri, panel: vscode.WebviewPanel): LaunchFiles | Error {
-    const { t } = vscode.l10n;    
     const entryPath = uri.fsPath;
     const dideviewerPath = hdlPath.join(context.extensionPath, 'resources', 'dide-viewer', 'view');
     const workerAbsPath = hdlPath.join(dideviewerPath, 'worker.js');

@@ -8,6 +8,7 @@ import { hdlFile, hdlPath } from '../../hdlFs';
 import { xilinx, itemModes, otherModes } from './common';
 import { getIconConfig } from '../../hdlFs/icons';
 import { DoFastFileType } from '../../global/lsp';
+import { t } from '../../i18n';
 
 let needExpand = true;
 
@@ -109,12 +110,10 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
 
 
     public getTreeItem(element: ModuleDataItem): vscode.TreeItem | Thenable<vscode.TreeItem> {
-        const { t } = vscode.l10n;
         let itemName = element.name;
         if (itemModes.has(element.icon)) {
             itemName = `${element.type}(${itemName})`;
         }
-
         const expandable = canExpandable(element);
         let collapsibleState;
         if (!expandable) {

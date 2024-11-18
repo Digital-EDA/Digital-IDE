@@ -7,6 +7,7 @@ import { hdlParam } from '../../hdlParser';
 import { hdlFile, hdlPath } from '../../hdlFs';
 import { defaultMacro, doFastApi } from '../../hdlParser/util';
 import { HdlFile } from '../../hdlParser/core';
+import { t } from '../../i18n';
 
 
 class Netlist {
@@ -19,7 +20,6 @@ class Netlist {
     }
 
     public async open(uri: vscode.Uri) {
-        const { t } = vscode.l10n;
 
         // get dependence of the current uri
         const prjFiles = [];

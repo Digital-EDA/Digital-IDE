@@ -12,6 +12,7 @@ import { PropertySchema } from '../../global/propertySchema';
 import { XilinxIP } from '../../global/enum';
 import { HardwareOutput, MainOutput, ReportType } from '../../global/outputChannel';
 import { debounce } from '../../global/util';
+import { t } from '../../i18n';
 
 interface XilinxCustom {
     ipRepo: AbsPath, 
@@ -139,8 +140,6 @@ class XilinxOperation {
      * @param context
      */
     public async launch(context: PLContext): Promise<string | undefined> {
-        const { t } = vscode.l10n;
-
         this.guiLaunched = false;
         let scripts: string[] = [];
 
@@ -244,7 +243,7 @@ class XilinxOperation {
                 }
                 messageBuffer.push(line);
             }
-            const launchInfo = vscode.l10n.t('info.pl.launch.launch-info');
+            const launchInfo = t('info.pl.launch.launch-info');
             messageBuffer.unshift(launchInfo);
             return messageBuffer.join("\n");
         }
@@ -582,8 +581,6 @@ file delete ${scriptPath} -force\n`;
     }
 
     public async gui(context: PLContext) {
-        const { t } = vscode.l10n;
-
         if (context.process === undefined) {
             await this.launch(context);
         }
@@ -597,8 +594,6 @@ file delete ${scriptPath} -force\n`;
     }
 
     public addFiles(files: string[], context: PLContext) {
-        const { t } = vscode.l10n;
-
         if (!this.guiLaunched && files.length > 0) {
             const filesString = files.join("\n");
             HardwareOutput.report(t('info.pl.add-files.title') + '\n' + filesString);
@@ -607,8 +602,6 @@ file delete ${scriptPath} -force\n`;
     }
 
     public delFiles(files: string[], context: PLContext) {
-        const { t } = vscode.l10n;
-
         if (!this.guiLaunched && files.length > 0) {
             const filesString = files.join("\n");
             HardwareOutput.report(t('info.pl.del-files.title') + '\n' + filesString);

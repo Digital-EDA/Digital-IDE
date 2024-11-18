@@ -14,6 +14,7 @@ import { getSymbolComments } from '../lsp/util/feature';
 import { HdlLangID, ThemeType } from '../../global/enum';
 import { makeDiagram } from './diagram';
 import { defaultMacro, doFastApi } from '../../hdlParser/util';
+import { t } from '../../i18n';
 
 
 function makeSVGElementByLink(link: AbsPath, caption?: string) {
@@ -45,12 +46,12 @@ function selectFieldValue(obj: any, subName: string, ws: string, name: string, i
             if (hdlFile && hdlFile.type === 'remote_lib') {
                 // 如果是 库 文件，做出更加自定义的字面量
                 const libRelPath = value.replace(`${opeParam.extensionPath}/library/`, '');                
-                value = `(library) [${libRelPath}](file://${value})`;
+                value = `<span class="source-lib-tag">library</span> [${libRelPath}](file://${value})`;
             } else {
-                value = `(project) [${relativePath}](file://${value})`;
+                value = `<span class="source-prj-tag">project</span> [${relativePath}](file://${value})`;
             }            
         } else {
-            value = '(unknown) ' + vscode.l10n.t('info.dide-doc.source.cannot-find');
+            value = '<span class="source-unk-tag">unknown</span> ' + t('info.dide-doc.source.cannot-find');
         }
     }
 
@@ -123,8 +124,6 @@ async function patchComment(path: AbsPath, ports: (HdlModulePort | HdlModulePara
  * @param module 
  */
 async function getDocsFromModule(module: HdlModule): Promise<MarkdownString> {
-    const { t } = vscode.l10n;
-
     const moduleName = module.name;
     const portNum = module.ports.length;
     const paramNum = module.params.length;
@@ -182,7 +181,8 @@ async function getDocsFromModule(module: HdlModule): Promise<MarkdownString> {
     }
     
     // param section
-    md.addTitle(t('info.dide-doc.parameters'), 2);
+    const paramTitleIcon = '<span class="iconfont icon-parameter"></span> ';
+    md.addTitle(paramTitleIcon + t('info.dide-doc.parameters'), 2);
     if (module.params.length > 0) {
         makeTableFromObjArray(md, module.params, 'params', 
             ['name', 'init', 'empty', 'desc'],
@@ -203,7 +203,8 @@ async function getDocsFromModule(module: HdlModule): Promise<MarkdownString> {
     
 
     // port section
-    md.addTitle(t('info.dide-doc.ports'), 2);
+    const portTitleIcon = '<span class="iconfont icon-port"></span> ';
+    md.addTitle(portTitleIcon + t('info.dide-doc.ports'), 2);
     if (module.ports.length > 0) {
         makeTableFromObjArray(md, module.ports, 'ports', 
             ['name', 'type', 'width', 'desc'],
@@ -223,7 +224,8 @@ async function getDocsFromModule(module: HdlModule): Promise<MarkdownString> {
     md.addEnter();
     
     // dependency section
-    md.addTitle(t('info.dide-doc.dependency'), 2);
+    const depTitleIcon = '<span class="iconfont icon-tree"></span> ';
+    md.addTitle(depTitleIcon + t('info.dide-doc.dependency'), 2);
     
     let insts = module.getAllInstances();
     // 对于单文件模式而言，未进行 instance 搜索，所以insts必然是空的
@@ -269,8 +271,6 @@ async function getDocsFromModule(module: HdlModule): Promise<MarkdownString> {
  * @param path absolute path of the file
  */
 async function getDocsFromFile(path: AbsPath): Promise<MarkdownString[] | undefined> {
-    const { t } = vscode.l10n;
-
     let moduleFile = hdlParam.getHdlFile(path);
     // 没有说明是单文件模式，直接打开解析
     if (!moduleFile) {

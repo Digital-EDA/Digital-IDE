@@ -13,6 +13,7 @@ import { moduleTreeProvider, ModuleDataItem } from '../../function/treeView/tree
 import { HdlFileType } from '../../hdlParser/common';
 import { PropertySchema } from '../../global/propertySchema';
 import { HardwareOutput, ReportType } from '../../global/outputChannel';
+import { t } from '../../i18n';
 
 class PlManage extends BaseManage {
     context: PLContext;
@@ -96,7 +97,6 @@ class PlManage extends BaseManage {
     }
 
     public exit() {
-        const { t } = vscode.l10n;
 
         if (this.context.process === undefined) {
             return;

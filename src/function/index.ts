@@ -22,6 +22,7 @@ import { hdlPath } from '../hdlFs';
 import { LspClient, opeParam } from '../global';
 import { DoFastToolChainType, SyncFastRequestType } from '../global/lsp';
 import { makeDocBody } from './hdlDoc/html';
+import { State } from 'vscode-languageclient';
 
 function registerDocumentation(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('digital-ide.hdlDoc.showWebview', async (uri: vscode.Uri) => {
@@ -35,7 +36,7 @@ function registerDocumentation(context: vscode.ExtensionContext) {
             // TODO: 注册文件变动监听
             const fileChangeDisposer = vscode.window.onDidChangeActiveTextEditor(async event => {
                 // const client = LspClient.DigitalIDE;
-                // if (client && event?.document) {
+                // if (client && event?.document && client.state === State.Running && event.document.uri.path === uri.path) {
                 //     const path = hdlPath.toSlash(event.document.fileName);
                 //     const fileType = 'common';
                 //     const toolChain = opeParam.prjInfo.toolChain as DoFastToolChainType;

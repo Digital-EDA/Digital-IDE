@@ -14,6 +14,7 @@ import { libManage } from '../manager/lib';
 import type { HdlMonitor } from './index';
 import { HdlLangID, ToolChainType } from '../global/enum';
 import { vlogLinterManager, vhdlLinterManager, svlogLinterManager } from '../function/lsp/linter';
+import { t } from '../i18n';
 
 enum Event {
     Add = 'add',                 // emit when add file
@@ -281,8 +282,6 @@ class PpyAction extends BaseAction {
 
     public async refreshHdlMonitor(m: HdlMonitor, originalHdlFiles: AbsPath[]) {           
         m.remakeHdlMonitor();
-
-        const { t } = vscode.l10n;
         const newFiles = await prjManage.getPrjHardwareFiles();
         const { addFiles, delFiles } = this.diffNewOld(newFiles, originalHdlFiles);
 

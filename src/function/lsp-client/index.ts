@@ -16,6 +16,7 @@ import axios, { AxiosResponse } from "axios";
 import { chooseBestDownloadSource, getGiteeDownloadLink, getGithubDownloadLink, getPlatformPlatformSignature } from "./cdn";
 import { hdlDir, hdlPath } from "../../hdlFs";
 import { registerConfigurationUpdater } from "./config";
+import { t } from "../../i18n";
 
 function getLspServerExecutionName() {
     const osname = platform();
@@ -98,8 +99,6 @@ async function checkAndDownload(context: vscode.ExtensionContext, version: strin
 }
 
 export async function downloadLsp(context: vscode.ExtensionContext, version: string, versionFolderPath: string): Promise<boolean> {
-    const { t } = vscode.l10n;
-    
     const downloadLink = await vscode.window.withProgress({
         location: vscode.ProgressLocation.Notification,
         title: t('info.progress.choose-best-download-source')

@@ -4,6 +4,7 @@ import { hdlParam } from '../../hdlParser';
 import { HdlModulePort, HdlModuleParam, HdlModulePortType } from '../../hdlParser/common';
 import { HdlModule } from '../../hdlParser/core';
 import { hdlFile, hdlPath } from '../../hdlFs';
+import { t } from '../../i18n';
 
 class ModuleInfoItem {
     label: string;
@@ -275,7 +276,6 @@ function getSelectItem(modules: HdlModule[]) {
  * @description 调用vscode的窗体，让用户从所有的Module中选择模块（为后续的例化准备）
  */
 async function selectModuleFromAll() {
-    const { t } = vscode.l10n;
     const option = {
         placeHolder: t('info.command.instantiation.pick-title')
     };

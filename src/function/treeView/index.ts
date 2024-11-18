@@ -7,6 +7,7 @@ import { hardwareTreeProvider, softwareTreeProvider, toolTreeProvider } from './
 import { moduleTreeProvider, ModuleDataItem  } from './tree';
 import { Range } from '../../hdlParser/common';
 import { MainOutput, opeParam, ReportType } from '../../global';
+import { t } from '../../i18n';
 
 
 async function openFileAtPosition(uri: vscode.Uri, range?: Range) {
@@ -16,7 +17,7 @@ async function openFileAtPosition(uri: vscode.Uri, range?: Range) {
             end: { line: 0, character: 0 }
         }
     }
-    const document = await vscode.workspace.openTextDocument(uri);    
+    const document = await vscode.workspace.openTextDocument(uri);
     const start = new vscode.Position(range.start.line, range.start.character);
     const end = new vscode.Position(range.end.line, range.end.character);
 
@@ -29,7 +30,6 @@ async function openFileAtPosition(uri: vscode.Uri, range?: Range) {
 }
 
 function openFileByUri(path: string, range: Range, element: ModuleDataItem) {
-    const { t } = vscode.l10n; 
     if (range === undefined) {
         // vscode.window.showErrorMessage(`${path} not support jump yet`);
         return;
@@ -53,7 +53,6 @@ function openFileByUri(path: string, range: Range, element: ModuleDataItem) {
 }
 
 function gotoXilinxIPDefinition(element: ModuleDataItem) {
-    const { t } = vscode.l10n;
     const folderPath = element.path;
     if (folderPath) {
         const ipName = fspath.basename(folderPath);

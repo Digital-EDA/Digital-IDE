@@ -9,6 +9,8 @@ import { hdlMonitor } from './monitor';
 
 import * as lspClient from './function/lsp-client';
 import { refreshArchTree } from './function/treeView';
+import { hdlFile } from './hdlFs';
+import { initialiseI18n, t } from './i18n';
 
 
 async function registerCommand(context: vscode.ExtensionContext, packageJson: any) {
@@ -34,7 +36,8 @@ function readPackageJson(context: vscode.ExtensionContext): any | undefined {
 }
 
 async function launch(context: vscode.ExtensionContext) {
-    const { t } = vscode.l10n;
+    initialiseI18n(context);
+    
     console.log(t('info.welcome.title'));
     console.log(t('info.welcome.join-qq-group') + ' https://qm.qq.com/q/1M655h3GsA'); 
     const packageJson = readPackageJson(context);

@@ -5,6 +5,7 @@ import { BSON } from 'bson';
 import * as path from 'path';
 import * as os from 'os';
 import { getIconConfig } from '../../hdlFs/icons';
+import { t } from '../../i18n';
 
 export interface SaveViewData {
     originVcdFile: string,
@@ -80,9 +81,6 @@ function getFilename(file: string) {
 
 
 export async function saveViewAs(data: any, uri: vscode.Uri, panel: vscode.WebviewPanel) {
-    const { t } = vscode.l10n;
-
-
     try {
         // 先保存原来的文件 payload 一定是 all
         let { originVcdFile, originVcdViewFile, payload } = data;
@@ -101,7 +99,6 @@ export async function saveViewAs(data: any, uri: vscode.Uri, panel: vscode.Webvi
         const vcdFilters: Record<string, string[]> = {};
         vcdFilters[t('info.vcd-viewer.vcd-view-file')] = ['view'];
         vcdFilters[t('info.vcd-viewer.all-file')] = ['*'];
-        
         const saveUri = await vscode.window.showSaveDialog({
             title: t('info.vcd-viewer.save-as-view'),
             defaultUri: vscode.Uri.file(path.join(rootPath, defaultFilename)),
@@ -137,7 +134,6 @@ export async function saveViewAs(data: any, uri: vscode.Uri, panel: vscode.Webvi
 
 
 export async function loadView(data: any, uri: vscode.Uri, panel: vscode.WebviewPanel) {
-    const { t } = vscode.l10n;
     try {
         let { originVcdFile } = data;
 

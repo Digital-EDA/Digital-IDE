@@ -11,6 +11,7 @@ import assert = require('assert');
 import * as hdlPath from '../hdlFs/path';
 import { hdlDir } from '../hdlFs';
 import { MainOutput } from './outputChannel';
+import { t } from '../i18n';
 
 
 type AbsPath = string;
@@ -400,7 +401,6 @@ class PrjInfo implements PrjInfoMeta {
     }
 
     public updateArch(arch?: Arch) {
-        const { t } = vscode.l10n;
         const workspacePath = this._workspacePath;
         if (arch) {
             // 如果配置中存在，直接根据用户配置的项来赋值

@@ -9,6 +9,7 @@ import * as common from './common';
 import { hdlFile, hdlPath } from '../hdlFs';
 import { defaultMacro, defaultRange, doPrimitivesJudgeApi, HdlSymbol } from './util';
 import { DoFastFileType } from '../global/lsp';
+import { t } from '../i18n';
 
 
 class HdlParam {
@@ -253,10 +254,8 @@ class HdlParam {
 
 
     public async initializeHdlFiles(hdlFiles: AbsPath[], progress: vscode.Progress<IProgress>) {        
-        const { t } = vscode.l10n;        
         let count: number = 0;
         let fileNum = hdlFiles.length;
-
         const parallelChunk = Math.min(os.cpus().length, 32);
         console.log("use cpu: " + parallelChunk);
 
@@ -290,7 +289,6 @@ class HdlParam {
     }
 
     public async initializeIPsPath(IPsPath: string[], progress: vscode.Progress<IProgress>) {
-        const { t } = vscode.l10n;        
         let count: number = 0;
         let fileNum = IPsPath.length;
 

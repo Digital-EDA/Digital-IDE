@@ -636,3 +636,28 @@ img {
 .icon-parameter:before {
     font-weight: 1000;
 }
+
+#write .source-lib-tag {
+    font-size: 0.85rem;
+    padding: 3px 4px;
+    border-radius: .5em;
+    background-color: rgb(35,102,93);
+}
+
+#write .source-prj-tag {
+    font-size: 0.85rem;
+    padding: 3px 4px;
+    border-radius: .5em;
+    background-color: rgb(53,59,140);
+}
+
+#write .source-unk-tag {
+    font-size: 0.85rem;
+    padding: 3px 4px;
+    border-radius: .5em;
+    background-color: #a09c9c;
+}
+
+#write table, th, td {
+    border: 1px solid var(--vscode-foreground) !important;
+}

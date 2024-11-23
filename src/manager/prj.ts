@@ -17,6 +17,7 @@ import { hdlMonitor } from '../monitor';
 import { NotificationType } from 'vscode-jsonrpc';
 import { refreshArchTree } from '../function/treeView';
 import { Fast } from '../hdlParser/common';
+import { t } from '../i18n';
 
 interface RefreshPrjConfig {
     mkdir: boolean
@@ -123,7 +124,7 @@ class PrjManage {
             searchPathSet.checkAdd(prjInfo.getLibraryCommonPaths());
             searchPathSet.checkAdd(prjInfo.getLibraryCustomPaths());
         }
-                    
+
         MainOutput.report('<getPrjHardwareFiles> search folders: ', ReportType.Debug);
         searchPathSet.files.forEach(p => MainOutput.report(p, ReportType.Debug));
 
@@ -132,7 +133,8 @@ class PrjManage {
 
         // do search
         const searchPaths = searchPathSet.files;
-        const hdlFiles = hdlFile.getHDLFiles(searchPaths, ignores);        
+        const hdlFiles = hdlFile.getHDLFiles(searchPaths, ignores);
+
         return hdlFiles;
     }
 

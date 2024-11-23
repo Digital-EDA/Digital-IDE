@@ -10,5 +10,6 @@
     "typescript.tsc.autoDetect": "off",
     "i18n-haru.root": "l10n",
     "i18n-haru.main": "zh-cn",
+    "i18n-haru.display": "zh-cn",
     "i18n-haru.line-hint-max-length": 20
 }

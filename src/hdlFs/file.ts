@@ -75,8 +75,10 @@ function isHDLFile(path: AbsPath): boolean {
 
 
 function getHDLFiles(path: AbsPath | AbsPath[] | Set<AbsPath>, ignores?: AbsPath[]): AbsPath[] {
-    return pickFileRecursive(path, ignores, 
+    const allFiles = pickFileRecursive(path, ignores, 
         filePath => isHDLFile(filePath));
+    const pathSet = new Set<string>(allFiles);
+    return [...pathSet];
 }
 
 

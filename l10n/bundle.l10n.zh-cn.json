@@ -60,5 +60,6 @@
     "info.dide-doc.no-dep-info": "没有依赖信息",
     "info.dide-doc.source.cannot-find": "无法找到",
     "info.command.instantiation.pick-title": "选择一个模块",
-    "warn.command.clean.prjPath-is-workspace": "arch.prjPath 和当前的工作区目录相同， clean 功能可能会删除整个项目，请检查你的 arch.prjPath ！"
+    "warn.command.clean.prjPath-is-workspace": "arch.prjPath 和当前的工作区目录相同， clean 功能可能会删除整个项目，请检查你的 arch.prjPath ！",
+    "info.monitor.ppy.impl-change-to-project": "正在将修改应用于 {0} 项目中"
 }

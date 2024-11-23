@@ -249,7 +249,6 @@ class PpyAction extends BaseAction {
                 const fileChange = await libManage.processLibFiles(opeParam.prjInfo.library);
                 MainOutput.report(`libManage finish process, add ${fileChange.add.length} files, del ${fileChange.del.length} files`, ReportType.Info);
             }
-            
         } else {
             // update hdl monitor
             await this.refreshHdlMonitor(m, originalHdlFiles);
@@ -284,15 +283,22 @@ class PpyAction extends BaseAction {
         m.remakeHdlMonitor();
         const newFiles = await prjManage.getPrjHardwareFiles();
         const { addFiles, delFiles } = this.diffNewOld(newFiles, originalHdlFiles);
+        
+        await vscode.window.withProgress({
+            location: vscode.ProgressLocation.Notification,
+            title: t('info.monitor.ppy.impl-change-to-project', opeParam.prjInfo.toolChain)
+        }, async () => {
+            await this.updateHdlParam(addFiles, delFiles);
 
-        const options: vscode.ProgressOptions = { location: vscode.ProgressLocation.Notification };
-        options.title = t('info.monitor.update-hdlparam');
-        await vscode.window.withProgress(options, async () => await this.updateHdlParam(addFiles, delFiles));
-
-        if (opeParam.prjInfo.toolChain === ToolChainType.Xilinx) {
-            options.title = t('info.monitor.update-pl');
-            await vscode.window.withProgress(options, async () => await this.updatePL(addFiles, delFiles));
-        }
+            switch (opeParam.prjInfo.toolChain) {
+                case ToolChainType.Xilinx:
+                    await this.updatePL(addFiles, delFiles);
+                    break;
+            
+                default:
+                    break;
+            }
+        });
     }
 
     public async updateHdlParam(addFiles: AbsPath[], delFiles: AbsPath[]) {
@@ -302,6 +308,8 @@ class PpyAction extends BaseAction {
         for (const path of delFiles) {
             hdlParam.deleteHdlFile(path);
         }
+
+        // TODO: 增加解决 instance 的地方
     }
 
     public async updatePL(addFiles: AbsPath[], delFiles: AbsPath[]) {

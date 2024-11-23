@@ -192,7 +192,6 @@ class XilinxOperation {
                 return Promise.resolve(undefined);
             }
             // 执行 cmd 启动
-            console.log('spawn process in ', opeParam.workspacePath);
             const vivadoProcess = spawn(cmd, [], { shell: true, stdio: 'pipe', cwd: opeParam.workspacePath });
 
             vivadoProcess.on('close', () => {

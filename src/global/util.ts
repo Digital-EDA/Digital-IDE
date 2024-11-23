@@ -19,7 +19,7 @@ export class PathSet {
 }
 
 /**
- * tell if two set are element-wise equal
+ * @description 判断两个集合是否逐元素相同
  * @param setA 
  * @param setB 
  */

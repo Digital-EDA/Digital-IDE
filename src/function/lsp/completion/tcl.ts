@@ -8,7 +8,6 @@ class TCLCompletionProvider implements vscode.CompletionItemProvider {
     keywordsCompletionItems: vscode.CompletionItem[] | undefined;
     constructor() {
         this.keywordsCompletionItems = this.provideKeywords();
-        MainOutput.report('lsp for tcl is ready');
     }
     public provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext): vscode.ProviderResult<vscode.CompletionItem[] | vscode.CompletionList<vscode.CompletionItem>> {        
         try {
@@ -28,7 +27,6 @@ class TCLCompletionProvider implements vscode.CompletionItemProvider {
                 keywords.push(item);
             }
             this.keywordsCompletionItems = keywords;
-            MainOutput.report('tcl lsp is ready');
         }
         
         return this.keywordsCompletionItems;

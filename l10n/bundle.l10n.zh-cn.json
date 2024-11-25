@@ -61,5 +61,13 @@
     "info.dide-doc.source.cannot-find": "无法找到",
     "info.command.instantiation.pick-title": "选择一个模块",
     "warn.command.clean.prjPath-is-workspace": "arch.prjPath 和当前的工作区目录相同， clean 功能可能会删除整个项目，请检查你的 arch.prjPath ！",
-    "info.monitor.ppy.impl-change-to-project": "正在将修改应用于 {0} 项目中"
+    "info.monitor.ppy.impl-change-to-project": "正在将修改应用于 {0} 项目中",
+    "info.initialise.report.title": "完成 {0} 个 HDL 文件的解析，发现 {1} 个未解决的例化模块",
+    "info.launch.following-folder-tracked": "下方文件夹中的文件将被持续解析并提供完整的 LSP 服务",
+    "info.launch.search-and-parse": "从下方路径中搜索并解析 HDL 文件",
+    "info.launch.digital-ide-current-version": "Digital-IDE 已经启动，当前版本：",
+    "info.pl.xilinx.update-addfiles": "添加文件到 Xilinx 工程",
+    "info.pl.xilinx.update-delfiles": "将下方文件从 Xilinx 工程中删除",
+    "info.pl.xilinx.no-need-add-files": "没有需要添加到 Xilinx 工程的文件",
+    "info.pl.xilinx.no-need-del-files": "没有需要从 Xilinx 中删除的文件"
 }

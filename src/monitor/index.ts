@@ -5,6 +5,7 @@ import { PathSet } from '../global/util';
 import { hdlPath } from '../hdlFs';
 
 import * as Event from './event';
+import { t } from '../i18n';
 
 class HdlMonitor{
     private monitorConfig: chokidar.WatchOptions;
@@ -53,8 +54,9 @@ class HdlMonitor{
             const globPath = hdlPath.join(folder, hdlExtsGlob);
             monitorFoldersWithGlob.push(globPath);
         }
-        MainOutput.report('Following folders are tracked: ');
-        monitorPathSet.files.forEach(p => MainOutput.report(p));
+
+        const reportString = ['', ...monitorPathSet.files].join('\n\t');
+        MainOutput.report(t('info.launch.following-folder-tracked') + reportString, ReportType.Launch);
 
         return this.makeMonitor(monitorFoldersWithGlob);
     }

@@ -309,14 +309,31 @@ class PpyAction extends BaseAction {
             hdlParam.deleteHdlFile(path);
         }
 
-        // TODO: 增加解决 instance 的地方
+        // 判断新加入的 module 是否还是顶层模块
     }
+
 
     public async updatePL(addFiles: AbsPath[], delFiles: AbsPath[]) {
         // current only support xilinx
         if (prjManage.pl) {
-            await prjManage.pl.addFiles(addFiles);
-            await prjManage.pl.delFiles(delFiles);
+            const addfileActionTag = '(add files) ';
+            const delfileActionTag = '(del files) ';
+            if (addFiles.length > 0) {
+                const reportMsg = ['', ...addFiles].join('\n\t');
+                MainOutput.report(addfileActionTag + t('info.pl.xilinx.update-addfiles') + reportMsg, ReportType.Run);
+                await prjManage.pl.addFiles(addFiles);
+            } else {
+                MainOutput.report(addfileActionTag + t('info.pl.xilinx.no-need-add-files'));
+            }
+
+            if (delFiles.length > 0) {
+                const reportMsg = ['', ...delFiles].join('\n\t');
+                MainOutput.report(delfileActionTag + t('info.pl.xilinx.update-delfiles') + reportMsg, ReportType.Run);
+                await prjManage.pl.delFiles(delFiles);
+            } else {
+                MainOutput.report(delfileActionTag + t('info.pl.xilinx.no-need-del-files'));
+            }
+
         } else {
             MainOutput.report('PL is not registered', ReportType.Warn);
         }

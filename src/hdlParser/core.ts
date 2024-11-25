@@ -196,13 +196,33 @@ class HdlParam {
         return this.unhandleInstances.size;
     }
 
-    public getUnhandleInstanceByType(typeName: string): HdlInstance | undefined {
+    /**
+     * @description 获取所有 scope 内存在 unhandle instance 的 module
+     */
+    public getAllUnhandleInstanceBelongedModule(): HdlModule[] {
+        const modules = new Set<HdlModule>();
+        for (const instance of this.unhandleInstances) {
+            modules.add(instance.parentMod);
+        }
+        return [...modules];
+    }
+
+    /**
+     * @description 输入 moduleName，找到这个 module 的所有置于 unhandleInstances 中的例化，并去 solve 它们
+     * 因为一个 module 对应的 unsolved instance 可能不止一个。比如现在项目中，有两个地方存在 AGC 模块的例化，
+     * 但是当前项目并没有引入 AGC 的 module 申明，那么当引入 AGC 后，外部就应该调用 getUnhandleInstancesByModuleName("AGC")
+     * 并返回两个 AGC 的例化模块，然后去 solve 它们
+     * @param moduleName 
+     * @returns 
+     */
+    public getUnhandleInstancesByModuleName(moduleName: string): HdlInstance[] {
+        const unsolvedInstances = [];
         for (const inst of this.unhandleInstances) {
-            if (inst.type === typeName) {
-                return inst;
+            if (inst.type === moduleName) {
+                unsolvedInstances.push(inst);
             }
         }
-        return undefined;
+        return unsolvedInstances;
     }
 
     public addUnhandleInstance(inst: HdlInstance) {
@@ -211,21 +231,6 @@ class HdlParam {
 
     public deleteUnhandleInstance(inst: HdlInstance) {
         this.unhandleInstances.delete(inst);
-    }
-
-    /**
-     * vlog -> HdlLangID.Verilog
-     * svlog -> HdlLangID.SystemVerilog
-     * vhdl -> HdlLangID.Vhdl
-     * @param langID 
-     */
-    private alignLanguageId(langID: string) : HdlLangID {
-        switch (langID) {
-            case 'vhdl': return HdlLangID.Vhdl;
-            case 'vlog': return HdlLangID.Verilog;
-            case 'svlog': return HdlLangID.SystemVerilog;
-            default: return HdlLangID.Unknown;
-        }
     }
 
     private async doHdlFast(path: AbsPath, fileType: DoFastFileType) {
@@ -383,15 +388,21 @@ class HdlParam {
         }
     }
 
+    /**
+     * @description 往 hdlparam 中添加路径中的若干模块
+     * @param path 
+     */
     public async addHdlFile(path: AbsPath) {
         path = hdlPath.toSlash(path);
+        // 解析并构建
         await this.doHdlFast(path, 'common');
+        // 初始化
         const moduleFile = this.getHdlFile(path);
         if (!moduleFile) {
             MainOutput.report('error happen when create moduleFile ' + path, ReportType.Warn);
         } else {
             moduleFile.makeInstance();
-            for (const module of moduleFile.getAllHdlModules()) {
+            for (const module of moduleFile.getAllHdlModules()) {                
                 module.solveUnhandleInstance();
             }
         }
@@ -480,10 +491,11 @@ class HdlInstance {
             // add refer for module 
             this.module?.addGlobalReferedInstance(this);
             // if module and parent module share the same source (e.g both in src folder)
-            if (this.isSameSource()) {
+            if (this.isSameSourceInstantiation()) {
+                // 增加当前 instance 的引用，并从对应类型的顶层模块中剔除
                 this.module?.addLocalReferedInstance(this);
             }
-        } else {            
+        } else {
             doPrimitivesJudgeApi(instModName).then(isPrimitive => {                
                 if (isPrimitive) {
                     // 构造 fake hdlfile
@@ -497,15 +509,18 @@ class HdlInstance {
         }
     }
 
+
     /**
-     * judge if the instance is a cross source reference
-     * e.g. this.module is from src, this.parentMod is from sim, then
-     * isSameSource will return false, meaning that the instance is a cross source reference
+     * @description 判断当前的 `instance` 对应的例化行为是否为一个同源例化 (SSI, same source instantiation)
      * 
-     * a cross source reference won't affect the top module reference of this.module,
-     * meaning that a top module in one source can have its instance in other source
+     * 对于标准项目结构，也就是 src + sim ，如果在 moduleA 中完成了 moduleB 的例化，且 moduleA 和 moduleB 都是 src 文件夹下的，
+     * 那么这个例化就是一个同源例化；如果 moduleB 在 sim 下， moduleA 在 src 下，那么当前的例化就是一个非同源例化。
+     * 
+     * 同源例化造成的引用为 local ref，非同源例化 + 同源例化造成的引用为 global ref。在模块树下， src 文件夹下的只有 local ref 为空的 module 才是顶层模块
+     * 换句话说，非同源例化一定不会造成顶层模块的变化，但是同源例化有可能会。
+     * @returns 
      */
-    public isSameSource(): boolean {
+    public isSameSourceInstantiation(): boolean {
         const parentMod = this.parentMod;
         const instMod = this.module;
         if (instMod) {
@@ -692,7 +707,7 @@ class HdlModule {
             const instMod = inst.module;
             if (instMod) {
                 instMod.deleteGlobalReferedInstance(inst);
-                if (inst.isSameSource()) {
+                if (inst.isSameSourceInstantiation()) {
                     instMod.deleteLocalReferedInstance(inst);
                 }
             }
@@ -796,7 +811,9 @@ class HdlModule {
     }
 
     public solveInstModPathStatus(): common.InstModPathStatus {
-        const inst = hdlParam.getUnhandleInstanceByType(this.name);
+        // TODO: 修改这套系统，因为现在只是拿第一个例化来判断的，这是不合理的
+        // 应该把 common.InstModPathStatus 修改成一个可以通过析取来表示的变量
+        const inst = hdlParam.getUnhandleInstancesByModuleName(this.name)[0];
         if (!inst) {
             return common.InstModPathStatus.Unknown;
         }
@@ -815,24 +832,25 @@ class HdlModule {
         }
     }
 
+    /**
+     * @description 从全局寻找这个 module 的例化，并尝试修改它的状态
+     */
     public solveUnhandleInstance() {
-        const inst = hdlParam.getUnhandleInstanceByType(this.name);
+        const instances = hdlParam.getUnhandleInstancesByModuleName(this.name);
 
-        if (inst) {
-            const userModule = inst.parentMod;
-            // match a inst with the same type name of the module
-            // remove from unhandle list
-            hdlParam.deleteUnhandleInstance(inst);
-            userModule.deleteUnhandleInstance(inst);
+        for (const instance of instances) {
+            const belongScopeModule = instance.parentMod;
+            // 先从 unsolved 堆中删除当前的 instance
+            hdlParam.deleteUnhandleInstance(instance);
+            belongScopeModule.deleteUnhandleInstance(instance);
 
-            // assign instModPath
-            inst.instModPath = this.path;
+            // 解决
+            instance.instModPath = this.path;
+            instance.instModPathStatus = this.solveInstModPathStatus();
 
-            // judge the type of instModPathStatus
-            inst.instModPathStatus = this.solveInstModPathStatus();
-            
-            // assign module in the instance
-            inst.locateHdlModule();            
+            // 找寻这个 instance 对应的真正的 module（也有可能是原语）
+            // 并将这个 instance 加入这个 module 的计数器中
+            instance.locateHdlModule();
         }
     }
 

@@ -61,5 +61,13 @@
     "info.dide-doc.source.cannot-find": "Cannot find",
     "info.command.instantiation.pick-title": "Select a Module",
     "warn.command.clean.prjPath-is-workspace": "arch.prjPath is the same as the workspace path, the clean will delete the project, please check your arch.prjPath!",
-    "info.monitor.ppy.impl-change-to-project": "Applying changes to the {0} project"
+    "info.monitor.ppy.impl-change-to-project": "Applying changes to the {0} project",
+    "info.initialise.report.title": "Completed parsing {0} HDL files, found {1} unresolved instantiation modules",
+    "info.launch.following-folder-tracked": "The files in the folder below will be continuously parsed and full LSP services will be provided.",
+    "info.launch.search-and-parse": "Search and parse HDL files from the path below",
+    "info.launch.digital-ide-current-version": "Digital-IDE has been launched, current version:",
+    "info.pl.xilinx.update-addfiles": "Add file to Xilinx project",
+    "info.pl.xilinx.update-delfiles": "Delete the following files from the Xilinx project.",
+    "info.pl.xilinx.no-need-add-files": "No files need to be added to the Xilinx project",
+    "info.pl.xilinx.no-need-del-files": "There are no files to be deleted from Xilinx."
 }

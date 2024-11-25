@@ -39,8 +39,10 @@ async function launch(context: vscode.ExtensionContext) {
     initialiseI18n(context);
     
     console.log(t('info.welcome.title'));
-    console.log(t('info.welcome.join-qq-group') + ' https://qm.qq.com/q/1M655h3GsA'); 
+    console.log(t('info.welcome.join-qq-group') + ' https://qm.qq.com/q/1M655h3GsA');
+
     const packageJson = readPackageJson(context);
+    MainOutput.report(t('info.launch.digital-ide-current-version') + packageJson.version, ReportType.Launch);
 
     if (packageJson === undefined) {
         return;
@@ -60,7 +62,6 @@ async function launch(context: vscode.ExtensionContext) {
         // 初始化 OpeParam
         // 包含基本的插件的文件系统信息、用户配置文件和系统配置文件的合并数据结构
         const refreshPrjConfig = await manager.prjManage.initOpeParam(context);
-        MainOutput.report('finish initialise opeParam', ReportType.Info);
         manager.prjManage.refreshPrjFolder(refreshPrjConfig);
     });
 
@@ -88,7 +89,6 @@ async function launch(context: vscode.ExtensionContext) {
     });
 
 
-    MainOutput.report('Digital-IDE 已经启动，当前版本：' + packageJson.version, ReportType.Launch);
     console.log(hdlParam);
     
     // show welcome information (if first install)

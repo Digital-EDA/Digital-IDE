@@ -61,5 +61,13 @@
     "info.dide-doc.source.cannot-find": "見つかりません",
     "info.command.instantiation.pick-title": "Select a Module",
     "warn.command.clean.prjPath-is-workspace": "arch.prjPath is the same as the workspace path, the clean will delete the project, please check your arch.prjPath!",
-    "info.monitor.ppy.impl-change-to-project": "{0} プロジェクトに変更を適用しています"
+    "info.monitor.ppy.impl-change-to-project": "{0} プロジェクトに変更を適用しています",
+    "info.initialise.report.title": "{0} 個のHDLファイルの解析が完了し、{1} 個の未解決のインスタンスモジュールが見つかりました",
+    "info.launch.following-folder-tracked": "以下のフォルダ内のファイルは継続的に解析され、完全なLSPサービスが提供されます。",
+    "info.launch.search-and-parse": "以下のパスからHDLファイルを検索して解析します",
+    "info.launch.digital-ide-current-version": "Digital-IDEが起動しました、現在のバージョン：",
+    "info.pl.xilinx.update-addfiles": "ファイルを Xilinx プロジェクトに追加",
+    "info.pl.xilinx.update-delfiles": "以下のファイルをXilinxプロジェクトから削除してください。",
+    "info.pl.xilinx.no-need-add-files": "Xilinx プロジェクトに追加するファイルはありません",
+    "info.pl.xilinx.no-need-del-files": "Xilinx から削除するファイルはありません。"
 }

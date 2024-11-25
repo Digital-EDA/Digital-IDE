@@ -113,8 +113,8 @@ class PrjManage {
             // 如果是单文件模式，需要的操作
         } else {
             // 先处理 lib 文件
-            const fileChange = await libManage.processLibFiles(prjInfo.library);
-            MainOutput.report(`libManage finish process, add ${fileChange.add.length} files, del ${fileChange.del.length} files`, ReportType.Info);
+            // const fileChange = await libManage.processLibFiles(prjInfo.library);
+            // MainOutput.report(`libManage finish process, add ${fileChange.add.length} files, del ${fileChange.del.length} files`, ReportType.Info);
     
             // 默认搜索路径包括：
             // src, sim, lib
@@ -125,8 +125,8 @@ class PrjManage {
             searchPathSet.checkAdd(prjInfo.getLibraryCustomPaths());
         }
 
-        MainOutput.report('<getPrjHardwareFiles> search folders: ', ReportType.Debug);
-        searchPathSet.files.forEach(p => MainOutput.report(p, ReportType.Debug));
+        const reportMsg = ['', ... searchPathSet.files].join('\n\t');
+        MainOutput.report(t('info.launch.search-and-parse') + reportMsg, ReportType.Run);
 
         // TODO : make something like .gitignore
         const ignores = hdlIgnore.getIgnoreFiles();
@@ -199,15 +199,13 @@ class PrjManage {
 
         // 分析依赖关系错位情况
         const unhandleNum = hdlParam.getUnhandleInstanceNumber();
-        MainOutput.report(`finish analyse ${hdlFiles.length} hdl files, find ${unhandleNum} unsolved instances`, ReportType.Info);
-
+        const reportMsg = t('info.initialise.report.title', hdlFiles.length.toString(), unhandleNum.toString());
+        MainOutput.report(reportMsg, ReportType.Launch);
 
         this.pl = new PlManage();
         // TODO : finish it later
         // this.ps = new PsManage();
-        MainOutput.report('create pl', ReportType.Info);
 
-        
         if (countTimeCost) {
             console.timeLog('launch');
         }

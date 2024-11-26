@@ -300,8 +300,12 @@ function parseJson5(text: string): any {
     try {
         json = JSON5.parse(text);
     } catch (error) {
-        MainOutput.report('error happen when parse json ', ReportType.Error);
-        MainOutput.report(error, ReportType.Error);
+        MainOutput.report('error happen when parse json ', {
+            level: ReportType.Error
+        });
+        MainOutput.report(error, {
+            level: ReportType.Error
+        });
     }
     return json;
 }
@@ -317,8 +321,12 @@ function makeWaveDromSVG(wavedromComment: string, style: ThemeType): string {
         Count.svgMakeTimes += 1;
         return svgString;
     } catch (error) {
-        MainOutput.report('error happen when render ' + wavedromComment, ReportType.Error);
-        MainOutput.report(error, ReportType.Error);
+        MainOutput.report('error happen when render ' + wavedromComment, {
+            level: ReportType.Error
+        });
+        MainOutput.report(error, {
+            level: ReportType.Error
+        });
         return '';
     }
 }

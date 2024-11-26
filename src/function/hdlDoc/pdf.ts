@@ -104,7 +104,9 @@ async function exportCurrentFileDocAsPDF(uri: vscode.Uri) {
             vscode.window.showInformationMessage('pdf generated at ' + pdfPath);
             
         } catch (error) {
-            MainOutput.report("error happen in export pdf: " + error, ReportType.Error);
+            MainOutput.report("error happen in export pdf: " + error, {
+                level: ReportType.Error
+            });
         }
     });
 }

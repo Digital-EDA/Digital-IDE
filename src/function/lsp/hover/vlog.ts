@@ -148,7 +148,7 @@ import { HdlLangID } from '../../../global/enum';
 //         const paramResult = util.matchParams(targetWord, currentModule);
 
 //         if (paramResult) {
-//             LspOutput.report('<vlog hover> get param info ' + paramResult?.name, ReportType.Info);
+//             LspOutput.report('<vlog hover> get param info ' + paramResult?.name;
 //             const paramComment = await util.searchCommentAround(filePath, paramResult.range);
 //             const paramDesc = util.makeParamDesc(paramResult);
 //             content.appendCodeblock(paramDesc, HdlLangID.Verilog);
@@ -162,7 +162,7 @@ import { HdlLangID } from '../../../global/enum';
 //         const portResult = util.matchPorts(targetWord, currentModule);
 
 //         if (portResult) {
-//             LspOutput.report('<vlog hover> get port info ' + portResult?.name, ReportType.Info);
+//             LspOutput.report('<vlog hover> get port info ' + portResult?.name;
 //             const portComment = await util.searchCommentAround(filePath, portResult.range);
 //             const portDesc = util.makePortDesc(portResult);
             

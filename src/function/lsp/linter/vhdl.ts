@@ -56,7 +56,9 @@ class VhdlLinterManager implements BaseManager {
                 await this.lint(doc);
             }
         }
-        LspOutput.report('<vhdl lsp manager> finish initialization of vhdl linter. Linter name: ' + this.activateLinterName, ReportType.Launch);
+        LspOutput.report('<vhdl lsp manager> finish initialization of vhdl linter. Linter name: ' + this.activateLinterName, {
+            level: ReportType.Launch
+        });
               
         // hide it if current window is not vhdl
         const editor = vscode.window.activeTextEditor;
@@ -92,7 +94,9 @@ class VhdlLinterManager implements BaseManager {
             // no need for update
             return true;
         }
-        LspOutput.report(`<vhdl lsp manager> detect linter setting changes, switch from ${lastDiagnostorName} to ${diagnostorName}.`, ReportType.Launch);
+        LspOutput.report(`<vhdl lsp manager> detect linter setting changes, switch from ${lastDiagnostorName} to ${diagnostorName}.`, {
+            level: ReportType.Launch
+        });
 
         let launch = false;
         switch (diagnostorName) {
@@ -121,13 +125,15 @@ class VhdlLinterManager implements BaseManager {
         if (launch) {
             this.statusBarItem.text = '$(getting-started-beginner) Linter(vivado)';
 
-            LspOutput.report('<vhdl lsp manager> vivado linter has been activated', ReportType.Info);
+            LspOutput.report('<vhdl lsp manager> vivado linter has been activated');
         } else {
             this.statusBarItem.backgroundColor = new vscode.ThemeColor('statusBarItem.warningBackground');
             this.statusBarItem.tooltip = 'Fail to launch vivado linter';
             this.statusBarItem.text = '$(extensions-warning-message) Linter(vivado)';
 
-            LspOutput.report('<vhdl lsp manager> Fail to launch vivado linter', ReportType.Error);
+            LspOutput.report('<vhdl lsp manager> Fail to launch vivado linter', {
+                level: ReportType.Error
+            });
         }
 
         this.currentLinter = selectedLinter;
@@ -145,13 +151,15 @@ class VhdlLinterManager implements BaseManager {
         if (launch) {
             this.statusBarItem.text = '$(getting-started-beginner) Linter(modelsim)';
 
-            LspOutput.report('<vhdl lsp manager> modelsim linter has been activated', ReportType.Info);
+            LspOutput.report('<vhdl lsp manager> modelsim linter has been activated');
         } else {
             this.statusBarItem.backgroundColor = new vscode.ThemeColor('statusBarItem.warningBackground');
             this.statusBarItem.tooltip = 'Fail to launch modelsim linter';
             this.statusBarItem.text = '$(extensions-warning-message) Linter(modelsim)';
 
-            LspOutput.report('<vhdl lsp manager> Fail to launch modelsim linter', ReportType.Error);
+            LspOutput.report('<vhdl lsp manager> Fail to launch modelsim linter', {
+                level: ReportType.Error
+            });
         }
 
         this.currentLinter = selectedLinter;
@@ -168,13 +176,15 @@ class VhdlLinterManager implements BaseManager {
         if (launch) {
             this.statusBarItem.text = '$(getting-started-beginner) Linter(default)';
             
-            LspOutput.report('<vhdl lsp manager> default build-in linter has been activated', ReportType.Info);
+            LspOutput.report('<vhdl lsp manager> default build-in linter has been activated');
         } else {
             this.statusBarItem.backgroundColor = undefined;
             this.statusBarItem.tooltip = 'Fail to launch default linter';
             this.statusBarItem.text = '$(extensions-warning-message) Linter(default)';
 
-            LspOutput.report('<vhdl lsp manager> Fail to launch default linter', ReportType.Error);
+            LspOutput.report('<vhdl lsp manager> Fail to launch default linter', {
+                level: ReportType.Error
+            });
         }
 
         this.currentLinter = selectedLinter;

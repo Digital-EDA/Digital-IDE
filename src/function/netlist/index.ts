@@ -69,11 +69,15 @@ class Netlist {
             }
             if (type === "error") {
                 vscode.window.showErrorMessage('type: ' + type + ', ' + message);
-                YosysOutput.report('type: ' + type + ', ' + message, ReportType.Error);
+                YosysOutput.report('type: ' + type + ', ' + message, {
+                    level: ReportType.Error
+                });
             }
         });
 
-        prjFiles.forEach(file => YosysOutput.report('feed file: ' + file, ReportType.Debug));
+        prjFiles.forEach(file => YosysOutput.report('feed file: ' + file, {
+            level: ReportType.Debug
+        }));
         this.kernel.load(prjFiles);
         this.create();
     }
@@ -115,7 +119,9 @@ class Netlist {
         if (this.panel && previewHtml) {
             this.panel.webview.html = previewHtml;
         } else {
-            YosysOutput.report('preview html in <Netlist.create> is empty', ReportType.Warn);
+            YosysOutput.report('preview html in <Netlist.create> is empty', {
+                level: ReportType.Warn
+            });
         }
     }
     

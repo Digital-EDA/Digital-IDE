@@ -114,7 +114,7 @@ class PrjManage {
         } else {
             // 先处理 lib 文件
             // const fileChange = await libManage.processLibFiles(prjInfo.library);
-            // MainOutput.report(`libManage finish process, add ${fileChange.add.length} files, del ${fileChange.del.length} files`, ReportType.Info);
+            // MainOutput.report(`libManage finish process, add ${fileChange.add.length} files, del ${fileChange.del.length} files`;
     
             // 默认搜索路径包括：
             // src, sim, lib
@@ -126,7 +126,9 @@ class PrjManage {
         }
 
         const reportMsg = ['', ... searchPathSet.files].join('\n\t');
-        MainOutput.report(t('info.launch.search-and-parse') + reportMsg, ReportType.Run);
+        MainOutput.report(t('info.launch.search-and-parse') + reportMsg, {
+            level: ReportType.Run
+        });
 
         // TODO : make something like .gitignore
         const ignores = hdlIgnore.getIgnoreFiles();
@@ -200,7 +202,9 @@ class PrjManage {
         // 分析依赖关系错位情况
         const unhandleNum = hdlParam.getUnhandleInstanceNumber();
         const reportMsg = t('info.initialise.report.title', hdlFiles.length.toString(), unhandleNum.toString());
-        MainOutput.report(reportMsg, ReportType.Launch);
+        MainOutput.report(reportMsg, {
+            level: ReportType.Launch
+        });
 
         this.pl = new PlManage();
         // TODO : finish it later

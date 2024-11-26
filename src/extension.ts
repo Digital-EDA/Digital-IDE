@@ -42,7 +42,9 @@ async function launch(context: vscode.ExtensionContext) {
     console.log(t('info.welcome.join-qq-group') + ' https://qm.qq.com/q/1M655h3GsA');
 
     const packageJson = readPackageJson(context);
-    MainOutput.report(t('info.launch.digital-ide-current-version') + packageJson.version, ReportType.Launch);
+    MainOutput.report(t('info.launch.digital-ide-current-version') + packageJson.version, {
+        level: ReportType.Launch
+    });
 
     if (packageJson === undefined) {
         return;

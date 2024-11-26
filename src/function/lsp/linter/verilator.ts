@@ -50,7 +50,10 @@ class VerilatorLinter implements BaseLinter {
                 this.diagnostic.set(document.uri, diagnostics);
             }
         } else {
-            LspOutput.report('verilator linter is not available, please check prj.verilator.install.path in your setting', ReportType.Error, true);
+            LspOutput.report('verilator linter is not available, please check prj.verilator.install.path in your setting', {
+                level: ReportType.Error,
+                notify: true
+            });
         }
     }
 
@@ -118,8 +121,12 @@ class VerilatorLinter implements BaseLinter {
         const fullExecutorName = opeParam.os === 'win32' ? executorName + '.exe' : executorName;
         
         if (verilatorInstallPath.trim() === '' || !fs.existsSync(verilatorInstallPath)) {
-            LspOutput.report(`User's verilator Install Path ${verilatorInstallPath}, which is invalid. Use ${executorName} in default.`, ReportType.Warn);
-            LspOutput.report('If you have doubts, check prj.verilator.install.path in setting', ReportType.Warn);
+            LspOutput.report(`User's verilator Install Path ${verilatorInstallPath}, which is invalid. Use ${executorName} in default.`, {
+                level: ReportType.Warn
+            });
+            LspOutput.report('If you have doubts, check prj.verilator.install.path in setting', {
+                level: ReportType.Warn
+            });
             return executorName;
         } else {
             LspOutput.report(`User's verilator Install Path ${verilatorInstallPath}, which is invalid`);
@@ -143,13 +150,18 @@ class VerilatorLinter implements BaseLinter {
         const { stderr } = await easyExec(executorPath, []);
         if (stderr.length === 0) {
             this.executableInvokeNameMap.set(langID, executorPath);
-            LspOutput.report(`success to verify ${executorPath}, linter from verilator is ready to go!`, ReportType.Launch);
+            LspOutput.report(`success to verify ${executorPath}, linter from verilator is ready to go!`, {
+                level: ReportType.Launch
+            });
             return true;
         } else {
             this.executableInvokeNameMap.set(langID, undefined);
             console.log(stderr);
             
-            LspOutput.report(`Fail to execute ${executorPath}! Reason: ${stderr}`, ReportType.Error, true);
+            LspOutput.report(`Fail to execute ${executorPath}! Reason: ${stderr}`, {
+                level: ReportType.Error,
+                notify: true
+            });
             
             return false;
         }

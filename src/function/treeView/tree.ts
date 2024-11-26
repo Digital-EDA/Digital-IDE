@@ -263,7 +263,9 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
                 moduleDataItemList.push(item);
             }
         } else {
-            MainOutput.report(`cannot find ${element} in hdlParam when constructing treeView`, ReportType.Error);
+            MainOutput.report(`cannot find ${element} in hdlParam when constructing treeView`, {
+                level: ReportType.Error
+            });
         }
 
         return moduleDataItemList;

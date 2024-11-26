@@ -56,7 +56,9 @@ class HdlMonitor{
         }
 
         const reportString = ['', ...monitorPathSet.files].join('\n\t');
-        MainOutput.report(t('info.launch.following-folder-tracked') + reportString, ReportType.Launch);
+        MainOutput.report(t('info.launch.following-folder-tracked') + reportString, {
+            level: ReportType.Launch
+        });
 
         return this.makeMonitor(monitorFoldersWithGlob);
     }

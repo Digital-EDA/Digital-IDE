@@ -1,4 +1,13 @@
 {  
+    "clock": {
+        "prefix": "create_pll",
+        "body": [
+            "create_clock -period 20.000 [get_ports clock]",
+            "set_input_jitter [get_clocks -of_objects [get_ports clock]] 0.200",
+            "set_property PHASESHIFT_MODE WAVEFORM [get_cells -hierarchical *adv*]"
+        ]
+    },
+
     "ILA_CORE": {
         "prefix": "create_ILA_CORE",
         "body": [
@@ -8,6 +17,7 @@
             "connect_debug_port dbg_hub/clk              [get_nets [list CLK_Global_u/clk_out${2:3}]]"
         ]
     },
+
     "Debug_CORE": {
         "prefix": "create_Debug_CORE",
         "body": [
@@ -24,6 +34,7 @@
             "connect_debug_port u_ila_$1/clk       [get_nets [list CLK_Global_u/clk_out${3:3}]]"
         ]
     },
+
     "Debug_add_port": {
         "prefix": "add_port",
         "body": [

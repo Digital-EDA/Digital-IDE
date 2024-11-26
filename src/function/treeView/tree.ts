@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 import { AbsPath, MainOutput, opeParam, ReportType } from '../../global';
 import { SimPath, SrcPath } from '../../global/prjInfo';
 import { HdlInstance, hdlParam } from '../../hdlParser/core';
-import { HdlFileType, Range } from '../../hdlParser/common';
+import { HdlFileProjectType, Range } from '../../hdlParser/common';
 import { hdlFile, hdlPath } from '../../hdlFs';
 import { xilinx, itemModes, otherModes } from './common';
 import { getIconConfig } from '../../hdlFs/icons';
@@ -71,7 +71,7 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
 
         this.srcRootItem = {
             icon: 'src',
-            type: HdlFileType.Src,
+            type: HdlFileProjectType.Src,
             doFastFileType: undefined,
             name: 'src',
             range: undefined,
@@ -81,7 +81,7 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
 
         this.simRootItem = {
             icon: 'sim',
-            type: HdlFileType.Sim,
+            type: HdlFileProjectType.Sim,
             doFastFileType: undefined,
             name: 'sim',
             range: undefined,

@@ -71,7 +71,7 @@ class WaveViewer {
             this.panel.iconPath = getIconConfig('view');
             registerMessageEvent(this.panel, uri);
         } else {
-            WaveViewOutput.report('preview html in <WaveViewer.create> is empty', ReportType.Warn);
+            WaveViewOutput.report('preview html in <WaveViewer.create> is empty', { level: ReportType.Warn });
         }
     }
 
@@ -138,7 +138,7 @@ class VcdViewerProvider implements vscode.CustomEditorProvider {
             webviewPanel.webview.html = preprocessHtml;
             webviewPanel.iconPath = getIconConfig('view');
         } else {
-            WaveViewOutput.report('preview html in <WaveViewer.create> is empty', ReportType.Warn);
+            WaveViewOutput.report('preview html in <WaveViewer.create> is empty', { level: ReportType.Warn });
         }
     }
 

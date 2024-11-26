@@ -69,5 +69,7 @@
     "info.pl.xilinx.update-addfiles": "Add file to Xilinx project",
     "info.pl.xilinx.update-delfiles": "Delete the following files from the Xilinx project.",
     "info.pl.xilinx.no-need-add-files": "No files need to be added to the Xilinx project",
-    "info.pl.xilinx.no-need-del-files": "There are no files to be deleted from Xilinx."
+    "info.pl.xilinx.no-need-del-files": "There are no files to be deleted from Xilinx.",
+    "error.pl.launch.not-valid-vivado-path": "Error encountered while starting the Vivado TCL script interpreter: {0}. Please check if your Vivado startup path is correct. Currently set Vivado startup folder path: {1}",
+    "info.pl.launch.set-vivado-path": "Go to set the Vivado installation path"
 }

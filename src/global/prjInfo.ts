@@ -233,6 +233,7 @@ class PrjInfo implements PrjInfoMeta {
         const psname = this.prjName.PS;
 
         // TODO : packaging the replacer
+        // TODO : 支持路径的正则表达式
         return path.replace(/\$\{workspace\}/g, workspacePath)
                    .replace(/\$\{plname\}/g, plname)
                    .replace(/\$\{psname\}/g, psname);
@@ -593,6 +594,11 @@ class PrjInfo implements PrjInfoMeta {
         return libPath;
     }
 
+    /**
+     * @description 代表当前的 arch.hardware.sim 的值
+     * 标准结构下应为 user/sim 的绝对路径
+     * 空则返回默认值 workspace path
+     */
     public get hardwareSimPath(): AbsPath {
         const simPath = this._arch.hardware.sim;  
         const workspace = this._workspacePath;
@@ -604,6 +610,11 @@ class PrjInfo implements PrjInfoMeta {
         return hdlPath.join(workspace, simPath);
     }
 
+    /**
+     * @description 代表当前的 arch.hardware.src 的值
+     * 标准结构下应为 user/src 的绝对路径
+     * 空则返回默认值 workspace path
+     */
     public get hardwareSrcPath(): AbsPath {
         const srcPath = this._arch.hardware.src;
         const workspace = this._workspacePath;
@@ -615,6 +626,30 @@ class PrjInfo implements PrjInfoMeta {
         }
         
         return hdlPath.join(workspace, srcPath);
+    }
+
+    /**
+     * @description user/ip 的绝对路径
+     */
+    public get ipPath(): AbsPath {
+        const workspace = this._workspacePath;
+        return hdlPath.join(workspace, 'user', 'ip');
+    }
+
+    /**
+     * @description user/src/lib 绝对路径
+     */
+    public get localLibPath(): AbsPath {
+        const workspace = this._workspacePath;
+        return hdlPath.join(workspace, 'user', 'src', 'lib');
+    }
+
+    /**
+     * @description ${extensionPath}/library 绝对路径
+     */
+    public get remoteLibPath(): AbsPath {
+        const extensionPath = this._extensionPath;
+        return hdlPath.join(extensionPath, 'library');
     }
 
     public json(): RawPrjInfo {

@@ -31,10 +31,12 @@ class Netlist {
             const standardPath = hdlPath.toSlash(path);
             const response = await doFastApi(standardPath, 'common');
             const langID = hdlFile.getLanguageId(standardPath);
+            const projectType = hdlParam.getHdlFileProjectType(standardPath, 'common');
             moduleFile = new HdlFile(
                 standardPath, langID,
                 response?.macro || defaultMacro,
                 response?.content || [],
+                projectType,
                 'common'
             );
             // 从 hdlParam 中去除，避免干扰全局

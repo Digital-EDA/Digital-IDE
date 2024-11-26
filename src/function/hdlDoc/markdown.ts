@@ -4,7 +4,7 @@ import * as fspath from 'path';
 
 import { AbsPath, opeParam, MainOutput, ReportType } from '../../global';
 import { hdlParam, HdlModule, HdlFile, HdlInstance } from '../../hdlParser/core';
-import { HdlModulePort, HdlModuleParam, InstModPathStatus } from '../../hdlParser/common';
+import { HdlModulePort, HdlModuleParam, InstModPathStatus, HdlFileProjectType } from '../../hdlParser/common';
 
 import { MarkdownString, RenderString, RenderType,
          mergeSortByLine, getWavedromsFromFile, Count, WavedromString } from './common';
@@ -43,7 +43,7 @@ function selectFieldValue(obj: any, subName: string, ws: string, name: string, i
         if (fs.existsSync(value)) {
             // 判断 类型
             const hdlFile = hdlParam.getHdlFile(value);
-            if (hdlFile && hdlFile.type === 'remote_lib') {
+            if (hdlFile && hdlFile.projectType === HdlFileProjectType.RemoteLib) {
                 // 如果是 库 文件，做出更加自定义的字面量
                 const libRelPath = value.replace(`${opeParam.extensionPath}/library/`, '');                
                 value = `<span class="source-lib-tag">library</span> [${libRelPath}](file://${value})`;
@@ -277,10 +277,12 @@ async function getDocsFromFile(path: AbsPath): Promise<MarkdownString[] | undefi
         const standardPath = hdlPath.toSlash(path);
         const response = await doFastApi(standardPath, 'common');
         const langID = hdlFile.getLanguageId(standardPath);
+        const projectType = hdlParam.getHdlFileProjectType(standardPath, 'common');
         moduleFile = new HdlFile(
             standardPath, langID,
             response?.macro || defaultMacro,
             response?.content || [],
+            projectType,
             'common'
         );
         // 从 hdlParam 中去除，避免干扰全局

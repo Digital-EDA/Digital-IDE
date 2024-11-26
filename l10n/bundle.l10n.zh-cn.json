@@ -69,5 +69,7 @@
     "info.pl.xilinx.update-addfiles": "添加文件到 Xilinx 工程",
     "info.pl.xilinx.update-delfiles": "将下方文件从 Xilinx 工程中删除",
     "info.pl.xilinx.no-need-add-files": "没有需要添加到 Xilinx 工程的文件",
-    "info.pl.xilinx.no-need-del-files": "没有需要从 Xilinx 中删除的文件"
+    "info.pl.xilinx.no-need-del-files": "没有需要从 Xilinx 中删除的文件",
+    "error.pl.launch.not-valid-vivado-path": "启动 Vivado TCL 脚本解释器遇到错误：{0} 。请检查你的 Vivado 启动路径是否正确，当前设置的 Vivado 启动文件夹路径：{1}",
+    "info.pl.launch.set-vivado-path": "前往设置 Vivado 安装路径"
 }

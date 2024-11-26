@@ -49,7 +49,9 @@ function openFileByUri(path: string, range: Range, element: ModuleDataItem) {
             }
         }
     }
-    MainOutput.report("invalid jump uri triggered in treeview, el: " + JSON.stringify(element, null, '  '), ReportType.Error);
+    MainOutput.report("invalid jump uri triggered in treeview, el: " + JSON.stringify(element, null, '  '), {
+        level: ReportType.Error
+    });
 }
 
 function gotoXilinxIPDefinition(element: ModuleDataItem) {
@@ -63,7 +65,9 @@ function gotoXilinxIPDefinition(element: ModuleDataItem) {
             vscode.window.showInformationMessage(t('info.treeview.ip-no-active.message'));
         }
     } else {
-        MainOutput.report("[gotoXilinxIPDefinition] path is undefined", ReportType.Error);
+        MainOutput.report("[gotoXilinxIPDefinition] path is undefined", {
+            level: ReportType.Error
+        });
     }
 }
 

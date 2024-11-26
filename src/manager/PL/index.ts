@@ -10,7 +10,7 @@ import { opeParam } from '../../global';
 import { ToolChainType } from '../../global/enum';
 import { hdlFile, hdlPath } from '../../hdlFs';
 import { moduleTreeProvider, ModuleDataItem } from '../../function/treeView/tree';
-import { HdlFileType } from '../../hdlParser/common';
+import { HdlFileProjectType } from '../../hdlParser/common';
 import { PropertySchema } from '../../global/propertySchema';
 import { HardwareOutput, ReportType } from '../../global/outputChannel';
 import { t } from '../../i18n';
@@ -31,15 +31,7 @@ class PlManage extends BaseManage {
 
         const curToolChain = this.context.tool;
         if (curToolChain === ToolChainType.Xilinx) {
-            const vivadoPath = vscode.workspace.getConfiguration('digital-ide.prj.vivado.install').get('path', '');
-            if (hdlFile.isDir(vivadoPath)) {
-                this.context.path = hdlPath.join(hdlPath.toSlash(vivadoPath), 'vivado');
-                if (opeParam.os === 'win32') {
-                    this.context.path += '.bat';
-                }
-            } else {
-                this.context.path = 'vivado';
-            }
+            this.context.path = this.context.ope.updateVivadoPath();
         }       
     }
 
@@ -104,7 +96,7 @@ class PlManage extends BaseManage {
 
         HardwareOutput.show();
         this.context.process.stdin.write('exit\n');
-        HardwareOutput.report(t('info.pl.exit.title'), ReportType.Info);
+        HardwareOutput.report(t('info.pl.exit.title'));
         this.context.process = undefined;
     }
 
@@ -112,8 +104,8 @@ class PlManage extends BaseManage {
     public setSrcTop(item: ModuleDataItem) {        
         this.context.ope.setSrcTop(item.name, this.context);
         const type = moduleTreeProvider.getItemType(item);
-        if (type === HdlFileType.Src) {
-            moduleTreeProvider.setFirstTop(HdlFileType.Src, item.name, item.path);
+        if (type === HdlFileProjectType.Src) {
+            moduleTreeProvider.setFirstTop(HdlFileProjectType.Src, item.name, item.path);
             moduleTreeProvider.refreshSrc();
         }
     }
@@ -121,8 +113,8 @@ class PlManage extends BaseManage {
     public setSimTop(item: ModuleDataItem) {
         this.context.ope.setSimTop(item.name, this.context);
         const type = moduleTreeProvider.getItemType(item);
-        if (type === HdlFileType.Sim) {
-            moduleTreeProvider.setFirstTop(HdlFileType.Sim, item.name, item.path);
+        if (type === HdlFileProjectType.Sim) {
+            moduleTreeProvider.setFirstTop(HdlFileProjectType.Sim, item.name, item.path);
             moduleTreeProvider.refreshSim();
         }
     }

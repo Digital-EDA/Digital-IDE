@@ -55,7 +55,10 @@ class VivadoLinter implements BaseLinter {
                 this.diagnostic.set(document.uri, diagnostics);
             }
         } else {
-            LspOutput.report('vivado linter is not available, please check prj.vivado.install.path in your setting', ReportType.Error, true);
+            LspOutput.report('vivado linter is not available, please check prj.vivado.install.path in your setting', {
+                level: ReportType.Error,
+                notify: true
+            });
         }
     }
 
@@ -79,7 +82,9 @@ class VivadoLinter implements BaseLinter {
             if (headerInfo === 'ERROR') {
                 const errorInfos = parsedPath.split(':');
                 const errorLine = Math.max(parseInt(errorInfos[errorInfos.length - 1]) - 1, 0);
-                LspOutput.report(`<xvlog linter> line: ${errorLine}, info: ${syntaxInfo}`, ReportType.Run);
+                LspOutput.report(`<xvlog linter> line: ${errorLine}, info: ${syntaxInfo}`, {
+                    level: ReportType.Run
+                });
 
                 const range = this.makeCorrectRange(document, errorLine, syntaxInfo);
                 const diag = new vscode.Diagnostic(range, syntaxInfo, vscode.DiagnosticSeverity.Error);
@@ -136,8 +141,13 @@ class VivadoLinter implements BaseLinter {
         const fullExecutorName = opeParam.os === 'win32' ? executorName + '.bat' : executorName;
         
         if (vivadoInstallPath.trim() === '' || !fs.existsSync(vivadoInstallPath)) {
-            LspOutput.report(`User's Vivado Install Path "${vivadoInstallPath}", which is invalid. Use ${executorName} in default.`, ReportType.Warn);
-            LspOutput.report('If you have doubts, check prj.vivado.install.path in setting', ReportType.Warn);
+            LspOutput.report(`User's Vivado Install Path "${vivadoInstallPath}", which is invalid. Use ${executorName} in default.`, {
+                level: ReportType.Warn
+            });
+            LspOutput.report('If you have doubts, check prj.vivado.install.path in setting', {
+                level: ReportType.Warn
+            });
+
             return executorName;
         } else {
             LspOutput.report(`User's Vivado Install Path "${vivadoInstallPath}", which is invalid`);
@@ -161,11 +171,16 @@ class VivadoLinter implements BaseLinter {
         const { stderr } = await easyExec(executorPath, []);
         if (stderr.length === 0) {
             this.executableInvokeNameMap.set(langID, executorPath);
-            LspOutput.report(`success to verify ${executorPath}, linter from vivado is ready to go!`, ReportType.Launch);
+            LspOutput.report(`success to verify ${executorPath}, linter from vivado is ready to go!`, {
+                level: ReportType.Launch
+            });
             return true;
         } else {
             this.executableInvokeNameMap.set(langID, undefined);
-            LspOutput.report(`Fail to execute ${executorPath}! Reason: ${stderr}`, ReportType.Error, true);            
+            LspOutput.report(`Fail to execute ${executorPath}! Reason: ${stderr}`, {
+                level: ReportType.Error,
+                notify: true
+            });            
             return false;
         }
     }

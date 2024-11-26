@@ -58,7 +58,9 @@ class HdlParam {
         await this.doHdlFast(path, 'common');
         const hdlFile = this.getHdlFile(path);
         if (!hdlFile) {
-            MainOutput.report('error happen when we attempt to add file by path: ' + path, ReportType.Error);
+            MainOutput.report('error happen when we attempt to add file by path: ' + path, {
+                level: ReportType.Error
+            });
         } else {
             hdlFile.makeInstance();
             // when a new file is added, retry the solution of dependency
@@ -134,11 +136,11 @@ class HdlParam {
     }
 
     public selectTopModuleSourceByFileType(hdlModule: HdlModule): Set<HdlModule> {
-        switch (hdlModule.file.type) {
-            case common.HdlFileType.Src: return this.srcTopModules;
-            case common.HdlFileType.Sim: return this.simTopModules;
-            case common.HdlFileType.LocalLib: return this.srcTopModules;
-            case common.HdlFileType.RemoteLib: return this.srcTopModules;
+        switch (hdlModule.file.projectType) {
+            case common.HdlFileProjectType.Src: return this.srcTopModules;
+            case common.HdlFileProjectType.Sim: return this.simTopModules;
+            case common.HdlFileProjectType.LocalLib: return this.srcTopModules;
+            case common.HdlFileProjectType.RemoteLib: return this.srcTopModules;
             default: return this.srcTopModules;        
         }
     }
@@ -152,6 +154,10 @@ class HdlParam {
         topModuleSource.add(hdlModule);
     }
 
+    /**
+     * @description 根据输入的 module 把它从所属的 src 或者 sim 的 topmodules 中去除
+     * @param hdlModule 
+     */
     public deleteTopModuleToSource(hdlModule: HdlModule) {
         const topModuleSource = this.selectTopModuleSourceByFileType(hdlModule);
         topModuleSource.delete(hdlModule);
@@ -238,15 +244,21 @@ class HdlParam {
             const fast = await HdlSymbol.fast(path, fileType);
             if (fast) {
                 const languageId = this.getRealLanguageId(path, fast.fileType);
+                const fileProjectType = this.getHdlFileProjectType(path, fast.fileType);
                 new HdlFile(path,
                             languageId,
                             fast.macro,
                             fast.content,
+                            fileProjectType,
                             fast.fileType);
             }
         } catch (error) {
-            MainOutput.report('Error happen when parse ' + path, ReportType.Error);
-            MainOutput.report('Reason: ' + error, ReportType.Error);
+            MainOutput.report('Error happen when parse ' + path, {
+                level: ReportType.Error
+            });
+            MainOutput.report('Reason: ' + error, {
+                level: ReportType.Error
+            });
         }
     }
 
@@ -257,6 +269,32 @@ class HdlParam {
         return hdlFile.getLanguageId(path);
     }
 
+    public getHdlFileProjectType(path: string, fileType: DoFastFileType): common.HdlFileProjectType {
+        switch (fileType) {
+            case 'common':
+                // 根据前缀来判断对应的类型
+                path = hdlPath.toSlash(path);
+                const prjInfo = opeParam.prjInfo;
+                
+                if (path.startsWith(prjInfo.hardwareSrcPath)) {
+                    return common.HdlFileProjectType.Src;
+                } else if (path.startsWith(prjInfo.hardwareSimPath)) {
+                    return common.HdlFileProjectType.Sim;
+                } else if (path.startsWith(prjInfo.ipPath)) {
+                    return common.HdlFileProjectType.IP;
+                } else if (path.startsWith(prjInfo.localLibPath)) {
+                    return common.HdlFileProjectType.LocalLib;
+                } else if (path.startsWith(prjInfo.remoteLibPath)) {
+                    return common.HdlFileProjectType.RemoteLib;
+                } else {
+                    return common.HdlFileProjectType.Unknown;
+                }
+            case 'ip':
+                return common.HdlFileProjectType.IP;
+            case 'primitives':
+                return common.HdlFileProjectType.Primitive;            
+        }
+    }
 
     public async initializeHdlFiles(hdlFiles: AbsPath[], progress: vscode.Progress<IProgress>) {        
         let count: number = 0;
@@ -343,8 +381,8 @@ class HdlParam {
         }
 
         switch (type) {
-            case common.HdlFileType.Src: return this.getSrcTopModules();
-            case common.HdlFileType.Sim: return this.getSimTopModules();
+            case common.HdlFileProjectType.Src: return this.getSrcTopModules();
+            case common.HdlFileProjectType.Sim: return this.getSimTopModules();
             default: return [];
         }
     }
@@ -399,7 +437,9 @@ class HdlParam {
         // 初始化
         const moduleFile = this.getHdlFile(path);
         if (!moduleFile) {
-            MainOutput.report('error happen when create moduleFile ' + path, ReportType.Warn);
+            MainOutput.report('error happen when create moduleFile ' + path, {
+                level: ReportType.Warn
+            });
         } else {
             moduleFile.makeInstance();
             for (const module of moduleFile.getAllHdlModules()) {                
@@ -481,19 +521,25 @@ class HdlInstance {
         this.locateHdlModule();
     }
 
+    /**
+     * @description 定位出当前 instance 的模块是什么，并将模块对应的 HdlModule （普通 HDL、IP、原语） 赋值到 this.module 上
+     * 对于存在于结构树中的 HdlModule （普通 HDL & IP），改变这些 HdlModule 的 ref 并修改顶层模块相关的属性
+     */
     public locateHdlModule() {
         const instModPath = this.instModPath;
         const instModName = this.type;
 
         if (instModPath) {
-            this.module = hdlParam.getHdlModule(instModPath, instModName);
-
-            // add refer for module 
-            this.module?.addGlobalReferedInstance(this);
-            // if module and parent module share the same source (e.g both in src folder)
-            if (this.isSameSourceInstantiation()) {
-                // 增加当前 instance 的引用，并从对应类型的顶层模块中剔除
-                this.module?.addLocalReferedInstance(this);
+            const module = hdlParam.getHdlModule(instModPath, instModName);
+            if (module) {
+                this.module = module;
+                // 增加当前模块的 global ref
+                this.module.addGlobalReferedInstance(this);
+                // 如果当前 instance 对应的例化是同源例化，则
+                // 增加当前 instance 的 local ref，并从对应类型的顶层模块中剔除
+                if (this.isSameSourceInstantiation()) {
+                    this.module?.addLocalReferedInstance(this);
+                }
             }
         } else {
             doPrimitivesJudgeApi(instModName).then(isPrimitive => {                
@@ -503,6 +549,9 @@ class HdlInstance {
                         const fakeModule = new HdlModule(
                             XilinxPrimitivesHdlFile, instModName, defaultRange, [], [], []);
                         this.module = fakeModule;
+                        // 原语在任何情况下都不是顶层模块
+                        hdlParam.deleteTopModule(fakeModule);
+                        hdlParam.deleteTopModuleToSource(fakeModule);
                     }
                 }
             });
@@ -513,24 +562,37 @@ class HdlInstance {
     /**
      * @description 判断当前的 `instance` 对应的例化行为是否为一个同源例化 (SSI, same source instantiation)
      * 
-     * 对于标准项目结构，也就是 src + sim ，如果在 moduleA 中完成了 moduleB 的例化，且 moduleA 和 moduleB 都是 src 文件夹下的，
+     * - 对于标准项目结构，也就是 src + sim ，如果在 moduleA 中完成了 moduleB 的例化，且 moduleA 和 moduleB 都是 src 文件夹下的，
      * 那么这个例化就是一个同源例化；如果 moduleB 在 sim 下， moduleA 在 src 下，那么当前的例化就是一个非同源例化。
-     * 
-     * 同源例化造成的引用为 local ref，非同源例化 + 同源例化造成的引用为 global ref。在模块树下， src 文件夹下的只有 local ref 为空的 module 才是顶层模块
+     * - 对于 library 和 IP 这两种类型的 module，对于它们的例化一律视为同源引用。
+     * - 同源例化造成的引用为 local ref，非同源例化 + 同源例化造成的引用为 global ref。在模块树下， src 文件夹下的只有 local ref 为空的 module 才是顶层模块
      * 换句话说，非同源例化一定不会造成顶层模块的变化，但是同源例化有可能会。
      * @returns 
      */
     public isSameSourceInstantiation(): boolean {
-        const parentMod = this.parentMod;
-        const instMod = this.module;
-        if (instMod) {
-            return parentMod.file.type === instMod.file.type;
+        const parentModule = this.parentMod;
+        const belongModule = this.module;
+
+        // 当前 instance 仍然是 unsolved 状态，返回 false 不参与后续的 ref 计算
+        if (!belongModule) {
+            return false;
         }
-        return false;
+        
+        // instance 模块本身是 library / IP / 原语，一律视为 SSI
+        if (belongModule.file.projectType === common.HdlFileProjectType.IP ||
+            belongModule.file.projectType === common.HdlFileProjectType.Primitive ||
+            belongModule.file.projectType === common.HdlFileProjectType.LocalLib ||
+            belongModule.file.projectType === common.HdlFileProjectType.RemoteLib
+        ) {
+            return true;
+        }
+
+        // 剩余情况下，一律根据 type 判断
+        return parentModule.file.projectType === belongModule.file.projectType;
     }
 
     /**
-     * @description update Instance of each time
+     * @description 更新当前的 instance
      * @param newInstance 
      */
     public update(newInstance: common.RawHdlInstance) {        
@@ -685,8 +747,9 @@ class HdlModule {
             }
             // this.rawInstances = undefined;
         } else {
-            MainOutput.report('call makeNameToInstances but this.rawInstances is undefined', 
-                              ReportType.Warn);
+            MainOutput.report('call makeNameToInstances but this.rawInstances is undefined', {
+                level: ReportType.Warn
+            });
         }
     }
 
@@ -885,23 +948,30 @@ class HdlModule {
 };
 
 export class HdlFile {
+    // 标准化的文件绝对路径
     public path: string;
+    // 对应的 HDL 语言 ID
     public languageId: HdlLangID;
-    public type: common.HdlFileType;
+    // 文件的项目类型
+    public projectType: common.HdlFileProjectType;
+    // 文件的解析模式
     public doFastType: DoFastFileType;
+    // 当前文件的宏
     public macro: common.Macro;
+    // 维护当前文件内部 module 的 map
     private readonly nameToModule: Map<string, HdlModule>;
 
     constructor(path: string, 
                 languageId: HdlLangID, 
                 macro: common.Macro, 
                 modules: common.RawHdlModule[],
+                projectType: common.HdlFileProjectType,
                 doFastType: DoFastFileType) {
 
         this.path = path;
         this.languageId = languageId;
         this.macro = macro;
-        this.type = hdlFile.getHdlFileType(path);
+        this.projectType = projectType;
         this.doFastType = doFastType;
 
         // add to global hdlParam
@@ -987,8 +1057,13 @@ export class HdlFile {
     }
 }
 
-export const XilinxPrimitivesHdlFile = new HdlFile('xilinx-primitives', HdlLangID.Verilog, defaultMacro, [], 'primitives');
-
+export const XilinxPrimitivesHdlFile = new HdlFile(
+    'xilinx-primitives',
+    HdlLangID.Verilog,
+    defaultMacro,
+    [],
+    common.HdlFileProjectType.Primitive,
+    'primitives');
 
 
 export {

@@ -2,15 +2,52 @@
 import * as vscode from 'vscode';
 
 enum ReportType {
+    /**
+     * debug
+     */
     Debug = 'Debug',
+    /**
+     * 某些模块或者子进程启动函数中的输出，用来判断子模块是否正常启动
+     */
     Launch = 'Launch',
+    /**
+     * 测量性能相关的输出
+     */
     Performance = 'Performance',
+    /**
+     * debug 查看路径有效性相关的输出
+     */
     PathCheck = 'Path Check',
+    /**
+     * 普通消息的信息
+     */
     Info = 'Info',
+    /**
+     * warn 等级的信息
+     */
     Warn = 'Warn',
+    /**
+     * error 等级的信息
+     */
     Error = 'Error',
+    /**
+     * 某些功能或者子进程在运行中产出的信息
+     */
     Run = 'Run'
 };
+
+interface ReportOption {
+    /**
+     * 汇报的等级，类似于日志系统中的 level，详见 
+     * [ReportType](https://github.com/Digital-EDA/Digital-IDE/blob/main/src/global/outputChannel.ts#L4)
+     */
+    level?: ReportType,
+    /**
+     * 用于控制是否同时也在窗口右下角展示信息。如果为 true，则同时会
+     * 调用 vscode.window.showInformationMessage 在右下角展示信息。默认为 false
+     */
+    notify?: boolean
+}
 
 class Output {
     private _output: vscode.OutputChannel;
@@ -51,19 +88,21 @@ class Output {
     }
 
     /**
-     * 
+     * @description 信息汇报函数，用于将字符串显示在 Output 窗口中，也可可以同时显示右下角的窗口中
      * @param message message
-     * @param type report type
-     * @param reportInWindows whether use vscode.windows.<api> to show info
+     * @param option 汇报的选项
      */
-    public report(message: string | unknown, type: ReportType = ReportType.Info, reportInWindows: boolean = false) {
-        if (!this.skipMessage(type) && message) {
-            // this._output.show(true);
+    public report(message: string | unknown, option?: ReportOption) {
+        option = option || { level: ReportType.Info, notify: false } as ReportOption;
+        const level = option.level || ReportType.Info;
+        const notify = option.notify || false;
+        
+        if (!this.skipMessage(level) && message) {
             const currentTime = this.getCurrentTime();
-            this._output.appendLine('[' + type + ' - ' + currentTime + '] ' + message);
+            this._output.appendLine('[' + level + ' - ' + currentTime + '] ' + message);
 
-            if (reportInWindows) {
-                this.showInWindows('' + message, type);
+            if (notify) {
+                this.showInWindows('' + message, level);
             }
         }
     }

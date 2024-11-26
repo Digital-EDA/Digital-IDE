@@ -13,7 +13,9 @@ function registerManagerCommands(context: vscode.ExtensionContext) {
     // const psManage = prjManage.ps;
 
     vscode.commands.registerCommand('digital-ide.property-json.generate', prjManage.generatePropertyJson);
-    vscode.commands.registerCommand('digital-ide.property-json.overwrite', prjManage.overwritePropertyJson);    
+
+    // 丢弃原因：插件更新后，用户修改的部分会被覆盖，没有存在必要了
+    // vscode.commands.registerCommand('digital-ide.property-json.overwrite', prjManage.overwritePropertyJson);    
 
     // libpick 
     vscode.commands.registerCommand('digital-ide.pickLibrary', pickLibrary);

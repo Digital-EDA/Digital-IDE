@@ -13,6 +13,7 @@ import { XilinxIP } from '../../global/enum';
 import { HardwareOutput, MainOutput, ReportType } from '../../global/outputChannel';
 import { debounce } from '../../global/util';
 import { t } from '../../i18n';
+import { HdlFileProjectType } from '../../hdlParser/common';
 
 interface XilinxCustom {
     ipRepo: AbsPath, 
@@ -172,14 +173,14 @@ class XilinxOperation {
         }
 
         const tclPath = hdlPath.join(this.xilinxPath, 'launch.tcl');
-        scripts.push(this.getRefreshCmd());
+        scripts.push(this.getRefreshXprDesignSourceCommand());
         scripts.push(`file delete ${tclPath} -force`);
         const tclCommands = scripts.join('\n') + '\n';
         hdlFile.writeFile(tclPath, tclCommands);
 
         const argu = `-notrace -nolog -nojournal`;
+        context.path = this.updateVivadoPath();
         const cmd = `${context.path} -mode tcl -s ${tclPath} ${argu}`;
-
         
         const _this = this;
         
@@ -193,6 +194,7 @@ class XilinxOperation {
             }
             // 执行 cmd 启动
             const vivadoProcess = spawn(cmd, [], { shell: true, stdio: 'pipe', cwd: opeParam.workspacePath });
+            let status: 'pending' | 'fulfilled' = 'pending';
 
             vivadoProcess.on('close', () => {
                 onVivadoClose();            
@@ -204,13 +206,6 @@ class XilinxOperation {
                 onVivadoClose();
             });
 
-            vivadoProcess.stderr.on('data', data => {
-                HardwareOutput.report(data.toString(), ReportType.Error);
-                HardwareOutput.show();
-            });
-
-            let status: 'pending' | 'fulfilled' = 'pending';
-
             return new Promise(resolve => {
                 vivadoProcess.stdout.on('data', data => {
                     const message: string = _this.handleMessage(data.toString(), status);                                        
@@ -219,15 +214,42 @@ class XilinxOperation {
                         HardwareOutput.show();
                         resolve(vivadoProcess);
                     }
-                    HardwareOutput.report(message, ReportType.Info);
+                    HardwareOutput.report(message, {
+                        level: ReportType.Info
+                    });
                     status = 'fulfilled';
+                });
+
+                vivadoProcess.stderr.on('data', async data => {
+                    HardwareOutput.report(data.toString(), {
+                        level: ReportType.Error
+                    });
+                    HardwareOutput.show();
+                    if (status === 'pending') {
+                        // pending 阶段就出现 stderr 说明启动失败
+                        resolve(undefined);
+
+                        const vivadoInstallPath = vscode.workspace.getConfiguration('digital-ide').get<string>('prj.vivado.install.path') || '';
+                        
+                        const res = await vscode.window.showErrorMessage(
+                            t('error.pl.launch.not-valid-vivado-path', data.toString(), vivadoInstallPath.toString()),
+                            {
+                                title: t('info.pl.launch.set-vivado-path'),
+                                value: true
+                            }
+                        );
+                        if (res?.value) {
+                            await vscode.commands.executeCommand('workbench.action.openSettings', 'digital-ide.prj.vivado.install.path');
+                        }
+                    }
                 });
             });
         }
 
         const process = await vscode.window.withProgress({
             title: t('info.pl.launch.progress.launch-tcl.title'),
-            location: vscode.ProgressLocation.Notification
+            location: vscode.ProgressLocation.Notification,
+            cancellable: true
         }, async () => {
             return await launchScript();
         });
@@ -280,7 +302,11 @@ class XilinxOperation {
         scripts.push(`open_project ${path} -quiet`);
     }
 
-    private getRefreshCmd(): string {
+    /**
+     * @description 更新 xpr 设计源的命令
+     * @returns 
+     */
+    private getRefreshXprDesignSourceCommand(): string {
         const scripts: string[] = [];
         // 清除所有源文件
         scripts.push(`remove_files -quiet [get_files]`);
@@ -358,13 +384,25 @@ class XilinxOperation {
         });
 
         // 导入非本地的设计源文件
-        const HDLFiles = hdlParam.getAllHdlFiles();
-        for (const file of HDLFiles) {
-            // TODO: 新增library的add_files
-            if (file.type === "src") {
-                scripts.push(`add_files ${file.path} -quiet`);
+        for (const hdlFile of hdlParam.getAllHdlFiles()) {
+            switch (hdlFile.projectType) {
+                case HdlFileProjectType.Src:
+                case HdlFileProjectType.LocalLib:
+                case HdlFileProjectType.RemoteLib:
+                    // src 和 library 加入 source_1 设计源
+                    scripts.push(`add_file ${hdlFile.path} -quiet`);
+                    break;
+                case HdlFileProjectType.Sim:
+                    // sim 加入 sim_1 设计源
+                    scripts.push(`add_file -fileset sim_1 ${hdlFile.path} -quiet`);
+                    break;
+                case HdlFileProjectType.IP:
+                case HdlFileProjectType.Primitive:
+                    // IP 和 原语不用管
+                    break;
+                default:
+                    break;
             }
-            scripts.push(`add_files -fileset sim_1 ${file.path} -quiet`);
         }
 
         scripts.push(`add_files -fileset constrs_1 ${this.datPath} -quiet`);
@@ -389,8 +427,12 @@ class XilinxOperation {
         return cmd;
     }
 
+    /**
+     * @description 【Xilinx Vivado 操作】更新 xpr 文件
+     * @param context 
+     */
     public refresh(context: PLContext) {
-        const cmd = this.getRefreshCmd();
+        const cmd = this.getRefreshXprDesignSourceCommand();
         context.process?.stdin.write(cmd + '\n');
     }
 
@@ -590,7 +632,9 @@ file delete ${scriptPath} -force\n`;
 
         if (context.process) {
             context.process.stdin.write('start_gui -quiet\n');
-            HardwareOutput.report(t('info.pl.gui.report-title'), ReportType.Info);
+            HardwareOutput.report(t('info.pl.gui.report-title'), {
+                level: ReportType.Info
+            });
             HardwareOutput.show();
             this.guiLaunched = true;
         }
@@ -600,7 +644,7 @@ file delete ${scriptPath} -force\n`;
         if (!this.guiLaunched && files.length > 0) {
             const filesString = files.join("\n");
             HardwareOutput.report(t('info.pl.add-files.title') + '\n' + filesString);
-            this.processFileInPrj(files, context, "add_file");
+            this.execCommandToFilesInTclInterpreter(files, context, "add_file");
         }
     }
 
@@ -608,7 +652,7 @@ file delete ${scriptPath} -force\n`;
         if (!this.guiLaunched && files.length > 0) {
             const filesString = files.join("\n");
             HardwareOutput.report(t('info.pl.del-files.title') + '\n' + filesString);
-            this.processFileInPrj(files, context, "remove_files");
+            this.execCommandToFilesInTclInterpreter(files, context, "remove_files");
         }
     }
 
@@ -638,7 +682,7 @@ file delete ${scriptPath} -force\n`;
      * @param context 
      * @param command 
      */
-    public processFileInPrj(files: string[], context: PLContext, command: string) {
+    public execCommandToFilesInTclInterpreter(files: string[], context: PLContext, command: string) {
         if (context.process === undefined) {
             return;
         }
@@ -680,6 +724,20 @@ file delete ${scriptPath} -force\n`;
         }
 
         MainOutput.report(log);
+    }
+
+    public updateVivadoPath(): string {
+        const vivadoBinFolder = vscode.workspace.getConfiguration('digital-ide.prj.vivado.install').get<string>('path') || '';
+        if (hdlFile.isDir(vivadoBinFolder)) {
+            let vivadoPath = hdlPath.join(hdlPath.toSlash(vivadoBinFolder), 'vivado');
+            if (opeParam.os === 'win32') {
+                vivadoPath += '.bat';
+            }
+            return vivadoPath;
+        } else {
+            // 没有设置 vivado bin 文件夹，就认为用户已经把对应的路径加入环境变量了
+            return 'vivado';
+        }
     }
 }
 

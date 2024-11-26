@@ -33,7 +33,9 @@ abstract class BaseAction {
     public listenChange(m: HdlMonitor) {
         const fSWatcher = this.selectFSWatcher(m);
         if (!fSWatcher) {
-            MainOutput.report("FSWatcher hasn't been made!", ReportType.Error);
+            MainOutput.report("FSWatcher hasn't been made!", {
+                level: ReportType.Error
+            });
             return;
         }
         fSWatcher.on(Event.Change, path => this.change(path, m));
@@ -42,7 +44,9 @@ abstract class BaseAction {
     public listenAdd(m: HdlMonitor) {
         const fSWatcher = this.selectFSWatcher(m);
         if (!fSWatcher) {
-            MainOutput.report("FSWatcher hasn't been made!", ReportType.Error);
+            MainOutput.report("FSWatcher hasn't been made!", {
+                level: ReportType.Error
+            });
             return;
         }
         fSWatcher.on(Event.Add, path => this.add(path, m));
@@ -51,7 +55,9 @@ abstract class BaseAction {
     public listenUnlink(m: HdlMonitor) {
         const fSWatcher = this.selectFSWatcher(m);
         if (!fSWatcher) {
-            MainOutput.report("FSWatcher hasn't been made!", ReportType.Error);
+            MainOutput.report("FSWatcher hasn't been made!", {
+                level: ReportType.Error
+            });
             return;
         }
         fSWatcher.on(Event.Unlink, path => this.unlink(path, m));
@@ -75,7 +81,9 @@ class HdlAction extends BaseAction {
 
         // check if it has been created
         if (hdlParam.hasHdlFile(path)) {
-            MainOutput.report('<HdlAction Add Event> HdlFile ' + path + ' has been created', ReportType.Warn);
+            MainOutput.report('<HdlAction Add Event> HdlFile ' + path + ' has been created', {
+                level: ReportType.Warn
+            });
             return;
         }
 
@@ -247,7 +255,9 @@ class PpyAction extends BaseAction {
             // skip hdl remake
             if (originalLibState !== currentLibState) {
                 const fileChange = await libManage.processLibFiles(opeParam.prjInfo.library);
-                MainOutput.report(`libManage finish process, add ${fileChange.add.length} files, del ${fileChange.del.length} files`, ReportType.Info);
+                MainOutput.report(`libManage finish process, add ${fileChange.add.length} files, del ${fileChange.del.length} files`, {
+                    level: ReportType.Info
+                });
             }
         } else {
             // update hdl monitor
@@ -308,8 +318,6 @@ class PpyAction extends BaseAction {
         for (const path of delFiles) {
             hdlParam.deleteHdlFile(path);
         }
-
-        // 判断新加入的 module 是否还是顶层模块
     }
 
 
@@ -320,7 +328,9 @@ class PpyAction extends BaseAction {
             const delfileActionTag = '(del files) ';
             if (addFiles.length > 0) {
                 const reportMsg = ['', ...addFiles].join('\n\t');
-                MainOutput.report(addfileActionTag + t('info.pl.xilinx.update-addfiles') + reportMsg, ReportType.Run);
+                MainOutput.report(addfileActionTag + t('info.pl.xilinx.update-addfiles') + reportMsg, {
+                    level: ReportType.Run
+                });
                 await prjManage.pl.addFiles(addFiles);
             } else {
                 MainOutput.report(addfileActionTag + t('info.pl.xilinx.no-need-add-files'));
@@ -328,14 +338,18 @@ class PpyAction extends BaseAction {
 
             if (delFiles.length > 0) {
                 const reportMsg = ['', ...delFiles].join('\n\t');
-                MainOutput.report(delfileActionTag + t('info.pl.xilinx.update-delfiles') + reportMsg, ReportType.Run);
+                MainOutput.report(delfileActionTag + t('info.pl.xilinx.update-delfiles') + reportMsg, {
+                    level: ReportType.Run
+                });
                 await prjManage.pl.delFiles(delFiles);
             } else {
                 MainOutput.report(delfileActionTag + t('info.pl.xilinx.no-need-del-files'));
             }
 
         } else {
-            MainOutput.report('PL is not registered', ReportType.Warn);
+            MainOutput.report('PL is not registered', {
+                level: ReportType.Warn
+            });
         }
     }
 }

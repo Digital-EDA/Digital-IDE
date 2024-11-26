@@ -32,11 +32,23 @@ enum HdlModulePortType {
 
 enum HdlModuleParamType {LocalParam, Parameter, Unknown};
 
-enum HdlFileType {
+/**
+ * @description 用于描述当前的这个 HDL 文件是会被系统视为哪一种进行处理
+ * - Src: src 目录文件
+ * - Sim: sim 目录文件
+ * - LocalLib: 局部库文件
+ * - RemoteLib: 全局库文件
+ * - IP: IP 核
+ * - Primitive: 原语
+ */
+enum HdlFileProjectType {
     Src = 'src', 
     Sim = 'sim',
     LocalLib = 'local_lib',
-    RemoteLib = 'remote_lib'
+    RemoteLib = 'remote_lib',
+    IP = 'ip',
+    Primitive = 'primitive',
+    Unknown = 'unknown'
 };
 
 enum InstModPathStatus {Current, Include, Others, Unknown};
@@ -214,7 +226,7 @@ export {
     InstRange,
     HdlModulePortType,
     HdlModuleParamType,
-    HdlFileType,
+    HdlFileProjectType,
     InstModPathStatus,
     Error,
     Define,

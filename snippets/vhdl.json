@@ -5,120 +5,140 @@
 		"description": "asynchronous process",
 		"scope": "source.vhdl"
 	},
+
 	"arch": {
 		"prefix": "arch",
 		"body": "architecture ${1:arch} of ${2:ent} is\n\n\tsignal $0\n\nbegin\n\nend ${1:arch} ; -- ${1:arch}",
 		"description": "architecture",
 		"scope": "source.vhdl"
 	},
+
 	"case": {
 		"prefix": "case",
 		"body": "case( ${1:signal_name} ) is\n\n\twhen ${2:IDLE} =>\n\t\t$0\n\n\twhen others =>\n\nend case ;",
 		"description": "case",
 		"scope": "source.vhdl"
 	},
+
 	"else": {
 		"prefix": "else",
 		"body": "else\n\t$0",
 		"description": "else",
 		"scope": "source.vhdl"
 	},
+
 	"elsif": {
 		"prefix": "elsif",
 		"body": "elsif ${1:expression} then\n\t$0",
 		"description": "elsif",
 		"scope": "source.vhdl"
 	},
+
 	"ent": {
 		"prefix": "ent",
 		"body": "entity ${1:ent} is\n  port (\n\t${0:clock}\n  ) ;\nend ${1:ent};",
 		"description": "entity",
 		"scope": "source.vhdl"
 	},
+
 	"entarch": {
 		"prefix": "entarch",
 		"body": "entity ${1:ent} is\n  port (\n\t${0:clock}\n  ) ;\nend ${1:ent} ;\n\narchitecture ${2:arch} of ${1:ent} is\n\n\n\nbegin\n\n\n\nend architecture ; -- ${2:arch}",
 		"description": "entity architecture",
 		"scope": "source.vhdl"
 	},
+
 	"for": {
 		"prefix": "for",
 		"body": "${1:identifier} : for ${2:i} in ${3:0} to ${4:10} loop\n\t$0\nend loop ; -- ${1:identifier}",
 		"description": "for loop",
 		"scope": "source.vhdl"
 	},
+
 	"forg": {
 		"prefix": "forg",
 		"body": "${1:identifier} : for ${2:i} in ${3:x} to ${4:y} generate\n\t$0\nend generate ; -- ${1:identifier}",
 		"description": "for generate",
 		"scope": "source.vhdl"
 	},
+
 	"if": {
 		"prefix": "if",
 		"body": "if ${1:expression} then\n\t$0\nend if ;",
 		"description": "if",
 		"scope": "source.vhdl"
 	},
+
 	"pack": {
 		"prefix": "pack",
 		"body": "package ${1:pkg} is\n\t$0\nend package ;",
 		"description": "package",
 		"scope": "source.vhdl"
 	},
+
 	"pro": {
 		"prefix": "pro",
 		"body": "${1:identifier} : process( ${2:sensitivity_list} )\nbegin\n\t$0\nend process ; -- ${1:identifier}",
 		"description": "process",
 		"scope": "source.vhdl"
 	},
+
 	"s": {
 		"prefix": "s",
 		"body": "signed(${1:x} downto ${2:0}) ;$0",
 		"description": "signed downto",
 		"scope": "source.vhdl"
 	},
+
 	"sr": {
 		"prefix": "sr",
 		"body": "signed(${1:signal}'range) ;$0",
 		"description": "signed range",
 		"scope": "source.vhdl"
 	},
+
 	"spro": {
 		"prefix": "spro",
 		"body": "${1:identifier} : process( ${2:clock} )\nbegin\n\tif( rising_edge(${2:clock}) ) then\n\t\t$0\n\tend if ;\nend process ; -- ${1:identifier}",
 		"description": "synchronous process",
 		"scope": "source.vhdl"
 	},
+
 	"slv": {
 		"prefix": "slv",
 		"body": "std_logic_vector(${1:x} downto ${2:0}) ;$0",
 		"description": "std_logic_vector downto",
 		"scope": "source.vhdl"
 	},
+
 	"slvr": {
 		"prefix": "slvr",
 		"body": "std_logic_vector(${1:signal}'range) ;$0",
 		"description": "std_logic_vector range",
 		"scope": "source.vhdl"
 	},
+
 	"u": {
 		"prefix": "u",
 		"body": "unsigned(${1:x} downto ${2:0}) ;$0",
 		"description": "unsigned downto",
 		"scope": "source.vhdl"
 	},
+
 	"ur": {
 		"prefix": "ur",
 		"body": "unsigned(${1:signal}'range) ;$0",
 		"description": "unsigned range",
 		"scope": "source.vhdl"
 	},
+
 	"vhdl": {
 		"prefix": "vhdl",
 		"body": "library ieee ;\n\tuse ieee.std_logic_1164.all ;\n\tuse ieee.numeric_std.all ;\n\nentity ${1:ent} is\n  port (\n\t${0:clock}\n  ) ;\nend ${1:ent} ; \n\narchitecture ${2:arch} of ${1:ent} is\n\nbegin\n\nend architecture ;",
 		"description": "vhdl template",
 		"scope": "source.vhdl"
 	},
+    
 	"while": {
 		"prefix": "while",
 		"body": "${1:identifier} : while ${2:expression} loop\n\t$0\nend loop ; -- ${1:identifier}",

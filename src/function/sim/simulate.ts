@@ -73,7 +73,10 @@ class Simulate {
         };
         let code = hdlFile.readFile(path);
         if (!code) {
-            MainOutput.report('error when read ' + path, ReportType.Error, true);
+            MainOutput.report('error when read ' + path, {
+                level: ReportType.Error,
+                notify: true
+            });
             return;
         }
 
@@ -95,7 +98,9 @@ class Simulate {
         
         
         if (!hdlFile.isDir(simConfig.simulationHome)) {
-            MainOutput.report('create dir ' + simConfig.simulationHome, ReportType.Info);
+            MainOutput.report('create dir ' + simConfig.simulationHome, {
+                level: ReportType.Info
+            });
             hdlDir.mkdir(simConfig.simulationHome);
         }
 
@@ -113,7 +118,10 @@ class Simulate {
 
         simConfig.installPath = setting.get('digital-ide.function.simulate.icarus.installPath', '');
         if (simConfig.installPath !== '' && !hdlFile.isDir(simConfig.installPath)) {
-            MainOutput.report(`install path ${simConfig.installPath} is illegal`, ReportType.Error, true);
+            MainOutput.report(`install path ${simConfig.installPath} is illegal`, {
+                level: ReportType.Error,
+                notify: true
+            });
             return;
         }
 
@@ -252,7 +260,9 @@ class IcarusSimulate extends Simulate {
         // console.log(thirdLibraryFileArgs);
         
         const cmd = `${iverilogPath} ${argu} -o ${outVvpPath} -s ${name} ${macroIncludeArgs} ${thirdLibraryDirArgs} ${mainPath} ${dependenceArgs} ${thirdLibraryFileArgs}`;
-        MainOutput.report(cmd, ReportType.Run);
+        MainOutput.report(cmd, {
+            level: ReportType.Run
+        });
         return cmd;
     }
 
@@ -287,26 +297,42 @@ class IcarusSimulate extends Simulate {
         }
         child_process.exec(command, { cwd }, (error, stdout, stderr) => {
             if (error) {
-                MainOutput.report('Error took place when run ' + command, ReportType.Error);
-                MainOutput.report('Reason: ' + stderr, ReportType.Error);
+                MainOutput.report('Error took place when run ' + command, {
+                    level: ReportType.Error
+                });
+                MainOutput.report('Reason: ' + stderr, {
+                    level: ReportType.Error
+                });
             } else {
-                MainOutput.report(stdout, ReportType.Info);
+                MainOutput.report(stdout, {
+                    level: ReportType.Info
+                });
                 const vvpOutFile = hdlPath.join(simConfig.simulationHome, 'out.vvp');
-                MainOutput.report("Create vvp to " + vvpOutFile, ReportType.Run);
+                MainOutput.report("Create vvp to " + vvpOutFile, {
+                    level: ReportType.Run
+                });
                 
                 const outVvpPath = hdlPath.join(simConfig.simulationHome, 'out.vvp');
                 const vvpPath = simConfig.vvpPath;
 
                 // run vvp to interrupt script
                 const vvpCommand = `${vvpPath} ${outVvpPath}`;
-                MainOutput.report(vvpCommand, ReportType.Run);
+                MainOutput.report(vvpCommand, {
+                    level: ReportType.Run
+                });
                 
                 child_process.exec(vvpCommand, { cwd }, (error, stdout, stderr) => {
                     if (error) {
-                        MainOutput.report('Error took place when run ' + vvpCommand, ReportType.Error);
-                        MainOutput.report('Reason: ' + stderr, ReportType.Error);
+                        MainOutput.report('Error took place when run ' + vvpCommand, {
+                            level: ReportType.Error
+                        });
+                        MainOutput.report('Reason: ' + stderr, {
+                            level: ReportType.Error
+                        });
                     } else {
-                        MainOutput.report(stdout, ReportType.Info);
+                        MainOutput.report(stdout, {
+                            level: ReportType.Info
+                        });
                     }
                 });
             }
@@ -355,7 +381,10 @@ class IcarusSimulate extends Simulate {
             this.exec(simulationCommand, cwd);
         } else {
             const errorMsg = 'Fail to generate command';
-            MainOutput.report(errorMsg, ReportType.Error, true);
+            MainOutput.report(errorMsg, {
+                level: ReportType.Error,
+                notify: true
+            });
             return;
         }
     }
@@ -386,15 +415,13 @@ class IcarusSimulate extends Simulate {
             }
             const standardPath = hdlPath.toSlash(path);
 
-            console.log('enter [doFastApi]');
             const response = await doFastApi(standardPath, 'common');
-            console.log('response result: ');
-            console.log(response);
-            
+            const projectType = hdlParam.getHdlFileProjectType(standardPath, 'common');               
             const moduleFile = new HdlFile(
                 standardPath, langID,
                 response?.macro || defaultMacro,
                 response?.content || [],
+                projectType,
                 'common'
             );
             // 从 hdlParam 中去除，避免干扰全局
@@ -418,7 +445,10 @@ class IcarusSimulate extends Simulate {
         if (targetModule !== undefined) {
             this.simulateByHdlModule(targetModule);
         } else {
-            MainOutput.report('There is no module named ' + view.name + ' in ' + view.path, ReportType.Error, true);
+            MainOutput.report('There is no module named ' + view.name + ' in ' + view.path, {
+                level: ReportType.Error,
+                notify: true
+            });
             return;
         }
     }

@@ -69,5 +69,7 @@
     "info.pl.xilinx.update-addfiles": "ファイルを Xilinx プロジェクトに追加",
     "info.pl.xilinx.update-delfiles": "以下のファイルをXilinxプロジェクトから削除してください。",
     "info.pl.xilinx.no-need-add-files": "Xilinx プロジェクトに追加するファイルはありません",
-    "info.pl.xilinx.no-need-del-files": "Xilinx から削除するファイルはありません。"
+    "info.pl.xilinx.no-need-del-files": "Xilinx から削除するファイルはありません。",
+    "error.pl.launch.not-valid-vivado-path": "Vivado TCL スクリプトインタプリタの起動中にエラーが発生しました：{0}。Vivado の起動パスが正しいか確認してください。現在設定されている Vivado 起動フォルダパス：{1}",
+    "info.pl.launch.set-vivado-path": "Vivado インストールパスの設定に移動"
 }

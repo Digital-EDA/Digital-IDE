@@ -1,210 +1,18 @@
-{
-    "IDDR": {
-        "prefix": "iddr",
-        "body" : [
-            "IDDR #(",
-            "    // \"OPPOSITE_EDGE\", \"SAME_EDGE\" or \"SAME_EDGE_PIPELINED\" ",
-            "    .DDR_CLK_EDGE(\"SAME_EDGE\"), ",
-            "    .INIT_Q1(1'b0),      // Initial value of Q1: 1'b0 or 1'b1",
-            "    .INIT_Q2(1'b0),      // Initial value of Q2: 1'b0 or 1'b1",
-            "    .SRTYPE(\"SYNC\"))     // Set/Reset type: \"SYNC\" or \"ASYNC\" ",
-            "IDDR_inst (",
-            "IDDR #(",
-            "    .Q1(rx_data_pos),    // 1-bit output for positive edge of clock ",
-            "    .Q2(rx_data_neg),    // 1-bit output for negative edge of clock",
-            "    .C(data_clk),        // 1-bit clock input",
-            "    .CE(1'b1),           // 1-bit clock enable input",
-            "    .D(rx_data_dly),     // 1-bit DDR data input",
-            "    .R(1'b0),            // 1-bit reset",
-            "    .S(1'b0)             // 1-bit set",
-            ");"
-        ]
-    },
-
-    "ODDR": {
-        "prefix": "oddr",
-        "body" : [
-            "ODDR #(",
-            "    .DDR_CLK_EDGE(\"SAME_EDGE\"), // \"OPPOSITE_EDGE\" or \"SAME_EDGE\" ",
-            "    .INIT(1'b0),        // Initial value of Q: 1'b0 or 1'b1",
-            "    .SRTYPE(\"SYNC\"))    // Set/Reset type: \"SYNC\" or \"ASYNC\" ",
-            "ODDR_inst (",
-            "    .Q(odata),          // 1-bit DDR output",
-            "    .C(data_clk),       // 1-bit clock input",
-            "    .CE(1'b1),          // 1-bit clock enable input",
-            "    .D1(data_p),        // 1-bit data input (positive edge)",
-            "    .D2(data_n),        // 1-bit data input (negative edge)",
-            "    .R(1'b0),           // 1-bit reset",
-            "    .S(1'b0)            // 1-bit set",
-            ");"
-        ]
-    },
-
-    "OBUFDS": {
-        "prefix": "obuf",
-        "body" : [
-            "OBUFDS #(",
-            "    .IOSTANDARD(\"LVDS18\"), // Specify the output I/O standard",
-            "    .SLEW(\"SLOW\"))         // Specify the output slew rate",
-            "OBUFDS_inst (",
-            "    .O(tx_frame_p),  // Diff_p output (connect directly to top-level port)",
-            "    .OB(tx_frame_n), // Diff_n output (connect directly to top-level port)",
-            "    .I(tx_frame)     // Buffer input ",
-            ");"
-        ]
-    },
-
-    "IBUFDS": {
-        "prefix": "ibuf",
-        "body" : [
-            "IBUFDS #(",
-            "    .DIFF_TERM(\"FALSE\"),       // Differential Termination",
-            "    .IBUF_LOW_PWR(\"TRUE\"),     // Low power=\"TRUE\", Highest performance=\"FALSE\" ",
-            "    .IOSTANDARD(\"DEFAULT\"))    // Specify the input I/O standard",
-            "IBUFDS_inst (",
-            "    .O(data_clk_tmp),   // Buffer output",
-            "    .I(data_clk_p),     // Diff_p buffer input (connect directly to top-level port)",
-            "    .IB(data_clk_n)     // Diff_n buffer input (connect directly to top-level port)",
-            ");"
-        ]
-    },
-
-    "OSERDESE2": {
-        "prefix": "oserd",
-        "body" : [
-        "OSERDESE2 #(",
-        "    .DATA_RATE_OQ(\"DDR\"),   // DDR, SDR",
-        "    .DATA_RATE_TQ(\"DDR\"),   // DDR, BUF, SDR",
-        "    .DATA_WIDTH(4),         // Parallel data width (2-8,10,14)",
-        "    .INIT_OQ(1'b0),         // Initial value of OQ output (1'b0,1'b1)",
-        "    .INIT_TQ(1'b0),         // Initial value of TQ output (1'b0,1'b1)",
-        "    .SERDES_MODE(\"MASTER\"), // MASTER, SLAVE",
-        "    .SRVAL_OQ(1'b0),        // OQ output value when SR is used (1'b0,1'b1)",
-        "    .SRVAL_TQ(1'b0),        // TQ output value when SR is used (1'b0,1'b1)",
-        "    .TBYTE_CTL(\"FALSE\"),    // Enable tristate byte operation (FALSE, TRUE)",
-        "    .TBYTE_SRC(\"FALSE\"),    // Tristate byte source (FALSE, TRUE)",
-        "    .TRISTATE_WIDTH(4)      // 3-state converter width (1,4)",
-        ")",
-        "OSERDESE2_inst (",
-        "    .OFB(OFB),             // 1-bit output: Feedback path for data",
-        "    .OQ(OQ),               // 1-bit output: Data path output",
-        "    // SHIFTOUT1 / SHIFTOUT2: 1-bit (each) output: Data output expansion (1-bit each)",
-        "    .SHIFTOUT1(SHIFTOUT1),",
-        "    .SHIFTOUT2(SHIFTOUT2),",
-        "    .TBYTEOUT(TBYTEOUT),   // 1-bit output: Byte group tristate",
-        "    .TFB(TFB),             // 1-bit output: 3-state control",
-        "    .TQ(TQ),               // 1-bit output: 3-state control",
-        "    .CLK(CLK),             // 1-bit input: High speed clock",
-        "    .CLKDIV(CLKDIV),       // 1-bit input: Divided clock",
-        "    // D1 - D8: 1-bit (each) input: Parallel data inputs (1-bit each)",
-        "    .D1(D1),",
-        "    .D2(D2),",
-        "    .D3(D3),",
-        "    .D4(D4),",
-        "    .D5(D5),",
-        "    .D6(D6),",
-        "    .D7(D7),",
-        "    .D8(D8),",
-        "    .OCE(OCE),             // 1-bit input: Output data clock enable",
-        "    .RST(RST),             // 1-bit input: Reset",
-        "    // SHIFTIN1 / SHIFTIN2: 1-bit (each) input: Data input expansion (1-bit each)",
-        "    .SHIFTIN1(SHIFTIN1),",
-        "    .SHIFTIN2(SHIFTIN2),",
-        "    // T1 - T4: 1-bit (each) input: Parallel 3-state inputs",
-        "    .T1(T1),",
-        "    .T2(T2),",
-        "    .T3(T3),",
-        "    .T4(T4),",
-        "    .TBYTEIN(TBYTEIN),     // 1-bit input: Byte group tristate",
-        "    .TCE(TCE)              // 1-bit input: 3-state clock enable",
-        ");"
-        ]
-    },
-
-    "ISERDESE2": {
-        "prefix": "iserd",
-        "body" : [
-        "ISERDESE2 #(",
-        "    .DATA_RATE(\"DDR\"),           // DDR, SDR",
-        "    .DATA_WIDTH(4),              // Parallel data width (2-8,10,14)",
-        "    .DYN_CLKDIV_INV_EN(\"FALSE\"), // Enable DYNCLKDIVINVSEL inversion (FALSE, TRUE)",
-        "    .DYN_CLK_INV_EN(\"FALSE\"),    // Enable DYNCLKINVSEL inversion (FALSE, TRUE)",
-        "    // INIT_Q1 - INIT_Q4: Initial value on the Q outputs (0/1)",
-        "    .INIT_Q1(1'b0),",
-        "    .INIT_Q2(1'b0),",
-        "    .INIT_Q3(1'b0),",
-        "    .INIT_Q4(1'b0),",
-        "    .INTERFACE_TYPE(\"MEMORY\"),   // MEMORY, MEMORY_DDR3, MEMORY_QDR, NETWORKING, OVERSAMPLE",
-        "    .IOBDELAY(\"NONE\"),           // NONE, BOTH, IBUF, IFD",
-        "    .NUM_CE(2),                  // Number of clock enables (1,2)",
-        "    .OFB_USED(\"FALSE\"),          // Select OFB path (FALSE, TRUE)",
-        "    .SERDES_MODE(\"MASTER\"),      // MASTER, SLAVE",
-        "    // SRVAL_Q1 - SRVAL_Q4: Q output values when SR is used (0/1)",
-        "    .SRVAL_Q1(1'b0),",
-        "    .SRVAL_Q2(1'b0),",
-        "    .SRVAL_Q3(1'b0),",
-        "    .SRVAL_Q4(1'b0))",
-        "ISERDESE2_inst (",
-        "    .O(O),                       // 1-bit output: Combinatorial output",
-        "    // Q1 - Q8: 1-bit (each) output: Registered data outputs",
-        "    .Q1(Q1),",
-        "    .Q2(Q2),",
-        "    .Q3(Q3),",
-        "    .Q4(Q4),",
-        "    .Q5(Q5),",
-        "    .Q6(Q6),",
-        "    .Q7(Q7),",
-        "    .Q8(Q8),",
-        "    // SHIFTOUT1, SHIFTOUT2: 1-bit (each) output: Data width expansion output ports",
-        "    .SHIFTOUT1(SHIFTOUT1),",
-        "    .SHIFTOUT2(SHIFTOUT2),",
-        "\n",    
-        "    // 1-bit input: The BITSLIP pin performs a Bitslip operation synchronous to",
-        "    // CLKDIV when asserted (active High). Subsequently, the data seen on the Q1",
-        "    // to Q8 output ports will shift, as in a barrel-shifter operation, one",
-        "    // position every time Bitslip is invoked (DDR operation is different from",
-        "    // SDR).",
-        "    .BITSLIP(BITSLIP), ",     
-        "\n",
-        "    // CE1, CE2: 1-bit (each) input: Data register clock enable inputs",
-        "    .CE1(CE1),",
-        "    .CE2(CE2),",
-        "    .CLKDIVP(CLKDIVP),           // 1-bit input: TBD",
-        "    // Clocks: 1-bit (each) input: ISERDESE2 clock input ports",
-        "    .CLK(CLK),                   // 1-bit input: High-speed clock",
-        "    .CLKB(CLKB),                 // 1-bit input: High-speed secondary clock",
-        "    .CLKDIV(CLKDIV),             // 1-bit input: Divided clock",
-        "    .OCLK(OCLK),                 // 1-bit input: High speed output clock used when INTERFACE_TYPE=\"MEMORY\" ",
-        "    // Dynamic Clock Inversions: 1-bit (each) input: Dynamic clock inversion pins to switch clock polarity",
-        "    .DYNCLKDIVSEL(DYNCLKDIVSEL), // 1-bit input: Dynamic CLKDIV inversion",
-        "    .DYNCLKSEL(DYNCLKSEL),       // 1-bit input: Dynamic CLK/CLKB inversion",
-        "    // Input Data: 1-bit (each) input: ISERDESE2 data input ports",
-        "    .D(D),                       // 1-bit input: Data input",
-        "    .DDLY(DDLY),                 // 1-bit input: Serial data from IDELAYE2",
-        "    .OFB(OFB),                   // 1-bit input: Data feedback from OSERDESE2",
-        "    .OCLKB(OCLKB),               // 1-bit input: High speed negative edge output clock",
-        "    .RST(RST),                   // 1-bit input: Active high asynchronous reset",
-        "    // SHIFTIN1, SHIFTIN2: 1-bit (each) input: Data width expansion input ports",
-        "    .SHIFTIN1(SHIFTIN1),",
-        "    .SHIFTIN2(SHIFTIN2)",
-        ");"
-        ]
-    },
-    
-    "count": {
-        "prefix": "count",
+{   
+    "counter": {
+        "prefix": "counter",
         "body": [
             "//define the time counter",
-            "reg [${1:32}:0]      cnt$2 = 0;",
-            "reg             ${3:impulse};",
             "parameter       SET_TIME = $1'd$4;",
-            "always@(posedge clk) begin",
-            "    if (cnt$2 == SET_TIME) begin",
-            "        cnt$2 <= $1'd0;",
+            "reg [${1:32}:0]      count$2;",
+            "reg             ${3:impulse};",
+            "always@(posedge clock) begin",
+            "    if (count$2 == SET_TIME) begin",
+            "        count$2 <= $1'd0;",
             "        $3 <= 1'd1;",
             "    end",
             "    else begin",
-            "        cnt$2 <= cnt$2 + 1'd1;",
+            "        count$2 <= count$2 + 1'd1;",
             "        $3 <= 1'd0;",
             "    end",
             "end"
@@ -214,15 +22,15 @@
     "divclk": {
         "prefix": "div",
         "body": [
-            "reg [${1:3}:0]      cnt$2 = 0;",
-            "reg                 clk_div$2;",
-            "always@(posedge ${3:clk}) begin",
-            "    if (cnt$2 == ${4:3}) begin",
-            "        cnt$2 <= $1'd0;",
+            "reg [${1:3}:0] count$2;",
+            "reg       clk_div$2;",
+            "always@(posedge ${3:clock}) begin",
+            "    if (count$2 == ${4:3}) begin",
+            "        count$2 <= $1'd0;",
             "        clk_div$2 <= ~clk_div$2;",
             "    end",
             "    else begin",
-            "        cnt$2 <= cnt$2 + 1'd1;",
+            "        count$2 <= count$2 + 1'd1;",
             "    end",
             "end"
         ]
@@ -234,10 +42,10 @@
             "reg  gate$2;",
             "reg  gate$2_buf;",
     
-            "wire gate$2_pose =  gate$2 & ~gate$2_buf;",
-            "wire gate$2_nege =  ~gate$2 & gate$2_buf;",
+            "wire gate$2_pos =   gate$2 & ~gate$2_buf;",
+            "wire gate$2_neg =  ~gate$2 &  gate$2_buf;",
     
-            "always@(posedge clk) begin",
+            "always@(posedge clock) begin",
             "   gate$2 <= ${1:signal};",
             "   gate$2_buf <= gate$2;",
             "end"
@@ -262,9 +70,9 @@
         "prefix": "resetn",
         "body": [
             "reg  rst_n_s1, rst_n_s2;",
-            "wire rst_n",
-            "always @ (posedge clk or negedge sys_rst_n) begin",
-            "    if (sys_rst_n) begin",
+            "wire sys_rstn",
+            "always @ (posedge clock or negedge rstn) begin",
+            "    if (rstn) begin",
             "        rst_n_s2 <= 1'b0;",
             "        rst_n_s1 <= 1'b0;",
             "    end",
@@ -272,18 +80,18 @@
             "        rst_n_s2 <= rst_n_s1;",
             "    end",
             "end",
-            "assign rst_n = rst_n_s2;"
+            "assign sys_rstn = rst_n_s2;"
         ],
-        "description" : "Asynchronous sys_rst_n synchronous release (intel device)"
+        "description" : "Asynchronous sys_rstn synchronous release (intel device)"
     },
 
     "reset": {
         "prefix": "reset",
         "body": [
             "reg  rst_s1, rst_s2;",
-            "wire rst",
-            "always @ (posedge clk or posedge sys_rst) begin",
-            "    if (sys_rst) begin",
+            "wire sys_rst",
+            "always @ (posedge clock or posedge reset) begin",
+            "    if (reset) begin",
             "        rst_s2 <= 1'b0;",
             "        rst_s1 <= 1'b0;",
             "    end",
@@ -291,9 +99,9 @@
             "        rst_s2 <= rst_s1;",
             "    end",
             "end",
-            "assign rst = rst_s2;"
+            "assign sys_rst = rst_s2;"
         ],
-        "description" : "Asynchronous sys_rst synchronous release (xilinx device)"
+        "description" : "Asynchronous reset synchronous release (xilinx device)"
     },
         
     "initial sim": {
@@ -369,18 +177,18 @@
     "alwaysposclk": {
         "prefix": "alclk",
         "body": [
-            "always @(posedge clk) begin",
+            "always @(posedge clock) begin",
             "    $1;",
             "end"
         ],
-        "description": "always @(posedge clk) directly"
+        "description": "always @(posedge clock) directly"
     },
 
     "alwayssyncrst": {
         "prefix": "alsync",
         "body": [
-            "always @(posedge clk) begin",
-            "    if(rst) begin",
+            "always @(posedge clock) begin",
+            "    if(reset) begin",
             "        $1 <= 0;",
             "    end",
             "    else begin",
@@ -394,8 +202,8 @@
     "alwaysasyncrst": {
         "prefix": "alasync",
         "body": [
-            "always @(posedge clk or posedge rst) begin",
-            "    if(rst) begin",
+            "always @(posedge clock or posedge reset) begin",
+            "    if(reset) begin",
             "        $1 <= 0;",
             "    end",
             "    else begin",
@@ -409,8 +217,8 @@
     "alwayssyncrstn": {
         "prefix": "alsyncn",
         "body": [
-            "always @(posedge clk) begin",
-            "    if(!rst_n) begin",
+            "always @(posedge clock) begin",
+            "    if(!rstn) begin",
             "        $1 <= 0;",
             "    end",
             "    else begin",
@@ -418,14 +226,14 @@
             "    end",
             "end"
         ],
-        "description": "synchronous rst_n (intel device)"
+        "description": "synchronous rstn (intel device)"
     },
 
     "alwaysasyncrstn": {
         "prefix": "alasyncn",
         "body": [
-            "always @(posedge clk or negedge rst_n) begin",
-            "    if(!rst_n) begin",
+            "always @(posedge clock or negedge rstn) begin",
+            "    if(!rstn) begin",
             "        $1 <= 0;",
             "    end",
             "    else begin",
@@ -433,7 +241,7 @@
             "    end",
             "end"
         ],
-        "description": "asynchronous rst_n (intel device)"
+        "description": "asynchronous rstn (intel device)"
     },
 
     "beginend": {
@@ -461,13 +269,13 @@
         "prefix": "modp",
         "body": [
             "module ${1:name} #(",
-            "    parameter    INPUT_WIDTH  = ${2:12},",
-            "    parameter    OUTPUT_WIDTH = $2",
+            "    parameter    IWIDTH = ${2:12},",
+            "    parameter    OWIDTH = $2",
             ") (",
-            "    input      clk,",
-            "    input      RST,",
-            "    input  [INPUT_WIDTH - 1 : 0]    ${3:data_i},",
-            "    output [OUTPUT_WIDTH - 1 : 0]   ${4:data_o}",
+            "    input      clock,",
+            "    input      reset,",
+            "    input  [IWIDTH - 1 : 0] ${3:data_i},",
+            "    output [OWIDTH - 1 : 0] ${4:data_o}",
             ");",
             "    $5",
             "endmodule  //$1\n"
@@ -479,8 +287,8 @@
         "prefix": "mod",
         "body": [
             "module ${1:moduleName} (",
-            "    input      clk,",
-            "    input      rst,",
+            "    input      clock,",
+            "    input      reset,",
             "    $2",
             ");",
             "    $3",
@@ -488,6 +296,7 @@
         ],
         "description": "Insert a module without parameter"
     },
+
     "simple module": {
         "prefix": "module",
         "body": [
@@ -497,6 +306,7 @@
         ],
         "description": "Insert a common module"
     },
+    
     "generate_for": {
         "prefix": "genfor",
         "body": [
@@ -903,18 +713,21 @@
             "*/"
         ]
     },
+
     "dumpfile": {
         "prefix": "$dumpfile",
         "body": [
 			"\\$dumpfile(\"$1\");"
 		]
     },
+
     "dumpvars": {
         "prefix": "$dumpvars",
         "body": [
 			"\\$dumpvars;"
 		]
     },
+
     "finish": {
         "prefix": "$finish",
         "body": [

@@ -5,7 +5,7 @@ import { AbsPath, RelPath } from '../global';
 import { HdlLangID } from '../global/enum';
 import { verilogExts, vhdlExts, systemVerilogExts, hdlExts } from '../global/lang';
 import * as hdlPath from './path';
-import { HdlFileType } from '../hdlParser/common';
+import { HdlFileProjectType } from '../hdlParser/common';
 import { opeParam } from '../global';
 
 /**
@@ -135,24 +135,6 @@ function getLanguageId(path: AbsPath | RelPath): HdlLangID {
         return HdlLangID.SystemVerilog;
     } else {
         return HdlLangID.Unknown;
-    }
-}
-
-
-function getHdlFileType(path: AbsPath) : HdlFileType {
-    const uniformPath = hdlPath.toSlash(path);
-    const arch = opeParam.prjInfo.arch;
-    const srcPath: AbsPath = arch.hardware.src;
-    const simPath: AbsPath = arch.hardware.sim;
-    const wsPath: AbsPath = opeParam.workspacePath;
-    if (uniformPath.includes(srcPath)) {
-        return HdlFileType.Src;
-    } else if (uniformPath.includes(simPath)) {
-        return HdlFileType.Sim;
-    } else if (uniformPath.includes(wsPath)) {
-        return HdlFileType.LocalLib;
-    } else {
-        return HdlFileType.RemoteLib;
     }
 }
 
@@ -376,7 +358,6 @@ export {
     readJSON,
     writeJSON,
     rmSync,
-    getHdlFileType,
     pickFileRecursive,
     isHasAttr,
     isHasValue,

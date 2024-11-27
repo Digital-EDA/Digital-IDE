@@ -221,14 +221,13 @@ class ToolTreeProvider extends BaseCommandTreeProvider {
             vscode.window.showWarningMessage(t('warn.command.clean.prjPath-is-workspace'));
         }
 
-        const ignores = hdlIgnore.getIgnoreFiles();
-        const strFiles = hdlFile.pickFileRecursive(workspacePath, ignores, p => p.endsWith('.str'));
+        const strFiles = hdlFile.pickFileRecursive(workspacePath, p => p.endsWith('.str'));
         for (const path of strFiles) {
             hdlFile.removeFile(path);
             MainOutput.report("remove file " + path);
         }
 
-        const logFiles = hdlFile.pickFileRecursive(workspacePath, ignores, p => p.endsWith('.log'));
+        const logFiles = hdlFile.pickFileRecursive(workspacePath, p => p.endsWith('.log'));
         for (const path of logFiles) {
             hdlFile.readFile(path);
         }
@@ -265,14 +264,13 @@ export async function clean() {
         vscode.window.showWarningMessage(t('warn.command.clean.prjPath-is-workspace'));
     }
 
-    const ignores = hdlIgnore.getIgnoreFiles();
-    const strFiles = hdlFile.pickFileRecursive(workspacePath, ignores, p => p.endsWith('.str'));
+    const strFiles = hdlFile.pickFileRecursive(workspacePath, p => p.endsWith('.str'));
     for (const path of strFiles) {
         hdlFile.removeFile(path);
         MainOutput.report("remove file " + path);
     }
 
-    const logFiles = hdlFile.pickFileRecursive(workspacePath, ignores, p => p.endsWith('.log'));
+    const logFiles = hdlFile.pickFileRecursive(workspacePath, p => p.endsWith('.log'));
     for (const path of logFiles) {
         hdlFile.readFile(path);
     }

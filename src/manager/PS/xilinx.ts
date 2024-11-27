@@ -43,7 +43,7 @@ class XilinxOperation {
     }
 
     launch(config: PSConfig) {
-        const hdfs = hdlFile.pickFileRecursive(this.config.dat, [], 
+        const hdfs = hdlFile.pickFileRecursive(this.config.dat,
             p => p.endsWith('.hdf'));
 
         if (hdfs.length) {

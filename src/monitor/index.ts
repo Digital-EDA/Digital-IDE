@@ -4,13 +4,16 @@ import { hdlExts } from '../global/lang';
 import { PathSet } from '../global/util';
 import { hdlPath } from '../hdlFs';
 
-import * as Event from './event';
 import { t } from '../i18n';
+import { HdlAction } from './hdl';
+import { PpyAction } from './propery';
+import { IgnoreAction } from './ignore';
 
 class HdlMonitor{
-    private monitorConfig: chokidar.WatchOptions;
+    private monitorConfig: chokidar.ChokidarOptions;
     public hdlMonitor?: chokidar.FSWatcher;
     public ppyMonitor?: chokidar.FSWatcher;
+    public ignoreMonitor?: chokidar.FSWatcher;
 
     constructor() {
         // public config for monitor
@@ -21,7 +24,7 @@ class HdlMonitor{
         };
     }
 
-    public makeMonitor(paths: string | string[], config?: chokidar.WatchOptions): chokidar.FSWatcher {
+    public makeMonitor(paths: string | string[], config?: chokidar.ChokidarOptions): chokidar.FSWatcher {
         if (!config) {
             config = this.monitorConfig;
         }
@@ -40,27 +43,27 @@ class HdlMonitor{
      * @description get monitor for HDLParam update
      */
     public getHdlMonitor() {
-        const hdlExtsGlob = `**/*.{${hdlExts.join(',')}}`;
         const prjInfo = opeParam.prjInfo;
 
         const monitorPathSet = new PathSet();
+
+        // 在输出中展示当前的监视路径
+        monitorPathSet.checkAdd(opeParam.workspacePath);
         monitorPathSet.checkAdd(prjInfo.hardwareSimPath);
         monitorPathSet.checkAdd(prjInfo.hardwareSrcPath);
         monitorPathSet.checkAdd(prjInfo.libCommonPath);
-        monitorPathSet.checkAdd(prjInfo.libCustomPath);
-
-        const monitorFoldersWithGlob = [];
-        for (const folder of monitorPathSet.files) {
-            const globPath = hdlPath.join(folder, hdlExtsGlob);
-            monitorFoldersWithGlob.push(globPath);
-        }
-
         const reportString = ['', ...monitorPathSet.files].join('\n\t');
         MainOutput.report(t('info.launch.following-folder-tracked') + reportString, {
             level: ReportType.Launch
         });
 
-        return this.makeMonitor(monitorFoldersWithGlob);
+        // chokidar 4.0.0 开始不支持 glob，需要在每一个入口自己判断
+        return this.makeMonitor([opeParam.workspacePath, prjInfo.libCommonPath]);
+    }
+
+    public getIgnoreMonitor() {
+        const watcherPath = opeParam.dideignorePath;
+        return this.makeMonitor(watcherPath);
     }
 
     public close() {
@@ -72,9 +75,11 @@ class HdlMonitor{
         // make monitor
         this.hdlMonitor = this.getHdlMonitor();
         this.ppyMonitor = this.getPpyMonitor();
+        this.ignoreMonitor = this.getIgnoreMonitor();
 
         this.registerHdlMonitorListener();
         this.registerPpyMonitorListener();
+        this.registerIgnoreMonitorListener();
     }
 
     public remakeHdlMonitor() {
@@ -93,19 +98,37 @@ class HdlMonitor{
         }
     }
 
-    public registerHdlMonitorListener() {
-        Event.hdlAction.listenAdd(this);
-        Event.hdlAction.listenChange(this);
-        Event.hdlAction.listenUnlink(this);
+    public remakeIgnoreMonitor() {
+        if (this.ignoreMonitor) {
+            this.ignoreMonitor.close();
+            this.ignoreMonitor = this.getIgnoreMonitor();
+            this.registerIgnoreMonitorListener();
+        }
+    }
 
-        // Event.hdlAction.listenAddDir(this);
-        // Event.hdlAction.listenUnlinkDir(this);
+    public registerHdlMonitorListener() {
+        // 不需要实现 addDir 和 unlinkDir 事件
+        // 因为删除文件夹时，下级各个文件会自动触发 add 和 unlink 事件
+        // 因此，monitor 只需要实现对文件的监听即可
+        
+        const hdlAction = new HdlAction();
+        hdlAction.listenAdd(this);
+        hdlAction.listenChange(this);
+        hdlAction.listenUnlink(this);
     }
 
     public registerPpyMonitorListener() {
-        Event.ppyAction.listenAdd(this);
-        Event.ppyAction.listenChange(this);
-        Event.ppyAction.listenUnlink(this);
+        const ppyAction = new PpyAction();
+        ppyAction.listenAdd(this);
+        ppyAction.listenChange(this);
+        ppyAction.listenUnlink(this);
+    }
+
+    public registerIgnoreMonitorListener() {
+        const ignoreAction = new IgnoreAction();
+        ignoreAction.listenAdd(this);
+        ignoreAction.listenChange(this);
+        ignoreAction.listenUnlink(this);
     }
 };
 

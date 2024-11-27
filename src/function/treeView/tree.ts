@@ -189,6 +189,9 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
             parent: element,
         }));
 
+        // 根据字母序列进行排序
+        topModuleItemList.sort((a, b) => a.name.localeCompare(b.name));
+
         if (topModuleItemList.length > 0) {
             const type = moduleType as keyof FirstTop;
 
@@ -241,7 +244,10 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
         const targetModule = hdlParam.getHdlModule(element.path, element.name);
 
         if (targetModule) {
-            for (const instance of targetModule.getAllInstances()) {
+            const allInstances = targetModule.getAllInstances();
+            // 根据出现次序进行排序
+            allInstances.sort((a, b) => a.range.start.line - b.range.start.line);
+            for (const instance of allInstances) {
                 // 所有的例化模块都定向到它的定义文件上
                 const item: ModuleDataItem = {
                     icon: 'file',
@@ -267,7 +273,7 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
                 level: ReportType.Error
             });
         }
-
+        
         return moduleDataItemList;
     }
 

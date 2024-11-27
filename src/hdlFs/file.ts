@@ -7,13 +7,14 @@ import { verilogExts, vhdlExts, systemVerilogExts, hdlExts } from '../global/lan
 import * as hdlPath from './path';
 import { HdlFileProjectType } from '../hdlParser/common';
 import { opeParam } from '../global';
+import { hdlIgnore } from '../manager/ignore';
 
 /**
  * judge if the path represent a file
  * @param path 
  * @returns 
  */
-function isFile(path: AbsPath): boolean {
+export function isFile(path: AbsPath): boolean {
     if (!fs.existsSync(path)) {
         return false;
     }
@@ -29,7 +30,7 @@ function isFile(path: AbsPath): boolean {
  * @param path 
  * @returns
  */
-function isDir(path: AbsPath): boolean {
+export function isDir(path: AbsPath): boolean {
     if (!fs.existsSync(path)) {
         return false;
     }
@@ -41,7 +42,7 @@ function isDir(path: AbsPath): boolean {
     return false;
 }
 
-function isVerilogFile(path: AbsPath): boolean {
+export function isVerilogFile(path: AbsPath): boolean {
     if (!isFile(path)) {
         return false;
     }
@@ -49,7 +50,7 @@ function isVerilogFile(path: AbsPath): boolean {
     return verilogExts.includes(ext);
 }
 
-function isVhdlFile(path: AbsPath): boolean {
+export function isVhdlFile(path: AbsPath): boolean {
     if (!isFile(path)) {
         return false;
     }
@@ -57,7 +58,7 @@ function isVhdlFile(path: AbsPath): boolean {
     return vhdlExts.includes(ext);
 }
 
-function isSystemVerilogFile(path: AbsPath): boolean {
+export function isSystemVerilogFile(path: AbsPath): boolean {
     if (!isFile(path)) {
         return false;
     }
@@ -65,7 +66,7 @@ function isSystemVerilogFile(path: AbsPath): boolean {
     return systemVerilogExts.includes(ext);
 }
 
-function isHDLFile(path: AbsPath): boolean {    
+export function isHDLFile(path: AbsPath): boolean {    
     if (!isFile(path)) {
         return false;
     }
@@ -73,34 +74,47 @@ function isHDLFile(path: AbsPath): boolean {
     return hdlExts.includes(ext);
 }
 
-
-function getHDLFiles(path: AbsPath | AbsPath[] | Set<AbsPath>, ignores?: AbsPath[]): AbsPath[] {
-    const allFiles = pickFileRecursive(path, ignores, 
-        filePath => isHDLFile(filePath));
+/**
+ * @description 获取 path 下所有的 hdl 类型的文件
+ * @param path 
+ * @returns 
+ */
+export function getHDLFiles(path: AbsPath | AbsPath[] | Set<AbsPath>): AbsPath[] {
+    const allFiles = pickFileRecursive(path, filePath => {
+        // 判断是否在 ignore 里面
+        if (hdlIgnore.isignore(filePath)) {
+            return false;
+        }
+        // 判断是否为 hdl 文件
+        return isHDLFile(filePath);
+    });
     const pathSet = new Set<string>(allFiles);
     return [...pathSet];
 }
 
-
-function pickFileRecursive(path: AbsPath | AbsPath[] | Set<AbsPath>, ignores?: AbsPath[], condition?: (filePath: string) => boolean | undefined | void): AbsPath[] {
+/**
+ * @description 从 path 下递归地获取所有文件
+ * @param path 
+ * @param condition 条件函数，判定为 true 的文件才会出现了返回文件中
+ * @returns 
+ */
+export function pickFileRecursive(
+    path: AbsPath | AbsPath[] | Set<AbsPath>,
+    condition?: (filePath: string) => boolean | undefined | void
+): AbsPath[] {
     if ((path instanceof Array) ||
         (path instanceof Set)) {
         const hdlFiles: AbsPath[] = [];
-        path.forEach(p => hdlFiles.push(...pickFileRecursive(p, ignores, condition)));
+        path.forEach(p => hdlFiles.push(...pickFileRecursive(p, condition)));
         return hdlFiles;
     }
 
     if (isDir(path)) {
-        // return if ignore have path
-        if (ignores?.includes(path)) {
-            return [];
-        }
-
         const hdlFiles = [];
         for (const file of fs.readdirSync(path)) {
             const filePath = hdlPath.join(path, file);            
             if (isDir(filePath)) {
-                const subHdlFiles = pickFileRecursive(filePath, ignores, condition);
+                const subHdlFiles = pickFileRecursive(filePath, condition);
                 if (subHdlFiles.length > 0) {
                     hdlFiles.push(...subHdlFiles);
                 }
@@ -122,7 +136,7 @@ function pickFileRecursive(path: AbsPath | AbsPath[] | Set<AbsPath>, ignores?: A
  * @param path 
  * @returns 
  */
-function getLanguageId(path: AbsPath | RelPath): HdlLangID {
+export function getLanguageId(path: AbsPath | RelPath): HdlLangID {
     if (!isFile(path)) {
         return HdlLangID.Unknown;
     }
@@ -139,7 +153,7 @@ function getLanguageId(path: AbsPath | RelPath): HdlLangID {
 }
 
 
-function readFile(path: AbsPath): string | undefined {
+export function readFile(path: AbsPath): string | undefined {
     try {
         const content = fs.readFileSync(path, 'utf-8');
         return content;
@@ -149,7 +163,7 @@ function readFile(path: AbsPath): string | undefined {
     }
 }
 
-function writeFile(path: AbsPath, content: string): boolean {
+export function writeFile(path: AbsPath, content: string): boolean {
     try {
         const parent = fspath.dirname(path);
         fs.mkdirSync(parent, {recursive: true});
@@ -161,7 +175,7 @@ function writeFile(path: AbsPath, content: string): boolean {
     }
 }
 
-function readJSON(path: AbsPath): object {
+export function readJSON(path: AbsPath): object {
     try {        
         const context = fs.readFileSync(path, 'utf-8');
         return JSON.parse(context);
@@ -171,7 +185,7 @@ function readJSON(path: AbsPath): object {
     return {};
 }
 
-function writeJSON(path: AbsPath, obj: object): boolean {
+export function writeJSON(path: AbsPath, obj: object): boolean {
     try {
         const jsonString = JSON.stringify(obj, null, '\t');
         return writeFile(path, jsonString);
@@ -181,7 +195,7 @@ function writeJSON(path: AbsPath, obj: object): boolean {
     return false;
 }
 
-function removeFile(path: AbsPath): boolean {
+export function removeFile(path: AbsPath): boolean {
     if (!isFile(path)) {
         return false;
     }
@@ -195,7 +209,7 @@ function removeFile(path: AbsPath): boolean {
     return false;
 }
 
-function moveFile(src: AbsPath, dest: AbsPath, cover: boolean = true): boolean {
+export function moveFile(src: AbsPath, dest: AbsPath, cover: boolean = true): boolean {
     if (src === dest) {
         return false;
     }
@@ -218,7 +232,7 @@ function moveFile(src: AbsPath, dest: AbsPath, cover: boolean = true): boolean {
     return false;
 }
 
-function copyFile(src: AbsPath, dest: AbsPath, cover: boolean = true): boolean {
+export function copyFile(src: AbsPath, dest: AbsPath, cover: boolean = true): boolean {
     if (src === dest) {
         return false;
     }
@@ -248,7 +262,7 @@ function copyFile(src: AbsPath, dest: AbsPath, cover: boolean = true): boolean {
  * remove folder or file by path
  * @param path 
 */
-function rmSync(path: AbsPath): void {
+export function rmSync(path: AbsPath): void {
     if (fs.existsSync(path)) {
         if (fs.statSync(path).isDirectory()) {
             const files = fs.readdirSync(path);
@@ -273,7 +287,7 @@ function rmSync(path: AbsPath): void {
  * @param attr attribution or attributions, split by '.' 
  * @returns 
  */
-function isHasAttr(obj: any, attr: string): boolean{
+export function isHasAttr(obj: any, attr: string): boolean{
     if (!obj) {
         return false;
     }
@@ -297,7 +311,7 @@ function isHasAttr(obj: any, attr: string): boolean{
 }
 
 
-function isHasValue(obj: any, attr: string, value: any): boolean{
+export function isHasValue(obj: any, attr: string, value: any): boolean{
     if (!obj) {
         return false;
     }
@@ -323,7 +337,7 @@ function isHasValue(obj: any, attr: string, value: any): boolean{
     return true;
 }
 
-function* walk(path: AbsPath | RelPath, condition?: (filePath: AbsPath) => boolean): Generator<AbsPath> {
+export function* walk(path: AbsPath | RelPath, condition?: (filePath: AbsPath) => boolean): Generator<AbsPath> {
     if (isFile(path)) {
         if (!condition || condition(path)) {
             yield path;
@@ -344,25 +358,40 @@ function* walk(path: AbsPath | RelPath, condition?: (filePath: AbsPath) => boole
     }
 }
 
-export {
-    isFile,
-    isDir,
-    isVerilogFile,
-    isVhdlFile,
-    isSystemVerilogFile,
-    isHDLFile,
-    getHDLFiles,
-    getLanguageId,
-    readFile,
-    writeFile,
-    readJSON,
-    writeJSON,
-    rmSync,
-    pickFileRecursive,
-    isHasAttr,
-    isHasValue,
-    copyFile,
-    removeFile,
-    moveFile,
-    walk
-};
+interface DiffResult {
+    /**
+     * @description 新文件布局和老的相比，新增了哪些文件
+     */
+    addFiles: AbsPath[],
+    /**
+     * @description 新文件布局和老的相比，少了哪些文件
+     */
+    delFiles: AbsPath[]
+}
+
+/**
+ * @description 比较新老文件布局，并返回有哪些新增，哪些减少
+ * @param newFiles 
+ * @param oldFiles 
+ * @returns 
+ */
+export function diffFiles(newFiles: AbsPath[], oldFiles: AbsPath[]): DiffResult {
+    const uncheckHdlFileSet = new Set<AbsPath>(oldFiles);
+    const addFiles: AbsPath[] = [];
+    const delFiles: AbsPath[] = [];
+    
+    for (const path of newFiles) {
+        if (!uncheckHdlFileSet.has(path)) {
+            addFiles.push(path);
+        } else {
+            uncheckHdlFileSet.delete(path);
+        }
+    }
+
+    for (const path of uncheckHdlFileSet) {
+        delFiles.push(path);
+    }
+    return {
+        addFiles, delFiles
+    };
+}

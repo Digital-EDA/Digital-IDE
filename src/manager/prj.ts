@@ -12,12 +12,12 @@ import { hdlParam } from '../hdlParser';
 import { PlManage } from './PL';
 import { PsManage } from './PS';
 import { hdlIgnore } from './ignore';
-import { ppyAction } from '../monitor/event';
 import { hdlMonitor } from '../monitor';
 import { NotificationType } from 'vscode-jsonrpc';
 import { refreshArchTree } from '../function/treeView';
 import { Fast } from '../hdlParser/common';
 import { t } from '../i18n';
+import { PpyAction } from '../monitor/propery';
 
 interface RefreshPrjConfig {
     mkdir: boolean
@@ -36,8 +36,9 @@ class PrjManage {
         const template = hdlFile.readJSON(opeParam.propertyInitPath) as RawPrjInfo;
         hdlFile.writeJSON(opeParam.propertyJsonPath, template);
 
-        // TODO : this is a bug, that monitor cannot sense the add event of ppy
-        // so we need to do <add event> manually here
+        // 当创建 property.json 时，monitor 似乎无法获取到 ppy 的 add 事件
+        // 所以此处需要手动调用
+        const ppyAction = new PpyAction();
         await ppyAction.add(opeParam.propertyJsonPath, hdlMonitor);
     }
 
@@ -130,12 +131,8 @@ class PrjManage {
             level: ReportType.Run
         });
 
-        // TODO : make something like .gitignore
-        const ignores = hdlIgnore.getIgnoreFiles();
-
-        // do search
-        const searchPaths = searchPathSet.files;
-        const hdlFiles = hdlFile.getHDLFiles(searchPaths, ignores);
+        // 根据搜索路径获取所有 HDL 文件（出现在 .dideignore 中的文件不会被搜索到）
+        const hdlFiles = hdlFile.getHDLFiles(searchPathSet.files);
 
         return hdlFiles;
     }
@@ -184,6 +181,8 @@ class PrjManage {
             console.time('launch');
         }
 
+        // 初始化 ignore
+        hdlIgnore.updatePatterns();
         
         // 解析 hdl 文件，构建 hdlParam
         const hdlFiles = await this.getPrjHardwareFiles();                  
@@ -191,10 +190,7 @@ class PrjManage {
 
         // 根据 toolchain 解析合法的 IP，构建 hdlParam
         const IPsPath = await this.getPrjIPs();
-        await hdlParam.initializeIPsPath(IPsPath, progress);
-
-        // TODO: 解析原语并构建，向后端索要原语缓存
-        
+        await hdlParam.initializeIPsPath(IPsPath, progress);        
 
         // 构建 instance 解析
         await hdlParam.makeAllInstance();

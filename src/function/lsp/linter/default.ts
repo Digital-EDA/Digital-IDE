@@ -26,7 +26,9 @@ class DefaultVlogLinter implements BaseLinter {
         const diagnostics: vscode.Diagnostic[] = [];
         if (all.error && all.error.length > 0) {
             for (const hdlError of all.error) {
-                LspOutput.report(`<default linter> line: ${hdlError.range.line}, info: ${hdlError.message}`, ReportType.Run);
+                LspOutput.report(`<default linter> line: ${hdlError.range.line}, info: ${hdlError.message}`, {
+                    level: ReportType.Run
+                });
                 const syntaxInfo = hdlError.message.replace(/\\r\\n/g, '\n');
                 const range = this.makeCorrectRange(document, hdlError.range);
                 const diag = new vscode.Diagnostic(range, syntaxInfo, hdlError.severity);
@@ -99,7 +101,9 @@ class DefaultVhdlLinter implements BaseLinter {
         const diagnostics: vscode.Diagnostic[] = [];
         if (all.error && all.error.length > 0) {
             for (const hdlError of all.error) {
-                LspOutput.report(`<default linter> line: ${hdlError.range.line}, info: ${hdlError.message}`, ReportType.Run);
+                LspOutput.report(`<default linter> line: ${hdlError.range.line}, info: ${hdlError.message}`, {
+                    level: ReportType.Run
+                });
                 
                 const range = this.makeCorrectRange(document, hdlError.range);
                 const diag = new vscode.Diagnostic(range, hdlError.message, hdlError.severity);

@@ -12,7 +12,8 @@ import { hdlFile, hdlPath } from '../../hdlFs';
 import { moduleTreeProvider, ModuleDataItem } from '../../function/treeView/tree';
 import { HdlFileProjectType } from '../../hdlParser/common';
 import { PropertySchema } from '../../global/propertySchema';
-import { HardwareOutput, ReportType } from '../../global/outputChannel';
+import { HardwareOutput, MainOutput, ReportType } from '../../global/outputChannel';
+import { AbsPath } from '../../global';
 import { t } from '../../i18n';
 
 class PlManage extends BaseManage {
@@ -118,7 +119,36 @@ class PlManage extends BaseManage {
             moduleTreeProvider.refreshSim();
         }
     }
+    
+    /**
+     * @description 因发生文件布局变动而进行更新
+     * @param addFiles 
+     * @param delFiles 
+     */
+    public async updateByMonitor(addFiles: AbsPath[], delFiles: AbsPath[]) {
+        // 目前只支持 Xilinx
+        const addfileActionTag = '(add files) ';
+        const delfileActionTag = '(del files) ';
+        if (addFiles.length > 0) {
+            const reportMsg = ['', ...addFiles].join('\n\t');
+            MainOutput.report(addfileActionTag + t('info.pl.xilinx.update-addfiles') + reportMsg, {
+                level: ReportType.Run
+            });
+            await this.addFiles(addFiles);
+        } else {
+            MainOutput.report(addfileActionTag + t('info.pl.xilinx.no-need-add-files'));
+        }
 
+        if (delFiles.length > 0) {
+            const reportMsg = ['', ...delFiles].join('\n\t');
+            MainOutput.report(delfileActionTag + t('info.pl.xilinx.update-delfiles') + reportMsg, {
+                level: ReportType.Run
+            });
+            await this.delFiles(delFiles);
+        } else {
+            MainOutput.report(delfileActionTag + t('info.pl.xilinx.no-need-del-files'));
+        }
+    }
 
     async addFiles(files: string[]) {
         this.context.ope.addFiles(files, this.context);

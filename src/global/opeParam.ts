@@ -2,6 +2,7 @@ import * as assert from 'assert';
 import * as fs from 'fs';
 
 import { Arch, PrjInfo, RawPrjInfo, resolve } from './prjInfo';
+import { hdlPath } from '../hdlFs';
 
 type AbsPath = string;
 type RelPath = string;
@@ -76,6 +77,14 @@ class OpeParam {
      */
     public get propertyJsonPath(): AbsPath {
         return this._propertyJsonPath;
+    }
+
+    /**
+     * .dideignore 的路径
+     */
+    public get dideignorePath(): AbsPath {
+        const workspace = this._workspacePath;
+        return hdlPath.join(workspace, '.dideignore');
     }
 
     /**

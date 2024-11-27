@@ -483,6 +483,15 @@ class HdlParam {
             moduleFile.deleteHdlModule(moduleName);
         }
     }
+
+    public async updateByMonitor(addFiles: AbsPath[], delFiles: AbsPath[]) {
+        for (const path of addFiles) {
+            await this.addHdlFile(path);
+        }
+        for (const path of delFiles) {
+            this.deleteHdlFile(path);
+        }
+    }
 };
 
 const hdlParam = new HdlParam();

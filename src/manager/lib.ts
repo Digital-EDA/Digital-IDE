@@ -144,8 +144,7 @@ class LibManage {
             libPathSet.checkAdd(path);
         }
 
-        const ignores = hdlIgnore.getIgnoreFiles();
-        const libPathList = hdlFile.getHDLFiles(libPathSet.files, ignores);        
+        const libPathList = hdlFile.getHDLFiles(libPathSet.files);     
         return libPathList;
     }
 
@@ -169,8 +168,7 @@ class LibManage {
     }
 
     public deleteLocalLib() {
-        const ignores = hdlIgnore.getIgnoreFiles();
-        const hdlFileList = hdlFile.getHDLFiles([this.localLibPath], ignores);
+        const hdlFileList = hdlFile.getHDLFiles([this.localLibPath]);
         for (const path of hdlFileList) {
             hdlParam.deleteHdlFile(path);
         }

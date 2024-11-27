@@ -146,7 +146,7 @@ class XilinxOperation {
 
         let prjFilePath = this.prjPath as AbsPath;
         // 找到所有的 xilinx 工程文件
-        const prjFiles = hdlFile.pickFileRecursive(prjFilePath, [], 
+        const prjFiles = hdlFile.pickFileRecursive(prjFilePath, 
             filePath => filePath.endsWith('.xpr')
         );
 
@@ -349,7 +349,7 @@ class XilinxOperation {
                 hdlPath.join(this.prjInfo.path, this.prjInfo.name + '.src', 'sources_1', 'bd')
             ];
 
-            hdlFile.pickFileRecursive(bdPaths, [], (filePath) => {
+            hdlFile.pickFileRecursive(bdPaths, filePath => {
                 if (filePath.endsWith('.bd')) {
                     scripts.push(`add_files ${filePath} -quiet`);
                     scripts.push(`add_files ${fspath.dirname(filePath)}/hdl -quiet`);
@@ -365,7 +365,7 @@ class XilinxOperation {
         }
 
         const mrefPath = hdlPath.join(this.HWPath, 'bd', 'mref');
-        hdlFile.pickFileRecursive(mrefPath, [], filePath => {
+        hdlFile.pickFileRecursive(mrefPath, filePath => {
             if (filePath.endsWith('.tcl')) {
                 scripts.push(`source ${filePath}`);
             }
@@ -377,7 +377,7 @@ class XilinxOperation {
             hdlPath.join(this.prjInfo.path, this.prjInfo.name + '.src', 'sources_1', 'ip')
         ];
 
-        hdlFile.pickFileRecursive(ipPaths, [], filePath => {
+        hdlFile.pickFileRecursive(ipPaths, filePath => {
             if (filePath.endsWith('.xci')) {
                 scripts.push(`add_files ${filePath} -quiet`);
             }
@@ -925,7 +925,7 @@ const tools = {
     },
 
     async getfsblPath(outsidePath: AbsPath, insidePath: AbsPath): Promise<string> {
-        const paths: AbsPath[] = hdlFile.pickFileRecursive(outsidePath, [], 
+        const paths: AbsPath[] = hdlFile.pickFileRecursive(outsidePath,
             filePath => filePath.endsWith('fsbl.elf'));
 
         if (paths.length) {
@@ -944,7 +944,7 @@ const tools = {
     },
 
     async getBitPath(bitPath: AbsPath): Promise<string> {
-        let bitList = hdlFile.pickFileRecursive(bitPath, [], 
+        let bitList = hdlFile.pickFileRecursive(bitPath,
             filePath => filePath.endsWith('.bit'));
 
         if (bitList.length === 0) {
@@ -999,7 +999,7 @@ const tools = {
     },
     
     pickElfFile(path: AbsPath): AbsPath[] {
-        return hdlFile.pickFileRecursive(path, [], 
+        return hdlFile.pickFileRecursive(path,
             filePath => filePath.endsWith('.elf') && !filePath.endsWith('fsbl.elf'));
     }
 };

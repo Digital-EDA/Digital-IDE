@@ -102,6 +102,13 @@ function toEscapePath(path: AbsPath): AbsPath {
     }
 }
 
+function toPureRelativePath(path: RelPath): RelPath {
+    if (path.startsWith('./') || path.startsWith('.\\')) {
+        return path.slice(2);
+    }
+    return path;
+}
+
 export {
     toSlash,
     rel2abs,
@@ -112,5 +119,6 @@ export {
     extname,
     basename,
     exist,
-    toEscapePath
+    toEscapePath,
+    toPureRelativePath
 };

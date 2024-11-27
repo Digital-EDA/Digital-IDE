@@ -652,6 +652,17 @@ class PrjInfo implements PrjInfoMeta {
         return hdlPath.join(extensionPath, 'library');
     }
 
+    /**
+     * @description 获取 prjPath
+     */
+    public get prjPath(): AbsPath {
+        const prjPath = this.arch.prjPath;
+        if (prjPath === undefined || prjPath.length === 0) {
+            return this._workspacePath;
+        }
+        return prjPath;
+    }
+
     public json(): RawPrjInfo {
         return {
             toolChain: this._toolChain,

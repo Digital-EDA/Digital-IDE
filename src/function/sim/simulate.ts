@@ -90,7 +90,8 @@ class Simulate {
         const setting = vscode.workspace.getConfiguration();
 
         // make simulation dir
-        const defaultSimulationDir = hdlPath.join(opeParam.prjInfo.arch.prjPath, 'icarus');
+        const defaultSimulationDir = hdlPath.join(opeParam.prjInfo.prjPath, 'icarus');
+        
         simConfig.simulationHome = setting.get('digital-ide.function.simulate.simulationHome', '');
         if (!fs.existsSync(simConfig.simulationHome)) {
             simConfig.simulationHome = defaultSimulationDir;

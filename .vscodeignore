@@ -18,3 +18,4 @@ tsconfig.json
 design
 lib
 *.vcd
+*.zip

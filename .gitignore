@@ -11,6 +11,7 @@ parser_stuck.v
 out-js/
 *.pyc
 *.pyd
+*.zip
 resources/hdlParser/parser.js
 resources/hdlParser/parser.wasm
 resources/dide-viewer/view/*

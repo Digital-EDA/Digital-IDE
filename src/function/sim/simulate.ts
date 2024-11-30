@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
+import * as fspath from 'path';
 import * as child_process from 'child_process';
 
 import { hdlParam } from '../../hdlParser';
@@ -10,6 +11,7 @@ import { HdlLangID, ToolChainType } from '../../global/enum';
 import { HdlFile, HdlModule } from '../../hdlParser/core';
 import { ModuleDataItem } from '../treeView/tree';
 import { defaultMacro, doFastApi } from '../../hdlParser/util';
+import { t } from '../../i18n';
 
 type Path = string;
 
@@ -185,17 +187,35 @@ class IcarusSimulate extends Simulate {
         return args.join(' ').trim();
     }
 
+    /**
+     * @description 生成用于进行仿真的依赖项相关的参数
+     * @param dependences 
+     * @returns 
+     */
     private makeDependenceArguments(dependences: string[]): string {
         // 去重
         const visitedPath = new Set<Path>;
         const args = [];
         for (const dep of dependences) {
+            // 去重
             if (visitedPath.has(dep)) {
                 continue;
             }
+            // icarus 不支持 原语
+            if (dep === 'xilinx-primitives') {
+                MainOutput.report(t('error.simluate.icarus.use-primitives', dep), { level: ReportType.Error });
+                continue;
+            }
+            // icarus 不支持 IP
+            if (dep.startsWith(opeParam.prjInfo.ipPath)) {
+                MainOutput.report(t('error.simluate.icarus.use-ip', dep), { level: ReportType.Error });
+                continue;     
+            }
+
             args.push(makeSafeArgPath(dep));
             visitedPath.add(dep);
         }
+        
         return args.join(' ').trim();
     }
 
@@ -215,13 +235,15 @@ class IcarusSimulate extends Simulate {
     }
 
     /**
-     * generate acutal iverlog simulation command
+     * @description 获取 iverilog 仿真的命令
      * @param name name of top module
      * @param path path of the simulated file
      * @param dependences dependence that not specified in `include macro
      * @returns 
      */
     private getCommand(name: string, path: AbsPath, dependences: string[]): string | undefined {
+        MainOutput.clear();
+
         const simConfig = this.getConfig(path, 'iverilog');
         if (!simConfig) {
             return;
@@ -252,22 +274,14 @@ class IcarusSimulate extends Simulate {
         const iverilogPath = simConfig.iverilogPath;
         // default is -g2012
         const argu = '-g' + iverilogCompileOptions.standard;
-        const outVvpPath = makeSafeArgPath(hdlPath.join(simConfig.simulationHome, 'out.vvp'));      
+        const outVvpPath = makeSafeArgPath(hdlPath.join(simConfig.simulationHome, name + '.vvp'));      
         const mainPath = makeSafeArgPath(path);
-
-        // console.log(macroIncludeArgs);
-        // console.log(thirdLibraryDirArgs);
-        // console.log(dependenceArgs);
-        // console.log(thirdLibraryFileArgs);
         
         const cmd = `${iverilogPath} ${argu} -o ${outVvpPath} -s ${name} ${macroIncludeArgs} ${thirdLibraryDirArgs} ${mainPath} ${dependenceArgs} ${thirdLibraryFileArgs}`;
-        MainOutput.report(cmd, {
-            level: ReportType.Run
-        });
         return cmd;
     }
 
-    private execInTerminal(command: string, cwd: AbsPath) {
+    private execInTerminal(command: string, cwd: AbsPath, hdlModule: HdlModule) {
         // let vvp: vscode.Terminal;
         // const targetTerminals = vscode.window.terminals.filter(t => t.name === 'vvp');
         // if (targetTerminals.length > 0) {
@@ -291,56 +305,136 @@ class IcarusSimulate extends Simulate {
         // }
     }
 
-    private execInOutput(command: string, cwd: AbsPath) {
+    /**
+     * @description 在 Digital IDE 窗口中运行 iverilog 的快速仿真
+     * @param command 
+     * @param cwd 
+     * @param hdlModule 
+     * @returns 
+     */
+    private execInOutput(command: string, cwd: AbsPath, hdlModule: HdlModule) {
         const simConfig = this.simConfig;
         if (!simConfig) {
             return;
         }
-        child_process.exec(command, { cwd }, (error, stdout, stderr) => {
-            if (error) {
-                MainOutput.report('Error took place when run ' + command, {
-                    level: ReportType.Error
-                });
-                MainOutput.report('Reason: ' + stderr, {
-                    level: ReportType.Error
-                });
-            } else {
-                MainOutput.report(stdout, {
-                    level: ReportType.Info
-                });
-                const vvpOutFile = hdlPath.join(simConfig.simulationHome, 'out.vvp');
-                MainOutput.report("Create vvp to " + vvpOutFile, {
-                    level: ReportType.Run
-                });
-                
-                const outVvpPath = hdlPath.join(simConfig.simulationHome, 'out.vvp');
-                const vvpPath = simConfig.vvpPath;
 
-                // run vvp to interrupt script
-                const vvpCommand = `${vvpPath} ${outVvpPath}`;
-                MainOutput.report(vvpCommand, {
-                    level: ReportType.Run
-                });
-                
-                child_process.exec(vvpCommand, { cwd }, (error, stdout, stderr) => {
-                    if (error) {
-                        MainOutput.report('Error took place when run ' + vvpCommand, {
-                            level: ReportType.Error
-                        });
-                        MainOutput.report('Reason: ' + stderr, {
-                            level: ReportType.Error
-                        });
-                    } else {
-                        MainOutput.report(stdout, {
-                            level: ReportType.Info
-                        });
-                    }
-                });
-            }
+        this.runIverilog(simConfig, command, cwd, hdlModule);
+    }
+
+    private reportCommandError(command: string, stderr: string) {
+        MainOutput.report(t('error.simulation.error-happen-run-command') + command, {
+            level: ReportType.Error
+        });
+        MainOutput.report(t('error.simulation.reason', stderr), {
+            level: ReportType.Error
         });
     }
 
-    private exec(command: string, cwd: AbsPath) {
+    /**
+     * @description 运行 iverilog xxx 的命令
+     * @param simConfig 
+     * @param command 
+     * @param cwd 
+     * @param hdlModule 
+     */
+    private runIverilog(simConfig: SimulateConfig, command: string, cwd: string, hdlModule: HdlModule) {
+        child_process.exec(command, (error, stdout, stderr) => {
+            if (error) {
+                this.reportCommandError(command, stderr);
+                return;
+            }
+
+            // 准备执行 vvp
+            MainOutput.report(stdout);
+            const generateVvpName = hdlModule.name + '.vvp';
+
+            const outVvpPath = hdlPath.join(simConfig.simulationHome, generateVvpName);
+            MainOutput.report(t('info.simulation.create-vvp', outVvpPath), {
+                level: ReportType.Run
+            });
+            
+            const vvpPath = simConfig.vvpPath;
+
+            // 运行 vvp 文件，执行目录在生成的 vcd 的同级目录
+            // 对于 vvp 执行的 cwd，为了方便用户可以调用 $readmemb $fopen $dumpfile
+            // 这些系统调用进行 IO，所以选择 {workspace} 作为执行 vvp 的 cwd
+            const vvpCwd = opeParam.openMode === 'file' ? cwd: opeParam.workspacePath;
+
+            const vvpCommand = `${vvpPath} ${outVvpPath}`;
+            MainOutput.report(vvpCommand, { level: ReportType.Run });
+            
+            this.runVvp(vvpCommand, vvpCwd);
+        });
+    }
+
+    /**
+     * @description 陨星 vvp xxx 的命令
+     * @param command 
+     * @param cwd 
+     */
+    private runVvp(command: string, cwd: string) {
+        child_process.exec(command, { cwd }, (error, stdout, stderr) => {
+            if (error) {
+                this.reportCommandError(command, stderr);
+                return;
+            }
+
+            // 对于 vvp 的输出结果，特殊处理
+            this.handleVvpStdOutput(stdout, command, cwd);
+        });
+    }
+
+    /**
+     * @description 处理 vvp xxx.vvp 执行后输出的标准输出
+     * vvp 的标准输出似乎总是一行一个的
+     * @param stdoutMessage vvp 执行后的标准输出窗口
+     * @param command 用于重新执行
+     * @param cwd 用于重新执行
+     */
+    private handleVvpStdOutput(stdoutMessage: string, command: string, cwd: string) {
+        for (const line of stdoutMessage.split('\n').map(line => line.trim())) {
+            if (line.startsWith('WARNING:')) {
+                // 运行时警告
+                MainOutput.report(line.slice(8).trim(), { level: ReportType.Warn });
+                
+            } else if (line.startsWith('ERROR:')) {
+                // 运行时错误，比如用户 $readmemb 读取的文件并不存在
+                MainOutput.report(line.slice(6).trim(), { level: ReportType.Error });
+
+            } else if (line.startsWith('VCD info:')) {
+                // 导出 VCD 的信息，用于输出
+                // 此处尝试提取 vcd 导出的信息，然后转换内部信息导出到屏幕上
+                const match = line.match(/dumpfile (.+) opened for output/);
+                if (match) {
+                    const vcdPath = match[1];
+                    const absVcdPath = hdlPath.resolve(cwd, vcdPath);
+                    MainOutput.report(t('info.simulate.vvp.vcd-generate', absVcdPath));
+                } else {
+                    MainOutput.report(line.slice(9).trim());
+                }
+
+            } else if (line.startsWith('VCD Error:')) {
+                // 出现 VCD Error 可能是因为生成地点的目录不存在，创建目录，然后再运行                
+                const match = line.match(/Unable to open (.+) for output\./);
+                if (match) {
+                    const vcdPath = match[1];
+                    const absVcdPath = hdlPath.resolve(cwd, vcdPath);
+                    const parentFolderPath = fspath.dirname(absVcdPath);
+                    hdlDir.mkdir(parentFolderPath);
+                    // 清除输出，准备第二次运行
+                    MainOutput.clear();
+                    this.runVvp(command, cwd);
+                } else {
+                    // 没有匹配到，说明是其他错误，直接按照错误输出
+                    MainOutput.report(line.slice(10).trim(), { level: ReportType.Error });
+                }
+            } else {
+                MainOutput.report(line, { level: ReportType.Info });
+            }
+        }
+    }
+
+    private exec(command: string, cwd: AbsPath, hdlModule: HdlModule) {
         const simConfig = this.simConfig;
         if (!simConfig) {
             MainOutput.report('this.simConfig is empty when exec');
@@ -350,10 +444,10 @@ class IcarusSimulate extends Simulate {
         const runInTerminal = vscode.workspace.getConfiguration().get('digital-ide.function.simulate.runInTerminal');
         
         if (runInTerminal) {
-            this.execInTerminal(command, cwd);
+            this.execInTerminal(command, cwd, hdlModule);
         } else {
             MainOutput.show();
-            this.execInOutput(command, cwd);
+            this.execInOutput(command, cwd, hdlModule);
         }
     }
 
@@ -375,11 +469,12 @@ class IcarusSimulate extends Simulate {
         //     MainOutput.report(warningMsg, ReportType.Warn, true);
         //     return;
         // }
+        
         const dependences = this.getAllOtherDependences(path, name);
         const simulationCommand = this.getCommand(name, path, dependences);
         if (simulationCommand) {
             const cwd = hdlPath.resolve(path, '..');            
-            this.exec(simulationCommand, cwd);
+            this.exec(simulationCommand, cwd, hdlModule);
         } else {
             const errorMsg = 'Fail to generate command';
             MainOutput.report(errorMsg, {

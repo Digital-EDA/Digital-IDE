@@ -71,5 +71,12 @@
     "info.pl.xilinx.no-need-add-files": "没有需要添加到 Xilinx 工程的文件",
     "info.pl.xilinx.no-need-del-files": "没有需要从 Xilinx 中删除的文件",
     "error.pl.launch.not-valid-vivado-path": "启动 Vivado TCL 脚本解释器遇到错误：{0} 。请检查你的 Vivado 启动路径是否正确，当前设置的 Vivado 启动文件夹路径：{1}",
-    "info.pl.launch.set-vivado-path": "前往设置 Vivado 安装路径"
+    "info.pl.launch.set-vivado-path": "前往设置 Vivado 安装路径",
+    "info.monitor.current-mode": "当前监视器模式：{0}",
+    "info.simulation.create-vvp": "在 {0} 创建 VVP 文件",
+    "error.simulation.reason": "原因: {0}",
+    "info.simulate.vvp.vcd-generate": "vcd 文件已经生成至 {0}",
+    "error.simluate.icarus.use-primitives": "检测到使用了原语 {0}，但是 Icarus iverilog 并不支持原语",
+    "error.simluate.icarus.use-ip": "检测到使用了 IP {0}，但是 Icarus iverilog 并不支持 IP",
+    "error.simulation.error-happen-run-command": "Icarus 仿真时，出现错误："
 }

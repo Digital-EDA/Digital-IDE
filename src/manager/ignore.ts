@@ -1,8 +1,10 @@
 import * as vscode from 'vscode';
 import { AbsPath, opeParam } from '../global';
-import { hdlPath } from '../hdlFs';
+import { hdlFile, hdlPath } from '../hdlFs';
 import * as fs from 'fs';
+import * as fspath from 'path';
 import { minimatch } from 'minimatch';
+import { toPureRelativePath } from '../hdlFs/path';
 
 
 class HdlIgnore {
@@ -19,9 +21,8 @@ class HdlIgnore {
         const workspace = opeParam.workspacePath;
         // 转换成相对于 ws 的相对路径，形如 ./src/test.py
         let relativePath = hdlPath.toPureRelativePath(hdlPath.relative(workspace, path));
-        console.log('current path:', relativePath);
         
-        for (const pattern of this.patterns.map(p => hdlPath.toPureRelativePath(p))) {
+        for (const pattern of this.patterns) {
             const matched = minimatch(relativePath, pattern);
             if (matched) {
                 return true;
@@ -55,9 +56,24 @@ class HdlIgnore {
                 }
             }
             this.patterns = [...validGlobStrings];
+            this.makeClearPattern();
         } else {
             // .dideignore 不存在直接赋值为空
             this.patterns = [];
+        }
+    }
+
+    /**
+     * @description 构建可直接使用的 patterns
+     * 该操作是幂等的
+     */
+    private makeClearPattern() {
+        for (let i = 0; i < this.patterns.length; ++ i) {
+            let pattern = this.patterns[i];
+            if (fspath.isAbsolute(pattern)) {
+                pattern = hdlPath.relative(opeParam.workspacePath, pattern);
+            }
+            this.patterns[i] = toPureRelativePath(pattern);
         }
     }
 }

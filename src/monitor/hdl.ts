@@ -152,7 +152,7 @@ export class HdlAction extends BaseAction {
      * @param path 
      */
     private isvalid(path: AbsPath): boolean {
-        const prjInfo = opeParam.prjInfo;
+        const prjInfo = opeParam.prjInfo;        
         if (path.startsWith(prjInfo.hardwareSrcPath) || path.startsWith(prjInfo.hardwareSimPath)) {
             if (!hdlIgnore.isignore(path) && hdlFile.isHDLFile(path)) {
                 return true;

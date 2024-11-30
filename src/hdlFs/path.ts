@@ -103,6 +103,7 @@ function toEscapePath(path: AbsPath): AbsPath {
 }
 
 function toPureRelativePath(path: RelPath): RelPath {
+        
     if (path.startsWith('./') || path.startsWith('.\\')) {
         return path.slice(2);
     }

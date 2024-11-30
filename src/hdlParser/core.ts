@@ -169,6 +169,10 @@ class HdlParam {
             return undefined;
         }
 
+        if (this.isTopModule(path, name)) {
+            console.log(module);
+        }
+
         const dependencies : common.HdlDependence = {
             current: [],
             include: [],
@@ -497,15 +501,93 @@ class HdlParam {
 const hdlParam = new HdlParam();
 
 class HdlInstance {
-    name: string;                                   // name of the instance
-    type: string;                                   // type
+    /**
+     * @description 例化的名字
+     * 
+     * 对于下面的例子，唯一例化 的 name 就是 `u_tool`
+     * @example
+     * module hello()
+     *   tool u_tool();
+     * endmodule
+     *
+     */
+    name: string;
+
+    /**
+     * @description 例化的模块名
+     * 
+     * 对于下面的例子，唯一例化 的 type 就是 `tool`
+     * @example
+     * module hello()
+     *   tool u_tool();
+     * endmodule
+     *
+     */
+    type: string;
+
+    /**
+     * @description 例化的 range
+     */
     range: common.Range;                            // range of instance
-    instModPath: AbsPath | undefined;               // path of the definition
-    instModPathStatus: common.InstModPathStatus;    // status of the instance (current, include, others)
-    instparams: common.InstRange;                   // range of params
-    instports: common.InstRange;                    // range of ports
-    parentMod: HdlModule;                           // 例化模块例化地点的外层 module
-    module: HdlModule | undefined;                  // 例化模块的定义模块
+    
+    /**
+     * @description 例化的模块的定义路径
+     * 
+     * 对于下面的例子，唯一例化 的 instModPath 就是 `tool` 这个模块 `module tool` 申明所在的文件的路径
+     * @example
+     * module hello()
+     *   tool u_tool();
+     * endmodule
+     *
+     */
+    instModPath: AbsPath | undefined;
+
+    /**
+     * @description 用于描述当前例化是如何被引入的，以下是三类枚举
+     * - current: 例化对应的模块就在当前文件中
+     * - include: 通过 `include
+     * - others: 其他
+     */
+    instModPathStatus: common.InstModPathStatus;
+
+    /**
+     * @description 例化 params 部分的 range.
+     * 如果是 vhdl，则是 generic map 部分的 range
+     */
+    instparams: common.InstRange;
+    
+    /**
+     * @description 例化 ports 部分的 range.
+     * 如果是 vhdl，则是 port map 部分的 range
+     */
+    instports: common.InstRange;
+    
+    /**
+     * @description 例化模块例化地点的外层 module
+     * 
+     * 对于下面的例子， 例化 `u_tool` 的 parentMod 就是 `hello`
+     * @example
+     * module hello()
+     *   tool u_tool();
+     * endmodule
+     *
+     */
+    parentMod: HdlModule;
+
+    /**
+     * @description 例化模块的定义模块
+     * 
+     * 对于下面的例子， 例化 `u_tool` 的 `module` 就是 tool
+     * @example
+     * module hello();
+     *   tool u_tool();
+     * endmodule
+     * 
+     * module tool();
+     *  ...
+     * endmodule
+     */
+    module: HdlModule | undefined;
 
     constructor(name: string, 
                 type: string,
@@ -611,7 +693,34 @@ class HdlInstance {
         this.instports = newInstance.instports;
 
         this.instModPath = this.module?.path || '';
-        this.instModPathStatus = this.parentMod.solveInstModPathStatus();
+        this.updateInstModPathStatus();
+    }
+
+    /**
+     * @description 用于解决例化的路径引入状态，对于 A 模块，它的两个例化 u_A1 和 u_A2
+     * 使用 u_A1 和 u_A2 的模块需要知道 u_A1 是如何被引入的，此时需要调用 u_A1.updateInstModPathStatus() 来更新
+     * u_A1 的 instModPathStatus
+     */
+    public updateInstModPathStatus() {
+        const module = this.module;
+        if (module) {
+            const userModule = this.parentMod;
+            if (userModule.path === module.path) {
+                this.instModPathStatus = common.InstModPathStatus.Current;
+            } else {
+                const userIncludePaths = userModule.file.macro.includes.map(
+                    include => hdlPath.rel2abs(userModule.path, include.path)
+                );
+    
+                if (userIncludePaths.includes(module.path)) {
+                    this.instModPathStatus = common.InstModPathStatus.Include;
+                } else {
+                    this.instModPathStatus = common.InstModPathStatus.Others;
+                }
+            }
+        } else {
+            this.instModPathStatus = common.InstModPathStatus.Unknown;
+        }
     }
 
     public get getDoFastFileType(): DoFastFileType | undefined {
@@ -882,28 +991,6 @@ class HdlModule {
         }
     }
 
-    public solveInstModPathStatus(): common.InstModPathStatus {
-        // TODO: 修改这套系统，因为现在只是拿第一个例化来判断的，这是不合理的
-        // 应该把 common.InstModPathStatus 修改成一个可以通过析取来表示的变量
-        const inst = hdlParam.getUnhandleInstancesByModuleName(this.name)[0];
-        if (!inst) {
-            return common.InstModPathStatus.Unknown;
-        }
-        const userModule = inst.parentMod;
-        if (userModule.path === this.path) {
-            return common.InstModPathStatus.Current;
-        } else {
-            const userIncludePaths = userModule.file.macro.includes.map(
-                include => hdlPath.rel2abs(userModule.path, include.path));
-
-            if (userIncludePaths.includes(this.path)) {
-                return common.InstModPathStatus.Include;
-            } else {
-                return common.InstModPathStatus.Others;
-            }
-        }
-    }
-
     /**
      * @description 从全局寻找这个 module 的例化，并尝试修改它的状态
      */
@@ -918,7 +1005,7 @@ class HdlModule {
 
             // 解决
             instance.instModPath = this.path;
-            instance.instModPathStatus = this.solveInstModPathStatus();
+            instance.updateInstModPathStatus();
 
             // 找寻这个 instance 对应的真正的 module（也有可能是原语）
             // 并将这个 instance 加入这个 module 的计数器中

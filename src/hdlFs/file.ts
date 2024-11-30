@@ -67,9 +67,6 @@ export function isSystemVerilogFile(path: AbsPath): boolean {
 }
 
 export function isHDLFile(path: AbsPath): boolean {    
-    if (!isFile(path)) {
-        return false;
-    }
     const ext = hdlPath.extname(path, false);    
     return hdlExts.includes(ext);
 }

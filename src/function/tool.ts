@@ -133,7 +133,7 @@ async function askUserToSaveFilelist(filelist: string[]) {
     if (uri === undefined) {
         return;
     }
-    const filePath = uri.path;
+    const filePath = uri.fsPath;
     const fileContent = filelist.join('\n');
 
     try {

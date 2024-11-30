@@ -71,5 +71,12 @@
     "info.pl.xilinx.no-need-add-files": "Xilinx プロジェクトに追加するファイルはありません",
     "info.pl.xilinx.no-need-del-files": "Xilinx から削除するファイルはありません。",
     "error.pl.launch.not-valid-vivado-path": "Vivado TCL スクリプトインタプリタの起動中にエラーが発生しました：{0}。Vivado の起動パスが正しいか確認してください。現在設定されている Vivado 起動フォルダパス：{1}",
-    "info.pl.launch.set-vivado-path": "Vivado インストールパスの設定に移動"
+    "info.pl.launch.set-vivado-path": "Vivado インストールパスの設定に移動",
+    "info.monitor.current-mode": "現在のモニターモード：{0}",
+    "info.simulation.create-vvp": "{0} で VVP ファイルを作成",
+    "error.simulation.reason": "理由: {0}",
+    "info.simulate.vvp.vcd-generate": "vcdファイルが生成されました: {0}",
+    "error.simluate.icarus.use-primitives": "プリミティブ {0} が検出されましたが、Icarus iverilog はプリミティブをサポートしていません。",
+    "error.simluate.icarus.use-ip": "IP {0} が使用されていますが、Icarus iverilog は IP をサポートしていません。",
+    "error.simulation.error-happen-run-command": "Icarusシミュレーション中にエラーが発生しました："
 }

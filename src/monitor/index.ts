@@ -44,7 +44,6 @@ class HdlMonitor{
      */
     public getHdlMonitor() {
         const prjInfo = opeParam.prjInfo;
-
         const monitorPathSet = new PathSet();
 
         // 在输出中展示当前的监视路径
@@ -57,8 +56,14 @@ class HdlMonitor{
             level: ReportType.Launch
         });
 
-        // chokidar 4.0.0 开始不支持 glob，需要在每一个入口自己判断
-        return this.makeMonitor([opeParam.workspacePath, prjInfo.libCommonPath]);
+        MainOutput.report(t('info.monitor.current-mode', opeParam.openMode));
+
+        if (opeParam.openMode === 'file') {
+            return this.makeMonitor([prjInfo.libCommonPath]);
+        } else {
+            // chokidar 4.0.0 开始不支持 glob，需要在每一个入口自己判断
+            return this.makeMonitor([opeParam.workspacePath, prjInfo.libCommonPath]);
+        }
     }
 
     public getIgnoreMonitor() {

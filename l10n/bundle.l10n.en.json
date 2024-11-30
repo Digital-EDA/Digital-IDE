@@ -71,5 +71,12 @@
     "info.pl.xilinx.no-need-add-files": "No files need to be added to the Xilinx project",
     "info.pl.xilinx.no-need-del-files": "There are no files to be deleted from Xilinx.",
     "error.pl.launch.not-valid-vivado-path": "Error encountered while starting the Vivado TCL script interpreter: {0}. Please check if your Vivado startup path is correct. Currently set Vivado startup folder path: {1}",
-    "info.pl.launch.set-vivado-path": "Go to set the Vivado installation path"
+    "info.pl.launch.set-vivado-path": "Go to set the Vivado installation path",
+    "info.monitor.current-mode": "Current monitor mode: {0}",
+    "info.simulation.create-vvp": "Create VVP file in {0}",
+    "error.simulation.reason": "Reason: {0}",
+    "info.simulate.vvp.vcd-generate": "vcd file has been generated to {0}",
+    "error.simluate.icarus.use-primitives": "Primitive {0} detected, but Icarus iverilog does not support primitives.",
+    "error.simluate.icarus.use-ip": "Detected the use of IP {0}, but Icarus iverilog does not support IP.",
+    "error.simulation.error-happen-run-command": "Error during Icarus simulation:"
 }

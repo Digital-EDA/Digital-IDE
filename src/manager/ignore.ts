@@ -23,6 +23,13 @@ class HdlIgnore {
         let relativePath = hdlPath.toPureRelativePath(hdlPath.relative(workspace, path));
         
         for (const pattern of this.patterns) {
+            // 1. 如果当前 pattern 是一个文件夹，则通过包含前缀匹配
+            const patternAbsPath = hdlPath.join(workspace, pattern);
+            if (fspath.isAbsolute(patternAbsPath) && relativePath.startsWith(pattern)) {
+                return true;
+            }
+
+            // 2. 通过 glob 进行匹配
             const matched = minimatch(relativePath, pattern);
             if (matched) {
                 return true;

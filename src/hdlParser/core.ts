@@ -314,7 +314,7 @@ class HdlParam {
             for (const p of pools) {
                 const increment = Math.floor(p.id / fileNum * 100);
                 await p.promise;
-                console.log("handle id " + p.id + ' increment: ' + increment);                
+                // console.log("handle id " + p.id + ' increment: ' + increment);           
                 progress?.report({ message: reportTitle + ` ${p.id}/${fileNum}`, increment });
             }
             pools.length = 0;
@@ -351,7 +351,7 @@ class HdlParam {
             for (const p of pools) {
                 const increment = Math.floor(p.id / fileNum * 100);
                 await p.promise;
-                console.log("handle id " + p.id + ' increment: ' + increment);                
+                // console.log("handle id " + p.id + ' increment: ' + increment);              
                 progress?.report({ message: reportTitle + ` ${p.id}/${fileNum}`, increment });
             }
             pools.length = 0;
@@ -454,14 +454,15 @@ class HdlParam {
 
     public updateFast(path: string, fast: common.Fast) {
         const moduleFile = this.getHdlFile(path);
+        
         if (moduleFile === undefined) {
             return;
         }
 
-        // 1. update marco directly
+        // 1. 更新 macro
         moduleFile.updateMacro(fast.macro);
         
-        // 2. update modules one by one
+        // 2. 增量更新所有 module
         const uncheckedModuleNames = new Set<string>();
         for (const name of moduleFile.getAllModuleNames()) {
             uncheckedModuleNames.add(name);
@@ -482,7 +483,7 @@ class HdlParam {
             }
         }
 
-        // 3. delete module not visited yet
+        // 3. 删除没有被访问到的 module
         for (const moduleName of uncheckedModuleNames) {
             moduleFile.deleteHdlModule(moduleName);
         }
@@ -1078,7 +1079,7 @@ export class HdlFile {
         hdlParam.setHdlFile(this);
 
         // make nameToModule
-        this.nameToModule = new Map<string, HdlModule>();   
+        this.nameToModule = new Map<string, HdlModule>();
         for (const rawHdlModule of modules) {
             this.createHdlModule(rawHdlModule);
         }

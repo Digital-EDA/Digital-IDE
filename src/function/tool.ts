@@ -156,7 +156,21 @@ function exportFilelist(view: ModuleDataItem) {
             deps.others.forEach(path => fileset.add(path));
             deps.include.forEach(path => fileset.add(path));
             const filelist = [view.path];
-            filelist.push(...fileset);
+
+            for (const dep of fileset) {
+                // 去除其中的原语
+                if (dep === 'xilinx-primitives') {
+                    continue;
+                }
+
+                // 去除其中的 IP 文件
+                if (opeParam.prjInfo.ipPath.length > 0 && dep.startsWith(opeParam.prjInfo.ipPath)) {
+                    continue;
+                }
+
+                filelist.push(dep);
+            }
+
             askUserToSaveFilelist(filelist);
         } else {
             vscode.window.showErrorMessage('fail to get deps of view ' + view.name);

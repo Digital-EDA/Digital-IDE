@@ -10,7 +10,6 @@ import { getIconConfig } from '../../hdlFs/icons';
 import { DoFastFileType } from '../../global/lsp';
 import { t } from '../../i18n';
 
-let needExpand = true;
 
 interface ModuleDataItem {
     icon: string,           // 图标
@@ -118,10 +117,13 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
         let collapsibleState;
         if (!expandable) {
             collapsibleState = vscode.TreeItemCollapsibleState.None;
-        } else if (needExpand) {
-            collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
-        } else {
-            collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
+        }  else {
+            // 默认只让 src 和 sim 展开
+            if (element.parent === undefined) {
+                collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
+            } else {
+                collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
+            }
         }
 
         const treeItem = new vscode.TreeItem(itemName, collapsibleState);
@@ -179,7 +181,7 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
         const hardwarePath = opeParam.prjInfo.arch.hardware;
         const moduleType = element.name as keyof (SrcPath & SimPath);
 
-        const topModules = hdlParam.getTopModulesByType(moduleType);        
+        const topModules = hdlParam.getTopModulesByType(moduleType);
         const topModuleItemList = topModules.map<ModuleDataItem>(module => ({
             icon: this.judgeTopModuleIconByDoFastType(module.file.doFastType),
             type: moduleType,

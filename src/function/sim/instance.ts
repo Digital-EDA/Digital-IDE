@@ -75,7 +75,7 @@ function instanceVhdlCode(module: HdlModule) {
         instContent += `generic map(\n${param})\n`;
     }
 
-    instContent += `port map(\n${port});\n`;
+    instContent += `port map(\n${port.trim()}\n);\n`;
 
     return instContent;
 }

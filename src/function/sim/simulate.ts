@@ -207,7 +207,7 @@ class IcarusSimulate extends Simulate {
                 continue;
             }
             // icarus 不支持 IP
-            if (dep.startsWith(opeParam.prjInfo.ipPath)) {
+            if (opeParam.prjInfo.ipPath.length > 0 && dep.startsWith(opeParam.prjInfo.ipPath)) {
                 MainOutput.report(t('error.simluate.icarus.use-ip', dep), { level: ReportType.Error });
                 continue;     
             }

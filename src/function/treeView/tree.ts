@@ -154,6 +154,7 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
     public getChildren(element?: ModuleDataItem | undefined): vscode.ProviderResult<ModuleDataItem[]> {                
         if (element) {
             const name = element.name;
+            
             if (name === 'sim' || name === 'src') {
                 element.parent = undefined;
                 return this.getTopModuleItemList(element);
@@ -242,9 +243,9 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
         
         const moduleDataItemList: ModuleDataItem[] = [];
         const targetModule = hdlParam.getHdlModule(element.path, element.name);
-
+        
         if (targetModule) {
-            const allInstances = targetModule.getAllInstances();
+            const allInstances = targetModule.getAllInstances();            
             // 根据出现次序进行排序
             allInstances.sort((a, b) => a.range.start.line - b.range.start.line);
             for (const instance of allInstances) {

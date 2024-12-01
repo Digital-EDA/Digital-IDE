@@ -808,7 +808,7 @@ class HdlModule {
         const instModName = rawHdlInstance.type;
 
         if (this.languageId === HdlLangID.Verilog || this.languageId === HdlLangID.SystemVerilog) {
-            const searchResult = this.searchInstModPath(instModName);       
+            const searchResult = this.searchInstModPath(instModName);
             const hdlInstance = new HdlInstance(rawHdlInstance.name,
                                                 rawHdlInstance.type,
                                                 searchResult.path,
@@ -827,15 +827,19 @@ class HdlModule {
             }
             return hdlInstance; 
         } else if (this.languageId === HdlLangID.Vhdl) {
+            const searchResult = this.searchInstModPath(instModName);
             const hdlInstance = new HdlInstance(rawHdlInstance.name,
                                                 rawHdlInstance.type,
-                                                this.path,
-                                                common.InstModPathStatus.Current,
+                                                searchResult.path,
+                                                searchResult.status,
                                                 rawHdlInstance.instparams,
                                                 rawHdlInstance.instports,
                                                 rawHdlInstance.range,
                                                 this);
-            hdlInstance.module = this;
+ 
+            if (hdlInstance.module === undefined) {
+                hdlInstance.module =  this;
+            }
             if (this.nameToInstances) {
                 const key = this.makeInstanceKey(rawHdlInstance.name, rawHdlInstance.type);
                 this.nameToInstances.set(key, hdlInstance);

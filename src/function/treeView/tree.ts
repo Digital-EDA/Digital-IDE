@@ -178,11 +178,13 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
 
     public getTopModuleItemList(element: ModuleDataItem): ModuleDataItem[] {
         // src or sim
-        const hardwarePath = opeParam.prjInfo.arch.hardware;
         const moduleType = element.name as keyof (SrcPath & SimPath);
 
+        // 获取所有对应类型（src | sim）下的顶层模块数量
         const topModules = hdlParam.getTopModulesByType(moduleType);
-        const topModuleItemList = topModules.map<ModuleDataItem>(module => ({
+        
+        // 将所有顶层模块转换成 ModuleDataItem 自定义 treeview item 数据结构
+        let topModuleItemList = topModules.map<ModuleDataItem>(module => ({
             icon: this.judgeTopModuleIconByDoFastType(module.file.doFastType),
             type: moduleType,
             doFastFileType: module.file.doFastType,
@@ -198,40 +200,40 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
         if (topModuleItemList.length > 0) {
             const type = moduleType as keyof FirstTop;
 
-            const firstTop = topModuleItemList[0];
-            if (!this.firstTop[type]) {
-                this.setFirstTop(type, firstTop.name, firstTop.path);
-            }
-            const name = this.firstTop[type]!.name;            
-            const path = this.firstTop[type]!.path;
-            const icon = this.makeFirstTopIconName(type);
-            const range = firstTop.range;
-            const parent = element;
-            // TODO: check
-            const doFastFileType = undefined;
-
-            const tops = topModuleItemList.filter(item => item.path === path && item.name === name);
-            const adjustItemList = [];
-            if (tops.length > 0 || !hdlParam.hasHdlModule(path, name)) {
-                // mean that the seleted top is an original top module
-                // push it to the top of the *topModuleItemList*
-                const headItem = tops[0] ? tops[0] : topModuleItemList[0];
-
-                headItem.icon = icon;
-                adjustItemList.push(headItem);
-                for (const item of topModuleItemList) {
-                    if (item !== headItem) {
-                        adjustItemList.push(item);
-                    }
+            // 默认选择依赖模块最多的作为 first top
+            let firstTop: { path: string, name: string } | undefined = undefined;
+            let maxDepSize = 0;
+            
+            for (const hdlModule of topModules) {
+                // 此处断言是因为当前的 name 和 path 是从 topModules 中提取的
+                // 它们对应的 hdlModule 一定存在
+                const deps = hdlParam.getAllDependences(hdlModule.path, hdlModule.name)!;
+                const depSize = deps.include.length + deps.others.length;
+                if (depSize > maxDepSize) {
+                    maxDepSize = depSize;
+                    firstTop = { path: hdlModule.path, name: hdlModule.name };
                 }
-            } else {
-                // mean the selected top is not an original top module
-                // create it and add it to the head of *topModuleItemList*
-                const selectedTopItem: ModuleDataItem = {icon, type, name, range, path, parent, doFastFileType};
-                adjustItemList.push(selectedTopItem);
-                adjustItemList.push(...topModuleItemList);
             }
-            return adjustItemList;
+
+            if (firstTop === undefined) {
+                // 没有找到顶层模块，代表当前本来就是空的
+                // 此时 topModuleItemList 一定是 []
+                return topModuleItemList;
+            }
+
+            // 将当前模块设置为 first top
+            this.setFirstTop(type, firstTop.name, firstTop.path);
+
+            // 将 first top 放到数据列表开头
+            const firstTopIcon = this.makeFirstTopIconName(type);
+
+            // 将 topModuleItemList 中的 first top 元素调整到第一个位置
+            const dataItem = topModuleItemList.filter(item => item.name === firstTop.name && item.path === firstTop.path)[0];
+            dataItem.icon = firstTopIcon;
+            let newTopModuleItemList = [dataItem];
+            newTopModuleItemList = newTopModuleItemList.concat(topModuleItemList.filter(item => item !== dataItem));
+            
+            return newTopModuleItemList;
         }
 
         return topModuleItemList;

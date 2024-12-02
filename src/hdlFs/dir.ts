@@ -3,7 +3,7 @@ import * as fspath from 'path';
 import { AbsPath } from '../global';
 import * as hdlPath from './path';
 
-function isDir(path: AbsPath): boolean {
+export function isDir(path: AbsPath): boolean {
     if (!fs.existsSync(path)) {
         return false;
     }
@@ -15,7 +15,7 @@ function isDir(path: AbsPath): boolean {
     return false;
 }
 
-function mkdir(path: AbsPath): boolean {
+export function mkdir(path: AbsPath): boolean {
     if (!path) {
         return false;
     }
@@ -34,8 +34,10 @@ function mkdir(path: AbsPath): boolean {
     return false;
 }
 
-function rmdir(path: AbsPath): void {
-    fs.rm(path, { recursive: true, force: true }, () => {});
+export function rmdir(path: AbsPath): void {
+    if (fs.existsSync(path)) {
+        fs.rmSync(path, { recursive: true, force: true });
+    }
     // if (fs.existsSync(path)) {
     //     if (fs.statSync(path).isDirectory()) {
     //         const files = fs.readdirSync(path);
@@ -54,7 +56,7 @@ function rmdir(path: AbsPath): void {
     // }
 }
 
-function mvdir(src: AbsPath, dest: AbsPath, cover: boolean): boolean {
+export function mvdir(src: AbsPath, dest: AbsPath, cover: boolean): boolean {
     if (src === dest) {
         return false;
     }
@@ -67,7 +69,8 @@ function mvdir(src: AbsPath, dest: AbsPath, cover: boolean): boolean {
     }
 }
 
-function cpdir(src: AbsPath, dest: AbsPath, cover: boolean) {
+
+export function cpdir(src: AbsPath, dest: AbsPath, cover: boolean) {
     if (src === dest) {
         return false;
     }
@@ -123,10 +126,3 @@ function cpdir(src: AbsPath, dest: AbsPath, cover: boolean) {
 
     return true;
 }
-
-export {
-    mkdir,
-    rmdir,
-    cpdir,
-    mvdir
-};

@@ -91,5 +91,6 @@
     "digital-ide.function.instantiation.addComment.title": "在进行实例化时添加注释，如 // 端口, // 输入, // 输出，包括模块调用的完成",
     "digital-ide.function.instantiation.autoNetOutputDeclaration.title": "在实例化发生时自动在作用域中声明输出类型的网络。",
     "fpga-support.onTypeFormattingTriggerCharacters.title": "onTypeFormatting 的触发字符",
-    "digital-ide.function.lsp.file-parse-maxsize.title": "最大解析的文件阈值，大小超出这个值的文件不会被解析。单位为 MB，必须是整数。默认为 1MB"
+    "digital-ide.function.lsp.file-parse-maxsize.title": "最大解析的文件阈值，大小超出这个值的文件不会被解析。单位为 MB，必须是整数。默认为 1MB",
+    "digital-ide.structure.from-xilinx-to-standard.title": "将 Xilinx 项目转换成 Digital IDE 标准项目结构"
 }

@@ -7,17 +7,16 @@ import { AbsPath, IProgress, LspClient, MainOutput, opeParam, ReportType } from 
 import { PathSet } from '../global/util';
 import { RawPrjInfo } from '../global/prjInfo';
 import { hdlDir, hdlFile, hdlPath } from '../hdlFs';
-import { libManage } from './lib';
 import { hdlParam } from '../hdlParser';
 import { PlManage } from './PL';
 import { PsManage } from './PS';
 import { hdlIgnore } from './ignore';
 import { hdlMonitor } from '../monitor';
-import { NotificationType } from 'vscode-jsonrpc';
-import { refreshArchTree } from '../function/treeView';
-import { Fast } from '../hdlParser/common';
 import { t } from '../i18n';
 import { PpyAction } from '../monitor/propery';
+import { refreshArchTree } from '../function/treeView';
+import * as lspClient from '../function/lsp-client';
+
 
 interface RefreshPrjConfig {
     mkdir: boolean
@@ -27,8 +26,11 @@ class PrjManage {
     pl?: PlManage;
     ps?: PsManage;
 
-    // generate property template and write it to .vscode/property.json
-    public async generatePropertyJson() {
+    /**
+     * @description 生成 .vscode/property.json 
+     * @returns 
+     */
+    public async generatePropertyJson(context: vscode.ExtensionContext) {
         if (fs.existsSync(opeParam.propertyJsonPath)) {
             vscode.window.showWarningMessage('property file already exists !!!');
             return;
@@ -282,6 +284,245 @@ class PrjManage {
             return 'LS';
         }
         return 'PL';
+    }
+
+    /**
+     * @description 指令 `digital-ide.structure.from-xilinx-to-standard` 的实现
+     * 
+     * 将 Xilinx 结构转变为标准项目结构
+     */
+    public async transformXilinxToStandard(context: vscode.ExtensionContext) {
+        function xprFile(): string | undefined {
+            if (opeParam.openMode === 'file' || opeParam.workspacePath.length === 0) {
+                return undefined;
+            }
+            for (const filename of fs.readdirSync(opeParam.workspacePath)) {
+                if (filename.endsWith('.xpr')) {
+                    return filename;
+                }
+            }
+            return undefined;
+        }
+
+        /**
+         * @description 转移非 PL PS 文件夹
+         * @param workspace 
+         * @param plname 
+         */
+        function transformXilinxNonP(
+            workspace: string,
+            plname: string
+        ) {
+            const xilinxPL = plname + '.srcs';
+            const xilinxPS = plname + '.sdk';
+            const ignores = ['user', 'prj', '.vscode', xilinxPL, xilinxPS];
+            hdlDir.rmdir(hdlPath.join(workspace, '.Xil'));
+            for (const file of fs.readdirSync(workspace)) {
+                // 排除标准文件夹
+                if (ignores.includes(file)) {
+                    continue;
+                }
+
+                if (file.startsWith(plname)) {
+                    const targetFolder = hdlPath.join(workspace, 'prj', 'xilinx');
+                    const sourcePath = hdlPath.join(workspace, file);
+                    hdlFile.move(sourcePath, targetFolder);
+                } else {
+                    const targetFolder = hdlPath.join(workspace, 'user', 'src');
+                    const sourcePath = hdlPath.join(workspace, file);
+                    hdlFile.move(sourcePath, targetFolder);
+                }
+            }
+        }
+
+        /**
+         * @description 搬移 Xilinx 项目中的 IP
+         * 
+         * IP 一般在 ${workspace}/${plname}.srcs/sources_xxx/ip 里面
+         */
+        function transformIP(
+            matchPrefix: string,
+            workspace: string,
+            plname: string
+        ) {
+            const xilinxSrcsPath = hdlPath.join(workspace, plname + '.srcs');
+            const standardIpPath = hdlPath.join(workspace, 'user', 'ip');
+            if (!fs.existsSync(xilinxSrcsPath)) {
+                return;
+            }
+            const sourceNames = fs.readdirSync(xilinxSrcsPath).filter(filename => filename.startsWith(matchPrefix));
+            for (const sn of sourceNames) {
+                const ipPath = hdlPath.join(xilinxSrcsPath, sn, 'ip');
+
+                if (!hdlFile.isDir(ipPath)) {
+                    continue;
+                }
+
+                for (const ipname of fs.readdirSync(ipPath)) {
+                    const sourcePath = hdlPath.join(ipPath, ipname);
+                    hdlDir.mvdir(sourcePath, standardIpPath, true);
+                }
+                hdlDir.rmdir(ipPath);
+            }
+        }
+
+        /**
+         * @description 将文件从 Xilinx 中迁移到标准结构去
+         * 根据 ${workspace}/${plname}.srcs 下以 source_ 开头的前缀分两种情况：
+         * - 如果只有一个 source_1，则将 ${workspace}/${plname}.srcs/sources_1 迁移
+         * - 如果有多个 source_*，则将 ${workspace}/${plname}.srcs 迁移
+         * @returns 
+         */
+        function transformXilinxPL(
+            sourceType: 'src' | 'sim' | 'data',
+            matchPrefix: string,
+            workspace: string,
+            plname: string
+        ) {
+            const xilinxSrcsPath = hdlPath.join(workspace, plname + '.srcs');
+            if (!fs.existsSync(xilinxSrcsPath)) {
+                return;
+            }
+            const sourceNames = fs.readdirSync(xilinxSrcsPath).filter(filename => filename.startsWith(matchPrefix));
+            if (sourceNames.length === 0) {
+                return;
+            } else if (sourceNames.length === 1) {
+                // 如果只有一个 source_1，则将 ${workspace}/${plname}.srcs/sources_1 迁移
+                const sourceFolderPath = hdlPath.join(workspace, plname + '.srcs', sourceNames[0]);
+                const targetPath = hdlPath.join(workspace, 'user', sourceType);
+                for (const filename of fs.readdirSync(sourceFolderPath)) {
+                    const sourcePath = hdlPath.join(sourceFolderPath, filename);
+                    hdlFile.move(sourcePath, targetPath);
+                }
+                hdlDir.rmdir(sourceFolderPath);
+            } else {
+                // 如果有多个 source_*，则将 ${workspace}/${plname}.srcs 迁移
+                for (const sn of sourceNames) {
+                    const sourcePath = hdlPath.join(workspace, plname + '.srcs', sn);
+                    const targetPath = hdlPath.join(workspace, 'user', sourceType);
+                    hdlDir.mvdir(sourcePath, targetPath, true);
+                }
+            }
+        }
+
+        /**
+         * @description 迁移 ${workspace}/${plname}.sdk 到 user/sdk 下
+         * @returns 
+         */
+        function transformXilinxPS(
+            workspace: string,
+            plname: string
+        ) {
+            const xilinxSdkPath = hdlPath.join(workspace, plname + '.sdk');
+            if (!fs.existsSync(xilinxSdkPath)) {
+                return;
+            }
+            const standardSdkPath = hdlPath.join(workspace, 'user', 'sdk');
+            hdlDir.mvdir(xilinxSdkPath, standardSdkPath, true);
+            
+            const hwNames = fs.readdirSync(standardSdkPath).filter(filename => filename.includes("_hw_platform_"));
+            if (hwNames.length === 0) {
+                return;
+            } else if (hwNames.length === 1) {
+                const hwFolderPath = hdlPath.join(standardSdkPath, hwNames[0]);
+                const targetPath = hdlPath.join(standardSdkPath, 'data');
+                for (const filename of fs.readdirSync(hwFolderPath)) {
+                    hdlFile.move(hdlPath.join(hwFolderPath, filename), targetPath);
+                }
+                hdlDir.rmdir(hwFolderPath);
+            } else {
+                for (const hw of hwNames) {
+                    const hwPath = hdlPath.join(standardSdkPath, hw);
+                    const targetPath = hdlPath.join(standardSdkPath, 'data');
+                    hdlDir.mvdir(hwPath, targetPath, true);
+                }
+            }
+        }
+
+        // 下方操作会产生大量的文件移动，为了进行性能优化，先关闭 monitor
+        hdlMonitor.close();
+
+        await vscode.window.withProgress({
+            title: t('info.command.structure.transform-xilinx-to-standard'),
+            location: vscode.ProgressLocation.Notification
+        }, async () => {
+            // 先获取 project name
+            const xprfile = xprFile();            
+            if (xprfile === undefined) {
+                MainOutput.report(t('error.command.structure.not-valid-xilinx-project'), {
+                    level: ReportType.Error,
+                    notify: true
+                });
+                return;
+            }
+
+            const plname = xprfile.slice(0, -4);
+            const workspacePath = opeParam.workspacePath;
+            
+            // 创建标准项目结构基本文件夹
+            // xilinx prj
+            hdlDir.mkdir(hdlPath.join(workspacePath, 'prj', 'xilinx'));
+            // hardware
+            hdlDir.mkdir(hdlPath.join(workspacePath, 'user', 'src'));
+            hdlDir.mkdir(hdlPath.join(workspacePath, 'user', 'sim'));
+            hdlDir.mkdir(hdlPath.join(workspacePath, 'user', 'data'));
+            hdlDir.mkdir(hdlPath.join(workspacePath, 'user', 'ip'));
+            // software
+            hdlDir.mkdir(hdlPath.join(workspacePath, 'user', 'sdk'));
+            hdlDir.mkdir(hdlPath.join(workspacePath, 'user', 'sdk', 'data'));
+
+            // 非 ${workspace}/${plname}.srcs ${workspace}/${plname}.sdk 的 ${workspace}/${plname}.* 文件夹迁移到 prj/xilinx 下
+            // 其他文件夹迁移到 user/src 下面
+            transformXilinxNonP(workspacePath, plname);
+
+            // 迁移 IP
+            transformIP('sources_', workspacePath, plname);
+            transformIP('sim_', workspacePath, plname);
+
+            // 迁移文件夹 ${workspace}/${plname}.srcs
+            transformXilinxPL('src', 'sources_', workspacePath, plname);
+            transformXilinxPL('sim', 'sim_', workspacePath, plname);
+            transformXilinxPL('data', 'constrs_', workspacePath, plname);
+            // 迁移文件夹 ${workspace}/${plname}.sdk
+            transformXilinxPS(workspacePath, plname);
+            
+            // 删除原本的项目文件夹 ${workspace}/${plname}.srcs 和 ${workspace}/${plname}.sdk
+            hdlDir.rmdir(hdlPath.join(workspacePath, plname + '.srcs'));
+            hdlDir.rmdir(hdlPath.join(workspacePath, plname + '.sdk'));
+
+            // 创建 property.json
+            const ppyTemplate = hdlFile.readJSON(opeParam.propertyInitPath);
+            ppyTemplate.prjName = {
+                PL: plname
+            };
+
+            hdlFile.writeJSON(opeParam.propertyJsonPath, ppyTemplate);
+        });
+
+        const res = await vscode.window.showInformationMessage(
+            t('info.command.structure.reload-vscode'),
+            { title: t('info.common.confirm'), value: true }
+        );
+
+        if (res?.value) {
+            await vscode.commands.executeCommand('workbench.action.reloadWindow');
+        }
+
+        // await vscode.window.withProgress({
+        //     location: vscode.ProgressLocation.Window,
+        //     title: t('info.progress.initialization')
+        // }, async (progress: vscode.Progress<IProgress>, token: vscode.CancellationToken) => {
+        //     hdlParam.clear();
+
+        //     // 初始化解析
+        //     await this.initialise(context, progress, false);
+    
+        //     // 刷新结构树
+        //     refreshArchTree();
+    
+        //     // 启动监视器
+        //     hdlMonitor.start();
+        // });
     }
 }
 

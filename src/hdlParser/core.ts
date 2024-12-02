@@ -32,6 +32,18 @@ class HdlParam {
         return this.pathToHdlFiles.get(path);
     }
 
+    /**
+     * @description 清空
+     */
+    public clear() {
+        this.topModules.clear();
+        this.srcTopModules.clear();
+        this.simTopModules.clear();
+        this.pathToHdlFiles.clear();
+        this.modules.clear();
+        this.unhandleInstances.clear();
+    }
+
     public getAllHdlFiles(): HdlFile[] {
         const hdlFiles = [];
         for (const [_, hdlFile] of this.pathToHdlFiles) {
@@ -163,14 +175,16 @@ class HdlParam {
         topModuleSource.delete(hdlModule);
     }
 
+    /**
+     * @description 获取模块的所有依赖项目
+     * @param path 
+     * @param name 
+     * @returns 
+     */
     public getAllDependences(path: AbsPath, name: string): common.HdlDependence | undefined {        
         const module = this.getHdlModule(path, name);
         if (!module) {
             return undefined;
-        }
-
-        if (this.isTopModule(path, name)) {
-            console.log(module);
         }
 
         const dependencies : common.HdlDependence = {

@@ -78,5 +78,9 @@
     "info.simulate.vvp.vcd-generate": "vcd-Datei wurde erstellt in {0}",
     "error.simluate.icarus.use-primitives": "Es wurde ein Primitiv {0} erkannt, aber Icarus iverilog unterstützt keine Primitiven.",
     "error.simluate.icarus.use-ip": "Es wurde die IP {0} verwendet, aber Icarus iverilog unterstützt keine IP.",
-    "error.simulation.error-happen-run-command": "Fehler bei der Icarus-Simulation:"
+    "error.simulation.error-happen-run-command": "Fehler bei der Icarus-Simulation:",
+    "info.command.structure.transform-xilinx-to-standard": "Konvertiere Xilinx-Projektstruktur in Digital IDE-Standardstruktur",
+    "error.command.structure.not-valid-xilinx-project": "Das aktuelle Projekt ist kein gültiges Xilinx-Projekt, die Konvertierung ist fehlgeschlagen!",
+    "info.command.structure.reload-vscode": "Projektstrukturkonvertierung abgeschlossen, bitte starten Sie vscode neu, um die Änderungen zu übernehmen.",
+    "info.common.confirm": "Bestätigen"
 }

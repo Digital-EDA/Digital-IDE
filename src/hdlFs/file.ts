@@ -8,6 +8,7 @@ import * as hdlPath from './path';
 import { HdlFileProjectType } from '../hdlParser/common';
 import { opeParam } from '../global';
 import { hdlIgnore } from '../manager/ignore';
+import { hdlDir } from '.';
 
 /**
  * judge if the path represent a file
@@ -172,7 +173,7 @@ export function writeFile(path: AbsPath, content: string): boolean {
     }
 }
 
-export function readJSON(path: AbsPath): object {
+export function readJSON(path: AbsPath): any {
     try {        
         const context = fs.readFileSync(path, 'utf-8');
         return JSON.parse(context);
@@ -391,4 +392,20 @@ export function diffFiles(newFiles: AbsPath[], oldFiles: AbsPath[]): DiffResult 
     return {
         addFiles, delFiles
     };
+}
+
+/**
+ * @description 移动 source 到 target 中，target 必须是一个文件夹路径
+ * - 如果 source 是一个文件，则移动到 target/source
+ * - 如果 source 是一个文件夹，则移动到 target/source
+ * @param source 
+ * @param target 
+ */
+export function move(source: AbsPath, target: AbsPath) {
+    if (isDir(source)) {
+        hdlDir.mvdir(source, target, true);
+    } else {
+        const filename = fspath.basename(source);
+        moveFile(source, hdlPath.join(target, filename));
+    }
 }

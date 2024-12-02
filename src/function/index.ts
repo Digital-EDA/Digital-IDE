@@ -5,7 +5,7 @@ import * as hdlDoc from './hdlDoc';
 import * as sim from './sim';
 import * as treeView from './treeView';
 
-import * as lspCompletion from './lsp/completion';
+import { tclCompletionProvider } from './lsp/completion/tcl';
 import * as lspFormatter from '../../resources/formatter';
 import * as lspTranslator from '../../resources/translator';
 import * as lspLinter from './lsp/linter';
@@ -117,26 +117,8 @@ function registerLsp(context: vscode.ExtensionContext, version: string) {
     // translator
     vscode.commands.registerCommand('digital-ide.vhdl2vlog', uri => lspTranslator.vhdl2vlog(uri));
 
-    // verilog lsp
-    // vscode.languages.registerDocumentSymbolProvider(vlogSelector, lspDocSymbol.vlogDocSymbolProvider);
-    // vscode.languages.registerDefinitionProvider(vlogSelector, lspDefinition.vlogDefinitionProvider);
-    // vscode.languages.registerHoverProvider(vlogSelector, lspHover.vlogHoverProvider);
-    // vscode.languages.registerCompletionItemProvider(vlogSelector, lspCompletion.vlogIncludeCompletionProvider, '/', '"');
-    // vscode.languages.registerCompletionItemProvider(vlogSelector, lspCompletion.vlogMacroCompletionProvider, '`');
-    // vscode.languages.registerCompletionItemProvider(vlogSelector, lspCompletion.vlogPositionPortProvider, '.');
-    // vscode.languages.registerCompletionItemProvider(vlogSelector, lspCompletion.vlogCompletionProvider);
-    // vscode.languages.registerDocumentSemanticTokensProvider(vlogSelector, lspDocSemantic.vlogDocSenmanticProvider, lspDocSemantic.vlogLegend);
-
-    
-    // vhdl lsp    
-    // vscode.languages.registerDocumentSymbolProvider(vhdlSelector, lspDocSymbol.vhdlDocSymbolProvider);
-    // vscode.languages.registerDefinitionProvider(vhdlSelector, lspDefinition.vhdlDefinitionProvider);
-    // vscode.languages.registerHoverProvider(vhdlSelector, lspHover.vhdlHoverProvider);
-    // vscode.languages.registerCompletionItemProvider(vhdlSelector, lspCompletion.vhdlCompletionProvider);
-    
-
     // tcl lsp
-    vscode.languages.registerCompletionItemProvider(tclSelector, lspCompletion.tclCompletionProvider);
+    vscode.languages.registerCompletionItemProvider(tclSelector, tclCompletionProvider);
 
     // lsp linter
     // make first symbols in workspace
@@ -167,7 +149,6 @@ function registerNetlist(context: vscode.ExtensionContext) {
         if (typeof uri === 'string') {
             uri = vscode.Uri.file(uri);
         }
-        console.log('get uri: ', uri);
         Netlist.openNetlistViewer(context, uri);
     });
 }

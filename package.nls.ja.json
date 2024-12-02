@@ -91,5 +91,6 @@
     "digital-ide.function.instantiation.addComment.title": "インスタンス化時に // ポート, // 入力, // 出力 のようなコメントを追加し、モジュール呼び出しの補完を含みます",
     "digital-ide.function.instantiation.autoNetOutputDeclaration.title": "インスタンス化が発生したときにスコープ内で出力タイプのネットを自動的に宣言します。",
     "fpga-support.onTypeFormattingTriggerCharacters.title": "onTypeFormatting のトリガー文字",
-    "digital-ide.function.lsp.file-parse-maxsize.title": ""
+    "digital-ide.function.lsp.file-parse-maxsize.title": "",
+    "digital-ide.structure.from-xilinx-to-standard.title": "Xilinx プロジェクトを Digital IDE 標準プロジェクト構造に変換する"
 }

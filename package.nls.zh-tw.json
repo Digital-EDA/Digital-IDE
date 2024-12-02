@@ -91,5 +91,6 @@
     "digital-ide.function.instantiation.addComment.title": "在進行實例化時添加註釋，如 // 端口, // 輸入, // 輸出，包括模塊調用的完成",
     "digital-ide.function.instantiation.autoNetOutputDeclaration.title": "在實例化發生時自動在作用域中聲明輸出類型的網絡。",
     "fpga-support.onTypeFormattingTriggerCharacters.title": "onTypeFormatting 的觸發字符",
-    "digital-ide.function.lsp.file-parse-maxsize.title": ""
+    "digital-ide.function.lsp.file-parse-maxsize.title": "",
+    "digital-ide.structure.from-xilinx-to-standard.title": "將 Xilinx 專案轉換成 Digital IDE 標準專案結構"
 }

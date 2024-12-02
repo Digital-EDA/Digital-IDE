@@ -91,5 +91,6 @@
     "digital-ide.function.instantiation.addComment.title": "add comment like // ports, // input, // output when doing instantiation, including completion for module invoking",
     "digital-ide.function.instantiation.autoNetOutputDeclaration.title": "auto declare output type nets in the scope when instantiation happens.",
     "fpga-support.onTypeFormattingTriggerCharacters.title": "Trigger characters for onTypeFormatting",
-    "digital-ide.function.lsp.file-parse-maxsize.title": ""
+    "digital-ide.function.lsp.file-parse-maxsize.title": "",
+    "digital-ide.structure.from-xilinx-to-standard.title": "Konvertieren Sie Xilinx-Projekte in die Digital IDE-Standardprojektstruktur"
 }

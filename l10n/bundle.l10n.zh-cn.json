@@ -78,5 +78,9 @@
     "info.simulate.vvp.vcd-generate": "vcd 文件已经生成至 {0}",
     "error.simluate.icarus.use-primitives": "检测到使用了原语 {0}，但是 Icarus iverilog 并不支持原语",
     "error.simluate.icarus.use-ip": "检测到使用了 IP {0}，但是 Icarus iverilog 并不支持 IP",
-    "error.simulation.error-happen-run-command": "Icarus 仿真时，出现错误："
+    "error.simulation.error-happen-run-command": "Icarus 仿真时，出现错误：",
+    "info.command.structure.transform-xilinx-to-standard": "正在将 Xilinx 项目结构转变为 Digital IDE 标准结构",
+    "error.command.structure.not-valid-xilinx-project": "当前项目不是一个有效的 Xilinx 项目，转换失败！",
+    "info.command.structure.reload-vscode": "项目结构转换完成，请重启 vscode 使应用生效",
+    "info.common.confirm": "确定"
 }

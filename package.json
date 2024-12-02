@@ -597,6 +597,11 @@
                 "command": "digital-ide.tool.clean",
                 "category": "Digital-IDE",
                 "title": "%digital-ide.tool.clean.title%"
+            },
+            {
+                "command": "digital-ide.structure.from-xilinx-to-standard",
+                "category": "Digital-IDE",
+                "title": "%digital-ide.structure.from-xilinx-to-standard.title%"
             }
         ],
         "menus": {

@@ -1,8 +1,6 @@
 import * as chokidar from 'chokidar';
 import { MainOutput, opeParam, ReportType } from '../global';
-import { hdlExts } from '../global/lang';
 import { PathSet } from '../global/util';
-import { hdlPath } from '../hdlFs';
 
 import { t } from '../i18n';
 import { HdlAction } from './hdl';
@@ -74,6 +72,7 @@ class HdlMonitor{
     public close() {
         this.hdlMonitor?.close();
         this.ppyMonitor?.close();
+        this.ignoreMonitor?.close();
     }
 
     public start() {

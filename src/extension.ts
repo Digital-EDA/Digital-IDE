@@ -16,12 +16,23 @@ import { initialiseI18n, t } from './i18n';
 async function registerCommand(context: vscode.ExtensionContext, packageJson: any) {
     func.registerFunctionCommands(context);
     func.registerTreeViewDataProvider(context);
-
     func.registerLsp(context, packageJson.version);
     func.registerToolCommands(context);
     func.registerFSM(context);
     func.registerNetlist(context);
     func.registerWaveViewer(context);
+
+    // onCommand 激活事件中的命令
+    context.subscriptions.push(
+        vscode.commands.registerCommand('digital-ide.property-json.generate', () => {
+            manager.prjManage.generatePropertyJson(context);
+        })
+    );
+    context.subscriptions.push(
+        vscode.commands.registerCommand('digital-ide.structure.from-xilinx-to-standard', () => {
+            manager.prjManage.transformXilinxToStandard(context);
+        })
+    );
 }
 
 function readPackageJson(context: vscode.ExtensionContext): any | undefined {
@@ -37,7 +48,7 @@ function readPackageJson(context: vscode.ExtensionContext): any | undefined {
 
 async function launch(context: vscode.ExtensionContext) {
     initialiseI18n(context);
-    
+
     console.log(t('info.welcome.title'));
     console.log(t('info.welcome.join-qq-group') + ' https://qm.qq.com/q/1M655h3GsA');
 
@@ -87,6 +98,7 @@ async function launch(context: vscode.ExtensionContext) {
         // 刷新结构树
         refreshArchTree();
 
+        // 启动监视器
         hdlMonitor.start();
     });
 

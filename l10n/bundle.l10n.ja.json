@@ -78,5 +78,9 @@
     "info.simulate.vvp.vcd-generate": "vcdファイルが生成されました: {0}",
     "error.simluate.icarus.use-primitives": "プリミティブ {0} が検出されましたが、Icarus iverilog はプリミティブをサポートしていません。",
     "error.simluate.icarus.use-ip": "IP {0} が使用されていますが、Icarus iverilog は IP をサポートしていません。",
-    "error.simulation.error-happen-run-command": "Icarusシミュレーション中にエラーが発生しました："
+    "error.simulation.error-happen-run-command": "Icarusシミュレーション中にエラーが発生しました：",
+    "info.command.structure.transform-xilinx-to-standard": "Xilinx プロジェクト構造を Digital IDE 標準構造に変換しています",
+    "error.command.structure.not-valid-xilinx-project": "現在のプロジェクトは有効なXilinxプロジェクトではありません、変換に失敗しました！",
+    "info.command.structure.reload-vscode": "プロジェクト構造の変換が完了しました。変更を適用するために vscode を再起動してください。",
+    "info.common.confirm": "確認"
 }

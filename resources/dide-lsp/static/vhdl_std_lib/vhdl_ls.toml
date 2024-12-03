@@ -3,5 +3,5 @@
 std.files = ['std/*.vhd']
 std.is_third_party = true
 
-ieee.files = ['ieee_2008/*.vhdl', 'synopsys/*.vhd', 'vital2000/*.vhdl', 'unifast/primitive/*.vhd', 'unifast/secureip/*.vhd', 'unimacro/*.vhd']
+ieee.files = ['ieee/*.vhdl', 'synopsys/*.vhd', 'vital2000/*.vhdl', 'unifast/primitive/*.vhd', 'unifast/secureip/*.vhd', 'unimacro/*.vhd']
 ieee.is_third_party = true

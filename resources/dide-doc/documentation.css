@@ -651,6 +651,20 @@ img {
     background-color: rgb(53,59,140);
 }
 
+#write .source-ip-tag {
+    font-size: 0.85rem;
+    padding: 3px 4px;
+    border-radius: .5em;
+    background-color: rgb(24, 91, 149);
+}
+
+#write .source-primitive-tag {
+    font-size: 0.85rem;
+    padding: 3px 4px;
+    border-radius: .5em;
+    background-color: rgb(108, 53, 140);
+}
+
 #write .source-unk-tag {
     font-size: 0.85rem;
     padding: 3px 4px;

@@ -81,6 +81,5 @@
     "error.simulation.error-happen-run-command": "Fehler bei der Icarus-Simulation:",
     "info.command.structure.transform-xilinx-to-standard": "Konvertiere Xilinx-Projektstruktur in Digital IDE-Standardstruktur",
     "error.command.structure.not-valid-xilinx-project": "Das aktuelle Projekt ist kein gültiges Xilinx-Projekt, die Konvertierung ist fehlgeschlagen!",
-    "info.command.structure.reload-vscode": "Projektstrukturkonvertierung abgeschlossen, bitte starten Sie vscode neu, um die Änderungen zu übernehmen.",
-    "info.common.confirm": "Bestätigen"
+    "info.common.codedoc": "Code-Dokumentation"
 }

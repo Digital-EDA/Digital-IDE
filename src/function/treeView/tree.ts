@@ -203,6 +203,7 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
             // 默认选择依赖模块最多的作为 first top
             let firstTop: { path: string, name: string } | undefined = undefined;
             let maxDepSize = 0;
+
             
             for (const hdlModule of topModules) {
                 // 此处断言是因为当前的 name 和 path 是从 topModules 中提取的

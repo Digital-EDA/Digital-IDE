@@ -43,15 +43,34 @@ function selectFieldValue(obj: any, subName: string, ws: string, name: string, i
         if (fs.existsSync(value)) {
             // 判断 类型
             const hdlFile = hdlParam.getHdlFile(value);
-            if (hdlFile && hdlFile.projectType === HdlFileProjectType.RemoteLib) {
-                // 如果是 库 文件，做出更加自定义的字面量
-                const libRelPath = value.replace(`${opeParam.extensionPath}/library/`, '');                
-                value = `<span class="source-lib-tag">library</span> [${libRelPath}](file://${value})`;
-            } else {
+            if (hdlFile) {
+                switch (hdlFile.projectType) {
+                    case HdlFileProjectType.RemoteLib:
+                        // 如果是 库 文件，做出更加自定义的字面量
+                        const libRelPath = value.replace(`${opeParam.extensionPath}/library/`, '');                
+                        value = `<span class="source-lib-tag">library</span> [${libRelPath}](file://${value})`;
+                    break;
+                    case HdlFileProjectType.IP:
+                        // 如果是 IP，定向到 xci 上
+                        const ipname = fspath.basename(value);
+                        const xciPath = hdlPath.join(value, ipname + '.xci');                                    
+                        value = `<span class="source-ip-tag">ip core</span> [${relativePath}](file://${xciPath})`;
+                    break;
+                    default:
+                        value = `<span class="source-prj-tag">project</span> [${relativePath}](file://${value})`;
+                        break;
+                }
+            }  else {
                 value = `<span class="source-prj-tag">project</span> [${relativePath}](file://${value})`;
             }            
         } else {
-            value = '<span class="source-unk-tag">unknown</span> ' + t('info.dide-doc.source.cannot-find');
+            // 如果不存在，可能是原语
+            const inst = obj as HdlInstance;
+            if (inst.getDoFastFileType === 'primitives') {
+                value = `<span class="source-primitive-tag">${opeParam.prjInfo.toolChain} primitive</span>`;
+            } else {
+                value = '<span class="source-unk-tag">unknown</span> ' + t('info.dide-doc.source.cannot-find');
+            }
         }
     }
 
@@ -171,14 +190,7 @@ async function getDocsFromModule(module: HdlModule): Promise<MarkdownString> {
     await portPP;
 
     // 判断是否为单文件
-    let isSingleFile = false;
-    if (!opeParam.workspacePath || !fs.existsSync(opeParam.workspacePath)) {
-        isSingleFile = true;
-    } else {
-        const workspacePath = opeParam.workspacePath;
-        const modulePath = module.path;
-        isSingleFile = !modulePath.startsWith(workspacePath);
-    }
+    const isSingleFile = opeParam.openMode === 'file';
     
     // param section
     const paramTitleIcon = '<span class="iconfont icon-parameter"></span> ';
@@ -227,10 +239,10 @@ async function getDocsFromModule(module: HdlModule): Promise<MarkdownString> {
     const depTitleIcon = '<span class="iconfont icon-tree"></span> ';
     md.addTitle(depTitleIcon + t('info.dide-doc.dependency'), 2);
     
-    let insts = module.getAllInstances();
+    let insts: HdlInstance[] = [];
     // 对于单文件模式而言，未进行 instance 搜索，所以insts必然是空的
     if (isSingleFile && insts.length === 0 && module.rawInstances) {
-        insts = module.rawInstances.map(rawInstance => new HdlInstance(
+        insts = module.rawInstances.map<HdlInstance>(rawInstance => new HdlInstance(
             rawInstance.name,
             rawInstance.type,
             undefined,
@@ -240,6 +252,9 @@ async function getDocsFromModule(module: HdlModule): Promise<MarkdownString> {
             rawInstance.range,
             module
         ));
+    } else {
+        // 对于多文件，找出所有依赖项
+        insts = [...module.getAllDependenceInstance()];
     }
 
     // 根据 start 进行排序

@@ -205,11 +205,14 @@ class HdlParam {
             } else if (status === common.InstModPathStatus.Others && inst.instModPath) {
                 dependencies.others.push(inst.instModPath);
             }
-            const instDependencies = this.getAllDependences(inst.module.path, inst.module.name);            
-            if (instDependencies) {
-                dependencies.current.push(...instDependencies.current);
-                dependencies.include.push(...instDependencies.include);
-                dependencies.others.push(...instDependencies.others);
+            // 防止无限递归
+            if (inst.module && inst.module !== module) {
+                const instDependencies = this.getAllDependences(inst.module.path, inst.module.name);            
+                if (instDependencies) {
+                    dependencies.current.push(...instDependencies.current);
+                    dependencies.include.push(...instDependencies.include);
+                    dependencies.others.push(...instDependencies.others);
+                }
             }
         }
 
@@ -819,6 +822,59 @@ class HdlModule {
         return this.nameToInstances.size;
     }
 
+    /**
+     * @description 获取当前模块的所有依赖路径
+     * @returns 
+     */
+    public getAllDependences(): common.HdlDependence {
+        const dependencies : common.HdlDependence = {
+            current: [],
+            include: [],
+            others: []
+        };
+
+        for (const inst of this.getAllInstances()) {
+            if (!inst.module) {
+                continue;
+            }
+            const status = inst.instModPathStatus;
+            if (status === common.InstModPathStatus.Current && inst.instModPath) {
+                dependencies.current.push(inst.instModPath);
+            } else if (status === common.InstModPathStatus.Include && inst.instModPath) {
+                dependencies.include.push(inst.instModPath);
+            } else if (status === common.InstModPathStatus.Others && inst.instModPath) {
+                dependencies.others.push(inst.instModPath);
+            }
+            if (inst.module) {
+                const instDependencies = inst.module.getAllDependences();
+                dependencies.current.push(...instDependencies.current);
+                dependencies.include.push(...instDependencies.include);
+                dependencies.others.push(...instDependencies.others);
+            }
+        }
+
+        return dependencies;
+    }
+
+    /**
+     * @description 递归获取当前模块所有依赖
+     */
+    public getAllDependenceInstance(): Set<HdlInstance> {
+        const instances = new Set<HdlInstance>();
+        // 获取自身的        
+        for (const inst of this.nameToInstances.values()) {
+            console.log(inst);
+            instances.add(inst);
+            // 递归获取 inst 的
+            if (inst.module) {
+                for (const subInst of inst.module.getAllDependenceInstance()) {
+                    instances.add(subInst);
+                }
+            }
+        }
+        return instances;
+    }
+
     public createHdlInstance(rawHdlInstance: common.RawHdlInstance): HdlInstance {
         const instModName = rawHdlInstance.type;
 
@@ -1091,6 +1147,8 @@ export class HdlFile {
 
         // add to global hdlParam
         hdlParam.setHdlFile(this);
+
+        console.log(modules);
 
         // make nameToModule
         this.nameToModule = new Map<string, HdlModule>();

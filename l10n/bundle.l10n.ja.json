@@ -81,6 +81,5 @@
     "error.simulation.error-happen-run-command": "Icarusシミュレーション中にエラーが発生しました：",
     "info.command.structure.transform-xilinx-to-standard": "Xilinx プロジェクト構造を Digital IDE 標準構造に変換しています",
     "error.command.structure.not-valid-xilinx-project": "現在のプロジェクトは有効なXilinxプロジェクトではありません、変換に失敗しました！",
-    "info.command.structure.reload-vscode": "プロジェクト構造の変換が完了しました。変更を適用するために vscode を再起動してください。",
-    "info.common.confirm": "確認"
+    "info.common.codedoc": "コードドキュメント"
 }

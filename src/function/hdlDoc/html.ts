@@ -9,6 +9,7 @@ import { Count, MarkdownString, ThemeColorConfig, WavedromString } from './commo
 import { getRenderList, getCurrentRenderList } from './markdown';
 import { hdlPath, hdlIcon, hdlFile } from '../../hdlFs'; 
 import { ThemeType } from '../../global/enum';
+import { t } from '../../i18n';
 
 const _cache = {
     css : ''
@@ -227,8 +228,9 @@ export async function makeDocWebview(uri: vscode.Uri, context: vscode.ExtensionC
         }
     );
 
-    panel.iconPath = hdlIcon.getIconConfig('documentation');
-    
+    panel.iconPath = hdlIcon.getIconConfig('dide');
+    panel.title = t('info.common.codedoc') + ': ' + fspath.basename(uri.fsPath);
+
     const html = getWebviewContent(context, panel);
     if (html === undefined) {
         return panel;
@@ -241,7 +243,7 @@ export async function makeDocWebview(uri: vscode.Uri, context: vscode.ExtensionC
                 let filePath: string = message.filePath;
                 if (filePath.startsWith('file://')) {
                     filePath = filePath.slice(7);
-                }                
+                }
                 vscode.commands.executeCommand('vscode.open', vscode.Uri.file(filePath));
                 return;
             case 'do-render':

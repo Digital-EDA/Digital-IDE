@@ -210,8 +210,10 @@ export async function activate(context: vscode.ExtensionContext, packageJson: an
     );
     LspClient.DigitalIDE = client;
     
+    // 启动 lsp
     await client.start();
 
+    // 检测配置文件变动
     registerConfigurationUpdater(client, packageJson);
 }
 

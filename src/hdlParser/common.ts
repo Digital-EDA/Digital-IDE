@@ -172,6 +172,7 @@ interface RawHdlInstance {
 
 interface RawHdlModule {
     name: string
+    archName: string
     params: HdlModuleParam[]
     ports: HdlModulePort[]
     instances: RawHdlInstance[]

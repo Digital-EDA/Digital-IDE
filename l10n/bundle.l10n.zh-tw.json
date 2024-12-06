@@ -81,5 +81,13 @@
     "error.simulation.error-happen-run-command": "Icarus 模擬時，出現錯誤：",
     "info.command.structure.transform-xilinx-to-standard": "正在將 Xilinx 專案結構轉變為 Digital IDE 標準結構",
     "error.command.structure.not-valid-xilinx-project": "當前專案不是一個有效的 Xilinx 專案，轉換失敗！",
-    "info.common.codedoc": "程式碼文件"
+    "info.common.codedoc": "程式碼文件",
+    "info.linter.pick-for-verilog": "為 Verilog 程式碼選擇一個診斷器",
+    "info.command.loading": "載入中",
+    "info.linter.pick-for-system-verilog": "為 System Verilog 程式碼選擇一個診斷器",
+    "info.linter.pick-for-vhdl": "為VHDL代碼選擇一個診斷器",
+    "info.linter.vivado.xvlog-name": "Vivado診斷工具",
+    "info.common.some-is-ready": "{0} 已經準備就緒",
+    "info.common.not-available": "{0} 目前無法使用",
+    "info.common.linter-name": "診斷工具"
 }

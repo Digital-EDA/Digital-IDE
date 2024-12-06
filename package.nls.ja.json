@@ -71,7 +71,7 @@
     "digital-ide.function.doc.pdf.margin.left.title": "エクスポートされた PDF の左余白、単位 cm",
     "digital-ide.function.doc.pdf.headerTemplate.title": "ヘッダーの HTML テンプレート、displayHeaderFooter が false に設定されている場合、この設定は無視されます",
     "digital-ide.function.doc.pdf.footerTemplate.title": "フッターの HTML テンプレート、displayHeaderFooter が false に設定されている場合、この設定は無視されます",
-    "digital-ide.function.simulate.icarus.installPath.title": "Icarus Verilog コンポーネントのインストールパス、空に設定されている場合、環境の iverilog と vvp がシミュレーションに使用されます。それ以外の場合、インストールパスのコンポーネントが使用されます。",
+    "digital-ide.prj.iverilog.install.path.title": "Icarus Verilog コンポーネントのインストールパス、空に設定されている場合、環境の iverilog と vvp がシミュレーションに使用されます。それ以外の場合、インストールパスのコンポーネントが使用されます。",
     "digital-ide.function.simulate.simulationHome.title": "シミュレーションフォルダのパス、シミュレーション中の .vvp およびその他のファイルがここに生成されます",
     "digital-ide.function.simulate.gtkwavePath.title": "gtkwave ソフトウェアの起動パスの絶対パス",
     "digital-ide.function.simulate.xilinxLibPath.title": "シミュレーション用の Xilinx ライブラリのパス",
@@ -92,5 +92,7 @@
     "digital-ide.function.instantiation.autoNetOutputDeclaration.title": "インスタンス化が発生したときにスコープ内で出力タイプのネットを自動的に宣言します。",
     "fpga-support.onTypeFormattingTriggerCharacters.title": "onTypeFormatting のトリガー文字",
     "digital-ide.function.lsp.file-parse-maxsize.title": "",
-    "digital-ide.structure.from-xilinx-to-standard.title": "Xilinx プロジェクトを Digital IDE 標準プロジェクト構造に変換する"
+    "digital-ide.structure.from-xilinx-to-standard.title": "Xilinx プロジェクトを Digital IDE 標準プロジェクト構造に変換する",
+    "digital-ide.prj.verible.install.path.title": "",
+    "digital-ide.prj.verilator.install.path.title": ""
 }

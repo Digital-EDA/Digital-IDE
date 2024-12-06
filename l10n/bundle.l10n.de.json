@@ -81,5 +81,13 @@
     "error.simulation.error-happen-run-command": "Fehler bei der Icarus-Simulation:",
     "info.command.structure.transform-xilinx-to-standard": "Konvertiere Xilinx-Projektstruktur in Digital IDE-Standardstruktur",
     "error.command.structure.not-valid-xilinx-project": "Das aktuelle Projekt ist kein gültiges Xilinx-Projekt, die Konvertierung ist fehlgeschlagen!",
-    "info.common.codedoc": "Code-Dokumentation"
+    "info.common.codedoc": "Code-Dokumentation",
+    "info.linter.pick-for-verilog": "Wählen Sie einen Diagnostiker für Verilog-Code aus",
+    "info.command.loading": "Wird geladen",
+    "info.linter.pick-for-system-verilog": "Wählen Sie einen Diagnostiker für System Verilog-Code",
+    "info.linter.pick-for-vhdl": "Wählen Sie einen Diagnostiker für VHDL-Code aus",
+    "info.linter.vivado.xvlog-name": "Vivado-Diagnosetools",
+    "info.common.some-is-ready": "{0} ist bereit",
+    "info.common.not-available": "{0} ist derzeit nicht verfügbar",
+    "info.common.linter-name": "Diagnosetools"
 }

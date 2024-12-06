@@ -71,7 +71,7 @@
     "digital-ide.function.doc.pdf.margin.left.title": "导出的 PDF 的左边距，单位 cm",
     "digital-ide.function.doc.pdf.headerTemplate.title": "页眉的 HTML 模板，如果 displayHeaderFooter 设置为 false，则此设置将被忽略",
     "digital-ide.function.doc.pdf.footerTemplate.title": "页脚的 HTML 模板，如果 displayHeaderFooter 设置为 false，则此设置将被忽略",
-    "digital-ide.function.simulate.icarus.installPath.title": "Icarus Verilog 组件的安装路径，如果设置为空，则使用环境中的 iverilog 和 vvp 进行仿真。否则，将使用安装路径中的组件。",
+    "digital-ide.prj.iverilog.install.path.title": "Icarus Verilog 组件的安装路径，如果设置为空，则使用环境中的 iverilog 和 vvp 进行仿真。否则，将使用安装路径中的组件。",
     "digital-ide.function.simulate.simulationHome.title": "仿真文件夹路径，仿真期间的 .vvp 和其他文件将生成在此处",
     "digital-ide.function.simulate.gtkwavePath.title": "gtkwave 软件的启动路径的绝对路径",
     "digital-ide.function.simulate.xilinxLibPath.title": "仿真用 Xilinx 库的路径",
@@ -92,5 +92,7 @@
     "digital-ide.function.instantiation.autoNetOutputDeclaration.title": "在实例化发生时自动在作用域中声明输出类型的网络。",
     "fpga-support.onTypeFormattingTriggerCharacters.title": "onTypeFormatting 的触发字符",
     "digital-ide.function.lsp.file-parse-maxsize.title": "最大解析的文件阈值，大小超出这个值的文件不会被解析。单位为 MB，必须是整数。默认为 1MB",
-    "digital-ide.structure.from-xilinx-to-standard.title": "将 Xilinx 项目转换成 Digital IDE 标准项目结构"
+    "digital-ide.structure.from-xilinx-to-standard.title": "将 Xilinx 项目转换成 Digital IDE 标准项目结构",
+    "digital-ide.prj.verible.install.path.title": "",
+    "digital-ide.prj.verilator.install.path.title": ""
 }

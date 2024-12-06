@@ -229,7 +229,7 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
             const firstTopIcon = this.makeFirstTopIconName(type);
 
             // 将 topModuleItemList 中的 first top 元素调整到第一个位置
-            const dataItem = topModuleItemList.filter(item => item.name === firstTop.name && item.path === firstTop.path)[0];
+            const dataItem = topModuleItemList.filter(item => item.name === firstTop!.name && item.path === firstTop!.path)[0];
             dataItem.icon = firstTopIcon;
             let newTopModuleItemList = [dataItem];
             newTopModuleItemList = newTopModuleItemList.concat(topModuleItemList.filter(item => item !== dataItem));

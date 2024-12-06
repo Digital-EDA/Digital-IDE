@@ -71,7 +71,7 @@
     "digital-ide.function.doc.pdf.margin.left.title": "top margin of exported pdf, unit cm",
     "digital-ide.function.doc.pdf.headerTemplate.title": "html template of header, if displayHeaderFooter is set to false, this setting will be ignored",
     "digital-ide.function.doc.pdf.footerTemplate.title": "html template of footer, if displayHeaderFooter is set to false, this setting will be ignored",
-    "digital-ide.function.simulate.icarus.installPath.title": "Path of install path of iverilog components, if set to \"\", then iverilog and vvp in environment will be used for simulation. Otherwise, ones that in the install path will be used.",
+    "digital-ide.prj.iverilog.install.path.title": "Path of install path of iverilog components, if set to \"\", then iverilog and vvp in environment will be used for simulation. Otherwise, ones that in the install path will be used.",
     "digital-ide.function.simulate.simulationHome.title": "Path of simulation folder, .vvp and other file during simulation will be generated here",
     "digital-ide.function.simulate.gtkwavePath.title": "Absolute path of launch path of gtkwave software",
     "digital-ide.function.simulate.xilinxLibPath.title": "Path of Xilinx library for simulation",
@@ -92,5 +92,7 @@
     "digital-ide.function.instantiation.autoNetOutputDeclaration.title": "auto declare output type nets in the scope when instantiation happens.",
     "fpga-support.onTypeFormattingTriggerCharacters.title": "Trigger characters for onTypeFormatting",
     "digital-ide.function.lsp.file-parse-maxsize.title": "",
-    "digital-ide.structure.from-xilinx-to-standard.title": "Konvertieren Sie Xilinx-Projekte in die Digital IDE-Standardprojektstruktur"
+    "digital-ide.structure.from-xilinx-to-standard.title": "Konvertieren Sie Xilinx-Projekte in die Digital IDE-Standardprojektstruktur",
+    "digital-ide.prj.verible.install.path.title": "",
+    "digital-ide.prj.verilator.install.path.title": ""
 }

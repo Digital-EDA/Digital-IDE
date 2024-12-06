@@ -119,7 +119,7 @@ class Simulate {
             }
         }
 
-        simConfig.installPath = setting.get('digital-ide.function.simulate.icarus.installPath', '');
+        simConfig.installPath = setting.get('digital-ide.prj.iverilog.install.path', '');
         if (simConfig.installPath !== '' && !hdlFile.isDir(simConfig.installPath)) {
             MainOutput.report(`install path ${simConfig.installPath} is illegal`, {
                 level: ReportType.Error,

@@ -71,7 +71,7 @@
     "digital-ide.function.doc.pdf.margin.left.title": "導出的 PDF 的左邊距，單位 cm",
     "digital-ide.function.doc.pdf.headerTemplate.title": "頁眉的 HTML 模板，如果 displayHeaderFooter 設置為 false，則此設置將被忽略",
     "digital-ide.function.doc.pdf.footerTemplate.title": "頁腳的 HTML 模板，如果 displayHeaderFooter 設置為 false，則此設置將被忽略",
-    "digital-ide.function.simulate.icarus.installPath.title": "Icarus Verilog 組件的安裝路徑，如果設置為空，則使用環境中的 iverilog 和 vvp 進行仿真。否則，將使用安裝路徑中的組件。",
+    "digital-ide.prj.iverilog.install.path.title": "Icarus Verilog 組件的安裝路徑，如果設置為空，則使用環境中的 iverilog 和 vvp 進行仿真。否則，將使用安裝路徑中的組件。",
     "digital-ide.function.simulate.simulationHome.title": "仿真文件夾路徑，仿真期間的 .vvp 和其他文件將生成在此處",
     "digital-ide.function.simulate.gtkwavePath.title": "gtkwave 軟件的啟動路徑的絕對路徑",
     "digital-ide.function.simulate.xilinxLibPath.title": "仿真用 Xilinx 庫的路徑",
@@ -92,5 +92,7 @@
     "digital-ide.function.instantiation.autoNetOutputDeclaration.title": "在實例化發生時自動在作用域中聲明輸出類型的網絡。",
     "fpga-support.onTypeFormattingTriggerCharacters.title": "onTypeFormatting 的觸發字符",
     "digital-ide.function.lsp.file-parse-maxsize.title": "",
-    "digital-ide.structure.from-xilinx-to-standard.title": "將 Xilinx 專案轉換成 Digital IDE 標準專案結構"
+    "digital-ide.structure.from-xilinx-to-standard.title": "將 Xilinx 專案轉換成 Digital IDE 標準專案結構",
+    "digital-ide.prj.verible.install.path.title": "",
+    "digital-ide.prj.verilator.install.path.title": ""
 }

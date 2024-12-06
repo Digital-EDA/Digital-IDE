@@ -29,6 +29,7 @@ export const DoFastRequestType =        new RequestType<IDoFastParam, Fast, void
 export const UpdateConfigurationType =  new RequestType<IUpdateConfigurationParam, void, void>('api/update-configuration');
 export const DoPrimitivesJudgeType =    new RequestType<IDoPrimitivesJudgeParam, boolean, void>('api/do-primitives-judge');
 export const SyncFastRequestType =      new RequestType<ISyncFastParam, Fast, void>('api/sync-fast');
+export const LinterStatusRequestType =  new RequestType<ILinterStatusRequestType, LinterToolStatus, void>('api/linter-status');
 
 export interface ITextDocumentItem {
     uri: vscode.Uri,
@@ -47,6 +48,7 @@ export interface ICommonParam {
     param: string
 }
 
+
 export interface IUpdateConfigurationParam {
     configs: {
         name: string,
@@ -55,6 +57,17 @@ export interface IUpdateConfigurationParam {
     configType: string
 }
 
+export interface ILinterStatusRequestType {
+    languageId: string,
+    linterName: string,
+    linterPath: string
+}
+
+interface LinterToolStatus {
+    toolName: string,
+    available: boolean,
+    invokeName: string
+}
 
 export interface IDoPrimitivesJudgeParam {
     name: string

@@ -81,5 +81,13 @@
     "error.simulation.error-happen-run-command": "Icarusシミュレーション中にエラーが発生しました：",
     "info.command.structure.transform-xilinx-to-standard": "Xilinx プロジェクト構造を Digital IDE 標準構造に変換しています",
     "error.command.structure.not-valid-xilinx-project": "現在のプロジェクトは有効なXilinxプロジェクトではありません、変換に失敗しました！",
-    "info.common.codedoc": "コードドキュメント"
+    "info.common.codedoc": "コードドキュメント",
+    "info.linter.pick-for-verilog": "Verilogコードの診断機能を選択してください",
+    "info.command.loading": "読み込み中",
+    "info.linter.pick-for-system-verilog": "System Verilog コードの診断機能を選択",
+    "info.linter.pick-for-vhdl": "VHDLコードの診断機能を選択してください",
+    "info.linter.vivado.xvlog-name": "Vivado診断ツール",
+    "info.common.some-is-ready": "{0} は準備ができています",
+    "info.common.not-available": "{0} は現在使用できません",
+    "info.common.linter-name": "診断ツール"
 }

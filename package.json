@@ -70,6 +70,16 @@
                     "default": "C:/modeltech64_10.4/win64",
                     "description": "%digital-ide.prj.modelsim.install.path.title%"
                 },
+                "digital-ide.prj.verible.install.path": {
+                    "type": "string",
+                    "default": "",
+                    "description": "%digital-ide.prj.verible.install.path.title%"
+                },
+                "digital-ide.prj.verilator.install.path": {
+                    "type": "string",
+                    "default": "",
+                    "description": "%digital-ide.prj.verilator.install.path.title%"
+                },
                 "digital-ide.prj.xilinx.IP.repo.path": {
                     "type": "string",
                     "default": "",
@@ -150,9 +160,9 @@
                     "default": "<div style=\"font-size: 9px; margin-left: 1cm;\"> <span class='title'></span></div> <div style=\"font-size: 9px; margin-left: auto; margin-right: 1cm; \"> <span class='date'></span></div>",
                     "description": "%digital-ide.function.doc.pdf.footerTemplate.title%"
                 },
-                "digital-ide.function.simulate.icarus.installPath": {
+                "digital-ide.prj.iverilog.install.path": {
                     "type": "string",
-                    "description": "%digital-ide.function.simulate.icarus.installPath.title%"
+                    "description": "%digital-ide.prj.iverilog.install.path.title%"
                 },
                 "digital-ide.function.simulate.simulationHome": {
                     "type": "string",
@@ -228,14 +238,16 @@
                 "digital-ide.function.lsp.linter.vlog.diagnostor": {
                     "type": "string",
                     "enumDescriptions": [
-                        "use diagnostor in vivado",
-                        "use diagnostor in modelsim",
-                        "use our buildin diagnostor"
+                        "vivado",
+                        "modelsim",
+                        "verilator",
+                        "verible"
                     ],
                     "enum": [
                         "vivado",
                         "modelsim",
-                        "default"
+                        "verilator",
+                        "verible"
                     ],
                     "default": "default",
                     "description": "%digital-ide.function.lsp.linter.vlog.diagnostor.title%"

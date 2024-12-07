@@ -84,15 +84,18 @@
     "digital-ide.function.lsp.formatter.vhdl.default.indentation.title": "縮進",
     "digital-ide.function.lsp.completion.vlog.auto-add-include.title": "觸發模塊的自動補全時，如果頂部 include 宏中沒有包含被例化模塊所在的文件，則自動在文件頂部添加 `include \"xxx.v\"",
     "digital-ide.function.lsp.completion.vlog.auto-add-output-declaration.title": "觸發模塊的自動補全時，在例化模塊上方自動生成 output 類型信號的申明",
-    "digital-ide.function.lsp.linter.vlog.diagnostor.title": "選擇編輯 Verilog 時的診斷器進行語法檢查",
-    "digital-ide.function.lsp.linter.svlog.diagnostor.title": "選擇編輯 SystemVerilog 時的診斷器進行語法檢查",
-    "digital-ide.function.lsp.linter.vhdl.diagnostor.title": "選擇編輯 VHDL 時的診斷器進行語法檢查",
+    "digital-ide.function.lsp.linter.verilog.diagnostor.title": "選擇編輯 Verilog 時的診斷器進行語法檢查",
     "digital-ide.function.lsp.linter.systemverilog.diagnostor.title": "選擇編輯 SystemVerilog 時的診斷器進行語法檢查",
+    "digital-ide.function.lsp.linter.vhdl.diagnostor.title": "選擇編輯 VHDL 時的診斷器進行語法檢查",
     "digital-ide.function.instantiation.addComment.title": "在進行實例化時添加註釋，如 // 端口, // 輸入, // 輸出，包括模塊調用的完成",
     "digital-ide.function.instantiation.autoNetOutputDeclaration.title": "在實例化發生時自動在作用域中聲明輸出類型的網絡。",
     "fpga-support.onTypeFormattingTriggerCharacters.title": "onTypeFormatting 的觸發字符",
     "digital-ide.function.lsp.file-parse-maxsize.title": "",
     "digital-ide.structure.from-xilinx-to-standard.title": "將 Xilinx 專案轉換成 Digital IDE 標準專案結構",
-    "digital-ide.prj.verible.install.path.title": "",
-    "digital-ide.prj.verilator.install.path.title": ""
+    "digital-ide.prj.verible.install.path.title": "verible 的安裝目錄路徑，也就是包含 verible-verilog-syntax 可執行文件的文件夾的絕對路徑。如果不指定，默認採用 verible-verilog-syntax 執行診斷。",
+    "digital-ide.prj.verilator.install.path.title": "verilator 的安裝目錄路徑，也就是包含了 verilator 可執行文件的文件夾的絕對路徑。不如不指定，默認採用 verilator 執行診斷。",
+    "digital-ide.function.lsp.linter.linter-mode.title": "指定診斷器的診斷模式",
+    "digital-ide.function.lsp.linter.linter-mode.0.title": "將所有設計源直接進行診斷，並報錯，無論文件是否打開。",
+    "digital-ide.function.lsp.linter.linter-mode.1.title": "單文件關閉時，對應報錯去除，打開哪個文件就對哪個文件進行診斷。",
+    "digital-ide.function.lsp.linter.linter-mode.2.title": "全局關閉，即整個工程都不進行工程報錯。"
 }

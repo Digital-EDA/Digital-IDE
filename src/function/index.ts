@@ -8,7 +8,6 @@ import * as treeView from './treeView';
 import { tclCompletionProvider } from './lsp/completion/tcl';
 import * as lspFormatter from '../../resources/formatter';
 import * as lspTranslator from '../../resources/translator';
-import * as lspLinter from './lsp/linter';
 
 import * as tool from './tool';
 
@@ -119,16 +118,6 @@ function registerLsp(context: vscode.ExtensionContext, version: string) {
 
     // tcl lsp
     vscode.languages.registerCompletionItemProvider(tclSelector, tclCompletionProvider);
-
-    // lsp linter
-    // make first symbols in workspace
-    lspLinter.vlogLinterManager.initialise();
-    lspLinter.vhdlLinterManager.initialise();
-    lspLinter.svlogLinterManager.initialise();
-
-    vscode.commands.registerCommand('digital-ide.lsp.vlog.linter.pick', lspLinter.pickVlogLinter);
-    vscode.commands.registerCommand('digital-ide.lsp.vhdl.linter.pick', lspLinter.pickVhdlLinter);
-    vscode.commands.registerCommand('digital-ide.lsp.svlog.linter.pick', lspLinter.pickSvlogLinter);
 }
 
 

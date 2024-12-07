@@ -89,5 +89,7 @@
     "info.linter.vivado.xvlog-name": "Vivado診斷工具",
     "info.common.some-is-ready": "{0} 已經準備就緒",
     "info.common.not-available": "{0} 目前無法使用",
-    "info.common.linter-name": "診斷工具"
+    "info.common.linter-name": "診斷工具",
+    "info.linter.finish-init": "完成 {0} 診斷器的初始化，當前診斷器的名字 {1}",
+    "error.linter.status-bar.tooltip": "無法取得 {0} 診斷器"
 }

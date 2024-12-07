@@ -1,8 +1,9 @@
 import * as vscode from 'vscode';
 import { LanguageClient } from 'vscode-languageclient/node';
 import { UpdateConfigurationType } from '../../global/lsp';
-import * as linterCommand from '../../function/lsp/linter/command';
+import * as Linter from '../lsp/linter/common';
 import { HdlLangID } from '../../global/enum';
+import * as lspLinter from '../lsp/linter';
 
 interface ConfigItem {
     name: string,
@@ -11,7 +12,13 @@ interface ConfigItem {
 
 type CommonValue = string | boolean | number;
 
-export function registerConfigurationUpdater(client: LanguageClient, packageJson: any) {
+/**
+ * @description 注册配置文件变动时发生的操作
+ * 该操作一定发生在 lsp 启动后。
+ * @param client 
+ * @param packageJson 
+ */
+export async function registerConfigurationUpdater(client: LanguageClient, packageJson: any) {
     // 常规 lsp 相关的配置
     const lspConfigures: ConfigItem[] = [];
     const properties = packageJson?.contributes?.configuration?.properties;
@@ -24,31 +31,31 @@ export function registerConfigurationUpdater(client: LanguageClient, packageJson
         }
     }
 
-    const supportLinters: linterCommand.SupportLinterName[] = ['iverilog', 'vivado', 'modelsim', 'verible', 'verilator'];
+    const supportLinters: Linter.SupportLinterName[] = ['iverilog', 'vivado', 'modelsim', 'verible', 'verilator'];
 
     // 初始化，配置参数全部同步到后端
-    client.sendRequest(UpdateConfigurationType, {
+    await client.sendRequest(UpdateConfigurationType, {
         configs: lspConfigures,
         configType: 'lsp'
     });
 
     // 初始化，配置全部 linter 到后端
-    updateLinterConfiguration(
+    await updateLinterConfiguration(
         client,
-        linterCommand.VLOG_LINTER_CONFIG_NAME + '.diagnostor',
-        getCurrentLinterName(HdlLangID.Verilog)
+        Linter.getLinterConfigurationName(HdlLangID.Verilog),
+        Linter.getLinterName(HdlLangID.Verilog)
     );
 
-    updateLinterConfiguration(
+    await updateLinterConfiguration(
         client,
-        linterCommand.SVLOG_LINTER_CONFIG_NAME + '.diagnostor',
-        getCurrentLinterName(HdlLangID.SystemVerilog)
+        Linter.getLinterConfigurationName(HdlLangID.SystemVerilog),
+        Linter.getLinterName(HdlLangID.SystemVerilog)
     );
 
-    updateLinterConfiguration(
+    await updateLinterConfiguration(
         client,
-        linterCommand.VHDL_LINTER_CONFIG_NAME + '.diagnostor',
-        getCurrentLinterName(HdlLangID.Vhdl)
+        Linter.getLinterConfigurationName(HdlLangID.Vhdl),
+        Linter.getLinterName(HdlLangID.Vhdl)
     );
 
     // 监听配置文件的变化，变化时需要做出的行为
@@ -69,79 +76,68 @@ export function registerConfigurationUpdater(client: LanguageClient, packageJson
             });
         }
 
-        const currentLinterConfiguration = {
-            vlog: getCurrentLinterName(HdlLangID.Verilog),
-            svlog: getCurrentLinterName(HdlLangID.SystemVerilog),
-            vhdl: getCurrentLinterName(HdlLangID.Vhdl)
+        // 本次更新时，当前各个语言正在使用的诊断器的名字的映射表
+        // 因为 getLinterName 需要进行一次映射，此处为后续的遍历预缓存一波
+        const currentLinterConfiguration: Record<HdlLangID, string> = {
+            [HdlLangID.Verilog]: Linter.getLinterName(HdlLangID.Verilog),
+            [HdlLangID.SystemVerilog]: Linter.getLinterName(HdlLangID.SystemVerilog),
+            [HdlLangID.Vhdl]: Linter.getLinterName(HdlLangID.Vhdl),
+            [HdlLangID.Unknown]: HdlLangID.Unknown
         };
+
+        // 需要讨论的可能受到配置文件更新影响 linter 功能的语言列表
+        const affectsLangIDs = [HdlLangID.Verilog, HdlLangID.SystemVerilog, HdlLangID.Vhdl];
 
         // 对于诊断器路径的修改
         for (const linterName of supportLinters) {
-            const configuratioName = linterCommand.LinterInstallPathConfigurationNames[linterName];
+            const configuratioName = Linter.getLinterInstallConfigurationName(linterName);
             if (event.affectsConfiguration(configuratioName)) {
                 // 查看谁使用了这个诊断器，更新它的基本信息
-                if (linterName === currentLinterConfiguration.vlog) {
-                    await updateLinterConfiguration(
-                        client,
-                        linterCommand.VLOG_LINTER_CONFIG_NAME + '.diagnostor',
-                        linterName
-                    );
-                }
-
-                if (linterName === currentLinterConfiguration.svlog) {
-                    await updateLinterConfiguration(
-                        client,
-                        linterCommand.SVLOG_LINTER_CONFIG_NAME + '.diagnostor',
-                        linterName
-                    );
-                }
-
-                if (linterName === currentLinterConfiguration.vhdl) {
-                    await updateLinterConfiguration(
-                        client,
-                        linterCommand.VHDL_LINTER_CONFIG_NAME + '.diagnostor',
-                        linterName
-                    );
+                for (const langID of affectsLangIDs) {
+                    if (linterName === currentLinterConfiguration[langID]) {
+                        const linterConfigurationName = Linter.getLinterConfigurationName(langID);
+                        await updateLinterConfiguration(client, linterConfigurationName, linterName);
+                    }
                 }
             }
         }
-
     });
 }
 
-function getCurrentLinterName(langID: HdlLangID): linterCommand.SupportLinterName {
-    switch (langID) {
-        case HdlLangID.Verilog:
-            return vscode.workspace.getConfiguration().get<linterCommand.SupportLinterName>(
-                linterCommand.VLOG_LINTER_CONFIG_NAME + '.diagnostor',
-                'vivado'
-            );
+export async function registerLinter(client: LanguageClient) {
+    // 初始化，配置全部 linter 到 linterManager
+    lspLinter.vlogLinterManager.start(client);
+    lspLinter.vhdlLinterManager.start(client);
+    lspLinter.svlogLinterManager.start(client);
 
-        case HdlLangID.Vhdl:
-            return vscode.workspace.getConfiguration().get<linterCommand.SupportLinterName>(
-                linterCommand.VHDL_LINTER_CONFIG_NAME + '.diagnostor',
-                'vivado'
-            );
-        
-        case HdlLangID.SystemVerilog:
-            return vscode.workspace.getConfiguration().get<linterCommand.SupportLinterName>(
-                linterCommand.SVLOG_LINTER_CONFIG_NAME + '.diagnostor',
-                'vivado'
-            );
+    // 对应配置文件的变动需要修改全局的相关变量
+    vscode.workspace.onDidChangeConfiguration(async event => {        
+        if (event.affectsConfiguration(Linter.getLinterConfigurationName(HdlLangID.Verilog))) {
+            await lspLinter.vlogLinterManager.updateCurrentLinterItem(client);
+            lspLinter.vlogLinterManager.updateStatusBar();
+        }
 
-        default:
-            break;
-    }
-    return 'vivado';
+        if (event.affectsConfiguration(Linter.getLinterConfigurationName(HdlLangID.SystemVerilog))) {
+            await lspLinter.svlogLinterManager.updateCurrentLinterItem(client);
+            lspLinter.svlogLinterManager.updateStatusBar();
+        }
+
+        if (event.affectsConfiguration(Linter.getLinterConfigurationName(HdlLangID.Vhdl))) {
+            await lspLinter.vhdlLinterManager.updateCurrentLinterItem(client);
+            lspLinter.vhdlLinterManager.updateStatusBar();
+        }
+    });
 }
 
 async function updateLinterConfiguration(
     client: LanguageClient,
     configurationName: string,
-    linterName: linterCommand.SupportLinterName
+    linterName: Linter.SupportLinterName
 ) {
-    const configuratioName = linterCommand.LinterInstallPathConfigurationNames[linterName];
+    const configuratioName = Linter.getLinterInstallConfigurationName(linterName);
     const linterPath = vscode.workspace.getConfiguration().get<string>(configuratioName, '');
+
+    console.log(linterName);
 
     await client.sendRequest(UpdateConfigurationType, {
         configs: [

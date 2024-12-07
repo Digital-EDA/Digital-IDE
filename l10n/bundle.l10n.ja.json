@@ -89,5 +89,7 @@
     "info.linter.vivado.xvlog-name": "Vivado診断ツール",
     "info.common.some-is-ready": "{0} は準備ができています",
     "info.common.not-available": "{0} は現在使用できません",
-    "info.common.linter-name": "診断ツール"
+    "info.common.linter-name": "診断ツール",
+    "info.linter.finish-init": "{0} 診断ツールの初期化が完了しました。現在の診断ツールの名前は {1} です",
+    "error.linter.status-bar.tooltip": "{0} 診断機能を取得できません"
 }

@@ -89,5 +89,7 @@
     "info.linter.vivado.xvlog-name": "vivado 诊断工具",
     "info.common.some-is-ready": "{0} 已经准备就绪",
     "info.common.not-available": "{0} 目前不可用",
-    "info.common.linter-name": "诊断工具"
+    "info.common.linter-name": "诊断工具",
+    "info.linter.finish-init": "完成 {0} 诊断器的初始化，当前诊断器的名字 {1}",
+    "error.linter.status-bar.tooltip": "无法获取 {0} 诊断器"
 }

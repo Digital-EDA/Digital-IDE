@@ -235,67 +235,69 @@
                     "type": "boolean",
                     "default": true
                 },
-                "digital-ide.function.lsp.linter.vlog.diagnostor": {
+                "digital-ide.function.lsp.linter.verilog.diagnostor": {
                     "type": "string",
                     "enumDescriptions": [
+                        "iverilog (© Icarus Verilog Project)",
+                        "xvlog (© Xilinx, Inc.)",
+                        "vlog (© Mentor Graphics Corporation)",
+                        "verilator (© Verilator Project)",
+                        "verible-verilog-syntax (© Google LLC)"
+                    ],
+                    "enum": [
+                        "iverilog",
                         "vivado",
                         "modelsim",
                         "verilator",
                         "verible"
                     ],
-                    "enum": [
-                        "vivado",
-                        "modelsim",
-                        "verilator",
-                        "verible"
-                    ],
-                    "default": "default",
-                    "description": "%digital-ide.function.lsp.linter.vlog.diagnostor.title%"
-                },
-                "digital-ide.function.lsp.linter.svlog.diagnostor": {
-                    "type": "string",
-                    "enumDescriptions": [
-                        "use diagnostor in vivado",
-                        "use diagnostor in modelsim",
-                        "use our buildin diagnostor"
-                    ],
-                    "enum": [
-                        "vivado",
-                        "modelsim",
-                        "default"
-                    ],
-                    "default": "default",
-                    "description": "%digital-ide.function.lsp.linter.svlog.diagnostor.title%"
-                },
-                "digital-ide.function.lsp.linter.vhdl.diagnostor": {
-                    "type": "string",
-                    "enumDescriptions": [
-                        "use diagnostor in vivado",
-                        "use diagnostor in modelsim",
-                        "use our buildin diagnostor"
-                    ],
-                    "enum": [
-                        "vivado",
-                        "modelsim",
-                        "default"
-                    ],
-                    "default": "default",
-                    "description": "%digital-ide.function.lsp.linter.vhdl.diagnostor.title%"
+                    "default": "vivado",
+                    "description": "%digital-ide.function.lsp.linter.verilog.diagnostor.title%"
                 },
                 "digital-ide.function.lsp.linter.systemverilog.diagnostor": {
                     "type": "string",
                     "enumDescriptions": [
-                        "use diagnostor in vivado",
-                        "use diagnostor in modelsim",
-                        "use our buildin diagnostor"
+                        "xvlog (© Xilinx, Inc.)",
+                        "vlog (© Mentor Graphics Corporation)",
+                        "verilator (© Verilator Project)",
+                        "verible-verilog-syntax (© Google LLC)"
                     ],
                     "enum": [
                         "vivado",
                         "modelsim",
-                        "default"
+                        "verilator",
+                        "verible"
                     ],
-                    "default": "default",
+                    "default": "vivado",
                     "description": "%digital-ide.function.lsp.linter.systemverilog.diagnostor.title%"
+                },
+                "digital-ide.function.lsp.linter.vhdl.diagnostor": {
+                    "type": "string",
+                    "enumDescriptions": [
+                        "xvlog (© Xilinx, Inc.)",
+                        "vlog (© Mentor Graphics Corporation)"
+                    ],
+                    "enum": [
+                        "vivado",
+                        "modelsim"
+                    ],
+                    "default": "vivado",
+                    "description": "%digital-ide.function.lsp.linter.vhdl.diagnostor.title%"
+                },
+                "digital-ide.function.lsp.linter.linter-mode": {
+                    "type": "string",
+                    "enumDescriptions": [
+                        "%digital-ide.function.lsp.linter.linter-mode.0.title%",
+                        "%digital-ide.function.lsp.linter.linter-mode.1.title%",
+                        "%digital-ide.function.lsp.linter.linter-mode.2.title%"
+                    ],
+                    "enum": [
+                        "full",
+                        "single",
+                        "shutdown"
+                    ],
+                    "default": "full",
+                    "description": "%digital-ide.function.lsp.linter.linter-mode.title%"
                 },
                 "digital-ide.function.instantiation.addComment": {
                     "description": "%digital-ide.function.instantiation.addComment.title%",

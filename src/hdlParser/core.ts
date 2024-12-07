@@ -863,7 +863,6 @@ class HdlModule {
         const instances = new Set<HdlInstance>();
         // 获取自身的        
         for (const inst of this.nameToInstances.values()) {
-            console.log(inst);
             instances.add(inst);
             // 递归获取 inst 的
             if (inst.module) {
@@ -1147,8 +1146,6 @@ export class HdlFile {
 
         // add to global hdlParam
         hdlParam.setHdlFile(this);
-
-        console.log(modules);
 
         // make nameToModule
         this.nameToModule = new Map<string, HdlModule>();

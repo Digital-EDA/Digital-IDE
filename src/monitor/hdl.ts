@@ -164,17 +164,6 @@ export class HdlAction extends BaseAction {
 
     // 下一个版本丢弃，完全由后端承担这部分功能
     async updateLinter(path: string) {
-        const uri = vscode.Uri.file(path);
-        const document = await vscode.workspace.openTextDocument(uri);
-        const langID = hdlFile.getLanguageId(path);
-
-        if (langID === HdlLangID.Verilog) {
-            vlogLinterManager.lint(document);
-        } else if (langID === HdlLangID.Vhdl) {
-            vhdlLinterManager.lint(document);
-        } else if (langID === HdlLangID.SystemVerilog) {
-            svlogLinterManager.lint(document);
-        }
     }
 }
 

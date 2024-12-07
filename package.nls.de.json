@@ -84,15 +84,18 @@
     "digital-ide.function.lsp.formatter.vhdl.default.indentation.title": "Indentation",
     "digital-ide.function.lsp.completion.vlog.auto-add-include.title": "`include \"xxx.v\" will be added to the top of the file automatically",
     "digital-ide.function.lsp.completion.vlog.auto-add-output-declaration.title": "complete everything invoking a module needs including paramters and ports",
-    "digital-ide.function.lsp.linter.vlog.diagnostor.title": "choose diagnostor to do linter in editing verilog",
-    "digital-ide.function.lsp.linter.svlog.diagnostor.title": "choose diagnostor to do linter in editing verilog",
+    "digital-ide.function.lsp.linter.verilog.diagnostor.title": "choose diagnostor to do linter in editing verilog",
+    "digital-ide.function.lsp.linter.systemverilog.diagnostor.title": "choose diagnostor to do linter in editing verilog",
     "digital-ide.function.lsp.linter.vhdl.diagnostor.title": "choose diagnostor to do linter in editing vhdl",
-    "digital-ide.function.lsp.linter.systemverilog.diagnostor.title": "choose diagnostor to do linter in editing systemverilog",
     "digital-ide.function.instantiation.addComment.title": "add comment like // ports, // input, // output when doing instantiation, including completion for module invoking",
     "digital-ide.function.instantiation.autoNetOutputDeclaration.title": "auto declare output type nets in the scope when instantiation happens.",
     "fpga-support.onTypeFormattingTriggerCharacters.title": "Trigger characters for onTypeFormatting",
     "digital-ide.function.lsp.file-parse-maxsize.title": "",
     "digital-ide.structure.from-xilinx-to-standard.title": "Konvertieren Sie Xilinx-Projekte in die Digital IDE-Standardprojektstruktur",
-    "digital-ide.prj.verible.install.path.title": "",
-    "digital-ide.prj.verilator.install.path.title": ""
+    "digital-ide.prj.verible.install.path.title": "Installationsverzeichnispfad für verible, also der absolute Pfad des Ordners, der die ausführbare Datei verible-verilog-syntax enthält. Wenn nicht angegeben, wird standardmäßig verible-verilog-syntax für die Diagnose verwendet.",
+    "digital-ide.prj.verilator.install.path.title": "Installationsverzeichnispfad für verilator, also der absolute Pfad des Ordners, der die ausführbare Datei verilator enthält. Wenn nicht angegeben, wird standardmäßig verilator für die Diagnose verwendet.",
+    "digital-ide.function.lsp.linter.linter-mode.title": "Diagnosemodus des Linters festlegen",
+    "digital-ide.function.lsp.linter.linter-mode.0.title": "Diagnostizieren Sie alle Designquellen direkt und melden Sie Fehler, unabhängig davon, ob die Dateien geöffnet sind.",
+    "digital-ide.function.lsp.linter.linter-mode.1.title": "Wenn eine einzelne Datei geschlossen ist, wird der entsprechende Fehler entfernt, und nur die geöffnete Datei wird diagnostiziert.",
+    "digital-ide.function.lsp.linter.linter-mode.2.title": "Global deaktiviert, d.h. für das gesamte Projekt werden keine Projektfehler gemeldet."
 }

@@ -4,10 +4,9 @@ import * as fs from 'fs';
 import { LspOutput, ReportType, opeParam } from "../../../global";
 import { hdlFile, hdlPath } from "../../../hdlFs";
 import { easyExec } from "../../../global/util";
-import { BaseLinter } from "./base";
 import { HdlLangID } from "../../../global/enum";
 
-class ModelsimLinter implements BaseLinter {
+class ModelsimLinter {
     diagnostic: vscode.DiagnosticCollection;
     executableFileMap: Map<HdlLangID, string | undefined> = new Map<HdlLangID, string>();
     executableInvokeNameMap: Map<HdlLangID, string | undefined> = new Map<HdlLangID, string>();

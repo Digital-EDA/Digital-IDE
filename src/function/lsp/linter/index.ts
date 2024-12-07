@@ -1,14 +1,11 @@
-import { vlogLinterManager } from './vlog';
-import { vhdlLinterManager } from './vhdl';
-import { svlogLinterManager } from './svlog';
-
-import { pickVlogLinter, pickVhdlLinter, pickSvlogLinter } from './command';
+import {
+    vlogLinterManager,
+    vhdlLinterManager,
+    svlogLinterManager
+} from './manager';
 
 export {
     vlogLinterManager,
     vhdlLinterManager,
-    svlogLinterManager,
-    pickVlogLinter,
-    pickVhdlLinter,
-    pickSvlogLinter,
+    svlogLinterManager
 };

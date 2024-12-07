@@ -89,5 +89,7 @@
     "info.linter.vivado.xvlog-name": "Vivado-Diagnosetools",
     "info.common.some-is-ready": "{0} ist bereit",
     "info.common.not-available": "{0} ist derzeit nicht verfügbar",
-    "info.common.linter-name": "Diagnosetools"
+    "info.common.linter-name": "Diagnosetools",
+    "info.linter.finish-init": "Initialisierung des Diagnosewerkzeugs {0} abgeschlossen, aktueller Name des Diagnosewerkzeugs {1}",
+    "error.linter.status-bar.tooltip": "Kann Diagnose für {0} nicht abrufen"
 }

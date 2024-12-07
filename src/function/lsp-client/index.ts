@@ -15,7 +15,7 @@ import { IProgress, LspClient, opeParam } from '../../global';
 import axios, { AxiosResponse } from "axios";
 import { chooseBestDownloadSource, getGiteeDownloadLink, getGithubDownloadLink, getPlatformPlatformSignature } from "./cdn";
 import { hdlDir, hdlPath } from "../../hdlFs";
-import { registerConfigurationUpdater } from "./config";
+import { registerConfigurationUpdater, registerLinter } from "./config";
 import { t } from "../../i18n";
 
 function getLspServerExecutionName() {
@@ -214,7 +214,10 @@ export async function activate(context: vscode.ExtensionContext, packageJson: an
     await client.start();
 
     // 检测配置文件变动
-    registerConfigurationUpdater(client, packageJson);
+    await registerConfigurationUpdater(client, packageJson);
+
+    // 配置诊断器
+    await registerLinter(client);
 }
 
 

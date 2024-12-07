@@ -89,5 +89,7 @@
     "info.linter.vivado.xvlog-name": "Vivado diagnostic tools",
     "info.common.some-is-ready": "{0} is ready",
     "info.common.not-available": "{0} is currently unavailable",
-    "info.common.linter-name": "Diagnostic tools"
+    "info.common.linter-name": "Diagnostic tools",
+    "info.linter.finish-init": "Completed initialization of the {0} diagnostic tool, current name of the diagnostic tool {1}",
+    "error.linter.status-bar.tooltip": "Unable to get {0} diagnoser"
 }

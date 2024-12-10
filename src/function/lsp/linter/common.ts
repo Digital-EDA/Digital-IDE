@@ -26,6 +26,7 @@ export let _selectVhdlLinterItem: LinterItem | undefined = undefined;
 // verible      digital-ide.prj.verible.install.path
 // verilator    digital-ide.prj.verilator.install.path
 export type SupportLinterName = 'iverilog' | 'vivado' | 'modelsim' | 'verible' | 'verilator';
+export const SupportLinters: SupportLinterName[] = ['iverilog', 'vivado', 'modelsim', 'verible', 'verilator'];
 
 /**
  * @description 获取指向【当前的 linter 的名字】的配置的名字，比如 `digital-ide.function.lsp.linter.verilog.diagnostor`
@@ -52,6 +53,12 @@ export function getLinterInstallConfigurationName(linterName: SupportLinterName)
     return `digital-ide.prj.${linterName}.install.path`;
 }
 
+export function getLinterInstallPath(linterName: SupportLinterName): string {
+    const configuration = vscode.workspace.getConfiguration();
+    const linterInstallConfigurationName = getLinterInstallConfigurationName(linterName);
+    return configuration.get<string>(linterInstallConfigurationName, '');
+}
+
 /**
  * @description 生成 PickItem，这个过程中会对当前 linterName 的有效性进行校验
  * @param client 
@@ -64,23 +71,27 @@ export async function makeLinterNamePickItem(
     langID: HdlLangID,
     linterName: SupportLinterName
 ): Promise<LinterItem> {
-    const configuration = vscode.workspace.getConfiguration();
-    const linterInstallConfigurationName = getLinterInstallConfigurationName(linterName);
-    const linterPath = configuration.get<string>(linterInstallConfigurationName, '');
+    const linterPath = getLinterInstallPath(linterName);
     
     const linterStatus = await client.sendRequest(LinterStatusRequestType, {
         languageId: langID,
         linterName,
         linterPath
     });
-    
+
+    const labelIcon = linterStatus.available ? 'getting-started-beginner': 'extensions-warning-message';
+
+    const detail = linterStatus.available ? 
+        t('info.common.some-is-ready', linterStatus.invokeName) :
+        t("info.common.not-available", linterStatus.invokeName);
+ 
     return {
-        label: '$(getting-started-beginner) ' + linterName,
+        label: `$(${labelIcon}) ` + linterName,
         name: linterName,
         linterPath,
         available: linterStatus.available,
         description: linterStatus.toolName,
-        detail: t('info.common.some-is-ready', linterStatus.invokeName)
+        detail
     }
 }
 
@@ -109,4 +120,9 @@ export enum LinterMode {
 
 export function getLinterMode(): LinterMode {
     return vscode.workspace.getConfiguration().get<LinterMode>('digital-ide.function.lsp.linter.linter-mode', LinterMode.Full);
+}
+
+export interface IConfigReminder {
+    title: string,
+    value: 'config' | 'download'
 }

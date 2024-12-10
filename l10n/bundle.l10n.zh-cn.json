@@ -91,5 +91,8 @@
     "info.common.not-available": "{0} 目前不可用",
     "info.common.linter-name": "诊断工具",
     "info.linter.finish-init": "完成 {0} 诊断器的初始化，当前诊断器的名字 {1}",
-    "error.linter.status-bar.tooltip": "无法获取 {0} 诊断器"
+    "error.linter.status-bar.tooltip": "无法获取 {0} 诊断器",
+    "info.linter.status-bar.tooltip": "诊断器 {0} 正在工作",
+    "warning.linter.cannot-get-valid-linter-invoker": "Digital IDE 无法获取到关于 {0} 的调用路径，请安装对应诊断器后，配置到环境变量 PATH 或者配置 Digital IDE 对应的诊断工具安装路径",
+    "info.linter.config-linter-install-path": "配置安装目录"
 }

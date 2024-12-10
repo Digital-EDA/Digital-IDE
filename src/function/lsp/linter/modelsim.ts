@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import * as fs from 'fs';
 
-import { LspOutput, ReportType, opeParam } from "../../../global";
+import { LinterOutput, ReportType, opeParam } from "../../../global";
 import { hdlFile, hdlPath } from "../../../hdlFs";
 import { easyExec } from "../../../global/util";
 import { HdlLangID } from "../../../global/enum";
@@ -49,7 +49,7 @@ class ModelsimLinter {
                 this.diagnostic.set(document.uri, diagnostics);
             }
         } else {
-            LspOutput.report('modelsim linter is not available, please check prj.modelsim.install.path in your setting!', {
+            LinterOutput.report('modelsim linter is not available, please check prj.modelsim.install.path in your setting!', {
                 level: ReportType.Error,
                 notify: true
             });
@@ -74,7 +74,7 @@ class ModelsimLinter {
             if (headerInfo === 'Error') {
                 const errorLine = parseInt(tokens[2]) - 1;
                 const syntaxInfo = tokens[5];
-                LspOutput.report(`<vlog linter> line: ${errorLine}, info: ${syntaxInfo}`, {
+                LinterOutput.report(`<vlog linter> line: ${errorLine}, info: ${syntaxInfo}`, {
                     level: ReportType.Run
                 });
 
@@ -84,7 +84,7 @@ class ModelsimLinter {
             } else if (headerInfo === 'Warning') {
                 const errorLine = parseInt(tokens[2]) - 1;
                 const syntaxInfo = tokens[5];
-                LspOutput.report(`<vlog linter> line: ${errorLine}, info: ${syntaxInfo}`, {
+                LinterOutput.report(`<vlog linter> line: ${errorLine}, info: ${syntaxInfo}`, {
                     level: ReportType.Run
                 });
 
@@ -143,15 +143,15 @@ class ModelsimLinter {
         const fullExecutorName = opeParam.os === 'win32' ? executorName + '.exe' : executorName;
         
         if (modelsimInstallPath.trim() === '' || !fs.existsSync(modelsimInstallPath)) {
-            LspOutput.report(`User's modelsim Install Path "${modelsimInstallPath}", which is invalid. Use ${executorName} in default.`, {
+            LinterOutput.report(`User's modelsim Install Path "${modelsimInstallPath}", which is invalid. Use ${executorName} in default.`, {
                 level: ReportType.Warn
             });
-            LspOutput.report('If you have doubts, check prj.modelsim.install.path in setting', {
+            LinterOutput.report('If you have doubts, check prj.modelsim.install.path in setting', {
                 level: ReportType.Warn
             });
             return executorName;
         } else {
-            LspOutput.report(`User's modelsim Install Path "${modelsimInstallPath}", which is invalid`);
+            LinterOutput.report(`User's modelsim Install Path "${modelsimInstallPath}", which is invalid`);
             
             const executorPath = hdlPath.join(
                 hdlPath.toSlash(modelsimInstallPath),
@@ -172,13 +172,13 @@ class ModelsimLinter {
         const { stderr } = await easyExec(executorPath, []);
         if (stderr.length === 0) {
             this.executableInvokeNameMap.set(langID, executorPath);
-            LspOutput.report(`success to verify ${executorPath}, linter from modelsim is ready to go!`, {
+            LinterOutput.report(`success to verify ${executorPath}, linter from modelsim is ready to go!`, {
                 level: ReportType.Launch
             });
             return true;
         } else {
             this.executableInvokeNameMap.set(langID, undefined);
-            LspOutput.report(`Fail to execute ${executorPath}! Reason: ${stderr}`, {
+            LinterOutput.report(`Fail to execute ${executorPath}! Reason: ${stderr}`, {
                 level: ReportType.Error,
                 notify: true
             });

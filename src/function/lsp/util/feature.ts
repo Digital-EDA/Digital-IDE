@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import * as vscode from 'vscode';
-import { AbsPath, LspOutput } from '../../../global';
+import { AbsPath, LinterOutput } from '../../../global';
 import { HdlLangID } from '../../../global/enum';
 import { hdlPath, hdlFile } from '../../../hdlFs';
 import { Range } from '../../../hdlParser/common';
@@ -278,7 +278,7 @@ async function getFullSymbolInfo(document: vscode.TextDocument, range: Range, no
     while (line) {
         line --;
         content = document.lineAt(line).text;
-        LspOutput.report(content);
+        LinterOutput.report(content);
                
         // 首先判断该行是否是空白
         if (content.trim().length === 0) {

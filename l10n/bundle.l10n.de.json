@@ -91,5 +91,8 @@
     "info.common.not-available": "{0} ist derzeit nicht verfügbar",
     "info.common.linter-name": "Diagnosetools",
     "info.linter.finish-init": "Initialisierung des Diagnosewerkzeugs {0} abgeschlossen, aktueller Name des Diagnosewerkzeugs {1}",
-    "error.linter.status-bar.tooltip": "Kann Diagnose für {0} nicht abrufen"
+    "error.linter.status-bar.tooltip": "Kann Diagnose für {0} nicht abrufen",
+    "info.linter.status-bar.tooltip": "Diagnosegerät {0} arbeitet",
+    "warning.linter.cannot-get-valid-linter-invoker": "Die digitale IDE kann keinen Aufrufpfad für {0} abrufen. Bitte installieren Sie den entsprechenden Diagnose-Tool und konfigurieren Sie ihn entweder in der Umgebungsvariablen PATH oder im digitalen IDE-Diagnosetool-Installationspfad.",
+    "info.linter.config-linter-install-path": "Installationsverzeichnis konfigurieren"
 }

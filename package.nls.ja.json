@@ -97,5 +97,8 @@
     "digital-ide.function.lsp.linter.linter-mode.title": "リンターの診断モードを指定",
     "digital-ide.function.lsp.linter.linter-mode.0.title": "すべての設計ソースを直接診断し、エラーを報告します。ファイルが開いているかどうかに関係なく。",
     "digital-ide.function.lsp.linter.linter-mode.1.title": "単一のファイルが閉じられた場合、対応するエラーが削除され、開いているファイルのみが診断されます。",
-    "digital-ide.function.lsp.linter.linter-mode.2.title": "グローバルに無効化され、プロジェクト全体でプロジェクトエラーが報告されません。"
+    "digital-ide.function.lsp.linter.linter-mode.2.title": "グローバルに無効化され、プロジェクト全体でプロジェクトエラーが報告されません。",
+    "digital-ide.function.lsp.linter.linter-level.title": "診断器の診断レベル設定",
+    "digital-ide.function.lsp.linter.linter-level.error.title": "エラーのみ表示",
+    "digital-ide.function.lsp.linter.linter-level.warning.title": "エラーと警告を表示"
 }

@@ -97,5 +97,8 @@
     "digital-ide.function.lsp.linter.linter-mode.title": "Diagnosemodus des Linters festlegen",
     "digital-ide.function.lsp.linter.linter-mode.0.title": "Diagnostizieren Sie alle Designquellen direkt und melden Sie Fehler, unabhängig davon, ob die Dateien geöffnet sind.",
     "digital-ide.function.lsp.linter.linter-mode.1.title": "Wenn eine einzelne Datei geschlossen ist, wird der entsprechende Fehler entfernt, und nur die geöffnete Datei wird diagnostiziert.",
-    "digital-ide.function.lsp.linter.linter-mode.2.title": "Global deaktiviert, d.h. für das gesamte Projekt werden keine Projektfehler gemeldet."
+    "digital-ide.function.lsp.linter.linter-mode.2.title": "Global deaktiviert, d.h. für das gesamte Projekt werden keine Projektfehler gemeldet.",
+    "digital-ide.function.lsp.linter.linter-level.title": "Diagnoselevel-Einstellungen des Linters",
+    "digital-ide.function.lsp.linter.linter-level.error.title": "Nur Fehler anzeigen",
+    "digital-ide.function.lsp.linter.linter-level.warning.title": "Fehler und Warnungen anzeigen"
 }

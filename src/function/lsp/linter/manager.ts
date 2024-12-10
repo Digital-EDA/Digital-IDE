@@ -1,13 +1,13 @@
 import * as vscode from 'vscode';
-import { LspClient, LspOutput, ReportType } from '../../../global';
+import { LspClient, LinterOutput, ReportType } from '../../../global';
 import { HdlLangID } from '../../../global/enum';
 import { hdlFile, hdlPath } from '../../../hdlFs';
 import { t } from '../../../i18n';
-import { getLinterConfigurationName, getLinterInstallConfigurationName, getLinterMode, getLinterName, LinterItem, LinterMode, makeLinterNamePickItem, makeLinterOptions, SupportLinterName, updateLinterConfigurationName } from './common';
-import { LinterStatusRequestType, UpdateConfigurationType } from '../../../global/lsp';
+import { getLinterConfigurationName, getLinterInstallConfigurationName, getLinterName, IConfigReminder, LinterItem, LinterMode, makeLinterNamePickItem, makeLinterOptions, SupportLinterName, updateLinterConfigurationName } from './common';
+import { UpdateConfigurationType } from '../../../global/lsp';
 import { LanguageClient } from 'vscode-languageclient/node';
 
-class LinterManager {
+export class LinterManager {
     /**
      * @description 当前诊断器管理者绑定的语言
      */
@@ -115,7 +115,7 @@ class LinterManager {
             this.statusBarItem.hide();
         }
 
-        LspOutput.report(t('info.linter.finish-init', "verilog", this.currentLinterItem?.name || 'unknown'), {
+        LinterOutput.report(t('info.linter.finish-init', this.langID, this.currentLinterItem?.name || 'unknown'), {
             level: ReportType.Launch
         });
     }
@@ -145,16 +145,38 @@ class LinterManager {
     public updateStatusBar() {
         const statusBarItem = this.statusBarItem;
         const currentLinterItem = this.currentLinterItem;
-        if (currentLinterItem) {
+        if (currentLinterItem) {            
             if (currentLinterItem.available) {
+                // 当前诊断器正常
+                statusBarItem.backgroundColor = new vscode.ThemeColor('statusBar.background');
+                statusBarItem.tooltip = t('info.linter.status-bar.tooltip', currentLinterItem.name);
                 statusBarItem.text = `$(getting-started-beginner) Linter(${currentLinterItem.name})`;
+                LinterOutput.report(t('info.linter.finish-init', this.langID, currentLinterItem.name));
             } else {
+                // 当前诊断器不可用
                 statusBarItem.backgroundColor = new vscode.ThemeColor('statusBarItem.warningBackground');
                 statusBarItem.tooltip = t('error.linter.status-bar.tooltip', currentLinterItem.name);
                 statusBarItem.text = `$(extensions-warning-message) Linter(${currentLinterItem.name})`;
-                LspOutput.report(t('error.linter.status-bar.tooltip', currentLinterItem.name), {
+                LinterOutput.report(t('error.linter.status-bar.tooltip', currentLinterItem.name), {
                     level: ReportType.Error
                 });
+                // 当前诊断器不可用，遂提醒用户【配置文件】or【下载（如果有的话）】
+                vscode.window.showWarningMessage<IConfigReminder>(
+                    t('warning.linter.cannot-get-valid-linter-invoker', currentLinterItem.name),
+                    { title: t('info.linter.config-linter-install-path'),  value: "config" },
+                ).then(async res => {
+                    // 用户选择配置
+                    if (res?.value === 'config') {
+                        const linterInstallConfigurationName = getLinterInstallConfigurationName(currentLinterItem.name);
+                        await vscode.commands.executeCommand('workbench.action.openSettings', linterInstallConfigurationName);
+                    }
+                    // 用户选择下载
+                    if (res?.value === 'download') {
+
+                    }
+                });
+
+                
             }
             statusBarItem.show();
         }
@@ -221,8 +243,7 @@ class LinterManager {
 
         pickWidget.onDidAccept(async () => {
             if (this.currentLinterItem) {
-                // 更新 vscode 配置文件
-                updateLinterConfigurationName(this.langID, this.currentLinterItem.name);
+
                 // 更新后端
                 await client.sendRequest(UpdateConfigurationType, {
                     configs: [
@@ -231,8 +252,9 @@ class LinterManager {
                     ],
                     configType: 'linter'
                 });
-                // 更新 status bar
-                this.updateStatusBar();
+                // 更新 vscode 配置文件，这会改变配置，顺便触发一次 this.updateStatusBar()
+                // 详细请见 async function registerLinter(client: LanguageClient)
+                updateLinterConfigurationName(this.langID, this.currentLinterItem.name);
 
                 pickWidget.hide();
             }
@@ -259,3 +281,4 @@ export const svlogLinterManager = new LinterManager(HdlLangID.SystemVerilog, [
     'verilator',
     'vivado'
 ]);
+export const reserveLinterManager = new LinterManager(HdlLangID.Unknown, []);

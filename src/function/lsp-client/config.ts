@@ -40,18 +40,30 @@ export async function registerConfigurationUpdater(client: LanguageClient, packa
     });
 
     // 初始化，配置全部 linter 到后端
+    await updateLinterInstallPathConfiguration(
+        client,
+        Linter.getLinterConfigurationName(HdlLangID.Verilog)
+    );
     await updateLinterConfiguration(
         client,
         Linter.getLinterConfigurationName(HdlLangID.Verilog),
         Linter.getLinterName(HdlLangID.Verilog)
     );
 
+    await updateLinterInstallPathConfiguration(
+        client,
+        Linter.getLinterConfigurationName(HdlLangID.SystemVerilog)
+    );
     await updateLinterConfiguration(
         client,
         Linter.getLinterConfigurationName(HdlLangID.SystemVerilog),
         Linter.getLinterName(HdlLangID.SystemVerilog)
     );
 
+    await updateLinterInstallPathConfiguration(
+        client,
+        Linter.getLinterConfigurationName(HdlLangID.Vhdl)
+    );
     await updateLinterConfiguration(
         client,
         Linter.getLinterConfigurationName(HdlLangID.Vhdl),
@@ -84,6 +96,13 @@ export async function registerConfigurationUpdater(client: LanguageClient, packa
             [HdlLangID.Vhdl]: Linter.getLinterName(HdlLangID.Vhdl),
             [HdlLangID.Unknown]: HdlLangID.Unknown
         };
+        
+        const linterManager: Record<HdlLangID, lspLinter.LinterManager> = {
+            [HdlLangID.Verilog]: lspLinter.vlogLinterManager,
+            [HdlLangID.SystemVerilog]: lspLinter.svlogLinterManager,
+            [HdlLangID.Vhdl]: lspLinter.vhdlLinterManager,
+            [HdlLangID.Unknown]: lspLinter.reserveLinterManager
+        };
 
         // 需要讨论的可能受到配置文件更新影响 linter 功能的语言列表
         const affectsLangIDs = [HdlLangID.Verilog, HdlLangID.SystemVerilog, HdlLangID.Vhdl];
@@ -96,7 +115,11 @@ export async function registerConfigurationUpdater(client: LanguageClient, packa
                 for (const langID of affectsLangIDs) {
                     if (linterName === currentLinterConfiguration[langID]) {
                         const linterConfigurationName = Linter.getLinterConfigurationName(langID);
+                        // 低频操作，随便糟蹋
                         await updateLinterConfiguration(client, linterConfigurationName, linterName);
+                        // 更新当前诊断器状态
+                        await linterManager[langID].updateCurrentLinterItem();
+                        linterManager[langID].updateStatusBar();
                     }
                 }
             }
@@ -129,16 +152,27 @@ export async function registerLinter(client: LanguageClient) {
     });
 }
 
+/**
+ * @description 更新所有诊断器的路径信息到后端
+ */
+async function updateLinterInstallPathConfiguration(
+    client: LanguageClient,
+    configurationName: string
+) {
+    for (const linterName of Linter.SupportLinters) {
+        await updateLinterConfiguration(client, configurationName, linterName);
+    }
+}
+
+/**
+ * @description 更新当前诊断器的所有信息到后端
+ */
 async function updateLinterConfiguration(
     client: LanguageClient,
     configurationName: string,
     linterName: Linter.SupportLinterName
 ) {
-    const configuratioName = Linter.getLinterInstallConfigurationName(linterName);
-    const linterPath = vscode.workspace.getConfiguration().get<string>(configuratioName, '');
-
-    console.log(linterName);
-
+    const linterPath = Linter.getLinterInstallPath(linterName);
     await client.sendRequest(UpdateConfigurationType, {
         configs: [
             { name: configurationName, value: linterName },

@@ -18,9 +18,6 @@ import * as WaveView from './dide-viewer';
 import { ModuleDataItem } from './treeView/tree';
 import { downloadLsp } from './lsp-client';
 import { hdlPath } from '../hdlFs';
-import { LspClient, opeParam } from '../global';
-import { DoFastToolChainType, SyncFastRequestType } from '../global/lsp';
-import { makeDocBody } from './hdlDoc/html';
 
 function registerDocumentation(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('digital-ide.hdlDoc.showWebview', async (uri: vscode.Uri) => {

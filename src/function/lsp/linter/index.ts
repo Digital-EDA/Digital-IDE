@@ -1,11 +1,15 @@
 import {
     vlogLinterManager,
     vhdlLinterManager,
-    svlogLinterManager
+    svlogLinterManager,
+    reserveLinterManager,
+    LinterManager
 } from './manager';
 
 export {
     vlogLinterManager,
     vhdlLinterManager,
-    svlogLinterManager
+    svlogLinterManager,
+    reserveLinterManager,
+    LinterManager
 };

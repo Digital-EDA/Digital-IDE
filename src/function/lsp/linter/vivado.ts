@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import * as fs from 'fs';
 
-import { LspOutput, ReportType, opeParam } from "../../../global";
+import { LinterOutput, ReportType, opeParam } from "../../../global";
 import { hdlFile, hdlPath } from "../../../hdlFs";
 import { easyExec } from "../../../global/util";
 import { HdlLangID } from "../../../global/enum";
@@ -54,7 +54,7 @@ class VivadoLinter {
                 this.diagnostic.set(document.uri, diagnostics);
             }
         } else {
-            LspOutput.report('vivado linter is not available, please check prj.vivado.install.path in your setting', {
+            LinterOutput.report('vivado linter is not available, please check prj.vivado.install.path in your setting', {
                 level: ReportType.Error,
                 notify: true
             });
@@ -81,7 +81,7 @@ class VivadoLinter {
             if (headerInfo === 'ERROR') {
                 const errorInfos = parsedPath.split(':');
                 const errorLine = Math.max(parseInt(errorInfos[errorInfos.length - 1]) - 1, 0);
-                LspOutput.report(`<xvlog linter> line: ${errorLine}, info: ${syntaxInfo}`, {
+                LinterOutput.report(`<xvlog linter> line: ${errorLine}, info: ${syntaxInfo}`, {
                     level: ReportType.Run
                 });
 
@@ -140,16 +140,16 @@ class VivadoLinter {
         const fullExecutorName = opeParam.os === 'win32' ? executorName + '.bat' : executorName;
         
         if (vivadoInstallPath.trim() === '' || !fs.existsSync(vivadoInstallPath)) {
-            LspOutput.report(`User's Vivado Install Path "${vivadoInstallPath}", which is invalid. Use ${executorName} in default.`, {
+            LinterOutput.report(`User's Vivado Install Path "${vivadoInstallPath}", which is invalid. Use ${executorName} in default.`, {
                 level: ReportType.Warn
             });
-            LspOutput.report('If you have doubts, check prj.vivado.install.path in setting', {
+            LinterOutput.report('If you have doubts, check prj.vivado.install.path in setting', {
                 level: ReportType.Warn
             });
 
             return executorName;
         } else {
-            LspOutput.report(`User's Vivado Install Path "${vivadoInstallPath}", which is invalid`);
+            LinterOutput.report(`User's Vivado Install Path "${vivadoInstallPath}", which is invalid`);
             
             const executorPath = hdlPath.join(
                 hdlPath.toSlash(vivadoInstallPath),
@@ -170,13 +170,13 @@ class VivadoLinter {
         const { stderr } = await easyExec(executorPath, []);
         if (stderr.length === 0) {
             this.executableInvokeNameMap.set(langID, executorPath);
-            LspOutput.report(`success to verify ${executorPath}, linter from vivado is ready to go!`, {
+            LinterOutput.report(`success to verify ${executorPath}, linter from vivado is ready to go!`, {
                 level: ReportType.Launch
             });
             return true;
         } else {
             this.executableInvokeNameMap.set(langID, undefined);
-            LspOutput.report(`Fail to execute ${executorPath}! Reason: ${stderr}`, {
+            LinterOutput.report(`Fail to execute ${executorPath}! Reason: ${stderr}`, {
                 level: ReportType.Error,
                 notify: true
             });            

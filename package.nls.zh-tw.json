@@ -97,5 +97,8 @@
     "digital-ide.function.lsp.linter.linter-mode.title": "指定診斷器的診斷模式",
     "digital-ide.function.lsp.linter.linter-mode.0.title": "將所有設計源直接進行診斷，並報錯，無論文件是否打開。",
     "digital-ide.function.lsp.linter.linter-mode.1.title": "單文件關閉時，對應報錯去除，打開哪個文件就對哪個文件進行診斷。",
-    "digital-ide.function.lsp.linter.linter-mode.2.title": "全局關閉，即整個工程都不進行工程報錯。"
+    "digital-ide.function.lsp.linter.linter-mode.2.title": "全局關閉，即整個工程都不進行工程報錯。",
+    "digital-ide.function.lsp.linter.linter-level.title": "診斷器診斷等級設置",
+    "digital-ide.function.lsp.linter.linter-level.error.title": "只顯示錯誤",
+    "digital-ide.function.lsp.linter.linter-level.warning.title": "顯示錯誤和警告"
 }

@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import * as fs from 'fs';
 
-import { LspOutput, ReportType, opeParam } from "../../../global";
+import { LinterOutput, ReportType, opeParam } from "../../../global";
 import { hdlFile, hdlPath } from "../../../hdlFs";
 import { easyExec } from "../../../global/util";
 import { HdlLangID } from "../../../global/enum";
@@ -49,7 +49,7 @@ class VerilatorLinter {
                 this.diagnostic.set(document.uri, diagnostics);
             }
         } else {
-            LspOutput.report('verilator linter is not available, please check prj.verilator.install.path in your setting', {
+            LinterOutput.report('verilator linter is not available, please check prj.verilator.install.path in your setting', {
                 level: ReportType.Error,
                 notify: true
             });
@@ -120,15 +120,15 @@ class VerilatorLinter {
         const fullExecutorName = opeParam.os === 'win32' ? executorName + '.exe' : executorName;
         
         if (verilatorInstallPath.trim() === '' || !fs.existsSync(verilatorInstallPath)) {
-            LspOutput.report(`User's verilator Install Path ${verilatorInstallPath}, which is invalid. Use ${executorName} in default.`, {
+            LinterOutput.report(`User's verilator Install Path ${verilatorInstallPath}, which is invalid. Use ${executorName} in default.`, {
                 level: ReportType.Warn
             });
-            LspOutput.report('If you have doubts, check prj.verilator.install.path in setting', {
+            LinterOutput.report('If you have doubts, check prj.verilator.install.path in setting', {
                 level: ReportType.Warn
             });
             return executorName;
         } else {
-            LspOutput.report(`User's verilator Install Path ${verilatorInstallPath}, which is invalid`);
+            LinterOutput.report(`User's verilator Install Path ${verilatorInstallPath}, which is invalid`);
             
             const executorPath = hdlPath.join(
                 hdlPath.toSlash(verilatorInstallPath),
@@ -149,7 +149,7 @@ class VerilatorLinter {
         const { stderr } = await easyExec(executorPath, []);
         if (stderr.length === 0) {
             this.executableInvokeNameMap.set(langID, executorPath);
-            LspOutput.report(`success to verify ${executorPath}, linter from verilator is ready to go!`, {
+            LinterOutput.report(`success to verify ${executorPath}, linter from verilator is ready to go!`, {
                 level: ReportType.Launch
             });
             return true;
@@ -157,7 +157,7 @@ class VerilatorLinter {
             this.executableInvokeNameMap.set(langID, undefined);
             console.log(stderr);
             
-            LspOutput.report(`Fail to execute ${executorPath}! Reason: ${stderr}`, {
+            LinterOutput.report(`Fail to execute ${executorPath}! Reason: ${stderr}`, {
                 level: ReportType.Error,
                 notify: true
             });

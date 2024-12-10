@@ -6,11 +6,8 @@ import { AbsPath, MainOutput, opeParam, ReportType } from '../global';
 import { hdlFile, hdlPath } from '../hdlFs';
 import { hdlParam, HdlSymbol } from '../hdlParser';
 import type { HdlMonitor } from './index';
-import { HdlLangID } from '../global/enum';
-import { vlogLinterManager, vhdlLinterManager, svlogLinterManager } from '../function/lsp/linter';
 import { BaseAction, Event } from './event';
 import { hdlIgnore } from '../manager/ignore';
-
 
 export class HdlAction extends BaseAction {
     selectFSWatcher(m: HdlMonitor): chokidar.FSWatcher | undefined {
@@ -68,16 +65,6 @@ export class HdlAction extends BaseAction {
         hdlParam.deleteHdlFile(path);
 
         refreshArchTree();
-
-        const uri = vscode.Uri.file(path);
-        const langID = hdlFile.getLanguageId(path);
-        if (langID === HdlLangID.Verilog) {
-            vlogLinterManager.remove(uri);
-        } else if (langID === HdlLangID.Vhdl) {
-            vhdlLinterManager.remove(uri);
-        } else if (langID === HdlLangID.SystemVerilog) {
-            svlogLinterManager.remove(uri);
-        }
     }
 
     /**

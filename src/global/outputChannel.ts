@@ -117,7 +117,7 @@ class Output {
 }
 
 const MainOutput = new Output('Digital-IDE');
-const LspOutput = new Output('Digital-IDE Linter');
+const LinterOutput = new Output('Digital-IDE Linter');
 const YosysOutput = new Output('Digital-IDE Yosys');
 const WaveViewOutput = new Output('Digital-IDE Wave Viewer');
 const HardwareOutput = new Output('Digital-IDE Hareware');
@@ -126,7 +126,7 @@ const HardwareErrorOutput = new Output('Digital-IDE Hareware Error');
 export {
     ReportType,
     MainOutput,
-    LspOutput,
+    LinterOutput,
     YosysOutput,
     WaveViewOutput,
     HardwareOutput,

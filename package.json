@@ -299,6 +299,19 @@
                     "default": "full",
                     "description": "%digital-ide.function.lsp.linter.linter-mode.title%"
                 },
+                "digital-ide.function.lsp.linter.linter-level": {
+                    "type": "string",
+                    "enumDescriptions": [
+                        "%digital-ide.function.lsp.linter.linter-level.error.title%",
+                        "%digital-ide.function.lsp.linter.linter-level.warning.title%"
+                    ],
+                    "enum": [
+                        "error",
+                        "warning"
+                    ],
+                    "default": "warning",
+                    "description": "%digital-ide.function.lsp.linter.linter-level.title%"
+                },
                 "digital-ide.function.instantiation.addComment": {
                     "description": "%digital-ide.function.instantiation.addComment.title%",
                     "type": "boolean",

@@ -13,10 +13,11 @@ import * as tar from 'tar';
 import { platform } from "os";
 import { IProgress, LspClient, opeParam } from '../../global';
 import axios, { AxiosResponse } from "axios";
-import { chooseBestDownloadSource, getGiteeDownloadLink, getGithubDownloadLink, getPlatformPlatformSignature } from "./cdn";
+import { chooseBestDownloadSource } from "./cdn";
 import { hdlDir, hdlPath } from "../../hdlFs";
 import { registerConfigurationUpdater, registerLinter } from "./config";
 import { t } from "../../i18n";
+import { getPlatformPlatformSignature } from "../../global/util";
 
 function getLspServerExecutionName() {
     const osname = platform();
@@ -198,7 +199,8 @@ export async function activate(context: vscode.ExtensionContext, packageJson: an
         workspaceFolder,
         initializationOptions: {
             extensionPath,
-            toolChain: opeParam.prjInfo.toolChain
+            toolChain: opeParam.prjInfo.toolChain,
+            version: version
         }
     };
 

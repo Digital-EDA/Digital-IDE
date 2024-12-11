@@ -2,12 +2,13 @@ import * as chokidar from 'chokidar';
 import * as vscode from 'vscode';
 
 import { refreshArchTree } from '../function/treeView';
-import { AbsPath, MainOutput, opeParam, ReportType } from '../global';
+import { AbsPath, LspClient, MainOutput, opeParam, ReportType } from '../global';
 import { hdlFile, hdlPath } from '../hdlFs';
 import { hdlParam, HdlSymbol } from '../hdlParser';
 import type { HdlMonitor } from './index';
 import { BaseAction, Event } from './event';
 import { hdlIgnore } from '../manager/ignore';
+import { DoFastToolChainType, SyncFastRequestType } from '../global/lsp';
 
 export class HdlAction extends BaseAction {
     selectFSWatcher(m: HdlMonitor): chokidar.FSWatcher | undefined {
@@ -99,8 +100,10 @@ export class HdlAction extends BaseAction {
             return;
         }
 
+        const fileType = 'common';
+        const toolChain = opeParam.prjInfo.toolChain as DoFastToolChainType;
         // 更新 hdl 文件
-        const fast = await HdlSymbol.fast(path, 'common');
+        const fast = await LspClient.DigitalIDE?.sendRequest(SyncFastRequestType, { path, fileType, toolChain })
         if (fast) {
             hdlParam.updateFast(path, fast);
         }

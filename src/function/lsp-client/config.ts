@@ -4,6 +4,10 @@ import { UpdateConfigurationType } from '../../global/lsp';
 import * as Linter from '../lsp/linter/common';
 import { HdlLangID } from '../../global/enum';
 import * as lspLinter from '../lsp/linter';
+import { t } from '../../i18n';
+import { IProgress } from '../../global';
+import { refreshWorkspaceDiagonastics } from '../lsp/linter/manager';
+import { prjManage } from '../../manager';
 
 interface ConfigItem {
     name: string,
@@ -124,6 +128,15 @@ export async function registerConfigurationUpdater(client: LanguageClient, packa
                 }
             }
         }
+
+        // 如果诊断模式发生变化，进行一次刷新
+        await vscode.window.withProgress({
+            location: vscode.ProgressLocation.Window,
+            title: t('info.progress.doing-diagnostic')
+        }, async (progress: vscode.Progress<IProgress>, token: vscode.CancellationToken) => {
+            const hdlFiles = await prjManage.getPrjHardwareFiles();
+            await refreshWorkspaceDiagonastics(client, hdlFiles, false, progress);
+        });
     });
 }
 

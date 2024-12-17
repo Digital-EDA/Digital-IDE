@@ -94,5 +94,7 @@
     "error.linter.status-bar.tooltip": "無法取得 {0} 診斷器",
     "info.linter.status-bar.tooltip": "診斷器 {0} 正在運作",
     "warning.linter.cannot-get-valid-linter-invoker": "Digital IDE 無法取得關於 {0} 的呼叫路徑，請安裝對應診斷器後，配置到環境變數 PATH 或者配置 Digital IDE 對應的診斷工具安裝路徑。",
-    "info.linter.config-linter-install-path": "配置安裝目錄"
+    "info.linter.config-linter-install-path": "配置安裝目錄",
+    "info.progress.doing-diagnostic": "診斷中",
+    "error.common.fail-to-launch-lsp": "語言伺服器啟動失敗！"
 }

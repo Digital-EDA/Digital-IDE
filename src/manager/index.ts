@@ -4,7 +4,7 @@ import * as assert from 'assert';
 import { prjManage } from './prj';
 import { pickLibrary } from './libPick';
 
-function registerManagerCommands(context: vscode.ExtensionContext) {
+export function registerManagerCommands(context: vscode.ExtensionContext) {
     // make ps and ps have been prepared
     assert(prjManage.pl, 'pl is undefined');
     // assert(prjManage.ps, 'ps is undefined');
@@ -45,6 +45,5 @@ function registerManagerCommands(context: vscode.ExtensionContext) {
 }
 
 export {
-    prjManage,
-    registerManagerCommands
+    prjManage
 };

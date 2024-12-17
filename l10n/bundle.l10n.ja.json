@@ -94,5 +94,7 @@
     "error.linter.status-bar.tooltip": "{0} 診断機能を取得できません",
     "info.linter.status-bar.tooltip": "診断ツール {0} が作動中",
     "warning.linter.cannot-get-valid-linter-invoker": "デジタルIDEは{0}の呼び出しパスを取得できません。対応する診断ツールをインストールし、環境変数PATHに設定するか、デジタルIDEの診断ツールインストールパスを設定してください。",
-    "info.linter.config-linter-install-path": "インストールディレクトリを設定"
+    "info.linter.config-linter-install-path": "インストールディレクトリを設定",
+    "info.progress.doing-diagnostic": "診断中",
+    "error.common.fail-to-launch-lsp": "言語サーバーの起動に失敗しました！"
 }

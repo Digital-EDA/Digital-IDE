@@ -16,6 +16,7 @@ import { t } from '../i18n';
 import { PpyAction } from '../monitor/propery';
 import { refreshArchTree } from '../function/treeView';
 import * as lspClient from '../function/lsp-client';
+import { refreshWorkspaceDiagonastics } from '../function/lsp/linter/manager';
 
 
 interface RefreshPrjConfig {
@@ -211,6 +212,8 @@ class PrjManage {
         if (countTimeCost) {
             console.timeLog('launch');
         }
+
+        return hdlFiles;
     }
 
     public async refreshPrjFolder(config?: RefreshPrjConfig) {

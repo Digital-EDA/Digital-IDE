@@ -1,11 +1,14 @@
 import * as vscode from 'vscode';
-import { LspClient, LinterOutput, ReportType } from '../../../global';
+import * as os from 'os';
+
+import { LspClient, LinterOutput, ReportType, AbsPath, IProgress } from '../../../global';
 import { HdlLangID } from '../../../global/enum';
 import { hdlFile, hdlPath } from '../../../hdlFs';
 import { t } from '../../../i18n';
 import { getLinterConfigurationName, getLinterInstallConfigurationName, getLinterName, IConfigReminder, LinterItem, LinterMode, makeLinterNamePickItem, makeLinterOptions, SupportLinterName, updateLinterConfigurationName } from './common';
 import { UpdateConfigurationType } from '../../../global/lsp';
 import { LanguageClient } from 'vscode-languageclient/node';
+import { toEscapePath } from '../../../hdlFs/path';
 
 export class LinterManager {
     /**
@@ -92,9 +95,6 @@ export class LinterManager {
         // 根据配置选择对应的诊断器
         await this.updateCurrentLinterItem(client);
 
-        // TODO: 根据当前的诊断模式进行选择
-
-
         // 注册内部命令
         if (!this.started) {
             const pickerCommand = this.getLinterPickCommand();
@@ -118,25 +118,6 @@ export class LinterManager {
         LinterOutput.report(t('info.linter.finish-init', this.langID, this.currentLinterItem?.name || 'unknown'), {
             level: ReportType.Launch
         });
-    }
-
-    /**
-     * @description 刷新当前工作区所有文件的 linter 状态。仅仅在初始化和更新配置文件时需要使用。
-     */
-    public async refreshWorkspaceLinterResult(linterMode: LinterMode) {
-        switch (linterMode) {
-            case LinterMode.Full:
-                
-                break;
-            case LinterMode.Single:
-
-                break;
-            case LinterMode.Shutdown:
-
-                break;
-            default:
-                break;
-        }
     }
 
     /**
@@ -261,6 +242,130 @@ export class LinterManager {
         });
 
         pickWidget.show();
+    }
+}
+
+export async function publishDiagnostics(
+    client: LanguageClient,
+    path: string
+) {
+    await client.sendRequest("workspace/executeCommand", {
+        command: 'publish-diagnostics',
+        arguments: [path]
+    });
+}
+
+export async function clearDiagnostics(
+    client: LanguageClient,
+    path: string
+) {
+    await client.sendRequest("workspace/executeCommand", {
+        command: 'clear-diagnostics',
+        arguments: [path]
+    });
+}
+
+/**
+ * @description 异步方法的受限并发消费
+ * @param arrays 
+ * @param consumer 
+ * @param poolNum 
+ */
+export async function asyncConsumer<T, R>(
+    arrays: T[],
+    consumer: (item: T) => Promise<R>,
+    poolNum: number,
+    progress?: vscode.Progress<IProgress>
+): Promise<R[]> {
+    const rets: R[] = [];
+    const pools = [];
+    let i = 0;
+
+    progress?.report({ message: `${1}/${arrays.length}`, increment: 0 });
+
+    while (i < arrays.length) {
+        const p = consumer(arrays[i]);
+        pools.push({ id: i + 1, promise: p });
+        if (pools.length % poolNum === 0) {
+            for (const p of pools) {
+                const ret = await p.promise;
+                const increment = Math.floor(p.id / arrays.length * 100);
+                progress?.report({ message: `${p.id}/${arrays.length}`, increment });
+                rets.push(ret);
+            }
+            pools.length = 0;
+        }
+        i ++;
+    }
+    
+    for (const p of pools) {
+        const ret = await p.promise;
+        const increment = Math.floor(p.id / arrays.length * 100);
+        progress?.report({ message: `${p.id}/${arrays.length}`, increment });
+        rets.push(ret);
+    }
+
+    return rets;
+}
+
+/**
+ * @description 刷新当前工作区所有文件的 linter 状态。仅仅在初始化和更新配置文件时需要使用。
+ */
+export async function refreshWorkspaceDiagonastics(
+    client: LanguageClient,
+    lintPaths: AbsPath[],
+    isInitialise: boolean,
+    progress: vscode.Progress<IProgress>
+) {
+    const parallelChunk = Math.min(os.cpus().length, 32);
+    const configuration = vscode.workspace.getConfiguration();
+    const linterMode = configuration.get<LinterMode>('digital-ide.function.lsp.linter.linter-mode', LinterMode.Common);
+    
+    console.log('进入诊断，当前诊断模式:', linterMode, lintPaths);
+    
+    if (linterMode === LinterMode.Full) {
+        // full，对工作区所有文件进行诊断
+        const consumer = async (path: string) => {
+            await publishDiagnostics(client, path);
+        }
+        await asyncConsumer(lintPaths, consumer, parallelChunk);
+    } else if (linterMode === LinterMode.Common) {
+        // common, 只对打开文件进行操作
+        // 先清除所有的诊断结果
+        const clearConsumer = async (path: string) => {
+            await clearDiagnostics(client, path);
+        }
+        await asyncConsumer(lintPaths, clearConsumer, parallelChunk);
+
+        // 再对激活区域进行诊断
+        const consumer = async (path: string) => {
+            await publishDiagnostics(client, path);
+        }
+
+        const tabs = vscode.window.tabGroups.all;
+        const tabArray = tabs.flatMap<AbsPath>(group => {
+            const files = [];
+            for (const tab of group.tabs) {
+                if (tab.input) {
+                    const doc = tab.input as vscode.TabInputText;
+                    if (doc.uri) {
+                        const absPath = hdlPath.toEscapePath(doc.uri.fsPath);
+                        files.push(absPath);
+                    }
+                }
+            }
+            return files;
+        });
+        
+        await asyncConsumer(tabArray, consumer, parallelChunk);
+    } else {
+        // shutdown, 如果是初始化阶段，什么都不需要做
+        const consumer = async (path: string) => {
+            await clearDiagnostics(client, path);
+        };
+        if (!isInitialise) {
+            await asyncConsumer(lintPaths, consumer, parallelChunk);
+        }
     }
 }
 

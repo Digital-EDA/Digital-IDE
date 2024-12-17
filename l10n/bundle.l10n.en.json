@@ -94,5 +94,7 @@
     "error.linter.status-bar.tooltip": "Unable to get {0} diagnoser",
     "info.linter.status-bar.tooltip": "Diagnostics {0} is working",
     "warning.linter.cannot-get-valid-linter-invoker": "The Digital IDE cannot retrieve the call path for {0}. Please install the corresponding diagnostic tool and configure it either in the environment variable PATH or in the Digital IDE's diagnostic tool installation path.",
-    "info.linter.config-linter-install-path": "Configure installation directory"
+    "info.linter.config-linter-install-path": "Configure installation directory",
+    "info.progress.doing-diagnostic": "Diagnosing",
+    "error.common.fail-to-launch-lsp": "Language server startup failed!"
 }

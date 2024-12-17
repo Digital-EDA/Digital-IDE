@@ -1,8 +1,6 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 
-import { vivadoLinter } from './vivado';
-import { modelsimLinter } from './modelsim';
 import { HdlLangID } from '../../../global/enum';
 import { t } from '../../../i18n';
 import { LspClient } from '../../../global';
@@ -114,7 +112,7 @@ export async function makeLinterOptions(
 
 export enum LinterMode {
     Full = 'full',
-    Single = 'single',
+    Common = 'common',
     Shutdown = 'shutdown'
 }
 

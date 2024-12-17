@@ -4,12 +4,12 @@ import * as fs from 'fs';
 import { MainOutput, ReportType, IProgress } from './global';
 import { hdlParam } from './hdlParser';
 import * as manager from './manager';
+import * as lspLinter from './function/lsp/linter';
 import * as func from './function';
 import { hdlMonitor } from './monitor';
 
 import * as lspClient from './function/lsp-client';
 import { refreshArchTree } from './function/treeView';
-import { hdlFile } from './hdlFs';
 import { initialiseI18n, t } from './i18n';
 
 
@@ -85,12 +85,12 @@ async function launch(context: vscode.ExtensionContext) {
         await lspClient.activate(context, packageJson);
     });
         
-    await vscode.window.withProgress({
+    const hdlFiles = await vscode.window.withProgress({
         location: vscode.ProgressLocation.Window,
         title: t('info.progress.initialization')
     }, async (progress: vscode.Progress<IProgress>, token: vscode.CancellationToken) => {
         // 初始化解析
-        await manager.prjManage.initialise(context, progress);
+        const hdlFiles = await manager.prjManage.initialise(context, progress);
         
         // 这里是因为 pl 对象在 initialise 完成初始化，此处再注册它的行为
         manager.registerManagerCommands(context);
@@ -100,8 +100,18 @@ async function launch(context: vscode.ExtensionContext) {
 
         // 启动监视器
         hdlMonitor.start();
+
+        return hdlFiles;
     });
 
+
+    await vscode.window.withProgress({
+        location: vscode.ProgressLocation.Window,
+        title: t('info.progress.doing-diagnostic')
+    }, async (progress: vscode.Progress<IProgress>, token: vscode.CancellationToken) => {
+        // 完成诊断器初始化
+        await lspLinter.initialise(context, hdlFiles, progress);
+    });
 
     console.log(hdlParam);
     

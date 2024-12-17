@@ -332,7 +332,7 @@ class HdlParam {
                 const increment = Math.floor(p.id / fileNum * 100);
                 await p.promise;
                 // console.log("handle id " + p.id + ' increment: ' + increment);           
-                progress?.report({ message: reportTitle + ` ${p.id}/${fileNum}`, increment });
+                progress.report({ message: reportTitle + ` ${p.id}/${fileNum}`, increment });
             }
             pools.length = 0;
         }

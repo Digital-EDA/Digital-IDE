@@ -293,7 +293,7 @@
                     ],
                     "enum": [
                         "full",
-                        "single",
+                        "common",
                         "shutdown"
                     ],
                     "default": "full",

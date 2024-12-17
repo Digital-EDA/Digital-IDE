@@ -320,9 +320,7 @@ export async function refreshWorkspaceDiagonastics(
     const parallelChunk = Math.min(os.cpus().length, 32);
     const configuration = vscode.workspace.getConfiguration();
     const linterMode = configuration.get<LinterMode>('digital-ide.function.lsp.linter.linter-mode', LinterMode.Common);
-    
-    console.log('进入诊断，当前诊断模式:', linterMode, lintPaths);
-    
+        
     if (linterMode === LinterMode.Full) {
         // full，对工作区所有文件进行诊断
         const consumer = async (path: string) => {

@@ -181,14 +181,14 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
         const moduleType = element.name as keyof (SrcPath & SimPath);
 
         // 获取所有对应类型（src | sim）下的顶层模块数量
-        const topModules = hdlParam.getTopModulesByType(moduleType);
+        const topModules = hdlParam.getTopModulesByType(moduleType);        
         
         // 将所有顶层模块转换成 ModuleDataItem 自定义 treeview item 数据结构
         let topModuleItemList = topModules.map<ModuleDataItem>(module => ({
             icon: this.judgeTopModuleIconByDoFastType(module.file.doFastType),
             type: moduleType,
             doFastFileType: module.file.doFastType,
-            name: module.name,
+            name: module.archName === undefined ? module.name : `${module.name}(${module.archName})`,
             range: module.range,
             path: module.path,
             parent: element,

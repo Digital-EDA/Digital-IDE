@@ -656,7 +656,7 @@ class HdlInstance {
                     // 构造 fake hdlfile
                     if (opeParam.prjInfo.toolChain === 'xilinx') {
                         const fakeModule = new HdlModule(
-                            XilinxPrimitivesHdlFile, instModName, defaultRange, [], [], []);
+                            XilinxPrimitivesHdlFile, instModName, undefined, defaultRange, [], [], []);
                         this.module = fakeModule;
                         // 原语在任何情况下都不是顶层模块
                         hdlParam.deleteTopModule(fakeModule);
@@ -749,6 +749,7 @@ class HdlInstance {
 class HdlModule {
     file: HdlFile;
     name: string;
+    archName: string | undefined;
     range: common.Range;
     params: common.HdlModuleParam[];
     ports: common.HdlModulePort[];
@@ -761,6 +762,7 @@ class HdlModule {
 
     constructor(file: HdlFile, 
                 name: string, 
+                archName: string | undefined,
                 range: common.Range, 
                 params: common.HdlModuleParam[], 
                 ports: common.HdlModulePort[], 
@@ -768,6 +770,7 @@ class HdlModule {
         
         this.file = file;
         this.name = name;
+        this.archName = archName;
         this.range = range;
         this.params = params ? params : [];
         this.ports = ports ? ports : [];
@@ -1149,28 +1152,73 @@ export class HdlFile {
 
         // make nameToModule
         this.nameToModule = new Map<string, HdlModule>();
-        for (const rawHdlModule of modules) {
+
+        if (path.endsWith('vhd')) {
+            console.log(path);
+            console.log(modules);
+        }
+
+        for (const rawHdlModule of modules) {        
             this.createHdlModule(rawHdlModule);
         }
     }
 
     public createHdlModule(rawHdlModule: common.RawHdlModule): HdlModule {
+        const archName = rawHdlModule.archName.trim().length === 0 ? undefined: rawHdlModule.archName;
         const module: HdlModule = new HdlModule(this,
                                                 rawHdlModule.name,
+                                                archName,
                                                 rawHdlModule.range,
                                                 rawHdlModule.params,
                                                 rawHdlModule.ports,
                                                 rawHdlModule.instances);
-        this.nameToModule.set(rawHdlModule.name, module);
+        const key = this.makeKey(rawHdlModule.name, archName);
+        this.nameToModule.set(key, module);
         return module;
     }
 
+    public makeKey(name: string, archName: string | undefined): string {
+        return archName === undefined ? name: `${name}(${archName})`;
+    }
+
+    /**
+     * @description 判断一个名为 name 的 module 在不在当前文件中
+     * 如果存在关于 name 的映射，则直接返回，否则，寻找全文匹配含有 name 的 item
+     * @param name 
+     * @returns 
+     */
     public hasHdlModule(name: string): boolean {
-        return this.nameToModule.has(name);
+        if (this.nameToModule.has(name)) {
+            return true;
+        }
+
+        for (const moduleName of this.nameToModule.keys()) {
+            if (moduleName.includes('(')) {
+                const entityName = moduleName.split('(')[0];
+                if (entityName === name) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public getHdlModule(name: string): HdlModule | undefined {
-        return this.nameToModule.get(name);
+        const hdlModule = this.nameToModule.get(name);
+        if (hdlModule !== undefined) {
+            return hdlModule;
+        }
+
+        for (const [moduleName, hdlModule] of this.nameToModule.entries()) {
+            if (moduleName.includes('(')) {
+                const entityName = moduleName.split('(')[0];
+                if (entityName === name) {
+                    return hdlModule;
+                }
+            }
+        }
+
+        return undefined;
     }
 
     public getAllModuleNames(): string[] {

@@ -1153,10 +1153,6 @@ export class HdlFile {
         // make nameToModule
         this.nameToModule = new Map<string, HdlModule>();
 
-        if (path.endsWith('vhd')) {
-            console.log(path);
-            console.log(modules);
-        }
 
         for (const rawHdlModule of modules) {        
             this.createHdlModule(rawHdlModule);
@@ -1238,7 +1234,7 @@ export class HdlFile {
     }
 
     public deleteHdlModule(name: string) {
-        const hdlModule = this.getHdlModule(name);
+        let hdlModule = this.getHdlModule(name);
         if (hdlModule) {
             // delete child reference in the module which use this
             for (const childInst of hdlModule.getAllGlobalRefers()) {
@@ -1260,7 +1256,27 @@ export class HdlFile {
             hdlParam.deleteTopModule(hdlModule);
             hdlParam.deleteTopModuleToSource(hdlModule);
             hdlParam.modules.delete(hdlModule);
-            this.nameToModule.delete(hdlModule.name);
+            
+            // TODO: 未来迁移这段逻辑
+            hdlModule = this.nameToModule.get(name);
+            if (hdlModule !== undefined) {
+                this.nameToModule.delete(name);
+            } else {
+                let entityComName: undefined | string = undefined;
+                for (const moduleName of this.nameToModule.keys()) {
+                    if (moduleName.includes('(')) {
+                        const entityName = moduleName.split('(')[0];
+                        if (entityName === name) {
+                            entityComName = moduleName;
+                            break;
+                        }
+                    }
+                }
+
+                if (entityComName) {
+                    this.nameToModule.delete(entityComName);
+                }
+            }
         }
     }
     

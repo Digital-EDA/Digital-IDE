@@ -486,13 +486,13 @@ class HdlParam {
         }
     
         for (const rawHdlModule of fast.content) {
-            const moduleName = rawHdlModule.name;            
-            if (uncheckedModuleNames.has(moduleName)) {     
+            const renderName = moduleFile.makeKey(rawHdlModule.name, rawHdlModule.archName);
+            if (uncheckedModuleNames.has(renderName)) {     
                 // match the same module, check then
-                const originalModule = moduleFile.getHdlModule(moduleName);
-                uncheckedModuleNames.delete(moduleName);
-                originalModule?.update(rawHdlModule);                
-            } else {             
+                const originalModule = moduleFile.getHdlModule(renderName);
+                uncheckedModuleNames.delete(renderName);
+                originalModule?.update(rawHdlModule);           
+            } else {
                 // no matched, create it
                 const newModule = moduleFile.createHdlModule(rawHdlModule);
                 newModule.makeNameToInstances();
@@ -1153,7 +1153,6 @@ export class HdlFile {
         // make nameToModule
         this.nameToModule = new Map<string, HdlModule>();
 
-
         for (const rawHdlModule of modules) {        
             this.createHdlModule(rawHdlModule);
         }
@@ -1174,6 +1173,7 @@ export class HdlFile {
     }
 
     public makeKey(name: string, archName: string | undefined): string {
+        archName = archName ? archName: undefined;
         return archName === undefined ? name: `${name}(${archName})`;
     }
 
@@ -1235,6 +1235,7 @@ export class HdlFile {
 
     public deleteHdlModule(name: string) {
         let hdlModule = this.getHdlModule(name);
+        
         if (hdlModule) {
             // delete child reference in the module which use this
             for (const childInst of hdlModule.getAllGlobalRefers()) {

@@ -319,8 +319,6 @@ export async function refreshWorkspaceDiagonastics(
     const parallelChunk = Math.min(os.cpus().length, 32);
     const linterMode = getLinterMode();
     
-    console.log('[refreshWorkspaceDiagonastics]', linterMode);
-
     if (linterMode === LinterMode.Full) {
         // full，对工作区所有文件进行诊断
         const consumer = async (path: string) => {

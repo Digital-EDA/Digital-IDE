@@ -471,7 +471,6 @@ class HdlParam {
 
     public updateFast(path: string, fast: common.Fast) {
         const moduleFile = this.getHdlFile(path);
-        
         if (moduleFile === undefined) {
             return;
         }
@@ -867,8 +866,8 @@ class HdlModule {
         // 获取自身的        
         for (const inst of this.nameToInstances.values()) {
             instances.add(inst);
-            // 递归获取 inst 的
-            if (inst.module) {
+            // 递归获取 inst 的，防止无限递归
+            if (inst.module && inst.module !== this) {
                 for (const subInst of inst.module.getAllDependenceInstance()) {
                     instances.add(subInst);
                 }
@@ -910,9 +909,6 @@ class HdlModule {
                                                 rawHdlInstance.range,
                                                 this);
  
-            if (hdlInstance.module === undefined) {
-                hdlInstance.module =  this;
-            }
             if (this.nameToInstances) {
                 const key = this.makeInstanceKey(rawHdlInstance.name, rawHdlInstance.type);
                 this.nameToInstances.set(key, hdlInstance);
@@ -1152,8 +1148,7 @@ export class HdlFile {
 
         // make nameToModule
         this.nameToModule = new Map<string, HdlModule>();
-
-        for (const rawHdlModule of modules) {        
+        for (const rawHdlModule of modules) {
             this.createHdlModule(rawHdlModule);
         }
     }

@@ -120,10 +120,7 @@ export enum LinterMode {
     Shutdown = 'shutdown'
 }
 
-export function getLinterMode(): LinterMode {
-    console.log(vscode.workspace.getConfiguration().get('digital-ide.function.lsp.linter.mode'));
-    console.log(vscode.workspace.getConfiguration().get('digital-ide.function.lsp.linter.linter-level'));
-    
+export function getLinterMode(): LinterMode {    
     return vscode.workspace.getConfiguration().get<LinterMode>('digital-ide.function.lsp.linter.mode') || LinterMode.Common;
 }
 

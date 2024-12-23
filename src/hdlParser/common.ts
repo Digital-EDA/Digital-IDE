@@ -26,7 +26,9 @@ interface Range {
 enum HdlModulePortType {
     Inout = 'inout', 
     Output = 'output', 
-    Input = 'input', 
+    Input = 'input',
+    VhdlInput = 'in',
+    VhdlOutput = 'out',
     Unknown = 'unknown'
 };
 

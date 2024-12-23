@@ -137,7 +137,7 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
         // set tooltip
         treeItem.tooltip = element.path;
         if (!treeItem.tooltip) {
-            treeItem.tooltip = t('info.treeview.item.tooltip');
+            treeItem.tooltip = 'src';
         }
 
         // set iconPath
@@ -201,29 +201,32 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
             const type = moduleType as keyof FirstTop;
 
             // 默认选择依赖模块最多的作为 first top
-            let firstTop: { path: string, name: string } | undefined = undefined;
-            let maxDepSize = 0;
+            let firstTop = this.firstTop[type];
 
-            
-            for (const hdlModule of topModules) {
-                // 此处断言是因为当前的 name 和 path 是从 topModules 中提取的
-                // 它们对应的 hdlModule 一定存在
-                const deps = hdlParam.getAllDependences(hdlModule.path, hdlModule.name)!;
-                const depSize = deps.include.length + deps.others.length;
-                if (depSize > maxDepSize) {
-                    maxDepSize = depSize;
-                    firstTop = { path: hdlModule.path, name: hdlModule.name };
+            if (!firstTop) {
+                let maxDepSize = 0;            
+                for (const hdlModule of topModules) {
+                    // 此处断言是因为当前的 name 和 path 是从 topModules 中提取的
+                    // 它们对应的 hdlModule 一定存在
+                    const deps = hdlParam.getAllDependences(hdlModule.path, hdlModule.name)!;
+                    const depSize = deps.include.length + deps.others.length;
+                    if (depSize > maxDepSize) {
+                        maxDepSize = depSize;
+                        firstTop = { path: hdlModule.path, name: hdlModule.name };
+                    }
+                }
+
+                if (firstTop) {
+                    // 将当前模块设置为 first top
+                    this.setFirstTop(type, firstTop.name, firstTop.path);
                 }
             }
 
-            if (firstTop === undefined) {
+            if (!firstTop) {
                 // 没有找到顶层模块，代表当前本来就是空的
                 // 此时 topModuleItemList 一定是 []
                 return topModuleItemList;
             }
-
-            // 将当前模块设置为 first top
-            this.setFirstTop(type, firstTop.name, firstTop.path);
 
             // 将 first top 放到数据列表开头
             const firstTopIcon = this.makeFirstTopIconName(type);

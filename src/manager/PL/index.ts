@@ -105,10 +105,6 @@ class PlManage extends BaseManage {
     public setSrcTop(item: ModuleDataItem) {        
         this.context.ope.setSrcTop(item.name, this.context);
         const type = moduleTreeProvider.getItemType(item);
-        console.log('set top');
-        console.log(type);
-        console.log(item);
-
         
         if (type === HdlFileProjectType.Src) {
             moduleTreeProvider.setFirstTop(HdlFileProjectType.Src, item.name, item.path);

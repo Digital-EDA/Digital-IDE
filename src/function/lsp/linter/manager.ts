@@ -329,11 +329,13 @@ export async function refreshWorkspaceDiagonastics(
         await asyncConsumer(lintPaths, consumer, parallelChunk, progress);
     } else if (linterMode === LinterMode.Common) {
         // common, 只对打开文件进行操作
-        // 先清除所有的诊断结果
-        const clearConsumer = async (path: string) => {
-            await clearDiagnostics(client, path);
+        if (!isInitialise) {
+            // 先清除所有的诊断结果
+            const clearConsumer = async (path: string) => {
+                await clearDiagnostics(client, path);
+            }
+            await asyncConsumer(lintPaths, clearConsumer, parallelChunk);
         }
-        await asyncConsumer(lintPaths, clearConsumer, parallelChunk);
 
         // 再对激活区域进行诊断
         const consumer = async (path: string) => {

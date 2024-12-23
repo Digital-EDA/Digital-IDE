@@ -1,14 +1,13 @@
 import * as vscode from 'vscode';
 import * as os from 'os';
 
-import { LspClient, LinterOutput, ReportType, AbsPath, IProgress } from '../../../global';
+import { LinterOutput, ReportType, AbsPath, IProgress } from '../../../global';
 import { HdlLangID } from '../../../global/enum';
 import { hdlFile, hdlPath } from '../../../hdlFs';
 import { t } from '../../../i18n';
-import { getLinterConfigurationName, getLinterInstallConfigurationName, getLinterName, IConfigReminder, LinterItem, LinterMode, makeLinterNamePickItem, makeLinterOptions, SupportLinterName, updateLinterConfigurationName } from './common';
+import { getLinterConfigurationName, getLinterInstallConfigurationName, getLinterMode, getLinterName, IConfigReminder, LinterItem, LinterMode, makeLinterNamePickItem, makeLinterOptions, SupportLinterName, updateLinterConfigurationName } from './common';
 import { UpdateConfigurationType } from '../../../global/lsp';
 import { LanguageClient } from 'vscode-languageclient/node';
-import { toEscapePath } from '../../../hdlFs/path';
 
 export class LinterManager {
     /**
@@ -318,9 +317,10 @@ export async function refreshWorkspaceDiagonastics(
     progress: vscode.Progress<IProgress>
 ) {
     const parallelChunk = Math.min(os.cpus().length, 32);
-    const configuration = vscode.workspace.getConfiguration();
-    const linterMode = configuration.get<LinterMode>('digital-ide.function.lsp.linter.linter-mode', LinterMode.Common);
-        
+    const linterMode = getLinterMode();
+    
+    console.log('[refreshWorkspaceDiagonastics]', linterMode);
+
     if (linterMode === LinterMode.Full) {
         // full，对工作区所有文件进行诊断
         const consumer = async (path: string) => {
@@ -359,11 +359,11 @@ export async function refreshWorkspaceDiagonastics(
         
         await asyncConsumer(tabArray, consumer, parallelChunk, progress);
     } else {
-        // shutdown, 如果是初始化阶段，什么都不需要做
-        const consumer = async (path: string) => {
-            await clearDiagnostics(client, path);
-        };
         if (!isInitialise) {
+            // shutdown, 如果是初始化阶段，什么都不需要做
+            const consumer = async (path: string) => {
+                await clearDiagnostics(client, path);
+            };            
             await asyncConsumer(lintPaths, consumer, parallelChunk, progress);
         }
     }

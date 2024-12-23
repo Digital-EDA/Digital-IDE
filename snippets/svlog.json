@@ -581,14 +581,6 @@
 		"description":"interface name; ... endinterface"
 	},
 
-	"display":{
-		"prefix":"display",
-		"body":[
-			"\\$display($0);"
-		],
-		"description":"$display(\"...\", params...)"
-	},
-
 	"set Module":{
 		"prefix":"setmodule",
 		"body":[
@@ -663,22 +655,6 @@
 		"description": "forever begin ... end"
 	},
 
-    "write":{
-		"prefix": "$write",
-		"body": [
-			"\\$write($1)"
-		],
-		"description": ""
-	},
-
-    "clog2":{
-		"prefix": "$clog2",
-		"body": [
-			"\\$clog2($1)"
-		],
-		"description": ""
-	},
-
     "signed":{
 		"prefix": "$signed",
 		"body": [
@@ -695,14 +671,6 @@
 		"description": ""
 	},
 
-    "random" : {
-		"prefix": "$random",
-		"body": [
-			"\\$random($1)"
-		],
-		"description": ""
-	},
-
     "wavedrom comment": {
         "prefix" : "wavedrom",
         "body": [
@@ -711,27 +679,6 @@
             "    $1",
             "}",
             "*/"
-        ]
-    },
-
-    "dumpfile": {
-        "prefix": "$dumpfile",
-        "body": [
-			"\\$dumpfile(\"$1\");"
-		]
-    },
-
-    "dumpvars": {
-        "prefix": "$dumpvars",
-        "body": [
-			"\\$dumpvars;"
-		]
-    },
-
-    "finish": {
-        "prefix": "$finish",
-        "body": [
-            "\\$finish;"
         ]
     }
 }

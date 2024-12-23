@@ -326,7 +326,7 @@ export async function refreshWorkspaceDiagonastics(
         const consumer = async (path: string) => {
             await publishDiagnostics(client, path);
         }
-        await asyncConsumer(lintPaths, consumer, parallelChunk);
+        await asyncConsumer(lintPaths, consumer, parallelChunk, progress);
     } else if (linterMode === LinterMode.Common) {
         // common, 只对打开文件进行操作
         // 先清除所有的诊断结果
@@ -355,14 +355,14 @@ export async function refreshWorkspaceDiagonastics(
             return files;
         });
         
-        await asyncConsumer(tabArray, consumer, parallelChunk);
+        await asyncConsumer(tabArray, consumer, parallelChunk, progress);
     } else {
         // shutdown, 如果是初始化阶段，什么都不需要做
         const consumer = async (path: string) => {
             await clearDiagnostics(client, path);
         };
         if (!isInitialise) {
-            await asyncConsumer(lintPaths, consumer, parallelChunk);
+            await asyncConsumer(lintPaths, consumer, parallelChunk, progress);
         }
     }
 }

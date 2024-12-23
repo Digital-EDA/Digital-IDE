@@ -52,7 +52,7 @@ export function getLinterInstallConfigurationName(linterName: SupportLinterName)
 }
 
 export function getLinterModeConfigurationName(): string {
-    return 'digital-ide.function.lsp.linter.linter-mode';
+    return 'digital-ide.function.lsp.linter.mode';
 }
 
 export function getLinterInstallPath(linterName: SupportLinterName): string {
@@ -121,10 +121,10 @@ export enum LinterMode {
 }
 
 export function getLinterMode(): LinterMode {
-    console.log(vscode.workspace.getConfiguration().get('digital-ide.function.lsp.linter.linter-mode'));
+    console.log(vscode.workspace.getConfiguration().get('digital-ide.function.lsp.linter.mode'));
     console.log(vscode.workspace.getConfiguration().get('digital-ide.function.lsp.linter.linter-level'));
     
-    return vscode.workspace.getConfiguration().get<LinterMode>('digital-ide.function.lsp.linter.linter-mode') || LinterMode.Common;
+    return vscode.workspace.getConfiguration().get<LinterMode>('digital-ide.function.lsp.linter.mode') || LinterMode.Common;
 }
 
 export interface IConfigReminder {

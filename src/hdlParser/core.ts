@@ -247,6 +247,11 @@ class HdlParam {
         for (const inst of this.unhandleInstances) {
             if (inst.type === moduleName) {
                 unsolvedInstances.push(inst);
+            } else if (inst.type.includes('(')) {
+                const entityName = moduleName.split('(')[0];
+                if (entityName === moduleName) {
+                    unsolvedInstances.push(inst);
+                }
             }
         }
         return unsolvedInstances;
@@ -490,7 +495,7 @@ class HdlParam {
                 // match the same module, check then
                 const originalModule = moduleFile.getHdlModule(renderName);
                 uncheckedModuleNames.delete(renderName);
-                originalModule?.update(rawHdlModule);           
+                originalModule?.update(rawHdlModule);        
             } else {
                 // no matched, create it
                 const newModule = moduleFile.createHdlModule(rawHdlModule);
@@ -889,7 +894,7 @@ class HdlModule {
                                                 rawHdlInstance.instports,
                                                 rawHdlInstance.range,
                                                 this);
-            if (!searchResult.path) {
+            if (!searchResult.path || !hdlPath.exist(searchResult.path)) {
                 hdlParam.addUnhandleInstance(hdlInstance);
                 this.addUnhandleInstance(hdlInstance);
             }
@@ -908,7 +913,11 @@ class HdlModule {
                                                 rawHdlInstance.instports,
                                                 rawHdlInstance.range,
                                                 this);
- 
+            
+            if (!searchResult.path || !hdlPath.exist(searchResult.path)) {
+                hdlParam.addUnhandleInstance(hdlInstance);
+                this.addUnhandleInstance(hdlInstance);
+            }
             if (this.nameToInstances) {
                 const key = this.makeInstanceKey(rawHdlInstance.name, rawHdlInstance.type);
                 this.nameToInstances.set(key, hdlInstance);
@@ -1069,7 +1078,7 @@ class HdlModule {
      */
     public solveUnhandleInstance() {
         const instances = hdlParam.getUnhandleInstancesByModuleName(this.name);
-
+        
         for (const instance of instances) {
             const belongScopeModule = instance.parentMod;
             // 先从 unsolved 堆中删除当前的 instance

@@ -284,12 +284,12 @@
                     "default": "vivado",
                     "description": "%digital-ide.function.lsp.linter.vhdl.diagnostor.title%"
                 },
-                "digital-ide.function.lsp.linter.linter-mode": {
+                "digital-ide.function.lsp.linter.mode": {
                     "type": "string",
                     "enumDescriptions": [
-                        "%digital-ide.function.lsp.linter.linter-mode.0.title%",
-                        "%digital-ide.function.lsp.linter.linter-mode.1.title%",
-                        "%digital-ide.function.lsp.linter.linter-mode.2.title%"
+                        "%digital-ide.function.lsp.linter.mode.0.title%",
+                        "%digital-ide.function.lsp.linter.mode.1.title%",
+                        "%digital-ide.function.lsp.linter.mode.2.title%"
                     ],
                     "enum": [
                         "full",
@@ -297,7 +297,7 @@
                         "shutdown"
                     ],
                     "default": "full",
-                    "description": "%digital-ide.function.lsp.linter.linter-mode.title%"
+                    "description": "%digital-ide.function.lsp.linter.mode.title%"
                 },
                 "digital-ide.function.lsp.linter.linter-level": {
                     "type": "string",

@@ -254,6 +254,8 @@ async function getDocsFromModule(module: HdlModule): Promise<MarkdownString> {
         ));
     } else {
         // 对于多文件，找出所有依赖项
+        console.log(module);
+        
         insts = [...module.getAllDependenceInstance()];
     }
 

@@ -42,6 +42,12 @@ function getArrowSvgString(name: 'left' | 'right' | 'left-right' | 'left-dot' | 
     return svgString;
 }
 
+/**
+ * @description 生成文档化中用于描述一个 module 的简易 diagram
+ * @param params 
+ * @param ports 
+ * @returns 
+ */
 function makeDiagram(params: HdlModuleParam[], ports: HdlModulePort[]): string {
     // make params block
     const diagramParamWrapper = makeDiagramParamWrapper(params);
@@ -77,8 +83,15 @@ function makeDiagramPortWrapper(ports: HdlModulePort[]): string {
         return '';
     }
 
-    const leftPorts = ports.filter(port => port.type === HdlModulePortType.Input || port.type === HdlModulePortType.Inout);
-    const rightPorts = ports.filter(port => port.type === HdlModulePortType.Output);
+    const leftPorts = ports.filter(port =>
+        port.type === HdlModulePortType.Input || 
+        port.type === HdlModulePortType.Inout ||
+        port.type === HdlModulePortType.VhdlInput
+    );
+    const rightPorts = ports.filter(port =>
+        port.type === HdlModulePortType.Output ||
+        port.type === HdlModulePortType.VhdlOutput
+    );
 
     const leftDirection = makeLeftDirection(leftPorts);    
     const diagramPorts = makeDiagramPorts(leftPorts, rightPorts);    
@@ -107,13 +120,13 @@ function makePortArrow(port: HdlModulePort, direction: 'left' | 'right'): string
         return getArrowSvgString('left-right');
     }
     if (direction === 'left') {
-        if (port.type === HdlModulePortType.Input) {
+        if (port.type === HdlModulePortType.Input || port.type === HdlModulePortType.VhdlInput) {
             if (isValidWidth(port.width)) {
                 return getArrowSvgString('right-dot');
             } else {
                 return getArrowSvgString('right');
             }
-        } else if (port.type === HdlModulePortType.Output) {
+        } else if (port.type === HdlModulePortType.Output || port.type === HdlModulePortType.VhdlOutput) {
             if (isValidWidth(port.width)) {
                 return getArrowSvgString('left-dot');
             } else {
@@ -121,13 +134,13 @@ function makePortArrow(port: HdlModulePort, direction: 'left' | 'right'): string
             }
         }
     } else if (direction === 'right') {
-        if (port.type === HdlModulePortType.Input) {
+        if (port.type === HdlModulePortType.Input || port.type === HdlModulePortType.VhdlInput) {
             if (isValidWidth(port.width)) {
                 return getArrowSvgString('left-dot');
             } else {
                 return getArrowSvgString('left');
             }
-        } else if (port.type === HdlModulePortType.Output) {
+        } else if (port.type === HdlModulePortType.Output || port.type === HdlModulePortType.VhdlOutput) {
             if (isValidWidth(port.width)) {
                 return getArrowSvgString('right-dot');
             } else {
@@ -151,9 +164,9 @@ function makeLeftDirection(leftPorts: HdlModulePort[]): string {
 
 function makePortName(port: HdlModulePort): string {
     let portClass = '';
-    if (port.type === HdlModulePortType.Input) {
+    if (port.type === HdlModulePortType.Input || port.type === HdlModulePortType.VhdlInput) {
         portClass = 'i-port-name';
-    } else if (port.type === HdlModulePortType.Output) {
+    } else if (port.type === HdlModulePortType.Output || port.type === HdlModulePortType.VhdlOutput) {
         portClass = 'o-port-name';
     } else {
         portClass = 'io-port-name';

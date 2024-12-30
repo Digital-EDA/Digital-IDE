@@ -4,7 +4,11 @@ All notable changes to the "digital-ide" extension will be documented in this fi
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.4.0]
 
+- 新的 VCD 波形渲染器
+- 新的 Netlist 渲染器
+- 新的 LSP 后端
 
 ## [0.3.4] - 2024-08-28
 

@@ -333,6 +333,21 @@
                     "type": "integer",
                     "default": 1,
                     "description": "%digital-ide.function.lsp.file-parse-maxsize.title%"
+                },
+                "digital-ide.function.netlist.schema-mode": {
+                    "type": "string",
+                    "default": "before",
+                    "enum": [
+                        "before",
+                        "after",
+                        "RTL"
+                    ],
+                    "enumDescriptions": [
+                        "%digital-ide.function.netlist.schema-mode.0.title%",
+                        "%digital-ide.function.netlist.schema-mode.1.title%",
+                        "%digital-ide.function.netlist.schema-mode.2.title%"
+                    ],
+                    "description": "%digital-ide.function.netlist.schema-mode.title%"
                 }
             }
         },

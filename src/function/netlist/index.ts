@@ -1,27 +1,33 @@
 import * as vscode from 'vscode';
 import * as fspath from 'path';
+import * as fs from 'fs';
 
-import { NetlistKernel } from '../../../resources/netlist';
-import { opeParam, ReportType, YosysOutput } from '../../global';
+import { WASI } from 'wasi';
+import { AbsPath, opeParam, ReportType, YosysOutput } from '../../global';
 import { hdlParam } from '../../hdlParser';
-import { hdlFile, hdlPath } from '../../hdlFs';
+import { hdlDir, hdlFile, hdlPath } from '../../hdlFs';
 import { defaultMacro, doFastApi } from '../../hdlParser/util';
 import { HdlFile } from '../../hdlParser/core';
 import { t } from '../../i18n';
+import { HdlLangID } from '../../global/enum';
+
+type SynthMode = 'before' | 'after' | 'RTL';
 
 
 class Netlist {
-    kernel?: NetlistKernel;
     context: vscode.ExtensionContext;
+    wsName: string;
+    libName: string;
     panel?: vscode.WebviewPanel;
+    wasm?: WebAssembly.Module;
 
     constructor(context: vscode.ExtensionContext) {
         this.context = context;
+        this.wsName = 'dide';
+        this.libName = 'lib';
     }
 
-    public async open(uri: vscode.Uri) {
-
-        // get dependence of the current uri
+    public async open(uri: vscode.Uri, moduleName: string) {
         const prjFiles = [];
         const path = hdlPath.toSlash(uri.fsPath);
 
@@ -51,67 +57,149 @@ class Netlist {
         for (const hdlModule of moduleFile.getAllHdlModules()) {
             const hdlDependence = hdlParam.getAllDependences(path, hdlModule.name);
             if (hdlDependence) {
-                // kernel supports `include, so only others are needed
+                // include 宏在后续会被正确处理，所以只需要处理 others 即可
                 prjFiles.push(...hdlDependence.others);
             }
         }
-
         prjFiles.push(path);
 
-        // launch kernel
-        this.kernel = new NetlistKernel();
-        await this.kernel.launch();
+        console.log('enter', moduleName);
+        console.log(prjFiles);
+        console.log(opeParam.prjInfo.prjPath);
 
-        // set info output in kernel to console
-        this.kernel.setMessageCallback((message, type) => {
-            if (message !== '') {
-                YosysOutput.report('type: ' + type + ', ' + message);
-            }
-            if (type === "error") {
-                vscode.window.showErrorMessage('type: ' + type + ', ' + message);
-                YosysOutput.report('type: ' + type + ', ' + message, {
-                    level: ReportType.Error
-                });
-            }
+        if (!this.wasm) {
+            const wasm = await vscode.window.withProgress({
+                location: vscode.ProgressLocation.Notification,
+                title: t('info.netlist.launch-netlist')
+            }, async () => {
+                return await this.loadWasm();
+            });
+            this.wasm = wasm;
+        }
+
+        const targetYs = this.makeYs(prjFiles, moduleName);
+        if (!targetYs || !this.wasm) {
+            return;
+        }
+
+        const wasm = this.wasm;
+        const wasi = this.makeWasi(targetYs);
+        
+        await vscode.window.withProgress({
+            location: vscode.ProgressLocation.Notification,
+            title: t('info.netlist.generate-network'),
+            cancellable: true
+        }, async () => {
+            const instance = await WebAssembly.instantiate(wasm, {
+                wasi_snapshot_preview1: wasi.wasiImport
+            });
+            const exitCode = wasi.start(instance);
         });
-
-        prjFiles.forEach(file => YosysOutput.report('feed file: ' + file, {
-            level: ReportType.Debug
-        }));
-        this.kernel.load(prjFiles);
-        this.create();
     }
 
+    private getSynthMode(): SynthMode {
+        const configuration = vscode.workspace.getConfiguration();
+        return configuration.get<SynthMode>('digital-ide.function.netlist.schema-mode') || 'before';
+    }
+
+    private makeYs(files: AbsPath[], topModule: string) {
+        const netlistPayloadFolder = hdlPath.join(opeParam.prjInfo.prjPath, 'netlist');
+        hdlDir.mkdir(netlistPayloadFolder);
+        const target = hdlPath.join(netlistPayloadFolder, topModule + '.ys');
+        const targetJson = hdlPath.join(netlistPayloadFolder, topModule + '.json').replace(opeParam.workspacePath, '/' + this.wsName);
+
+        const scripts: string[] = [];
+        for (const file of files) {
+            const langID = hdlFile.getLanguageId(file);
+            if (langID === HdlLangID.Unknown || langID === HdlLangID.Vhdl) {
+                vscode.window.showErrorMessage(t('info.netlist.not-support-vhdl'));
+                return undefined;
+            }
+
+            if (file.startsWith(opeParam.workspacePath)) {
+                const constraintPath = file.replace(opeParam.workspacePath, '/' + this.wsName);
+                scripts.push(`read_verilog -sv -formal -overwrite ${constraintPath}`);
+            } else if (file.startsWith(opeParam.prjInfo.libCommonPath)) {
+                const constraintPath = file.replace(opeParam.prjInfo.libCommonPath, '/' + this.libName);
+                scripts.push(`read_verilog -sv -formal -overwrite ${constraintPath}`);
+            }
+        }
+
+        const mode = this.getSynthMode();
+        switch (mode) {
+        case 'before':
+            scripts.push('design -reset-vlog; proc;');
+            break;
+        case 'after':
+            scripts.push('design -reset-vlog; proc; opt_clean;');
+            break;
+        case 'RTL':
+            scripts.push('synth -run coarse;');
+            break;
+        }
+        scripts.push(`write_json ${targetJson}`);
+        const ysCode = scripts.join('\n');
+        hdlFile.writeFile(target, ysCode);
+        return target.replace(opeParam.workspacePath, '/' + this.wsName);
+    }
+
+    private makeWasi(target: string) {
+        // 创建日志文件路径
+        const logFilePath = hdlPath.join(opeParam.workspacePath, 'wasi_log.txt');
+        hdlFile.removeFile(logFilePath);
+
+        // 创建可写流，将标准输出和标准错误重定向到日志文件
+        const logFd = fs.openSync(logFilePath, 'a');
+        return new WASI({
+            version: 'preview1',
+            args: [
+                'yosys',
+                '-s',
+                target
+            ],
+            preopens: {
+                '/share': hdlPath.join(opeParam.extensionPath, 'resources', 'dide-netlist', 'static', 'share'),
+                ['/' + this.wsName ]: opeParam.workspacePath,
+                ['/' + this.libName]: opeParam.prjInfo.libCommonPath
+            },
+            stdin: process.stdin.fd,
+            stdout: logFd,
+            stderr: logFd,
+            env: process.env
+        });
+    }
+
+    private async loadWasm() {
+        const netlistWasmPath = hdlPath.join(opeParam.extensionPath, 'resources', 'dide-netlist', 'static', 'yosys.wasm');
+        if (!hdlPath.exist(netlistWasmPath)) {
+            vscode.window.showErrorMessage(t('info.netlist.not-found-payload'));
+            throw Error(t('info.netlist.not-found-payload'));
+        }
+        const binary = fs.readFileSync(netlistWasmPath);
+        const wasm = await WebAssembly.compile(binary);
+        return wasm;
+    }
+ 
     private create() {
         // Create panel
         this.panel = vscode.window.createWebviewPanel(
-            'netlist',
-            'Schematic viewer',
-            vscode.ViewColumn.One, {
+            'Netlist',
+            'Netlist',
+            vscode.ViewColumn.One,
+            {
                 enableScripts: true,
+                enableForms: true,
                 retainContextWhenHidden: true
             }
         );
 
         this.panel.onDidDispose(() => {
-            // When the panel is closed, cancel any future updates to the webview content
-            this.kernel?.exit();
-            this.panel?.dispose();
 
-            this.kernel = undefined;
-            this.panel = undefined;
-        }, null, this.context.subscriptions);
+        });
 
-        // Handle messages from the webview
         this.panel.webview.onDidReceiveMessage(message => {
-            console.log(message);
             switch (message.command) {
-                case 'export':
-                    this.export(message.type, message.svg);
-                break;
-                case 'exec':
-                    this.send();
-                break;
+
             }
         }, undefined, this.context.subscriptions);
 
@@ -126,16 +214,12 @@ class Netlist {
     }
     
     public send() {
-        this.kernel?.exec('proc');
-        const netlist = this.kernel?.export({type: 'json'});
-        
-        const command = 'netlist';
-        this.panel?.webview.postMessage({command, netlist});
+
     }
 
     public getWebviewContent() {
         const netlistPath = hdlPath.join(opeParam.extensionPath, 'resources', 'netlist', 'view');
-        const htmlIndexPath = hdlPath.join(netlistPath, 'netlist_viewer.html');
+        const htmlIndexPath = hdlPath.join(netlistPath, 'index.html');
 
         const html = hdlFile.readFile(htmlIndexPath)?.replace(/(<link.+?href="|<script.+?src="|<img.+?src=")(.+?)"/g, (m, $1, $2) => {
             const absLocalPath = fspath.resolve(netlistPath, $2);
@@ -175,11 +259,7 @@ class Netlist {
     }
 }
 
-async function openNetlistViewer(context: vscode.ExtensionContext, uri: vscode.Uri) {
+export async function openNetlistViewer(context: vscode.ExtensionContext, uri: vscode.Uri, moduleName: string) {
     const viewer = new Netlist(context);
-    viewer.open(uri);
+    viewer.open(uri, moduleName);
 }
-
-export {
-    openNetlistViewer
-};

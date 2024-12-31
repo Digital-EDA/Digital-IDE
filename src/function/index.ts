@@ -131,11 +131,11 @@ function registerFSM(context: vscode.ExtensionContext) {
 }
 
 function registerNetlist(context: vscode.ExtensionContext) {
-    vscode.commands.registerCommand('digital-ide.netlist.show', uri => {
+    vscode.commands.registerCommand('digital-ide.netlist.show', (uri, moduleName) => {
         if (typeof uri === 'string') {
             uri = vscode.Uri.file(uri);
         }
-        Netlist.openNetlistViewer(context, uri);
+        Netlist.openNetlistViewer(context, uri, moduleName);
     });
 }
 

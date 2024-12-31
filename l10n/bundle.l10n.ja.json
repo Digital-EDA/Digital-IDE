@@ -96,5 +96,9 @@
     "warning.linter.cannot-get-valid-linter-invoker": "デジタルIDEは{0}の呼び出しパスを取得できません。対応する診断ツールをインストールし、環境変数PATHに設定するか、デジタルIDEの診断ツールインストールパスを設定してください。",
     "info.linter.config-linter-install-path": "インストールディレクトリを設定",
     "info.progress.doing-diagnostic": "診断中",
-    "error.common.fail-to-launch-lsp": "言語サーバーの起動に失敗しました！"
+    "error.common.fail-to-launch-lsp": "言語サーバーの起動に失敗しました！",
+    "info.netlist.launch-netlist": "Netlistを起動中",
+    "info.netlist.not-found-payload": "ネットリストのロードリソースが見つかりません。インストールディレクトリが破損していないか確認してください！",
+    "info.netlist.not-support-vhdl": "現在のネットリストは一時的にVHDLやその他の言語をサポートしていません！",
+    "info.netlist.generate-network": "ネットワークトポロジを生成中"
 }

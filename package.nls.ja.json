@@ -100,5 +100,9 @@
     "digital-ide.function.lsp.linter.mode.2.title": "グローバルに無効化され、プロジェクト全体でプロジェクトエラーが報告されません。",
     "digital-ide.function.lsp.linter.linter-level.title": "診断器の診断レベル設定",
     "digital-ide.function.lsp.linter.linter-level.error.title": "エラーのみ表示",
-    "digital-ide.function.lsp.linter.linter-level.warning.title": "エラーと警告を表示"
+    "digital-ide.function.lsp.linter.linter-level.warning.title": "エラーと警告を表示",
+    "%digital-ide.function.netlist.schema-mode.title%": "Netlist 合成モードを選択",
+    "%digital-ide.function.netlist.schema-mode.0.title%": "ビヘイビア前合成",
+    "%digital-ide.function.netlist.schema-mode.1.title%": "ビヘイビア後合成",
+    "%digital-ide.function.netlist.schema-mode.2.title%": "RTL後合成"
 }

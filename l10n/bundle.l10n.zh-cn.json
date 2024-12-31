@@ -96,5 +96,9 @@
     "warning.linter.cannot-get-valid-linter-invoker": "Digital IDE 无法获取到关于 {0} 的调用路径，请安装对应诊断器后，配置到环境变量 PATH 或者配置 Digital IDE 对应的诊断工具安装路径",
     "info.linter.config-linter-install-path": "配置安装目录",
     "info.progress.doing-diagnostic": "诊断中",
-    "error.common.fail-to-launch-lsp": "语言服务器启动失败！"
+    "error.common.fail-to-launch-lsp": "语言服务器启动失败！",
+    "info.netlist.launch-netlist": "正在启动 Netlist",
+    "info.netlist.not-found-payload": "无法找到 netlist 的负载资源，请检查安装目录是否损坏！",
+    "info.netlist.not-support-vhdl": "当前 netlist 暂时不支持 VHDL 和其他语言！",
+    "info.netlist.generate-network": "正在生成网络拓扑"
 }

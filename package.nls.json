@@ -100,5 +100,9 @@
     "digital-ide.function.lsp.linter.mode.2.title": "Globally disabled, meaning no project errors are reported for the entire project.",
     "digital-ide.function.lsp.linter.linter-level.title": "Diagnostic Level Settings for the Linter",
     "digital-ide.function.lsp.linter.linter-level.error.title": "Show Only Errors",
-    "digital-ide.function.lsp.linter.linter-level.warning.title": "Show Errors and Warnings"
+    "digital-ide.function.lsp.linter.linter-level.warning.title": "Show Errors and Warnings",
+    "%digital-ide.function.netlist.schema-mode.title%": "Select Netlist Synthesis Mode",
+    "%digital-ide.function.netlist.schema-mode.0.title%": "Pre-Behavioral Synthesis",
+    "%digital-ide.function.netlist.schema-mode.1.title%": "Post-Behavioral Synthesis",
+    "%digital-ide.function.netlist.schema-mode.2.title%": "Post-RTL Synthesis"
 }

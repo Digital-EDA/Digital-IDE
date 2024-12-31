@@ -96,5 +96,9 @@
     "warning.linter.cannot-get-valid-linter-invoker": "Die digitale IDE kann keinen Aufrufpfad für {0} abrufen. Bitte installieren Sie den entsprechenden Diagnose-Tool und konfigurieren Sie ihn entweder in der Umgebungsvariablen PATH oder im digitalen IDE-Diagnosetool-Installationspfad.",
     "info.linter.config-linter-install-path": "Installationsverzeichnis konfigurieren",
     "info.progress.doing-diagnostic": "Diagnostizierung",
-    "error.common.fail-to-launch-lsp": "Start des Sprachservers fehlgeschlagen!"
+    "error.common.fail-to-launch-lsp": "Start des Sprachservers fehlgeschlagen!",
+    "info.netlist.launch-netlist": "Netlist wird gestartet",
+    "info.netlist.not-found-payload": "Die Lastressource des Netlists konnte nicht gefunden werden. Bitte überprüfen Sie, ob das Installationsverzeichnis beschädigt ist!",
+    "info.netlist.not-support-vhdl": "Das aktuelle Netlist unterstützt vorübergehend kein VHDL und andere Sprachen!",
+    "info.netlist.generate-network": "Netzwerktopologie wird generiert"
 }

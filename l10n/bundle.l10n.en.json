@@ -96,5 +96,9 @@
     "warning.linter.cannot-get-valid-linter-invoker": "The Digital IDE cannot retrieve the call path for {0}. Please install the corresponding diagnostic tool and configure it either in the environment variable PATH or in the Digital IDE's diagnostic tool installation path.",
     "info.linter.config-linter-install-path": "Configure installation directory",
     "info.progress.doing-diagnostic": "Diagnosing",
-    "error.common.fail-to-launch-lsp": "Language server startup failed!"
+    "error.common.fail-to-launch-lsp": "Language server startup failed!",
+    "info.netlist.launch-netlist": "Starting Netlist",
+    "info.netlist.not-found-payload": "Unable to find the load resource of the netlist, please check if the installation directory is corrupted!",
+    "info.netlist.not-support-vhdl": "The current netlist temporarily does not support VHDL and other languages!",
+    "info.netlist.generate-network": "Generating network topology"
 }

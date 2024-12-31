@@ -5,7 +5,9 @@
 		"outDir": "out",
         "skipLibCheck": true,
 		"lib": [
-			"ES2020"
+			"ES2020",
+            "dom",
+            "esnext"
 		],
 		"sourceMap": true,
 		"rootDir": "src",

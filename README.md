@@ -6,11 +6,10 @@
 
 [Document (New)](https://sterben.nitcloud.cn/) | [中文文档 (New)](https://sterben.nitcloud.cn/zh/) | [Bilibili Video](https://www.bilibili.com/video/BV1t14y1179V/?spm_id_from=333.999.0.0)
 
-![](https://img.shields.io/badge/version-0.3.3-blue)
-![](https://img.shields.io/badge/engine-wasm-blue)
+![](https://img.shields.io/badge/version-0.4.4-purple)
 ![](https://img.shields.io/badge/Verilog-support-green)
 ![](https://img.shields.io/badge/VHDL-support-green)
-![](https://img.shields.io/badge/SystemVerilog-building-black)
+![](https://img.shields.io/badge/SystemVerilog-support-green)
 
 </div>
 

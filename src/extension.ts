@@ -18,7 +18,6 @@ async function registerCommand(context: vscode.ExtensionContext, packageJson: an
     func.registerTreeViewDataProvider(context);
     func.registerLsp(context, packageJson.version);
     func.registerToolCommands(context);
-    func.registerFSM(context);
     func.registerNetlist(context);
     func.registerWaveViewer(context);
 

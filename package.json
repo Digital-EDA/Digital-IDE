@@ -698,11 +698,6 @@
                 },
                 {
                     "when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
-                    "command": "digital-ide.fsm.show",
-                    "group": "navigation@2"
-                },
-                {
-                    "when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
                     "command": "digital-ide.netlist.show",
                     "group": "navigation@3"
                 },
@@ -759,11 +754,6 @@
                     "group": "navigation@7"
                 },
                 {
-                    "when": "resourceLangId == verilog || resourceLangId == systemverilog || resourceLangId == vhdl",
-                    "command": "digital-ide.fsm.show",
-                    "group": "navigation@8"
-                },
-                {
                     "when": "resourceLangId == vhdl",
                     "command": "digital-ide.vhdl2vlog",
                     "group": "navigation@9"
@@ -804,11 +794,6 @@
                     "when": "resourceLangId == vcd || resourceLangId == view",
                     "command": "digital-ide.waveviewer.show",
                     "group": "navigation@10"
-                },
-                {
-                    "when": "resourceLangId == verilog || resourceLangId == systemverilog || resourceLangId == vhdl",
-                    "command": "digital-ide.fsm.show",
-                    "group": "navigation@11"
                 },
                 {
                     "when": "resourceLangId == vhdl",

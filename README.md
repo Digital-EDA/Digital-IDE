@@ -1,10 +1,8 @@
-<center>
+<div align="center">
 <img src="./images/icon.png"/>
 
-### Digital IDE <div style="color: #cb81da;background-color:#2d323b;width: fit-content;padding: 2px 7px;border-radius: .7rem"></div>
-All in one vscode plugin for Verilog/VHDL development
+## <code>Digital IDE</code> | All in one <code>vscode</code> plugin for Verilog/VHDL development
 
-<br>
 
 [Document (New)](https://sterben.nitcloud.cn/) | [中文文档 (New)](https://sterben.nitcloud.cn/zh/) | [Bilibili Video](https://www.bilibili.com/video/BV1t14y1179V/?spm_id_from=333.999.0.0)
 
@@ -14,7 +12,7 @@ All in one vscode plugin for Verilog/VHDL development
 ![](https://img.shields.io/badge/VHDL-support-green)
 ![](https://img.shields.io/badge/SystemVerilog-building-black)
 
-</center>
+</div>
 
 ## 0.4.0 新增内容
 

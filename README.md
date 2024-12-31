@@ -1,8 +1,12 @@
 <center>
 <img src="./images/icon.png"/>
-</center>
 
-# Digital IDE - version 0.3.3
+### Digital IDE <div style="color: #cb81da;background-color:#2d323b;width: fit-content;padding: 2px 7px;border-radius: .7rem"></div>
+All in one vscode plugin for Verilog/VHDL development
+
+<br>
+
+[Document (New)](https://sterben.nitcloud.cn/) | [中文文档 (New)](https://sterben.nitcloud.cn/zh/) | [Bilibili Video](https://www.bilibili.com/video/BV1t14y1179V/?spm_id_from=333.999.0.0)
 
 ![](https://img.shields.io/badge/version-0.3.3-blue)
 ![](https://img.shields.io/badge/engine-wasm-blue)
@@ -10,12 +14,24 @@
 ![](https://img.shields.io/badge/VHDL-support-green)
 ![](https://img.shields.io/badge/SystemVerilog-building-black)
 
-- [Document (New)](https://sterben.nitcloud.cn/)
-- [中文文档 (New)](https://sterben.nitcloud.cn/zh/)
-- [Video](https://www.bilibili.com/video/BV1t14y1179V/?spm_id_from=333.999.0.0)
+</center>
+
+## 0.4.0 新增内容
+
+**使用 Rust 重写全新的解析器与语言服务**：支持 verilog, vhdl, system verilog，性能更快，服务更加稳定。
+
+![](./figures/lsp.png)
+
+**修缮内容的文档化**：提供更加直接快速的，关于当前 HDL 文件的基本信息和依赖信息。支持 wavedrom 风格的注释并支持将其渲染成可视化的图表。
+
+![](./figures/doc.png)
+
+**新增内容的 Vcd 渲染器**：增加顶部工具栏、系统信标等组件；支持左侧面板选定信号的拖拽、分组等功能、支持按住 shift 连续选中一片信号并进行增加和删除操作；支持基于系统信标建立相对坐标系。
+
+![](./figures/vcd.png)
 
 
----
+- 全新的 Netlist 渲染器
 
 ## Feature
 - 增加对于 vhdl 的 全面支持（文件树、LSP等）
@@ -35,19 +51,3 @@
 - 修复 iverilog 仿真功能中，将重复的路径作为编译参数编译的 bug
 - 修复 iverilog 仿真功能中，将 <code>`include</code> 加入或去除后，无法通过仿真编译的 bug （没有更新 instance 的 instModPathStatus 属性）
 - 修复其他已知 bug
-
----
-
-## develop
-
-```bash
-python script/command/make_package.py
-<<<<<<< HEAD
-```
-
-## library更新
-
-library的更新不会随着Digital-IDE的git一起保存，是专门去拉取更新的，但是打包要一起打包进插件之中。
-=======
-```
->>>>>>> 199b7a8af3ea01baea4b20c89273a490dc0dc9d2

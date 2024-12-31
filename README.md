@@ -6,7 +6,7 @@
 
 [Document (New)](https://sterben.nitcloud.cn/) | [中文文档 (New)](https://sterben.nitcloud.cn/zh/) | [Bilibili Video](https://www.bilibili.com/video/BV1t14y1179V/?spm_id_from=333.999.0.0)
 
-![](https://img.shields.io/badge/version-0.4.4-purple)
+![](https://img.shields.io/badge/version-0.4.0-purple)
 ![](https://img.shields.io/badge/Verilog-support-green)
 ![](https://img.shields.io/badge/VHDL-support-green)
 ![](https://img.shields.io/badge/SystemVerilog-support-green)
@@ -23,7 +23,7 @@
 
 ![](./figures/doc.png)
 
-**新增内容的 Vcd 渲染器**：增加顶部工具栏、系统信标等组件；支持左侧面板选定信号的拖拽、分组等功能、支持按住 shift 连续选中一片信号并进行增加和删除操作；支持基于系统信标建立相对坐标系。
+**新增内容的 Vcd 渲染器**：增加顶部工具栏、系统信标等组件；支持左侧面板选定信号的拖拽、分组等功能、支持按住 shift 连续选中一片信号并进行增加和删除操作；支持基于系统信标建立相对坐标系；顶部工具栏支持选中信号的显示数字的进制转换，渲染模态切换，支持将信号渲染为模拟量。
 
 ![](./figures/vcd.png)
 

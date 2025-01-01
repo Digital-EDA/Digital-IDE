@@ -13,7 +13,7 @@ import * as tool from './tool';
 
 // special function
 import * as FSM from './fsm';
-import * as Netlist from './netlist';
+import * as Netlist from './dide-netlist';
 import * as WaveView from './dide-viewer';
 import { ModuleDataItem } from './treeView/tree';
 import { downloadLsp } from './lsp-client';

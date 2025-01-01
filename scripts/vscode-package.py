@@ -65,15 +65,10 @@ def modify_vsix():
 
     # move public
     copy_dir('./resources/public', os.path.join(extract_folder, 'extension', 'resources', 'public'))
-    
-    # move wasm
-    copy_dir('./resources/netlist/resources/kernel', os.path.join(extract_folder, 'extension', 'resources', 'kernel'))
-
 
     # webview
-    copy_dir('./resources/netlist/view', os.path.join(extract_folder, 'extension', 'resources', 'netlist', 'view'))
+    copy_dir('./resources/dide-netlist/view', os.path.join(extract_folder, 'extension', 'resources', 'dide-netlist', 'view'))
     copy_dir('./resources/dide-viewer/view', os.path.join(extract_folder, 'extension', 'resources', 'dide-viewer', 'view'))
-
 
     # remake
     target_path = os.path.join('dist', vsix_path)

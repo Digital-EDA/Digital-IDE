@@ -18,3 +18,4 @@ resources/dide-viewer/view/*
 resources/dide-lsp/server/*
 resources/dide-lsp/static/*
 resources/dide-netlist/static/*
+resources/dide-netlist/view/*

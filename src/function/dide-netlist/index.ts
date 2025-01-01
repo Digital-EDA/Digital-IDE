@@ -10,6 +10,8 @@ import { defaultMacro, doFastApi } from '../../hdlParser/util';
 import { HdlFile } from '../../hdlParser/core';
 import { t } from '../../i18n';
 import { HdlLangID } from '../../global/enum';
+import { getIconConfig } from '../../hdlFs/icons';
+import { PathSet } from '../../global/util';
 
 type SynthMode = 'before' | 'after' | 'RTL';
 
@@ -28,7 +30,7 @@ class Netlist {
     }
 
     public async open(uri: vscode.Uri, moduleName: string) {
-        const prjFiles = [];
+        const pathset = new PathSet();
         const path = hdlPath.toSlash(uri.fsPath);
 
         let moduleFile = hdlParam.getHdlFile(path);
@@ -58,12 +60,13 @@ class Netlist {
             const hdlDependence = hdlParam.getAllDependences(path, hdlModule.name);
             if (hdlDependence) {
                 // include 宏在后续会被正确处理，所以只需要处理 others 即可
-                prjFiles.push(...hdlDependence.others);
+                hdlDependence.others.forEach(path => pathset.add(path));
             }
         }
-        prjFiles.push(path);
+        pathset.add(path);
+        
+        const prjFiles = [...pathset.files];
 
-        console.log('enter', moduleName);
         console.log(prjFiles);
         console.log(opeParam.prjInfo.prjPath);
 
@@ -95,6 +98,8 @@ class Netlist {
             });
             const exitCode = wasi.start(instance);
         });
+
+        this.create(moduleName);
     }
 
     private getSynthMode(): SynthMode {
@@ -145,11 +150,11 @@ class Netlist {
 
     private makeWasi(target: string) {
         // 创建日志文件路径
-        const logFilePath = hdlPath.join(opeParam.workspacePath, 'wasi_log.txt');
-        hdlFile.removeFile(logFilePath);
-
+        // const logFilePath = hdlPath.join(opeParam.workspacePath, 'wasi_log.txt');
+        // hdlFile.removeFile(logFilePath);
         // 创建可写流，将标准输出和标准错误重定向到日志文件
-        const logFd = fs.openSync(logFilePath, 'a');
+        // const logFd = fs.openSync(logFilePath, 'a');
+
         return new WASI({
             version: 'preview1',
             args: [
@@ -163,8 +168,10 @@ class Netlist {
                 ['/' + this.libName]: opeParam.prjInfo.libCommonPath
             },
             stdin: process.stdin.fd,
-            stdout: logFd,
-            stderr: logFd,
+            stdout: process.stdout.fd,
+            stderr: process.stderr.fd,
+            // stdout: logFd,
+            // stderr: logFd,
             env: process.env
         });
     }
@@ -180,7 +187,7 @@ class Netlist {
         return wasm;
     }
  
-    private create() {
+    private create(moduleName: string) {
         // Create panel
         this.panel = vscode.window.createWebviewPanel(
             'Netlist',
@@ -205,7 +212,21 @@ class Netlist {
 
         const previewHtml = this.getWebviewContent();
         if (this.panel && previewHtml) {
-            this.panel.webview.html = previewHtml;
+            const netlistPath = hdlPath.join(opeParam.extensionPath, 'resources', 'dide-netlist', 'view');
+            const netlistPayloadFolder = hdlPath.join(opeParam.prjInfo.prjPath, 'netlist');
+            const targetJson = hdlPath.join(netlistPayloadFolder, moduleName + '.json');
+            const skinPath= hdlPath.join(netlistPath, 'dide.skin');
+
+            const graph = this.panel.webview.asWebviewUri(vscode.Uri.file(targetJson)).toString();
+            const skin = this.panel.webview.asWebviewUri(vscode.Uri.file(skinPath)).toString();
+            this.panel.iconPath = getIconConfig('view');
+
+            let preprocessHtml = previewHtml
+                .replace('test.json', graph)
+                .replace('test.module', moduleName)
+                .replace('dide.skin', skin);
+
+            this.panel.webview.html = preprocessHtml;
         } else {
             YosysOutput.report('preview html in <Netlist.create> is empty', {
                 level: ReportType.Warn
@@ -218,7 +239,7 @@ class Netlist {
     }
 
     public getWebviewContent() {
-        const netlistPath = hdlPath.join(opeParam.extensionPath, 'resources', 'netlist', 'view');
+        const netlistPath = hdlPath.join(opeParam.extensionPath, 'resources', 'dide-netlist', 'view');
         const htmlIndexPath = hdlPath.join(netlistPath, 'index.html');
 
         const html = hdlFile.readFile(htmlIndexPath)?.replace(/(<link.+?href="|<script.+?src="|<img.+?src=")(.+?)"/g, (m, $1, $2) => {

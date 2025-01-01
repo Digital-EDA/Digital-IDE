@@ -222,7 +222,7 @@ function getViewLaunchFiles(context: vscode.ExtensionContext, uri: vscode.Uri, p
         return { vcd, view, wasm, vcdjs, worker, root };
     } else if (entryPath.endsWith('.view')) {
         const buffer = fs.readFileSync(entryPath);
-        const recoverJson = BSON.deserialize(buffer);
+        const recoverJson = BSON.deserialize(new Uint8Array(buffer));
         if (recoverJson.originVcdFile) {
             const vcdPath = recoverJson.originVcdFile;
             if (!fs.existsSync(vcdPath)) {

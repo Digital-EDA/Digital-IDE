@@ -71,12 +71,7 @@ class Netlist {
         console.log(opeParam.prjInfo.prjPath);
 
         if (!this.wasm) {
-            const wasm = await vscode.window.withProgress({
-                location: vscode.ProgressLocation.Notification,
-                title: t('info.netlist.launch-netlist')
-            }, async () => {
-                return await this.loadWasm();
-            });
+            const wasm = await this.loadWasm();
             this.wasm = wasm;
         }
 

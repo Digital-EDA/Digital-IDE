@@ -63,9 +63,6 @@ def modify_vsix():
     
     os.remove(dist_path)
 
-    # move public
-    copy_dir('./resources/public', os.path.join(extract_folder, 'extension', 'resources', 'public'))
-
     # webview
     copy_dir('./resources/dide-netlist/view', os.path.join(extract_folder, 'extension', 'resources', 'dide-netlist', 'view'))
     copy_dir('./resources/dide-viewer/view', os.path.join(extract_folder, 'extension', 'resources', 'dide-viewer', 'view'))

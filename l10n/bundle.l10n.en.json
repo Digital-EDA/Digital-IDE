@@ -100,5 +100,9 @@
     "info.netlist.launch-netlist": "Starting Netlist",
     "info.netlist.not-found-payload": "Unable to find the load resource of the netlist, please check if the installation directory is corrupted!",
     "info.netlist.not-support-vhdl": "The current netlist temporarily does not support VHDL and other languages!",
-    "info.netlist.generate-network": "Generating network topology"
+    "info.netlist.generate-network": "Generating network topology",
+    "error.cannot-gen-netlist": "Unable to generate Netlist file!",
+    "info.common.confirm": "Confirm",
+    "info.command.structure.reload-vscode": "Restart Vscode",
+    "error.look-up-log": "View error log"
 }

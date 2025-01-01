@@ -83,6 +83,10 @@ class Netlist {
         const wasm = this.wasm;
         const wasi = this.makeWasi(targetYs);
         
+        const netlistPayloadFolder = hdlPath.join(opeParam.prjInfo.prjPath, 'netlist');
+        const targetJson = hdlPath.join(netlistPayloadFolder, moduleName + '.json');
+        hdlFile.rmSync(targetJson);
+
         await vscode.window.withProgress({
             location: vscode.ProgressLocation.Notification,
             title: t('info.netlist.generate-network'),
@@ -93,6 +97,19 @@ class Netlist {
             });
             const exitCode = wasi.start(instance);
         });
+
+        if (!fs.existsSync(targetJson)) {
+            const logFilePath = hdlPath.join(opeParam.prjInfo.prjPath, 'netlist', 'netlist.log');
+            const res = await vscode.window.showErrorMessage(
+                t('error.cannot-gen-netlist'),
+                { title: t('error.look-up-log'), value: true }
+            )
+            if (res?.value) {
+                const document = await vscode.workspace.openTextDocument(vscode.Uri.file(logFilePath));
+                await vscode.window.showTextDocument(document);
+            }
+            return;
+        }
 
         this.create(moduleName);
     }
@@ -145,10 +162,9 @@ class Netlist {
 
     private makeWasi(target: string) {
         // 创建日志文件路径
-        // const logFilePath = hdlPath.join(opeParam.workspacePath, 'wasi_log.txt');
-        // hdlFile.removeFile(logFilePath);
-        // 创建可写流，将标准输出和标准错误重定向到日志文件
-        // const logFd = fs.openSync(logFilePath, 'a');
+        const logFilePath = hdlPath.join(opeParam.prjInfo.prjPath, 'netlist', 'netlist.log');
+        hdlFile.removeFile(logFilePath);
+        const logFd = fs.openSync(logFilePath, 'a');
 
         return new WASI({
             version: 'preview1',
@@ -164,7 +180,7 @@ class Netlist {
             },
             stdin: process.stdin.fd,
             stdout: process.stdout.fd,
-            stderr: process.stderr.fd,
+            stderr: logFd,
             // stdout: logFd,
             // stderr: logFd,
             env: process.env

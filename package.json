@@ -9,7 +9,7 @@
     "l10n": "./l10n",
     "icon": "images/icon.png",
     "engines": {
-        "vscode": "^1.95.0"
+        "vscode": "^1.94.0"
     },
     "keywords": [
         "FPGA Develop Support",

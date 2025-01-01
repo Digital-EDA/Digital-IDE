@@ -100,5 +100,9 @@
     "info.netlist.launch-netlist": "正在啟動Netlist",
     "info.netlist.not-found-payload": "無法找到 netlist 的負載資源，請檢查安裝目錄是否損壞！",
     "info.netlist.not-support-vhdl": "當前 netlist 暫時不支援 VHDL 和其他語言！",
-    "info.netlist.generate-network": "正在生成網路拓撲"
+    "info.netlist.generate-network": "正在生成網路拓撲",
+    "error.cannot-gen-netlist": "無法生成Netlist檔案！",
+    "info.common.confirm": "確認",
+    "info.command.structure.reload-vscode": "重啟 Vscode",
+    "error.look-up-log": "查看錯誤日誌"
 }

@@ -100,5 +100,9 @@
     "info.netlist.launch-netlist": "Netlistを起動中",
     "info.netlist.not-found-payload": "ネットリストのロードリソースが見つかりません。インストールディレクトリが破損していないか確認してください！",
     "info.netlist.not-support-vhdl": "現在のネットリストは一時的にVHDLやその他の言語をサポートしていません！",
-    "info.netlist.generate-network": "ネットワークトポロジを生成中"
+    "info.netlist.generate-network": "ネットワークトポロジを生成中",
+    "error.cannot-gen-netlist": "ネットリストファイルを生成できません！",
+    "info.common.confirm": "確認",
+    "info.command.structure.reload-vscode": "Vscodeを再起動",
+    "error.look-up-log": "エラーログを表示"
 }

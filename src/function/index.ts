@@ -131,12 +131,23 @@ function registerFSM(context: vscode.ExtensionContext) {
 }
 
 function registerNetlist(context: vscode.ExtensionContext) {
-    vscode.commands.registerCommand('digital-ide.netlist.show', (uri, moduleName) => {
-        if (typeof uri === 'string') {
-            uri = vscode.Uri.file(uri);
-        }
-        Netlist.openNetlistViewer(context, uri, moduleName);
-    });
+    context.subscriptions.push(
+        vscode.commands.registerCommand('digital-ide.netlist.show', (uri, moduleName) => {
+            if (typeof uri === 'string') {
+                uri = vscode.Uri.file(uri);
+            }
+            Netlist.openNetlistViewer(context, uri, moduleName);
+        })
+    );
+    
+    context.subscriptions.push(
+        vscode.commands.registerCommand('digital-ide.netlist.treeview', (view: ModuleDataItem) => {
+            if (view.path && view.name) {
+                const uri = vscode.Uri.file(view.path);
+                Netlist.openNetlistViewer(context, uri, view.name);
+            }
+        })
+    );
 }
 
 function registerWaveViewer(context: vscode.ExtensionContext) {

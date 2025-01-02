@@ -627,6 +627,15 @@
                 "title": "%digital-ide.netlist.show.title%"
             },
             {
+                "command": "digital-ide.netlist.treeview",
+                "icon": {
+                    "light": "images/svg/light/netlist.svg",
+                    "dark": "images/svg/dark/netlist.svg"
+                },
+                "category": "Digital-IDE",
+                "title": "test"
+            },
+            {
                 "command": "digital-ide.waveviewer.show",
                 "icon": {
                     "light": "images/svg/light/vcd.svg",
@@ -674,9 +683,12 @@
                     }
                 },
                 {
-                    "command": "digital-ide.netlist.show",
+                    "command": "digital-ide.netlist.treeview",
                     "group": "inline@3",
-                    "when": "view == digital-ide-treeView-arch && viewItem == file"
+                    "when": "view == digital-ide-treeView-arch && viewItem == file",
+                    "args": {
+                        "file": "${viewItem}"
+                    }
                 },
                 {
                     "command": "digital-ide.pl.setSrcTop",
@@ -710,11 +722,6 @@
                     "when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
                     "command": "digital-ide.tool.icarus.simulateFile",
                     "group": "navigation@1"
-                },
-                {
-                    "when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
-                    "command": "digital-ide.netlist.show",
-                    "group": "navigation@3"
                 },
                 {
                     "when": "editorLangId == vcd || editorLangId == view",
@@ -759,11 +766,6 @@
                     "group": "navigation@5"
                 },
                 {
-                    "when": "resourceLangId == verilog || resourceLangId == systemverilog || resourceLangId == vhdl",
-                    "command": "digital-ide.netlist.show",
-                    "group": "navigation@6"
-                },
-                {
                     "when": "resourceLangId == vcd || resourceLangId == vcd",
                     "command": "digital-ide.waveviewer.show",
                     "group": "navigation@7"
@@ -799,11 +801,6 @@
                     "when": "resourceLangId == verilog || resourceLangId == systemverilog || resourceLangId == vhdl",
                     "command": "digital-ide.tool.instance",
                     "group": "navigation@8"
-                },
-                {
-                    "when": "resourceLangId == verilog || resourceLangId == systemverilog || resourceLangId == vhdl",
-                    "command": "digital-ide.netlist.show",
-                    "group": "navigation@9"
                 },
                 {
                     "when": "resourceLangId == vcd || resourceLangId == view",

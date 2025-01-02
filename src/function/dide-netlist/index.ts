@@ -81,7 +81,7 @@ class Netlist {
         }
 
         const wasm = this.wasm;
-        const wasi = this.makeWasi(targetYs);
+        const { wasi, fd } = this.makeWasi(targetYs);
         
         const netlistPayloadFolder = hdlPath.join(opeParam.prjInfo.prjPath, 'netlist');
         const targetJson = hdlPath.join(netlistPayloadFolder, moduleName + '.json');
@@ -111,7 +111,7 @@ class Netlist {
             return;
         }
 
-        this.create(moduleName);
+        this.create(moduleName, fd);
     }
 
     private getSynthMode(): SynthMode {
@@ -166,7 +166,7 @@ class Netlist {
         hdlFile.removeFile(logFilePath);
         const logFd = fs.openSync(logFilePath, 'a');
 
-        return new WASI({
+        const wasi = new WASI({
             version: 'preview1',
             args: [
                 'yosys',
@@ -185,6 +185,8 @@ class Netlist {
             // stderr: logFd,
             env: process.env
         });
+
+        return { wasi, fd: logFd };
     }
 
     private async loadWasm() {
@@ -198,7 +200,7 @@ class Netlist {
         return wasm;
     }
  
-    private create(moduleName: string) {
+    private create(moduleName: string, fd: number) {
         // Create panel
         this.panel = vscode.window.createWebviewPanel(
             'Netlist',
@@ -212,7 +214,7 @@ class Netlist {
         );
 
         this.panel.onDidDispose(() => {
-
+            fs.closeSync(fd);
         });
 
         this.panel.webview.onDidReceiveMessage(message => {

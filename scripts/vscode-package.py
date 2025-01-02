@@ -66,7 +66,8 @@ def modify_vsix():
     # webview
     print("")
     copy_dir('./resources/dide-netlist/view', os.path.join(extract_folder, 'extension', 'resources', 'dide-netlist', 'view'))
-    copy_dir('./resources/dide-netlist/static', os.path.join(extract_folder, 'extension', 'resources', 'dide-viewer', 'static'))
+    copy_dir('./resources/dide-netlist/static/share', os.path.join(extract_folder, 'extension', 'resources', 'dide-viewer', 'static', 'share'))
+    copy_file('./resources/dide-netlist/static/yosys.wasm', os.path.join(extract_folder, 'extension', 'resources', 'dide-viewer', 'static', 'yosys.wasm'))
 
     print("")
     copy_dir('./resources/dide-viewer/view', os.path.join(extract_folder, 'extension', 'resources', 'dide-viewer', 'view'))

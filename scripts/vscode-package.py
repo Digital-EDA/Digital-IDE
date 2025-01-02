@@ -64,7 +64,11 @@ def modify_vsix():
     os.remove(dist_path)
 
     # webview
+    print("")
     copy_dir('./resources/dide-netlist/view', os.path.join(extract_folder, 'extension', 'resources', 'dide-netlist', 'view'))
+    copy_dir('./resources/dide-netlist/static', os.path.join(extract_folder, 'extension', 'resources', 'dide-viewer', 'static'))
+
+    print("")
     copy_dir('./resources/dide-viewer/view', os.path.join(extract_folder, 'extension', 'resources', 'dide-viewer', 'view'))
 
     # remake
@@ -97,8 +101,8 @@ pipe.add_command('compile typescript', 'tsc -p ./ --outDir out-js')
 pipe.add_command('webpack', 'webpack --mode production')
 pipe.add_command('make vsix installer', 'vsce package')
 pipe.add_command('modify vsix installer', lambda : modify_vsix())
-pipe.add_command('remove out-js', lambda : remove_folder('out-js'))
-pipe.add_command('remove out', lambda : remove_folder('out'))
+# pipe.add_command('remove out-js', lambda : remove_folder('out-js'))
+# pipe.add_command('remove out', lambda : remove_folder('out'))
 pipe.add_command('install', lambda : install_extension())
 
 pipe.run()

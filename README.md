@@ -47,3 +47,4 @@
 - 修复 iverilog 仿真功能中，将重复的路径作为编译参数编译的 bug
 - 修复 iverilog 仿真功能中，将 <code>`include</code> 加入或去除后，无法通过仿真编译的 bug （没有更新 instance 的 instModPathStatus 属性）
 - 修复其他已知 bug
+

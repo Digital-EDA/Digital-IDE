@@ -30,6 +30,8 @@
 
 - 全新的 Netlist 渲染器
 
+![](./figures/netlist.png)
+
 ## Feature
 - 增加对于 vhdl 的 全面支持（文件树、LSP等）
 - 增加 verilog, vhdl, xdc, tcl, vvp, vcd 等语言或生成文件的工作区图标

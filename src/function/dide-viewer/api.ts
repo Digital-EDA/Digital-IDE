@@ -163,7 +163,7 @@ export async function loadView(data: any, uri: vscode.Uri, panel: vscode.Webview
             panel.title = path.basename(viewPath);
             panel.iconPath = getIconConfig('view');
 
-            const recoverJson = BSON.deserialize(buffer);
+            const recoverJson = BSON.deserialize(new Uint8Array(buffer));
             panel.webview.postMessage({
                 command: 'load-view',
                 recoverJson,

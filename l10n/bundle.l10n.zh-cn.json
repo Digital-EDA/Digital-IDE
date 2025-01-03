@@ -104,5 +104,7 @@
     "error.cannot-gen-netlist": "无法生成 Netlist 文件！",
     "info.common.confirm": "确认",
     "info.command.structure.reload-vscode": "重启 Vscode",
-    "error.look-up-log": "查看错误日志"
+    "error.look-up-log": "查看错误日志",
+    "netlist.save-as-svg": "保存为 Svg",
+    "svg-file": "svg 文件"
 }

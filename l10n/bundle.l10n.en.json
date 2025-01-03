@@ -104,5 +104,7 @@
     "error.cannot-gen-netlist": "Unable to generate Netlist file!",
     "info.common.confirm": "Confirm",
     "info.command.structure.reload-vscode": "Restart Vscode",
-    "error.look-up-log": "View error log"
+    "error.look-up-log": "View error log",
+    "netlist.save-as-svg": "Save as SVG",
+    "svg-file": "SVG file"
 }

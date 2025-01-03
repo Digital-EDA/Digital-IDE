@@ -364,7 +364,7 @@ async function exportCurrentFileDocAsMarkdown() {
     }
 
     const wsPath = opeParam.workspacePath;
-    const markdownFolderPath = hdlPath.join(wsPath, 'markdown');
+    const markdownFolderPath = hdlPath.join(wsPath, 'doc');
     if (!fs.existsSync(markdownFolderPath)) {
         fs.mkdirSync(markdownFolderPath);
     }

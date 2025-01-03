@@ -8,6 +8,10 @@ import { AbsPath, MainOutput, opeParam, ReportType } from '../../global';
 
 // TODO : finish it in each platform
 function getDefaultBrowerPath(): AbsPath {
+    const browserPath = vscode.workspace.getConfiguration().get<string>('digital-ide.function.doc.pdf.browserPath.title');
+    if (browserPath && fs.existsSync(browserPath)) {
+        return browserPath;
+    }
     switch (opeParam.os) {
         case 'win32': return 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe';
         case 'linux': return '';
@@ -79,7 +83,7 @@ async function exportCurrentFileDocAsPDF(uri: vscode.Uri) {
                 return;
             }
             
-            const pdfFolderPath = hdlPath.join(wsPath, 'pdf');
+            const pdfFolderPath = hdlPath.join(wsPath, 'doc');
             if (!fs.existsSync(pdfFolderPath)) {
                 fs.mkdirSync(pdfFolderPath);
             }

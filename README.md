@@ -32,7 +32,6 @@
 
 ## Feature
 - 增加对于 vhdl 的 全面支持（文件树、LSP等）
-- 增加对 XDC，TCL 等脚本的 LSP 支持
 - 增加 verilog, vhdl, xdc, tcl, vvp, vcd 等语言或生成文件的工作区图标
 - 增加对于 vivado, modelsim, verilator 的支持，用户可以通过设置 `function.lsp.linter.vhdl.diagnostor`(设置 vhdl) 和 `function.lsp.linter.vlog.diagnostor`(设置 verilog) 来使用这些第三方工具的仿真和自动纠错。
 - 增加对于 TCL, XDC, VVP 等脚本的 LSP 和 语法高亮 支持。

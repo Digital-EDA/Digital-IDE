@@ -14,11 +14,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 Feature
 
-wave 渲染器 https://nc-ai-lab.feishu.cn/wiki/K7gVwwU02iNMc8krIHucPwhqnff#share-NjuodrRQAoxEotxRicOc7BXDnOh
-
-
-
----
+VCA wave 渲染器 https://nc-ai-lab.feishu.cn/wiki/K7gVwwU02iNMc8krIHucPwhqnff#share-NjuodrRQAoxEotxRicOc7BXDnOh
 
 ## [0.3.3] - 2024-02-05
 
@@ -37,7 +33,6 @@ Bug 修复
 - 点击 Refuse 会在用户工作区创建 json 文件
 
 
----
 ## [0.3.2] - 2023-11-01
 
 Feature

@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
 
-import pako from 'pako';
+import * as pako from 'pako';
 import puppeteer, { LowerCasePaperFormat, PDFOptions } from 'puppeteer-core';
 import { AbsPath, opeParam } from '../../global';
 import { hdlPath } from '../../hdlFs';
@@ -28,12 +28,9 @@ export async function saveAsSvg(data: any, panel: vscode.WebviewPanel) {
         // 询问新的路径        
         const defaultFilename = moduleName + '.svg';
         const defaultPath = hdlPath.join(opeParam.workspacePath, defaultFilename);
-        const vcdFilters: Record<string, string[]> = {};
-        vcdFilters[""] = ['svg'];
-        vcdFilters[t('info.vcd-viewer.all-file')] = ['*'];
 
         const saveUri = await vscode.window.showSaveDialog({
-            title: t('info.vcd-viewer.save-as-view'),
+            title: t('netlist.save-as-svg'),
             defaultUri: vscode.Uri.file(defaultPath),
             saveLabel: t('info.vcd-viewer.save'),
             filters: {
@@ -66,48 +63,59 @@ export async function saveAsSvg(data: any, panel: vscode.WebviewPanel) {
     }   
 }
 
-export async function saveAsPdf(req: Request, res: Response) {
+export async function saveAsPdf(data: any, panel: vscode.WebviewPanel) {
     try {
-        const { svgBuffer, moduleName, width, height } = req.body;
+        const { svgBuffer, moduleName, width, height } = data;
         const svgString = pako.ungzip(svgBuffer, { to: 'string' });
         // 询问新的路径        
         const defaultFilename = moduleName + '.pdf';
-        const savePath = await showSaveViewDialog({
-            title: 'Save As pdf',
-            defaultPath: path.resolve(__dirname, '../test', defaultFilename),
-            buttonLabel: 'Save',
-            filters: [
-                { name: 'pdf', extensions: ['pdf'] },
-                { name: 'All Files', extensions: ['*'] },
-            ],
+        const defaultPath = hdlPath.join(opeParam.workspacePath, defaultFilename);
+
+        const saveUri = await vscode.window.showSaveDialog({
+            title: t('toolbar.save-as-pdf'),
+            defaultUri: vscode.Uri.file(defaultPath),
+            saveLabel: t('info.vcd-viewer.save'),
+            filters: {
+                [t('pdf-file')]: ['pdf'],
+                [t("info.vcd-viewer.all-file")]: ['*']
+            }
         });
 
-        if (savePath) {
+        if (saveUri) {
+            const savePath = saveUri.fsPath;
             // 先保存 html
             const htmlPath = savePath.slice(0, -4) + '.html';
             fs.writeFileSync(htmlPath, svgString);
 
-            await html2pdf(htmlPath, savePath, moduleName, width, height);
-            // removeBlankPages(savePath);
+            await vscode.window.withProgress({
+                title: t('export-pdf'),
+                location: vscode.ProgressLocation.Notification
+            }, async () => {
+                await html2pdf(htmlPath, savePath, moduleName, width, height);
+            });
+            fs.rmSync(htmlPath);
 
-            res.send({
-                savePath,
-                success: true
+            panel.webview.postMessage({
+                command: 'save-as-pdf',
+                arguments: [{ success: true }] 
             });
         } else {
-            res.send({
-                success: false
+            panel.webview.postMessage({
+                command: 'save-as-pdf',
+                arguments: [{ success: false }] 
             });
         }
     } catch (error) {
         console.log('error happen in /save-as-pdf, ' + error);
-        res.send({
-            success: false
+        panel.webview.postMessage({
+            command: 'save-as-pdf',
+            arguments: [{ success: false }] 
         });
     }   
 }
 
 async function html2pdf(htmlPath: string, pdfPath: string, moduleName: string, width: number, height: number) {    
+    const browserPath = getDefaultBrowerPath();
     const browser = await puppeteer.launch({
         executablePath: browserPath,
         args: ['--lang=en-US', '--no-sandbox', '--disable-setuid-sandbox']

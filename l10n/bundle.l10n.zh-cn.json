@@ -106,5 +106,9 @@
     "info.command.structure.reload-vscode": "重启 Vscode",
     "error.look-up-log": "查看错误日志",
     "netlist.save-as-svg": "保存为 Svg",
-    "svg-file": "svg 文件"
+    "svg-file": "svg 文件",
+    "toolbar.save-as-svg": "将当前视图保存为 svg",
+    "toolbar.save-as-pdf": "将当前视图保存为 pdf",
+    "pdf-file": "pdf 文件",
+    "export-pdf": "正在导出 pdf"
 }

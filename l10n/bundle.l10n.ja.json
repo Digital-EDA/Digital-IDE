@@ -106,5 +106,9 @@
     "info.command.structure.reload-vscode": "Vscodeを再起動",
     "error.look-up-log": "エラーログを表示",
     "netlist.save-as-svg": "SVGとして保存",
-    "svg-file": "SVGファイル"
+    "svg-file": "SVGファイル",
+    "toolbar.save-as-svg": "現在のビューをSVGとして保存",
+    "toolbar.save-as-pdf": "現在のビューをPDFとして保存",
+    "pdf-file": "PDFファイル",
+    "export-pdf": "PDFをエクスポート中"
 }

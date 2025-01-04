@@ -12,6 +12,7 @@ import { t } from '../../i18n';
 import { HdlLangID } from '../../global/enum';
 import { getIconConfig } from '../../hdlFs/icons';
 import { PathSet } from '../../global/util';
+import { saveAsPdf, saveAsSvg } from './api';
 
 type SynthMode = 'before' | 'after' | 'RTL';
 
@@ -240,6 +241,8 @@ class Netlist {
                 .replace('dide.skin', skin);
 
             this.panel.webview.html = preprocessHtml;
+
+            registerMessageEvent(this.panel);
         } else {
             YosysOutput.report('preview html in <Netlist.create> is empty', {
                 level: ReportType.Warn
@@ -296,4 +299,22 @@ class Netlist {
 export async function openNetlistViewer(context: vscode.ExtensionContext, uri: vscode.Uri, moduleName: string) {
     const viewer = new Netlist(context);
     viewer.open(uri, moduleName);
+}
+
+
+function registerMessageEvent(panel: vscode.WebviewPanel) {
+    panel.webview.onDidReceiveMessage(message => {
+        const { command, data } = message;
+
+        switch (command) {
+            case 'save-as-svg':
+                saveAsSvg(data, panel);
+                break;
+            case 'save-as-pdf':
+                saveAsPdf(data, panel);
+                break;
+            default:
+                break;
+        }
+    });
 }

@@ -106,5 +106,9 @@
     "info.command.structure.reload-vscode": "Vscode neu starten",
     "error.look-up-log": "Fehlerprotokoll anzeigen",
     "netlist.save-as-svg": "Als SVG speichern",
-    "svg-file": "SVG-Datei"
+    "svg-file": "SVG-Datei",
+    "toolbar.save-as-svg": "Aktuelle Ansicht als SVG speichern",
+    "toolbar.save-as-pdf": "Aktuelle Ansicht als PDF speichern",
+    "pdf-file": "PDF-Datei",
+    "export-pdf": "PDF wird exportiert"
 }

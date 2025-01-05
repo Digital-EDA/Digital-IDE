@@ -292,7 +292,7 @@
             "    $2",
             ");",
             "    $3",
-            "endmodule //$1\n"
+            "endmodule"
         ],
         "description": "Insert a module without parameter"
     },

@@ -480,8 +480,6 @@ class HdlParam {
             return;
         }
 
-        console.log('fast:', fast);
-
         // 1. 更新 macro
         moduleFile.updateMacro(fast.macro);
         

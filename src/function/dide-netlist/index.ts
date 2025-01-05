@@ -12,7 +12,7 @@ import { t } from '../../i18n';
 import { HdlLangID } from '../../global/enum';
 import { getIconConfig } from '../../hdlFs/icons';
 import { PathSet } from '../../global/util';
-import { saveAsPdf, saveAsSvg } from './api';
+import { gotoDefinition, saveAsPdf, saveAsSvg } from './api';
 
 type SynthMode = 'before' | 'after' | 'RTL';
 
@@ -312,6 +312,9 @@ function registerMessageEvent(panel: vscode.WebviewPanel) {
                 break;
             case 'save-as-pdf':
                 saveAsPdf(data, panel);
+                break;
+            case 'goto-definition':
+                gotoDefinition(data, panel);
                 break;
             default:
                 break;

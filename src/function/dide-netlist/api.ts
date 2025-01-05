@@ -114,6 +114,46 @@ export async function saveAsPdf(data: any, panel: vscode.WebviewPanel) {
     }   
 }
 
+export async function gotoDefinition(data: any, panel: vscode.WebviewPanel) {
+    try {
+        const { defs } = data;
+        if (defs.length === 0) {
+            return;
+        }
+
+        const { path, range } = defs[0];
+        const uri = vscode.Uri.file(getRealPath(path));
+        await vscode.commands.executeCommand('vscode.open', uri, {
+            selection: new vscode.Range(
+                new vscode.Position(range.start.line, range.end.character),
+                new vscode.Position(range.end.line, range.end.character)
+            )
+        });
+
+        panel.webview.postMessage({
+            command: 'goto-definition',
+            arguments: [{ success: false }] 
+        });
+    } catch (error) {
+        console.log('error happen in /goto-definition, ' + error);
+        panel.webview.postMessage({
+            command: 'goto-definition',
+            arguments: [{ success: false }] 
+        });
+    }
+}
+
+function getRealPath(path: string) {
+    path = hdlPath.toSlash(path);
+    if (path.startsWith('/')) {
+        path = path.substring(1);
+    }
+    path = path
+        .replace('{workspace}', opeParam.workspacePath)
+        .replace('{library}', opeParam.prjInfo.libCommonPath);
+    return path;
+}
+
 async function html2pdf(htmlPath: string, pdfPath: string, moduleName: string, width: number, height: number) {    
     const browserPath = getDefaultBrowerPath();
     const browser = await puppeteer.launch({

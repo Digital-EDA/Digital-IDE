@@ -189,7 +189,6 @@ class IcarusSimulate extends Simulate {
 
     /**
      * @description 生成用于进行仿真的依赖项相关的参数
-     * @param dependences 
      * @returns 
      */
     private makeDependenceArguments(dependences: string[]): string {
@@ -236,9 +235,6 @@ class IcarusSimulate extends Simulate {
 
     /**
      * @description 获取 iverilog 仿真的命令
-     * @param name name of top module
-     * @param path path of the simulated file
-     * @param dependences dependence that not specified in `include macro
      * @returns 
      */
     private getCommand(name: string, path: AbsPath, dependences: string[]): string | undefined {
@@ -276,9 +272,38 @@ class IcarusSimulate extends Simulate {
         const argu = '-g' + iverilogCompileOptions.standard;
         const outVvpPath = makeSafeArgPath(hdlPath.join(simConfig.simulationHome, name + '.vvp'));      
         const mainPath = makeSafeArgPath(path);
-        
-        const cmd = `${iverilogPath} ${argu} -o ${outVvpPath} -s ${name} ${macroIncludeArgs} ${thirdLibraryDirArgs} ${mainPath} ${dependenceArgs} ${thirdLibraryFileArgs}`;
-        return cmd;
+
+        const args = [];
+        if (macroIncludeArgs) {
+            args.push(macroIncludeArgs);
+        }
+
+        if (thirdLibraryDirArgs) {
+            args.push(thirdLibraryDirArgs);
+        }
+
+        if (mainPath) {
+            args.push(mainPath);
+        }
+
+        if (dependenceArgs) {
+            args.push(dependenceArgs);
+        }
+
+        if (thirdLibraryFileArgs) {
+            args.push(thirdLibraryFileArgs);
+        }
+
+        const extaArgs = args.join(' ');
+        let command = `${iverilogPath} ${argu} -o ${outVvpPath} -s ${name}`;
+        if (extaArgs) {
+            command += ' ' + extaArgs;
+        }
+
+        const parent = fspath.dirname(path);
+        command += ' ' + '-I"' + parent + '"';
+
+        return command;
     }
 
     private execInTerminal(command: string, cwd: AbsPath, hdlModule: HdlModule) {
@@ -332,10 +357,6 @@ class IcarusSimulate extends Simulate {
 
     /**
      * @description 运行 iverilog xxx 的命令
-     * @param simConfig 
-     * @param command 
-     * @param cwd 
-     * @param hdlModule 
      */
     private runIverilog(simConfig: SimulateConfig, command: string, cwd: string, hdlModule: HdlModule) {
         child_process.exec(command, (error, stdout, stderr) => {
@@ -369,8 +390,6 @@ class IcarusSimulate extends Simulate {
 
     /**
      * @description 陨星 vvp xxx 的命令
-     * @param command 
-     * @param cwd 
      */
     private runVvp(command: string, cwd: string) {
         child_process.exec(command, { cwd }, (error, stdout, stderr) => {

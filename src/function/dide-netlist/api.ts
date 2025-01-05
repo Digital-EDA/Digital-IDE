@@ -125,7 +125,7 @@ export async function gotoDefinition(data: any, panel: vscode.WebviewPanel) {
         const uri = vscode.Uri.file(getRealPath(path));
         await vscode.commands.executeCommand('vscode.open', uri, {
             selection: new vscode.Range(
-                new vscode.Position(range.start.line, range.end.character),
+                new vscode.Position(range.start.line, range.start.character),
                 new vscode.Position(range.end.line, range.end.character)
             )
         });

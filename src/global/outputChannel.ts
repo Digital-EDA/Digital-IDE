@@ -33,7 +33,15 @@ enum ReportType {
     /**
      * 某些功能或者子进程在运行中产出的信息
      */
-    Run = 'Run'
+    Run = 'Run',
+    /**
+     * 展示程序的输出
+     */
+    PrintOuput = 'PrintOutput',
+    /**
+     * 代表程序的结束
+     */
+    Finish = 'Finish'
 };
 
 interface ReportOption {
@@ -96,13 +104,24 @@ class Output {
         option = option || { level: ReportType.Info, notify: false } as ReportOption;
         const level = option.level || ReportType.Info;
         const notify = option.notify || false;
-        
+
         if (!this.skipMessage(level) && message) {
             const currentTime = this.getCurrentTime();
-            this._output.appendLine('[' + level + ' - ' + currentTime + '] ' + message);
 
-            if (notify) {
-                this.showInWindows('' + message, level);
+            switch (option.level) {
+                case ReportType.PrintOuput:
+                    this._output.appendLine(message.toString());
+                    break;
+                case ReportType.Finish:
+                    this._output.appendLine('\n[' + level + ' - ' + currentTime + '] ' + message);
+                    break;
+            
+                default:
+                    this._output.appendLine('[' + level + ' - ' + currentTime + '] ' + message);
+                    if (notify) {
+                        this.showInWindows('' + message, level);
+                    }
+                    break;
             }
         }
     }

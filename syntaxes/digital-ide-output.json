@@ -72,6 +72,21 @@
             }
         },
         {
+            "name": "digital-ide.Finish",
+            "match": "^(\\[Finish - (.*?)\\])(.*)",
+            "captures": {
+                "1": {
+                    "name": "token.warn-token"
+                },
+                "2": {
+                    "name": "string"
+                },
+                "3": {
+                    "name": "token.warn-token"
+                }
+            }
+        },
+        {
             "name": "digital-ide.Launch",
             "match": "^(\\[Launch - (.*?)\\])([\\s\\S]*)",
             "captures": {

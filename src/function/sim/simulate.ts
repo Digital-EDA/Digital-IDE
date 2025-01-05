@@ -370,9 +370,9 @@ class IcarusSimulate extends Simulate {
             const generateVvpName = hdlModule.name + '.vvp';
 
             const outVvpPath = hdlPath.join(simConfig.simulationHome, generateVvpName);
-            MainOutput.report(t('info.simulation.create-vvp', outVvpPath), {
-                level: ReportType.Run
-            });
+            // MainOutput.report(t('info.simulation.create-vvp', outVvpPath), {
+            //     level: ReportType.Run
+            // });
             
             const vvpPath = simConfig.vvpPath;
 
@@ -382,7 +382,7 @@ class IcarusSimulate extends Simulate {
             const vvpCwd = opeParam.openMode === 'file' ? cwd: opeParam.workspacePath;
 
             const vvpCommand = `${vvpPath} ${outVvpPath}`;
-            MainOutput.report(vvpCommand, { level: ReportType.Run });
+            // MainOutput.report(vvpCommand, { level: ReportType.Run });
             
             this.runVvp(vvpCommand, vvpCwd);
         });
@@ -427,7 +427,7 @@ class IcarusSimulate extends Simulate {
                 if (match) {
                     const vcdPath = match[1];
                     const absVcdPath = hdlPath.resolve(cwd, vcdPath);
-                    MainOutput.report(t('info.simulate.vvp.vcd-generate', absVcdPath));
+                    MainOutput.report(t('info.simulate.vvp.vcd-generate', absVcdPath), { level: ReportType.Finish });
                 } else {
                     MainOutput.report(line.slice(9).trim());
                 }
@@ -448,7 +448,10 @@ class IcarusSimulate extends Simulate {
                     MainOutput.report(line.slice(10).trim(), { level: ReportType.Error });
                 }
             } else {
-                MainOutput.report(line, { level: ReportType.Info });
+                const displayMessage = line.trim();
+                if (displayMessage) {
+                    MainOutput.report(displayMessage, { level: ReportType.PrintOuput});
+                }
             }
         }
     }
@@ -489,7 +492,7 @@ class IcarusSimulate extends Simulate {
         //     return;
         // }
         
-        const dependences = this.getAllOtherDependences(path, name);
+        const dependences = this.getAllOtherDependences(path, name);        
         const simulationCommand = this.getCommand(name, path, dependences);
         if (simulationCommand) {
             const cwd = hdlPath.resolve(path, '..');            

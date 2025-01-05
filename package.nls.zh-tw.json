@@ -6,7 +6,7 @@
     "digital-ide.hdlDoc.showWebview.title": "在 webview 中展示文檔",
     "digital-ide.tool.instance.title": "生成選中 module 的例化模板",
     "digital-ide.tool.testbench.title": "從當前文件中選擇 module 生成 testbench",
-    "digital-ide.tool.icarus.simulateFile.title": "對當前文件進行仿真",
+    "digital-ide.tool.icarus.simulateFile.title": "對當前文模块進行仿真",
     "digital-ide.treeView.arch.expand.title": "展開視圖中的所有項目",
     "digital-ide.treeView.arch.collapse.title": "收起視圖中的所有項目",
     "digital-ide.treeView.arch.refresh.title": "刷新樹視圖",

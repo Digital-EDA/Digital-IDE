@@ -278,7 +278,7 @@
             "    output [OWIDTH - 1 : 0] ${4:data_o}",
             ");",
             "    $5",
-            "endmodule  //$1\n"
+            "endmodule"
         ],
         "description": "Insert a module with parameter"
     },

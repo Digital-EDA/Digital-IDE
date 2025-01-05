@@ -6,7 +6,7 @@
     "digital-ide.hdlDoc.showWebview.title": "Show the document of current file in a webview",
     "digital-ide.tool.instance.title": "Generate instance template from selected module",
     "digital-ide.tool.testbench.title": "Generate testbench template from current file",
-    "digital-ide.tool.icarus.simulateFile.title": "Do simulation for current file",
+    "digital-ide.tool.icarus.simulateFile.title": "Do simulation for current module",
     "digital-ide.treeView.arch.expand.title": "Expand all the items in tree view",
     "digital-ide.treeView.arch.collapse.title": "Collapse all the items in tree view",
     "digital-ide.treeView.arch.refresh.title": "Refresh the tree view",

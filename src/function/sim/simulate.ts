@@ -189,7 +189,6 @@ class IcarusSimulate extends Simulate {
 
     /**
      * @description 生成用于进行仿真的依赖项相关的参数
-     * @param dependences 
      * @returns 
      */
     private makeDependenceArguments(dependences: string[]): string {
@@ -236,9 +235,6 @@ class IcarusSimulate extends Simulate {
 
     /**
      * @description 获取 iverilog 仿真的命令
-     * @param name name of top module
-     * @param path path of the simulated file
-     * @param dependences dependence that not specified in `include macro
      * @returns 
      */
     private getCommand(name: string, path: AbsPath, dependences: string[]): string | undefined {
@@ -276,9 +272,38 @@ class IcarusSimulate extends Simulate {
         const argu = '-g' + iverilogCompileOptions.standard;
         const outVvpPath = makeSafeArgPath(hdlPath.join(simConfig.simulationHome, name + '.vvp'));      
         const mainPath = makeSafeArgPath(path);
-        
-        const cmd = `${iverilogPath} ${argu} -o ${outVvpPath} -s ${name} ${macroIncludeArgs} ${thirdLibraryDirArgs} ${mainPath} ${dependenceArgs} ${thirdLibraryFileArgs}`;
-        return cmd;
+
+        const args = [];
+        if (macroIncludeArgs) {
+            args.push(macroIncludeArgs);
+        }
+
+        if (thirdLibraryDirArgs) {
+            args.push(thirdLibraryDirArgs);
+        }
+
+        if (mainPath) {
+            args.push(mainPath);
+        }
+
+        if (dependenceArgs) {
+            args.push(dependenceArgs);
+        }
+
+        if (thirdLibraryFileArgs) {
+            args.push(thirdLibraryFileArgs);
+        }
+
+        const extaArgs = args.join(' ');
+        let command = `${iverilogPath} ${argu} -o ${outVvpPath} -s ${name}`;
+        if (extaArgs) {
+            command += ' ' + extaArgs;
+        }
+
+        const parent = fspath.dirname(path);
+        command += ' ' + '-I"' + parent + '"';
+
+        return command;
     }
 
     private execInTerminal(command: string, cwd: AbsPath, hdlModule: HdlModule) {
@@ -332,10 +357,6 @@ class IcarusSimulate extends Simulate {
 
     /**
      * @description 运行 iverilog xxx 的命令
-     * @param simConfig 
-     * @param command 
-     * @param cwd 
-     * @param hdlModule 
      */
     private runIverilog(simConfig: SimulateConfig, command: string, cwd: string, hdlModule: HdlModule) {
         child_process.exec(command, (error, stdout, stderr) => {
@@ -349,9 +370,9 @@ class IcarusSimulate extends Simulate {
             const generateVvpName = hdlModule.name + '.vvp';
 
             const outVvpPath = hdlPath.join(simConfig.simulationHome, generateVvpName);
-            MainOutput.report(t('info.simulation.create-vvp', outVvpPath), {
-                level: ReportType.Run
-            });
+            // MainOutput.report(t('info.simulation.create-vvp', outVvpPath), {
+            //     level: ReportType.Run
+            // });
             
             const vvpPath = simConfig.vvpPath;
 
@@ -361,7 +382,7 @@ class IcarusSimulate extends Simulate {
             const vvpCwd = opeParam.openMode === 'file' ? cwd: opeParam.workspacePath;
 
             const vvpCommand = `${vvpPath} ${outVvpPath}`;
-            MainOutput.report(vvpCommand, { level: ReportType.Run });
+            // MainOutput.report(vvpCommand, { level: ReportType.Run });
             
             this.runVvp(vvpCommand, vvpCwd);
         });
@@ -369,8 +390,6 @@ class IcarusSimulate extends Simulate {
 
     /**
      * @description 陨星 vvp xxx 的命令
-     * @param command 
-     * @param cwd 
      */
     private runVvp(command: string, cwd: string) {
         child_process.exec(command, { cwd }, (error, stdout, stderr) => {
@@ -408,7 +427,7 @@ class IcarusSimulate extends Simulate {
                 if (match) {
                     const vcdPath = match[1];
                     const absVcdPath = hdlPath.resolve(cwd, vcdPath);
-                    MainOutput.report(t('info.simulate.vvp.vcd-generate', absVcdPath));
+                    MainOutput.report(t('info.simulate.vvp.vcd-generate', absVcdPath), { level: ReportType.Finish });
                 } else {
                     MainOutput.report(line.slice(9).trim());
                 }
@@ -429,7 +448,10 @@ class IcarusSimulate extends Simulate {
                     MainOutput.report(line.slice(10).trim(), { level: ReportType.Error });
                 }
             } else {
-                MainOutput.report(line, { level: ReportType.Info });
+                const displayMessage = line.trim();
+                if (displayMessage) {
+                    MainOutput.report(displayMessage, { level: ReportType.PrintOuput});
+                }
             }
         }
     }
@@ -470,7 +492,7 @@ class IcarusSimulate extends Simulate {
         //     return;
         // }
         
-        const dependences = this.getAllOtherDependences(path, name);
+        const dependences = this.getAllOtherDependences(path, name);        
         const simulationCommand = this.getCommand(name, path, dependences);
         if (simulationCommand) {
             const cwd = hdlPath.resolve(path, '..');            

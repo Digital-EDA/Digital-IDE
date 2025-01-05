@@ -885,7 +885,7 @@ class HdlModule {
         const instModName = rawHdlInstance.type;
 
         if (this.languageId === HdlLangID.Verilog || this.languageId === HdlLangID.SystemVerilog) {
-            const searchResult = this.searchInstModPath(instModName);
+            const searchResult = this.searchInstModPath(instModName);            
             const hdlInstance = new HdlInstance(rawHdlInstance.name,
                                                 rawHdlInstance.type,
                                                 searchResult.path,

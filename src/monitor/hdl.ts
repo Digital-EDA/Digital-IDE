@@ -105,6 +105,7 @@ export class HdlAction extends BaseAction {
         // 更新 hdl 文件
         const fast = await LspClient.DigitalIDE?.sendRequest(SyncFastRequestType, { path, fileType, toolChain })
         if (fast) {
+            console.log('update includes:', fast.macro.includes);
             hdlParam.updateFast(path, fast);
         }
         

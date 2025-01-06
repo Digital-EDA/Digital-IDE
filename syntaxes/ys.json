@@ -1,0 +1,44 @@
+{
+    "name": "ys",
+    "scopeName": "source.ys",
+    "patterns": [
+        {
+            "include": "#comment"
+        },
+        {
+            "name": "keyword.control.ys",
+            "match": "(?<![/\\w])\\b(?:read_verilog|read_vhdl|read_ilang|write_verilog|write_ilang|write_blif|write_edif|write_json|hierarchy|proc|flatten|splitnets|delete|rename|submod|synth|synth_xilinx|synth_ice40|synth_ecp5|opt|opt_clean|opt_expr|opt_merge|opt_muxtree|opt_reduce|opt_share|techmap|dfflegalize|abc|clean|check|stat|show|log|assert|script|help|exit|history|shell|dump|debug|trace|sim|memory|fsm|clk2fflogic|async2sync|wreduce|plugin|yosys|design)\\b(?![/\\w])"
+        },
+        {
+            "name": "keyword.operator.ys",
+            "match": "\\b(?:\\+|-|\\*|/|%|==|!=|<=|>=|<|>|&&|\\|\\||!|&|\\||\\^|~|<<|>>)\\b"
+        },
+        {
+            "name": "keyword.function.ys",
+            "match": "\\b(?:\\w+)\\b(?=\\s*\\()"
+        },
+        {
+            "name": "string.quoted.double.ys",
+            "match": "\"(?:\\\\\"|[^\"])*\""
+        },
+        {
+            "name": "comment.line.ys",
+            "match": "#.*$"
+        },
+        {
+            "name": "support.function.parameter.ys", 
+            "match": "-[a-zA-Z0-9_\\-]+"
+        }
+    ],
+    "repository": {
+        "comment": {
+            "patterns": [
+                {
+                    "match": "^\\s*#.*$",
+                    "name": "comment.line.number-sign.ys"
+                }
+            ]
+        }
+    },
+    "uuid": "12345678-1234-1234-1234-123456789012"
+}

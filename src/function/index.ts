@@ -59,8 +59,9 @@ function registerDocumentation(context: vscode.ExtensionContext) {
 function registerSimulation(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('digital-ide.tool.instance', sim.instantiation);
     vscode.commands.registerCommand('digital-ide.tool.testbench', sim.testbench);
-    vscode.commands.registerCommand('digital-ide.tool.icarus.simulateFile', (view: ModuleDataItem) => {        
-        sim.Icarus.simulateFile(view);
+    vscode.commands.registerCommand('digital-ide.tool.icarus.simulateFile', (view: ModuleDataItem) => {
+        const icarus = new sim.IcarusSimulate(context);
+        icarus.simulateFile(view);
     });
 }
 

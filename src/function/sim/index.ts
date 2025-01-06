@@ -1,9 +1,9 @@
 import { instantiation } from './instance';
 import { testbench } from './testbench';
-import { Icarus } from './simulate';
+import { IcarusSimulate } from './simulate';
 
 export {
     instantiation,
     testbench,
-    Icarus
+    IcarusSimulate
 };

@@ -12,6 +12,7 @@ import { HdlFile, HdlModule } from '../../hdlParser/core';
 import { ModuleDataItem } from '../treeView/tree';
 import { defaultMacro, doFastApi } from '../../hdlParser/util';
 import { t } from '../../i18n';
+import { openWaveViewer } from '../dide-viewer';
 
 type Path = string;
 
@@ -161,16 +162,17 @@ class Simulate {
  * @description icarus 仿真类
  * 
  */
-class IcarusSimulate extends Simulate {
+export class IcarusSimulate extends Simulate {
     os: string;
     prjPath: AbsPath;
     toolChain: ToolChainType;
-
+    context: vscode.ExtensionContext;
     simConfig: SimulateConfig | undefined;
 
-    constructor() {
+    constructor(context: vscode.ExtensionContext) {
         super();
         this.os = opeParam.os;
+        this.context = context;
         this.prjPath = opeParam.prjInfo.arch.prjPath;
         this.toolChain = opeParam.prjInfo.toolChain;
     }
@@ -428,6 +430,9 @@ class IcarusSimulate extends Simulate {
                     const vcdPath = match[1];
                     const absVcdPath = hdlPath.resolve(cwd, vcdPath);
                     MainOutput.report(t('info.simulate.vvp.vcd-generate', absVcdPath), { level: ReportType.Finish });
+                    if (fs.existsSync(absVcdPath)) {
+                        openWaveViewer(this.context, vscode.Uri.file(absVcdPath));
+                    }
                 } else {
                     MainOutput.report(line.slice(9).trim());
                 }
@@ -506,11 +511,6 @@ class IcarusSimulate extends Simulate {
             return;
         }
     }
-    
-
-    public async simulateModule(hdlModule: HdlModule) {
-        this.simulateByHdlModule(hdlModule);
-    }
 
     public async tryGetModuleFromView(view: ModuleDataItem): Promise<HdlModule | undefined> {         
         if (view.path) {
@@ -571,19 +571,3 @@ class IcarusSimulate extends Simulate {
         }
     }
 }
-
-const icarus = new IcarusSimulate();
-
-namespace Icarus {
-    export async function simulateModule(hdlModule: HdlModule) {
-        await icarus.simulateModule(hdlModule);
-    }
-    
-    export async function simulateFile(view: ModuleDataItem) {
-        await icarus.simulateFile(view);
-    }
-};
-
-export {
-    Icarus
-};

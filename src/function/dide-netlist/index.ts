@@ -182,8 +182,10 @@ class Netlist {
                 basepreopens[realMount.toLowerCase()] = realMount;
                 basepreopens[realMount.toUpperCase()] = realMount;
             }
+        } else {
+            basepreopens['/'] = '/';
         }
-        return basepreopens
+        return basepreopens;
     }
 
     private async makeWasi(target: string, logName: string) {
@@ -191,8 +193,6 @@ class Netlist {
         const logFilePath = hdlPath.join(opeParam.prjInfo.prjPath, 'netlist', logName + '.log');
         hdlFile.removeFile(logFilePath);
         const logFd = fs.openSync(logFilePath, 'a');
-
-        console.log(target);
 
         try {
             const wasiOption = {
@@ -286,34 +286,6 @@ class Netlist {
             return replaceHref;
         });
         return html;
-    }
-
-    public async export(type: string, svg: string) {
-        switch (type) {
-            case "svg":
-                await this.exportSvg(svg);
-            break;
-        
-            default: break;
-        }
-    }
-
-    public async exportSvg(svg: string) {
-        const filter = { 'svg': ['svg'] };
-        const fileInfos = await vscode.window.showSaveDialog({ filters: filter });
-
-        if (fileInfos && fileInfos.path) {
-            let savePath = fileInfos.path;
-
-            if (savePath[0] === '/' && require('os').platform() === 'win32') {
-                savePath = savePath.substring(1);
-            }
-
-            hdlFile.writeFile(savePath, svg);
-
-            vscode.window.showInformationMessage('Schematic saved in ' + savePath);
-            YosysOutput.report('Schematic saved in ' + savePath);
-        }
     }
 
     public getJsonPathFromYs(path: AbsPath): AbsPath | undefined {

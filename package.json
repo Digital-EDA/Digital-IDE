@@ -558,11 +558,11 @@
             {
                 "command": "digital-ide.netlist.run-ys",
                 "icon": {
-                    "light": "images/svg/light/netlist.svg",
-                    "dark": "images/svg/dark/netlist.svg"
+                    "light": "images/svg/light/ys.svg",
+                    "dark": "images/svg/dark/ys.svg"
                 },
                 "category": "Digital-IDE",
-                "title": "%digital-ide.netlist.title%"
+                "title": "%digital-ide.run-ys.title%"
             },
             {
                 "command": "digital-ide.fsm",

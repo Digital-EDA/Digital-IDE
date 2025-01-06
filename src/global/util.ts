@@ -263,3 +263,28 @@ export function getUserHomeDir(): AbsPath {
     const path = process.env.HOME || process.env.USERPROFILE || os.homedir();
     return hdlPath.toSlash(path);
 }
+
+export function getDiskLetters(): Promise<string[]> {
+    return new Promise((resolve, reject) => {
+        // 调用 wmic 命令获取磁盘信息
+        childProcess.exec('wmic logicaldisk get name', (error, stdout, stderr) => {
+            if (error) {
+                reject(`Error: ${error.message}`);
+                return;
+            }
+
+            if (stderr) {
+                reject(`Stderr: ${stderr}`);
+                return;
+            }
+
+            // 解析命令输出
+            const disks = stdout
+                .split('\n') // 按行分割
+                .map(line => line.trim()) // 去除每行的空白字符
+                .filter(line => /^[A-Z]:$/.test(line)); // 过滤出盘符（如 C:, D:）
+
+            resolve(disks);
+        });
+    });
+}

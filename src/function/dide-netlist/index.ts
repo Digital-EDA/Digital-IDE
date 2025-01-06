@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as fspath from 'path';
 import * as fs from 'fs';
+import * as os from 'os';
 
 import { WASI } from 'wasi';
 
@@ -12,7 +13,7 @@ import { HdlFile } from '../../hdlParser/core';
 import { t } from '../../i18n';
 import { HdlLangID } from '../../global/enum';
 import { getIconConfig } from '../../hdlFs/icons';
-import { PathSet } from '../../global/util';
+import { getDiskLetters, PathSet } from '../../global/util';
 import { gotoDefinition, saveAsPdf, saveAsSvg } from './api';
 
 type SynthMode = 'before' | 'after' | 'RTL';
@@ -31,7 +32,7 @@ class Netlist {
         this.libName = '{library}';
     }
 
-    public async open(uri: vscode.Uri, moduleName: string) {
+    public async open(uri: vscode.Uri, moduleName: string, option = {}) {
         const pathset = new PathSet();
         const path = hdlPath.toSlash(uri.fsPath);
 
@@ -83,7 +84,7 @@ class Netlist {
         }
 
         const wasm = this.wasm;
-        const wasiResult = this.makeWasi(targetYs, moduleName);
+        const wasiResult = await this.makeWasi(targetYs, moduleName);
         
         if (wasiResult === undefined) {
             return;
@@ -106,7 +107,8 @@ class Netlist {
         });
 
         if (!fs.existsSync(targetJson)) {
-            const logFilePath = hdlPath.join(opeParam.prjInfo.prjPath, 'netlist', 'netlist.log');
+            fs.closeSync(fd);
+            const logFilePath = hdlPath.join(opeParam.prjInfo.prjPath, 'netlist', moduleName + '.log');
             const res = await vscode.window.showErrorMessage(
                 t('error.cannot-gen-netlist'),
                 { title: t('error.look-up-log'), value: true }
@@ -167,11 +169,30 @@ class Netlist {
         return target.replace(opeParam.workspacePath, this.wsName);
     }
 
-    private makeWasi(target: string, moduleName: string) {
+    public async getPreopens() {
+        const basepreopens = {
+            '/share': hdlPath.join(opeParam.extensionPath, 'resources', 'dide-netlist', 'static', 'share'),
+            [this.wsName ]: opeParam.workspacePath,
+            [this.libName]: opeParam.prjInfo.libCommonPath
+        };
+        if (os.platform() === 'win32') {
+            const mounts = await getDiskLetters();
+            for (const mountName of mounts) {
+                const realMount = mountName + '/';
+                basepreopens[realMount.toLowerCase()] = realMount;
+                basepreopens[realMount.toUpperCase()] = realMount;
+            }
+        }
+        return basepreopens
+    }
+
+    private async makeWasi(target: string, logName: string) {
         // 创建日志文件路径
-        const logFilePath = hdlPath.join(opeParam.prjInfo.prjPath, 'netlist', moduleName + '.log');
+        const logFilePath = hdlPath.join(opeParam.prjInfo.prjPath, 'netlist', logName + '.log');
         hdlFile.removeFile(logFilePath);
         const logFd = fs.openSync(logFilePath, 'a');
+
+        console.log(target);
 
         try {
             const wasiOption = {
@@ -181,11 +202,7 @@ class Netlist {
                     '-s',
                     target
                 ],
-                preopens: {
-                    '/share': hdlPath.join(opeParam.extensionPath, 'resources', 'dide-netlist', 'static', 'share'),
-                    [this.wsName ]: opeParam.workspacePath,
-                    [this.libName]: opeParam.prjInfo.libCommonPath
-                },
+                preopens: await this.getPreopens(),
                 stdin: process.stdin.fd,
                 stdout: process.stdout.fd,
                 stderr: logFd,
@@ -227,12 +244,6 @@ class Netlist {
         this.panel.onDidDispose(() => {
             fs.closeSync(fd);
         });
-
-        this.panel.webview.onDidReceiveMessage(message => {
-            switch (message.command) {
-
-            }
-        }, undefined, this.context.subscriptions);
 
         const previewHtml = this.getWebviewContent();
         if (this.panel && previewHtml) {
@@ -305,8 +316,65 @@ class Netlist {
         }
     }
 
-    public async runYs(uri: vscode.Uri) {
+    public getJsonPathFromYs(path: AbsPath): AbsPath | undefined {
+        for (const line of fs.readFileSync(path, { encoding: 'utf-8' }).split('\n')) {
+            if (line.trim().startsWith('write_json')) {
+                const path = line.split(/\s+/).at(1);
+                if (path) {
+                    const realPath = path
+                        .replace(this.wsName, opeParam.workspacePath)
+                        .replace(this.libName, opeParam.prjInfo.libCommonPath);
+                    return hdlPath.toSlash(realPath);
+                }
+            }
+        }
+        return undefined;
+    }
 
+    public async runYs(uri: vscode.Uri) {
+        const ysPath = hdlPath.toSlash(uri.fsPath);
+        const targetJson = this.getJsonPathFromYs(ysPath);
+        const name = ysPath.split('/').at(-1) as string;
+        const wasiResult = await this.makeWasi(ysPath, name);
+        
+        if (wasiResult === undefined) {
+            return;
+        }
+        const { wasi, fd } = wasiResult;
+
+        if (targetJson) {
+            hdlFile.rmSync(targetJson);
+        }
+
+        if (!this.wasm) {
+            const wasm = await this.loadWasm();
+            this.wasm = wasm;
+        }
+        const wasm = this.wasm;
+
+        await vscode.window.withProgress({
+            location: vscode.ProgressLocation.Notification,
+            title: t('info.netlist.generate-network'),
+            cancellable: true
+        }, async () => {
+            const instance = await WebAssembly.instantiate(wasm, {
+                wasi_snapshot_preview1: wasi.wasiImport
+            });
+            const exitCode = wasi.start(instance);
+        });
+
+        if (targetJson && !fs.existsSync(targetJson)) {
+            fs.closeSync(fd);
+            const logFilePath = hdlPath.join(opeParam.prjInfo.prjPath, 'netlist', name + '.log');
+            const res = await vscode.window.showErrorMessage(
+                t('error.cannot-gen-netlist'),
+                { title: t('error.look-up-log'), value: true }
+            )
+            if (res?.value) {
+                const document = await vscode.workspace.openTextDocument(vscode.Uri.file(logFilePath));
+                await vscode.window.showTextDocument(document);
+            }
+        }
     }
 }
 
@@ -317,7 +385,7 @@ export async function openNetlistViewer(context: vscode.ExtensionContext, uri: v
 
 export async function runYsScript(context: vscode.ExtensionContext, uri: vscode.Uri) {
     const viewer = new Netlist(context);
-
+    viewer.runYs(uri);
 }
 
 

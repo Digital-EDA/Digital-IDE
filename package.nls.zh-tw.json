@@ -101,8 +101,9 @@
     "digital-ide.function.lsp.linter.linter-level.title": "診斷器診斷等級設置",
     "digital-ide.function.lsp.linter.linter-level.error.title": "只顯示錯誤",
     "digital-ide.function.lsp.linter.linter-level.warning.title": "顯示錯誤和警告",
-    "%digital-ide.function.netlist.schema-mode.title%": "選擇 Netlist 綜合模式",
-    "%digital-ide.function.netlist.schema-mode.0.title%": "行為前綜合",
-    "%digital-ide.function.netlist.schema-mode.1.title%": "行為後綜合",
-    "%digital-ide.function.netlist.schema-mode.2.title%": "RTL後綜合"
+    "digital-ide.function.netlist.schema-mode.title": "選擇 Netlist 綜合模式",
+    "digital-ide.function.netlist.schema-mode.0.title": "行為前綜合",
+    "digital-ide.function.netlist.schema-mode.1.title": "行為後綜合",
+    "digital-ide.function.netlist.schema-mode.2.title": "RTL後綜合",
+    "digital-ide.run-ys.title": "運行 yosys 腳本"
 }

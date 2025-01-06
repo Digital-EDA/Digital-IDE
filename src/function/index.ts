@@ -141,8 +141,8 @@ function registerNetlist(context: vscode.ExtensionContext) {
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand('digital-ide.netlist.run-ys', (uri) => {
-            
+        vscode.commands.registerCommand('digital-ide.netlist.run-ys', (uri: vscode.Uri) => {
+            Netlist.runYsScript(context, uri);
         })
     )
     

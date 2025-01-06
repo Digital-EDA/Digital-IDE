@@ -93,7 +93,7 @@
     "digital-ide.function.lsp.file-parse-maxsize.title": "",
     "digital-ide.structure.from-xilinx-to-standard.title": "將 Xilinx 專案轉換成 Digital IDE 標準專案結構",
     "digital-ide.prj.verible.install.path.title": "verible 的安裝目錄路徑，也就是包含 verible-verilog-syntax 可執行文件的文件夾的絕對路徑。如果不指定，默認採用 verible-verilog-syntax 執行診斷。",
-    "digital-ide.prj.verilator.install.path.title": "verilator 的安裝目錄路徑，也就是包含了 verilator 可執行文件的文件夾的絕對路徑。不如不指定，默認採用 verilator 執行診斷。",
+    "digital-ide.prj.verilator.install.path.title": "verilator 的安裝目錄路徑，也就是包含了 verilator 可執行文件的文件夾的絕對路徑。如果不指定，默認採用 verilator 執行診斷。",
     "digital-ide.function.lsp.linter.mode.title": "指定診斷器的診斷模式",
     "digital-ide.function.lsp.linter.mode.0.title": "將所有設計源直接進行診斷，並報錯，無論文件是否打開。",
     "digital-ide.function.lsp.linter.mode.1.title": "單文件關閉時，對應報錯去除，打開哪個文件就對哪個文件進行診斷。",

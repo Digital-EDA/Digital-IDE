@@ -110,5 +110,6 @@
     "toolbar.save-as-svg": "将当前视图保存为 svg",
     "toolbar.save-as-pdf": "将当前视图保存为 pdf",
     "pdf-file": "pdf 文件",
-    "export-pdf": "正在导出 pdf"
+    "export-pdf": "正在导出 pdf",
+    "info.process-killed": "进程 {0} 已经被销毁"
 }

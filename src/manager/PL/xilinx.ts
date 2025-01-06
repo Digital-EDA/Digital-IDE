@@ -11,7 +11,7 @@ import { PropertySchema } from '../../global/propertySchema';
 
 import { XilinxIP } from '../../global/enum';
 import { HardwareOutput, MainOutput, ReportType } from '../../global/outputChannel';
-import { debounce } from '../../global/util';
+import { debounce, getPIDsWithName, killProcess } from '../../global/util';
 import { t } from '../../i18n';
 import { HdlFileProjectType } from '../../hdlParser/common';
 
@@ -60,8 +60,10 @@ interface BootInfo {
  */
 class XilinxOperation {
     guiLaunched: boolean;
+    guiPid: number;
     constructor() {
         this.guiLaunched = false;
+        this.guiPid = -1;
     }
 
     public get xipRepo(): XilinxIP[] {
@@ -142,8 +144,9 @@ class XilinxOperation {
      */
     public async launch(context: PLContext): Promise<string | undefined> {
         this.guiLaunched = false;
-        let scripts: string[] = [];
+        this.guiPid = -1;
 
+        let scripts: string[] = [];
         let prjFilePath = this.prjPath as AbsPath;
         // 找到所有的 xilinx 工程文件
         const prjFiles = hdlFile.pickFileRecursive(prjFilePath, 
@@ -188,11 +191,12 @@ class XilinxOperation {
             _this.onVivadoClose();
         }, 100);
 
-        function launchScript(): Promise<ChildProcessWithoutNullStreams | undefined> {
+        function launchScript(pids: number[]): Promise<ChildProcessWithoutNullStreams | undefined> {
             if (!opeParam.workspacePath) {
                 return Promise.resolve(undefined);
             }
-            // 执行 cmd 启动
+
+            const vivadoPids = new Set<number>(pids);
             const vivadoProcess = spawn(cmd, [], { shell: true, stdio: 'pipe', cwd: opeParam.workspacePath });
             let status: 'pending' | 'fulfilled' = 'pending';
 
@@ -207,11 +211,16 @@ class XilinxOperation {
             });
 
             return new Promise(resolve => {
-                vivadoProcess.stdout.on('data', data => {
+                vivadoProcess.stdout.on('data', async data => {
                     const message: string = _this.handleMessage(data.toString(), status);                                        
                     if (status === 'pending') {
                         HardwareOutput.clear();
                         HardwareOutput.show();
+                        const pids = await getPIDsWithName('vivado');
+                        const newPid = pids.find(p => !vivadoPids.has(p));
+                        if (newPid) {
+                            _this.guiPid = newPid;
+                        }
                         resolve(vivadoProcess);
                     }
                     HardwareOutput.report(message, {
@@ -251,7 +260,8 @@ class XilinxOperation {
             location: vscode.ProgressLocation.Notification,
             cancellable: true
         }, async () => {
-            return await launchScript();
+            const originVivadoPids = await getPIDsWithName('vivado');
+            return await launchScript(originVivadoPids);
         });
 
         context.process = process;
@@ -274,7 +284,7 @@ class XilinxOperation {
         }
     }
 
-    private onVivadoClose() {
+    private async onVivadoClose() {
         const workspacePath = opeParam.workspacePath;
         const plName = opeParam.prjInfo.prjName.PL;
         const targetPath = fspath.dirname(opeParam.prjInfo.arch.hardware.src);
@@ -287,6 +297,8 @@ class XilinxOperation {
 
         hdlDir.mvdir(sourceBdPath, targetPath, true);
         HardwareOutput.report("move dir from " + sourceBdPath + " to " + targetPath);
+
+        await this.closeAllWindows();
     }
 
     public create(scripts: string[]) {
@@ -434,6 +446,22 @@ class XilinxOperation {
     public refresh(context: PLContext) {
         const cmd = this.getRefreshXprDesignSourceCommand();
         context.process?.stdin.write(cmd + '\n');
+    }
+
+    public async closeAllWindows() {
+        if (this.guiPid > 0) {
+            await killProcess(this.guiPid);
+        }
+
+        const srcscannerPids = await getPIDsWithName('srcscanner');
+        for (const pid of srcscannerPids) {
+            await killProcess(pid);
+        }
+    }
+
+    public async exit(context: PLContext) {
+        context.process?.stdin.write('exit' + '\n');
+        await this.closeAllWindows();
     }
 
     public simulate(context: PLContext) {
@@ -630,14 +658,18 @@ file delete ${scriptPath} -force\n`;
             await this.launch(context);
         }
 
-        if (context.process) {
-            context.process.stdin.write('start_gui -quiet\n');
-            HardwareOutput.report(t('info.pl.gui.report-title'), {
-                level: ReportType.Info
-            });
-            HardwareOutput.show();
-            this.guiLaunched = true;
+        const tclProcess = context.process;
+        if (tclProcess === undefined) {
+            return;
         }
+
+        tclProcess.stdin.write('start_gui -quiet\n');
+        HardwareOutput.report(t('info.pl.gui.report-title'), {
+            level: ReportType.Info
+        });
+
+        HardwareOutput.show();
+        this.guiLaunched = true;
     }
 
     public addFiles(files: string[], context: PLContext) {

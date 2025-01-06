@@ -93,7 +93,7 @@
     "digital-ide.function.lsp.file-parse-maxsize.title": "最大解析的文件阈值，大小超出这个值的文件不会被解析。单位为 MB，必须是整数。默认为 1MB",
     "digital-ide.structure.from-xilinx-to-standard.title": "将 Xilinx 项目转换成 Digital IDE 标准项目结构",
     "digital-ide.prj.verible.install.path.title": "verible 的安装目录路径，也就是包含 verible-verilog-syntax 可执行文件的文件夹的绝对路径。如果不指定，默认采用 verible-verilog-syntax 执行诊断。",
-    "digital-ide.prj.verilator.install.path.title": "verilator 的安装目录路径，也就是包含了 verilator 可执行文件的文件夹的绝对路径。不如不指定，默认采用 verilator 执行诊断。",
+    "digital-ide.prj.verilator.install.path.title": "verilator 的安装目录路径，也就是包含了 verilator 可执行文件的文件夹的绝对路径。如果不指定，默认采用 verilator 执行诊断。",
     "digital-ide.function.lsp.linter.mode.title": "指定诊断器的诊断模式",
     "digital-ide.function.lsp.linter.mode.0.title": "将所有设计源直接进行诊断，并报错，无论文件是否打开。",
     "digital-ide.function.lsp.linter.mode.1.title": "单文件关闭时，对应报错去除，打开哪个文件就对哪个文件进行诊断。",

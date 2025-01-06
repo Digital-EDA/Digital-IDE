@@ -3,6 +3,8 @@
  * Hardware Programming
  */
 import * as vscode from 'vscode';
+import { exec } from 'child_process';
+import { platform } from 'os';
 
 import { PLContext, XilinxOperation } from './xilinx';
 import { BaseManage } from '../common';
@@ -89,16 +91,12 @@ class PlManage extends BaseManage {
         this.context.ope.gui(this.context);
     }
 
-    public exit() {
-
+    public async exit() {
         if (this.context.process === undefined) {
             return;
         }
-
-        HardwareOutput.show();
-        this.context.process.stdin.write('exit\n');
-        HardwareOutput.report(t('info.pl.exit.title'));
-        this.context.process = undefined;
+        HardwareOutput.show();        
+        this.context.ope.exit(this.context);
     }
 
 

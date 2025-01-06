@@ -110,5 +110,6 @@
     "toolbar.save-as-svg": "Aktuelle Ansicht als SVG speichern",
     "toolbar.save-as-pdf": "Aktuelle Ansicht als PDF speichern",
     "pdf-file": "PDF-Datei",
-    "export-pdf": "PDF wird exportiert"
+    "export-pdf": "PDF wird exportiert",
+    "info.process-killed": "Prozess {0} wurde zerstört"
 }

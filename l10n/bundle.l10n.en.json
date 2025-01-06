@@ -110,5 +110,6 @@
     "toolbar.save-as-svg": "Save current view as SVG",
     "toolbar.save-as-pdf": "Save current view as PDF",
     "pdf-file": "PDF file",
-    "export-pdf": "Exporting PDF"
+    "export-pdf": "Exporting PDF",
+    "info.process-killed": "Process {0} has been destroyed"
 }

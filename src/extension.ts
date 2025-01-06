@@ -138,4 +138,5 @@ export function activate(context: vscode.ExtensionContext) {
 
 export function deactivate() {
     lspClient.deactivate();
+    manager.prjManage.pl?.exit();
 }

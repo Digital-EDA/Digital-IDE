@@ -110,5 +110,6 @@
     "toolbar.save-as-svg": "現在のビューをSVGとして保存",
     "toolbar.save-as-pdf": "現在のビューをPDFとして保存",
     "pdf-file": "PDFファイル",
-    "export-pdf": "PDFをエクスポート中"
+    "export-pdf": "PDFをエクスポート中",
+    "info.process-killed": "プロセス {0} は破棄されました"
 }

@@ -3,8 +3,7 @@
  * Hardware Programming
  */
 import * as vscode from 'vscode';
-import { exec } from 'child_process';
-import { platform } from 'os';
+import * as fs from 'fs';
 
 import { PLContext, XilinxOperation } from './xilinx';
 import { BaseManage } from '../common';
@@ -157,32 +156,53 @@ class PlManage extends BaseManage {
         this.context.ope.delFiles(files, this.context);
     }
 
+    /**
+     * @description 添加自定义 device 字符串
+     * @returns 
+     */
     async addDevice() {
         const propertySchema = opeParam.propertySchemaPath;
         let propertyParam = hdlFile.readJSON(propertySchema) as PropertySchema;
         const device = await vscode.window.showInputBox({
             password: false,
             ignoreFocusOut: true,
-            placeHolder: 'Please input the name of device'
+            placeHolder: t('info.addDevice.placeholder')
         });
 
         if (!device) {
             return;    
         }
 
+        // 同步到缓存中
+        const dideHome = opeParam.dideHome;
+        const cachePPy = hdlPath.join(dideHome, 'property-schema.json');
+
         if (!propertyParam.properties.device.enum.includes(device)) {
             propertyParam.properties.device.enum.push(device);
             hdlFile.writeJSON(propertySchema, propertyParam);
-            vscode.window.showInformationMessage(`Add the ${device} successfully!!!`);
+            hdlFile.writeJSON(cachePPy, propertyParam);
+            vscode.window.showInformationMessage(t('info.addDevice.add-success', device));
         } else {
-            vscode.window.showWarningMessage("The device already exists.");
+            vscode.window.showWarningMessage(t('warning.addDevice.name-taken', device));
         }
     }
 
+    /**
+     * @description 删除用户创建的 device
+     * @returns 
+     */
     async delDevice() {
         const propertySchema = opeParam.propertySchemaPath;
-        let propertyParam = hdlFile.readJSON(propertySchema) as PropertySchema;
-        const device = await vscode.window.showQuickPick(propertyParam.properties.device.enum);
+        const propertyParam = hdlFile.readJSON(propertySchema) as PropertySchema;
+        const cachePPy = hdlPath.join(opeParam.dideHome, 'property-schema.json');
+
+        const device = await vscode.window.showQuickPick(
+            propertyParam.properties.device.enum.filter(device => device !== 'none'),
+            {
+                placeHolder: t('info.delDevice.placeholder'),
+                ignoreFocusOut: true
+            }
+        );
         if (!device) {
             return;
         }
@@ -190,7 +210,8 @@ class PlManage extends BaseManage {
         const index = propertyParam.properties.device.enum.indexOf(device);
         propertyParam.properties.device.enum.splice(index, 1);
         hdlFile.writeJSON(propertySchema, propertyParam);
-        vscode.window.showInformationMessage(`Delete the ${device} successfully!!!`);
+        hdlFile.writeJSON(cachePPy, propertyParam);
+        vscode.window.showInformationMessage(t('info.delDevice.del-success', device));
     }
 }
 

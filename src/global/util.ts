@@ -5,6 +5,7 @@ import * as childProcess from 'child_process';
 
 import { AbsPath, MainOutput } from ".";
 import { t } from '../i18n';
+import { hdlPath } from '../hdlFs';
 
 export class PathSet {
     files: Set<AbsPath> = new Set<AbsPath>();
@@ -251,4 +252,14 @@ export function killProcess(pid: number): Promise<void> {
             resolve();
         });
     });
+}
+
+/**
+ * 获取当前用户的主目录
+ * @returns 用户主目录的绝对路径
+ */
+export function getUserHomeDir(): AbsPath {
+    // 优先使用环境变量，如果不存在则使用 os.homedir()
+    const path = process.env.HOME || process.env.USERPROFILE || os.homedir();
+    return hdlPath.toSlash(path);
 }

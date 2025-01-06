@@ -3,6 +3,7 @@ import * as fs from 'fs';
 
 import { Arch, PrjInfo, RawPrjInfo, resolve } from './prjInfo';
 import { hdlPath } from '../hdlFs';
+import { getUserHomeDir } from './util';
 
 type AbsPath = string;
 type RelPath = string;
@@ -92,6 +93,10 @@ class OpeParam {
      */
     public get propertySchemaPath() : AbsPath {
         return this._propertySchemaPath;
+    }
+
+    public get dideHome() : AbsPath {
+        return hdlPath.join(getUserHomeDir(), '.digital-ide');
     }
 
     /**

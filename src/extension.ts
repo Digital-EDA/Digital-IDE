@@ -32,6 +32,11 @@ async function registerCommand(context: vscode.ExtensionContext, packageJson: an
             manager.prjManage.transformXilinxToStandard(context);
         })
     );
+    context.subscriptions.push(
+        vscode.commands.registerCommand('digital-ide.property-json.overwrite', () => {
+            manager.prjManage.overwritePropertyJson()
+        })
+    )
 }
 
 function readPackageJson(context: vscode.ExtensionContext): any | undefined {
@@ -79,7 +84,7 @@ async function launch(context: vscode.ExtensionContext) {
 
     await vscode.window.withProgress({
         location: vscode.ProgressLocation.Window,
-        title: "启动 Digital LSP 语言服务器"
+        title: t('info.progress.launch-lsp')
     }, async () => {
         await lspClient.activate(context, packageJson);
     });

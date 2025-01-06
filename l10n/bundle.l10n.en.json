@@ -111,5 +111,11 @@
     "toolbar.save-as-pdf": "Save current view as PDF",
     "pdf-file": "PDF file",
     "export-pdf": "Exporting PDF",
-    "info.process-killed": "Process {0} has been destroyed"
+    "info.process-killed": "Process {0} has been destroyed",
+    "info.addDevice.placeholder": "Please enter the name of the device",
+    "warning.addDevice.name-taken": "The name of device {0} is already taken",
+    "info.addDevice.add-success": "Device {0} has been successfully added",
+    "info.delDevice.placeholder": "Select the device to delete",
+    "info.delDevice.del-success": "Device {0} has been successfully deleted",
+    "info.progress.launch-lsp": "Start the Digital LSP language server"
 }

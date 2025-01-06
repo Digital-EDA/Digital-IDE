@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as fspath from 'path';
 
-import { AbsPath, IProgress, LspClient, MainOutput, opeParam, ReportType } from '../global';
+import { AbsPath, IProgress, MainOutput, opeParam, ReportType } from '../global';
 import { PathSet } from '../global/util';
 import { RawPrjInfo } from '../global/prjInfo';
 import { hdlDir, hdlFile, hdlPath } from '../hdlFs';
@@ -14,9 +14,7 @@ import { hdlIgnore } from './ignore';
 import { hdlMonitor } from '../monitor';
 import { t } from '../i18n';
 import { PpyAction } from '../monitor/propery';
-import { refreshArchTree } from '../function/treeView';
-import * as lspClient from '../function/lsp-client';
-import { refreshWorkspaceDiagonastics } from '../function/lsp/linter/manager';
+import { checkJson, readJSON } from '../hdlFs/file';
 
 
 interface RefreshPrjConfig {
@@ -36,7 +34,11 @@ class PrjManage {
             vscode.window.showWarningMessage('property file already exists !!!');
             return;
         }
-        const template = hdlFile.readJSON(opeParam.propertyInitPath) as RawPrjInfo;
+
+        const cachePPy = hdlPath.join(opeParam.dideHome, 'property-init.json');
+        const propertyInitPath = fs.existsSync(cachePPy) ? cachePPy: opeParam.propertyInitPath;
+
+        const template = hdlFile.readJSON(propertyInitPath) as RawPrjInfo;
         hdlFile.writeJSON(opeParam.propertyJsonPath, template);
 
         // 当创建 property.json 时，monitor 似乎无法获取到 ppy 的 add 事件
@@ -45,13 +47,22 @@ class PrjManage {
         await ppyAction.add(opeParam.propertyJsonPath, hdlMonitor);
     }
 
-    // overwrite content in current property.json to property-init.json
+    /**
+     * @description 用户自定义 property-init.json
+     */
     public async overwritePropertyJson() {
+        const dideHome = opeParam.dideHome;
+        hdlDir.mkdir(dideHome);
+        const cachePPy = hdlPath.join(dideHome, 'property-init.json');
+        if (!fs.existsSync(cachePPy)) {
+            hdlFile.copyFile(opeParam.propertyInitPath, cachePPy);
+        }
+
         const options = {
             preview: false,
             viewColumn: vscode.ViewColumn.Active
         };
-        const uri = vscode.Uri.file(opeParam.propertyInitPath);
+        const uri = vscode.Uri.file(cachePPy);
         await vscode.window.showTextDocument(uri, options);
     }
 
@@ -83,17 +94,22 @@ class PrjManage {
                               propertySchemaPath, 
                               propertyInitPath);
         
-        // set path for merge in prjInfo        
         opeParam.prjInfo.initContextPath(extensionPath, workspacePath);
-
         const refreshPrjConfig: RefreshPrjConfig = {mkdir: true};
-
-        // merge prjInfo from propertyJsonPath if exist
         if (fs.existsSync(propertyJsonPath)) {
             const rawPrjInfo = hdlFile.readJSON(propertyJsonPath) as RawPrjInfo;
             opeParam.mergePrjInfo(rawPrjInfo);
         } else {
             refreshPrjConfig.mkdir = false;
+        }
+
+        // 创建用户目录
+        hdlDir.mkdir(opeParam.dideHome);
+        // 同步部分文件
+        const cachePPySchema = hdlPath.join(opeParam.dideHome, 'property-schema.json');
+        const propertySchema = opeParam.propertySchemaPath;
+        if (fs.existsSync(cachePPySchema) && checkJson(cachePPySchema)) {
+            hdlFile.copyFile(cachePPySchema, propertySchema);
         }
 
         return refreshPrjConfig;
@@ -527,6 +543,7 @@ class PrjManage {
         //     hdlMonitor.start();
         // });
     }
+
 }
 
 const prjManage = new PrjManage();

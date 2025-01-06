@@ -111,5 +111,11 @@
     "toolbar.save-as-pdf": "現在のビューをPDFとして保存",
     "pdf-file": "PDFファイル",
     "export-pdf": "PDFをエクスポート中",
-    "info.process-killed": "プロセス {0} は破棄されました"
+    "info.process-killed": "プロセス {0} は破棄されました",
+    "info.addDevice.placeholder": "デバイスの名前を入力してください",
+    "warning.addDevice.name-taken": "デバイス {0} の名前は既に使用されています",
+    "info.addDevice.add-success": "デバイス {0} が正常に追加されました",
+    "info.delDevice.placeholder": "削除するデバイスを選択してください",
+    "info.delDevice.del-success": "デバイス {0} は正常に削除されました",
+    "info.progress.launch-lsp": "Digital LSP 言語サーバーを起動する"
 }

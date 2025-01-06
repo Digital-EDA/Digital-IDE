@@ -420,130 +420,130 @@
             },
             {
                 "command": "digital-ide.treeView.arch.expand",
-                "category": "tool",
+                "category": "Digital-IDE",
                 "icon": "$(expand-all)",
                 "title": "%digital-ide.treeView.arch.expand.title%"
             },
             {
                 "command": "digital-ide.treeView.arch.collapse",
-                "category": "tool",
+                "category": "Digital-IDE",
                 "icon": "$(collapse-all)",
                 "title": "%digital-ide.treeView.arch.collapse.title%"
             },
             {
                 "command": "digital-ide.treeView.arch.refresh",
-                "category": "tool",
+                "category": "Digital-IDE",
                 "icon": "$(refresh)",
                 "title": "%digital-ide.treeView.arch.refresh.title%"
             },
             {
                 "command": "digital-ide.treeView.arch.openFile",
-                "category": "tool",
+                "category": "Digital-IDE",
                 "title": "%digital-ide.treeView.arch.openFile.title%"
             },
             {
                 "command": "digital-ide.soft.launch",
-                "category": "tool",
+                "category": "Digital-IDE",
                 "title": "%digital-ide.soft.launch.title%"
             },
             {
                 "command": "digital-ide.soft.build",
-                "category": "tool",
+                "category": "Digital-IDE",
                 "title": "%digital-ide.soft.build.title%"
             },
             {
                 "command": "digital-ide.soft.download",
-                "category": "tool",
+                "category": "Digital-IDE",
                 "title": "%digital-ide.soft.download.title%"
             },
             {
                 "command": "digital-ide.hard.launch",
-                "category": "tool",
+                "category": "Digital-IDE",
                 "title": "%digital-ide.hard.launch.title%"
             },
             {
                 "command": "digital-ide.hard.simulate",
-                "category": "tool",
+                "category": "Digital-IDE",
                 "title": "%digital-ide.hard.simulate.title%"
             },
             {
                 "command": "digital-ide.hard.simulate.cli",
-                "category": "tool",
+                "category": "Digital-IDE",
                 "title": "%digital-ide.hard.simulate.cli.title%"
             },
             {
                 "command": "digital-ide.hard.simulate.gui",
-                "category": "tool",
+                "category": "Digital-IDE",
                 "title": "%digital-ide.hard.simulate.gui.title%"
             },
             {
                 "command": "digital-ide.hard.refresh",
-                "category": "tool",
+                "category": "Digital-IDE",
                 "title": "%digital-ide.hard.refresh.title%"
             },
             {
                 "command": "digital-ide.hard.build",
-                "category": "tool",
+                "category": "Digital-IDE",
                 "title": "%digital-ide.hard.build.title%"
             },
             {
                 "command": "digital-ide.hard.build.synth",
-                "category": "tool",
+                "category": "Digital-IDE",
                 "title": "%digital-ide.hard.build.synth.title%"
             },
             {
                 "command": "digital-ide.hard.build.impl",
-                "category": "tool",
+                "category": "Digital-IDE",
                 "title": "%digital-ide.hard.build.impl.title%"
             },
             {
                 "command": "digital-ide.hard.build.bitstream",
-                "category": "tool",
+                "category": "Digital-IDE",
                 "title": "%digital-ide.hard.build.bitstream.title%"
             },
             {
                 "command": "digital-ide.hard.program",
-                "category": "tool",
+                "category": "Digital-IDE",
                 "title": "%digital-ide.hard.program.title%"
             },
             {
                 "command": "digital-ide.hard.gui",
-                "category": "tool",
+                "category": "Digital-IDE",
                 "title": "%digital-ide.hard.gui.title%"
             },
             {
                 "command": "digital-ide.hard.exit",
-                "category": "tool",
+                "category": "Digital-IDE",
                 "title": "%digital-ide.hard.exit.title%"
             },
             {
                 "command": "digital-ide.pl.setSrcTop",
-                "category": "pl",
+                "category": "Digital-IDE",
                 "title": "%digital-ide.pl.setSrcTop.title%"
             },
             {
                 "command": "digital-ide.pl.setSimTop",
-                "category": "pl",
+                "category": "Digital-IDE",
                 "title": "%digital-ide.pl.setSimTop.title%"
             },
             {
                 "command": "digital-ide.pl.addDevice",
-                "category": "pl",
+                "category": "Digital-IDE",
                 "title": "%digital-ide.pl.addDevice.title%"
             },
             {
                 "command": "digital-ide.pl.delDevice",
-                "category": "pl",
+                "category": "Digital-IDE",
                 "title": "%digital-ide.pl.delDevice.title%"
             },
             {
                 "command": "digital-ide.pl.addFile",
-                "category": "pl",
+                "category": "Digital-IDE",
                 "title": "%digital-ide.pl.addFile.title%"
             },
             {
                 "command": "digital-ide.pl.delFile",
-                "category": "pl",
+                "category": "Digital-IDE",
                 "title": "%digital-ide.pl.delFile.title%"
             },
             {

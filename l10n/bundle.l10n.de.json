@@ -111,5 +111,11 @@
     "toolbar.save-as-pdf": "Aktuelle Ansicht als PDF speichern",
     "pdf-file": "PDF-Datei",
     "export-pdf": "PDF wird exportiert",
-    "info.process-killed": "Prozess {0} wurde zerstört"
+    "info.process-killed": "Prozess {0} wurde zerstört",
+    "info.addDevice.placeholder": "Bitte geben Sie den Namen des Geräts ein",
+    "warning.addDevice.name-taken": "Der Name des Geräts {0} ist bereits vergeben",
+    "info.addDevice.add-success": "Gerät {0} wurde erfolgreich hinzugefügt",
+    "info.delDevice.placeholder": "Wählen Sie das zu löschende Gerät aus",
+    "info.delDevice.del-success": "Gerät {0} wurde erfolgreich gelöscht",
+    "info.progress.launch-lsp": "Starten Sie den Digital LSP-Sprachserver"
 }

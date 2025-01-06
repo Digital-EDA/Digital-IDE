@@ -111,5 +111,11 @@
     "toolbar.save-as-pdf": "將目前視圖儲存為PDF",
     "pdf-file": "PDF檔案",
     "export-pdf": "正在匯出PDF",
-    "info.process-killed": "進程 {0} 已經被銷毀"
+    "info.process-killed": "進程 {0} 已經被銷毀",
+    "info.addDevice.placeholder": "請輸入設備的名稱",
+    "warning.addDevice.name-taken": "設備 {0} 的名字已經被佔用",
+    "info.addDevice.add-success": "設備 {0} 已成功添加",
+    "info.delDevice.placeholder": "選擇需要刪除的設備",
+    "info.delDevice.del-success": "設備 {0} 已被成功刪除",
+    "info.progress.launch-lsp": "啟動 Digital LSP 語言伺服器"
 }

@@ -183,6 +183,17 @@ export function readJSON(path: AbsPath): any {
     return {};
 }
 
+export function checkJson(path: AbsPath): any {
+    try {
+        const context = fs.readFileSync(path, 'utf-8');
+        const obj = JSON.parse(context)
+        const toolChain = obj.properties.toolChain;
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
+
 export function writeJSON(path: AbsPath, obj: object): boolean {
     try {
         const jsonString = JSON.stringify(obj, null, '\t');
@@ -237,10 +248,6 @@ export function copyFile(src: AbsPath, dest: AbsPath, cover: boolean = true): bo
 
     if (!isFile(src)) {
         return false;
-    }
-
-    if (!cover) {
-        cover = true;
     }
 
     try {

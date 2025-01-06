@@ -111,5 +111,11 @@
     "toolbar.save-as-pdf": "将当前视图保存为 pdf",
     "pdf-file": "pdf 文件",
     "export-pdf": "正在导出 pdf",
-    "info.process-killed": "进程 {0} 已经被销毁"
+    "info.process-killed": "进程 {0} 已经被销毁",
+    "info.addDevice.placeholder": "请输入 device 的名字",
+    "warning.addDevice.name-taken": "device {0} 的名字已经被占用",
+    "info.addDevice.add-success": "device {0} 已被成功添加",
+    "info.delDevice.placeholder": "选择需要删除的 device",
+    "info.delDevice.del-success": "device {0} 已被成功删除",
+    "info.progress.launch-lsp": "启动 Digital LSP 语言服务器"
 }

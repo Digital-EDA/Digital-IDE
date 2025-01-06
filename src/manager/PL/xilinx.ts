@@ -457,6 +457,14 @@ class XilinxOperation {
         for (const pid of srcscannerPids) {
             await killProcess(pid);
         }
+
+        // 删除所有 vivado_pid21812.str
+        for (const file of fs.readdirSync(opeParam.workspacePath)) {
+            if (file.startsWith('vivado_pid') && file.endsWith('.str')) {
+                const file_path = hdlPath.join(opeParam.workspacePath, file);
+                hdlFile.rmSync(file_path);
+            }
+        }
     }
 
     public async exit(context: PLContext) {

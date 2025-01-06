@@ -556,6 +556,15 @@
                 "title": "%digital-ide.netlist.title%"
             },
             {
+                "command": "digital-ide.netlist.run-ys",
+                "icon": {
+                    "light": "images/svg/light/netlist.svg",
+                    "dark": "images/svg/dark/netlist.svg"
+                },
+                "category": "Digital-IDE",
+                "title": "%digital-ide.netlist.title%"
+            },
+            {
                 "command": "digital-ide.fsm",
                 "icon": {
                     "light": "images/svg/light/fsm.svg",
@@ -737,6 +746,11 @@
                     "when": "resourceLangId == vhdl",
                     "command": "digital-ide.vhdl2vlog",
                     "group": "navigation@6"
+                },
+                {
+                    "when": "editorLangId == ys",
+                    "command": "digital-ide.netlist.run-ys",
+                    "group": "navigation@1"
                 }
             ],
             "editor/context": [
@@ -1021,6 +1035,17 @@
                 "configuration": "./config/ignore.configuration.json"
             },
             {
+                "id": "ys",
+                "extensions": [
+                    ".ys"
+                ],
+                "icon": {
+                    "dark": "./images/svg/dark/ys.svg",
+                    "light": "./images/svg/dark/ys.svg"
+                },
+                "configuration": "./config/ys.configuration.json"
+            },
+            {
                 "id": "digital-ide-output",
                 "mimetypes": [
                     "text/x-code-output"
@@ -1078,6 +1103,11 @@
                 "language": "dideignore",
                 "scopeName": "source.dideignore",
                 "path": "./syntaxes/ignore.json"
+            },
+            {
+                "language": "ys",
+                "scopeName": "source.ys",
+                "path": "./syntaxes/ys.json"
             }
         ],
         "snippets": [

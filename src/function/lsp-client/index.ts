@@ -39,7 +39,7 @@ function extractTarGz(filePath: string, outputDir: string): Promise<void> {
         cwd: outputDir, // 解压到指定目录
     });
 
-    inputStream.pipe(gunzip).pipe(extract);
+    inputStream.pipe(gunzip).pipe(extract as NodeJS.WritableStream);
 
     return new Promise((resolve, reject) => {
         extract.on('finish', () => {

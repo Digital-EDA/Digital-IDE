@@ -139,6 +139,12 @@ function registerNetlist(context: vscode.ExtensionContext) {
             Netlist.openNetlistViewer(context, uri, moduleName);
         })
     );
+
+    context.subscriptions.push(
+        vscode.commands.registerCommand('digital-ide.netlist.run-ys', (uri) => {
+            
+        })
+    )
     
     context.subscriptions.push(
         vscode.commands.registerCommand('digital-ide.netlist.treeview', (view: ModuleDataItem) => {

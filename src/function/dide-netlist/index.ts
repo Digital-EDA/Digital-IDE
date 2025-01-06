@@ -3,6 +3,7 @@ import * as fspath from 'path';
 import * as fs from 'fs';
 
 import { WASI } from 'wasi';
+
 import { AbsPath, opeParam, ReportType, YosysOutput } from '../../global';
 import { hdlParam } from '../../hdlParser';
 import { hdlDir, hdlFile, hdlPath } from '../../hdlFs';
@@ -26,8 +27,8 @@ class Netlist {
 
     constructor(context: vscode.ExtensionContext) {
         this.context = context;
-        this.wsName = 'dide';
-        this.libName = 'lib';
+        this.wsName = '{workspace}';
+        this.libName = '{library}';
     }
 
     public async open(uri: vscode.Uri, moduleName: string) {
@@ -82,8 +83,13 @@ class Netlist {
         }
 
         const wasm = this.wasm;
-        const { wasi, fd } = this.makeWasi(targetYs);
+        const wasiResult = this.makeWasi(targetYs, moduleName);
         
+        if (wasiResult === undefined) {
+            return;
+        }
+        const { wasi, fd } = wasiResult;
+
         const netlistPayloadFolder = hdlPath.join(opeParam.prjInfo.prjPath, 'netlist');
         const targetJson = hdlPath.join(netlistPayloadFolder, moduleName + '.json');
         hdlFile.rmSync(targetJson);
@@ -124,7 +130,7 @@ class Netlist {
         const netlistPayloadFolder = hdlPath.join(opeParam.prjInfo.prjPath, 'netlist');
         hdlDir.mkdir(netlistPayloadFolder);
         const target = hdlPath.join(netlistPayloadFolder, topModule + '.ys');
-        const targetJson = hdlPath.join(netlistPayloadFolder, topModule + '.json').replace(opeParam.workspacePath, '/' + this.wsName);
+        const targetJson = hdlPath.join(netlistPayloadFolder, topModule + '.json').replace(opeParam.workspacePath, this.wsName);
 
         const scripts: string[] = [];
         for (const file of files) {
@@ -135,10 +141,10 @@ class Netlist {
             }
 
             if (file.startsWith(opeParam.workspacePath)) {
-                const constraintPath = file.replace(opeParam.workspacePath, '/' + this.wsName);
+                const constraintPath = file.replace(opeParam.workspacePath, this.wsName);
                 scripts.push(`read_verilog -sv -formal -overwrite ${constraintPath}`);
             } else if (file.startsWith(opeParam.prjInfo.libCommonPath)) {
-                const constraintPath = file.replace(opeParam.prjInfo.libCommonPath, '/' + this.libName);
+                const constraintPath = file.replace(opeParam.prjInfo.libCommonPath, this.libName);
                 scripts.push(`read_verilog -sv -formal -overwrite ${constraintPath}`);
             }
         }
@@ -158,36 +164,40 @@ class Netlist {
         scripts.push(`write_json ${targetJson}`);
         const ysCode = scripts.join('\n');
         hdlFile.writeFile(target, ysCode);
-        return target.replace(opeParam.workspacePath, '/' + this.wsName);
+        return target.replace(opeParam.workspacePath, this.wsName);
     }
 
-    private makeWasi(target: string) {
+    private makeWasi(target: string, moduleName: string) {
         // 创建日志文件路径
-        const logFilePath = hdlPath.join(opeParam.prjInfo.prjPath, 'netlist', 'netlist.log');
+        const logFilePath = hdlPath.join(opeParam.prjInfo.prjPath, 'netlist', moduleName + '.log');
         hdlFile.removeFile(logFilePath);
         const logFd = fs.openSync(logFilePath, 'a');
 
-        const wasi = new WASI({
-            version: 'preview1',
-            args: [
-                'yosys',
-                '-s',
-                target
-            ],
-            preopens: {
-                '/share': hdlPath.join(opeParam.extensionPath, 'resources', 'dide-netlist', 'static', 'share'),
-                ['/' + this.wsName ]: opeParam.workspacePath,
-                ['/' + this.libName]: opeParam.prjInfo.libCommonPath
-            },
-            stdin: process.stdin.fd,
-            stdout: process.stdout.fd,
-            stderr: logFd,
-            // stdout: logFd,
-            // stderr: logFd,
-            env: process.env
-        });
+        try {
+            const wasiOption = {
+                version: 'preview1',
+                args: [
+                    'yosys',
+                    '-s',
+                    target
+                ],
+                preopens: {
+                    '/share': hdlPath.join(opeParam.extensionPath, 'resources', 'dide-netlist', 'static', 'share'),
+                    [this.wsName ]: opeParam.workspacePath,
+                    [this.libName]: opeParam.prjInfo.libCommonPath
+                },
+                stdin: process.stdin.fd,
+                stdout: process.stdout.fd,
+                stderr: logFd,
+                env: process.env
+            };
 
-        return { wasi, fd: logFd };
+            const wasi = new WASI(wasiOption);
+            return { wasi, fd: logFd };
+        } catch (error) {
+            fs.closeSync(logFd);
+            return undefined;
+        }
     }
 
     private async loadWasm() {
@@ -294,11 +304,20 @@ class Netlist {
             YosysOutput.report('Schematic saved in ' + savePath);
         }
     }
+
+    public async runYs(uri: vscode.Uri) {
+
+    }
 }
 
 export async function openNetlistViewer(context: vscode.ExtensionContext, uri: vscode.Uri, moduleName: string) {
     const viewer = new Netlist(context);
     viewer.open(uri, moduleName);
+}
+
+export async function runYsScript(context: vscode.ExtensionContext, uri: vscode.Uri) {
+    const viewer = new Netlist(context);
+
 }
 
 

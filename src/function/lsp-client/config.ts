@@ -165,6 +165,14 @@ export async function registerLinter(client: LanguageClient) {
             lspLinter.vhdlLinterManager.updateStatusBar();
         }
     });
+
+    // 切换标签页时的行为
+    vscode.window.onDidChangeActiveTextEditor(editor => {
+        if (!editor) {
+            return;
+        }
+        console.log('change to ', editor);
+    })
 }
 
 /**

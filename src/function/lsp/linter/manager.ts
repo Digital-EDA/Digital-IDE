@@ -340,22 +340,11 @@ export async function refreshWorkspaceDiagonastics(
             await publishDiagnostics(client, path);
         }
 
-        const tabs = vscode.window.tabGroups.all;
-        const tabArray = tabs.flatMap<AbsPath>(group => {
-            const files = [];
-            for (const tab of group.tabs) {
-                if (tab.input) {
-                    const doc = tab.input as vscode.TabInputText;
-                    if (doc.uri) {
-                        const absPath = hdlPath.toEscapePath(doc.uri.fsPath);
-                        files.push(absPath);
-                    }
-                }
-            }
-            return files;
-        });
-        
-        await asyncConsumer(tabArray, consumer, parallelChunk, progress);
+        const activeEditor = vscode.window.activeTextEditor;
+        if (activeEditor) {
+            const path = hdlPath.toEscapePath(activeEditor.document.fileName);
+            await asyncConsumer([path], consumer, parallelChunk, progress);
+        }
     } else {
         if (!isInitialise) {
             // shutdown, 如果是初始化阶段，什么都不需要做

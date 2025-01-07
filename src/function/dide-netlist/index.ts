@@ -15,6 +15,7 @@ import { HdlLangID } from '../../global/enum';
 import { getIconConfig } from '../../hdlFs/icons';
 import { getDiskLetters, PathSet } from '../../global/util';
 import { gotoDefinition, saveAsPdf, saveAsSvg } from './api';
+import { Worker } from 'worker_threads';
 
 type SynthMode = 'before' | 'after' | 'RTL';
 
@@ -99,11 +100,20 @@ class Netlist {
             location: vscode.ProgressLocation.Notification,
             title: t('info.netlist.generate-network'),
             cancellable: true
-        }, async () => {
-            const instance = await WebAssembly.instantiate(wasm, {
+        }, async (_, token) => {
+            token.onCancellationRequested(() => {
+                console.log('cancel');
+                fs.closeSync(fd);
+            });
+
+            const instance = WebAssembly.instantiate(wasm, {
                 wasi_snapshot_preview1: wasi.wasiImport
             });
-            const exitCode = wasi.start(instance);
+            try {
+                const exitCode = wasi.start(instance);
+            } catch (error) {
+                console.error(error);
+            }
         });
 
         if (!fs.existsSync(targetJson)) {

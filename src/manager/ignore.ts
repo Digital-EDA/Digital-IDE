@@ -1,6 +1,5 @@
-import * as vscode from 'vscode';
 import { AbsPath, opeParam } from '../global';
-import { hdlFile, hdlPath } from '../hdlFs';
+import { hdlPath } from '../hdlFs';
 import * as fs from 'fs';
 import * as fspath from 'path';
 import { minimatch } from 'minimatch';

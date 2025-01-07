@@ -5,8 +5,6 @@ import { AbsPath, RelPath } from '../global';
 import { HdlLangID } from '../global/enum';
 import { verilogExts, vhdlExts, systemVerilogExts, hdlExts } from '../global/lang';
 import * as hdlPath from './path';
-import { HdlFileProjectType } from '../hdlParser/common';
-import { opeParam } from '../global';
 import { hdlIgnore } from '../manager/ignore';
 import { hdlDir } from '.';
 

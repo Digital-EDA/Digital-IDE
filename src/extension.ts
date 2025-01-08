@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 
-import { MainOutput, ReportType, IProgress } from './global';
+import { MainOutput, ReportType, IProgress, globalLookup } from './global';
 import { hdlParam } from './hdlParser';
 import * as manager from './manager';
 import * as lspLinter from './function/lsp/linter';
@@ -71,6 +71,9 @@ async function launch(context: vscode.ExtensionContext) {
     }, async () => {
         await registerCommand(context, packageJson);
     });
+
+    // 注册全局变量
+    globalLookup.activeEditor = vscode.window.activeTextEditor;
 
     await vscode.window.withProgress({
         location: vscode.ProgressLocation.Window,

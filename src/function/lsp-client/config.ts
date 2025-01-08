@@ -5,9 +5,10 @@ import * as Linter from '../lsp/linter/common';
 import { HdlLangID } from '../../global/enum';
 import * as lspLinter from '../lsp/linter';
 import { t } from '../../i18n';
-import { IProgress } from '../../global';
-import { refreshWorkspaceDiagonastics } from '../lsp/linter/manager';
+import { globalLookup, IProgress } from '../../global';
+import { clearDiagnostics, publishDiagnostics, refreshWorkspaceDiagonastics } from '../lsp/linter/manager';
 import { prjManage } from '../../manager';
+import { hdlFile, hdlPath } from '../../hdlFs';
 
 interface ConfigItem {
     name: string,
@@ -167,12 +168,24 @@ export async function registerLinter(client: LanguageClient) {
     });
 
     // 切换标签页时的行为
-    vscode.window.onDidChangeActiveTextEditor(editor => {
+    vscode.window.onDidChangeActiveTextEditor(async editor => {
         if (!editor) {
             return;
         }
-        console.log('change to ', editor);
-    })
+        const linterMode = Linter.getLinterMode();
+        const currentPath = hdlPath.toEscapePath(editor.document.fileName);
+        if (globalLookup.activeEditor && linterMode === 'common') {
+            const previousPath = hdlPath.toEscapePath(globalLookup.activeEditor.document.fileName);
+            if (hdlFile.isHDLFile(previousPath)) {
+                clearDiagnostics(client, previousPath);
+            }
+            if (hdlFile.isHDLFile(currentPath)) {
+                publishDiagnostics(client, currentPath);
+            }
+        }
+
+        globalLookup.activeEditor = editor;
+    });
 }
 
 /**

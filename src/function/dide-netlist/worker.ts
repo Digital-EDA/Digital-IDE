@@ -7,12 +7,6 @@ import { WASI } from 'wasi';
 
 type SynthMode = 'before' | 'after' | 'RTL';
 type AbsPath = string;
-enum HdlLangID {
-    Verilog = 'verilog',
-    SystemVerilog = 'systemverilog', 
-    Vhdl = 'vhdl', 
-    Unknown = 'Unknown'
-};
 
 interface SimpleOpe {
     workspacePath: string,

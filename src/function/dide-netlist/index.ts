@@ -178,6 +178,7 @@ function checkResource() {
 export async function openNetlistViewer(context: vscode.ExtensionContext, uri: vscode.Uri, moduleName: string) {
     checkResource();
     const worker = new Worker(workerScriptPath);
+    let success = true;
     
     worker.on('message', message => {
         const command = message.command;
@@ -185,8 +186,11 @@ export async function openNetlistViewer(context: vscode.ExtensionContext, uri: v
         switch (command) {
             case 'error-log-file':
                 showErrorLogFile(data);
+                success = false;
                 break;
-        
+            case 'finish':
+                
+                break;
             default:
                 break;
         }
@@ -221,8 +225,10 @@ export async function openNetlistViewer(context: vscode.ExtensionContext, uri: v
 
     worker.terminate();
 
-    const render = new NetlistRender();
-    render.create(moduleName);
+    if (success) {
+        const render = new NetlistRender();
+        render.create(moduleName);
+    }
 }
 
 async function showErrorLogFile(data: any) {

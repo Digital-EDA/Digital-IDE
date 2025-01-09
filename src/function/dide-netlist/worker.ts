@@ -297,7 +297,7 @@ class Netlist {
         }
         const { wasi, fd } = wasiResult;
 
-        if (targetJson) {
+        if (targetJson && fs.existsSync(targetJson)) {
             fs.rmSync(targetJson);
         }
 

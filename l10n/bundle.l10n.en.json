@@ -117,5 +117,8 @@
     "info.addDevice.add-success": "Device {0} has been successfully added",
     "info.delDevice.placeholder": "Select the device to delete",
     "info.delDevice.del-success": "Device {0} has been successfully deleted",
-    "info.progress.launch-lsp": "Start the Digital LSP language server"
+    "info.progress.launch-lsp": "Start the Digital LSP language server",
+    "info.choose.digital-lsp-targz": "Select the Digital LSP archive",
+    "info.digital-lsp.targz": "Digital LSP Package",
+    "error.digital-lsp.incorrect-filename": "The digital LSP archive file {0} you provided does not match the current system architecture. Please download the archive file named {1}!"
 }

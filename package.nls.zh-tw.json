@@ -105,5 +105,6 @@
     "digital-ide.function.netlist.schema-mode.0.title": "行為前綜合",
     "digital-ide.function.netlist.schema-mode.1.title": "行為後綜合",
     "digital-ide.function.netlist.schema-mode.2.title": "RTL後綜合",
-    "digital-ide.run-ys.title": "運行 yosys 腳本"
+    "digital-ide.run-ys.title": "運行 yosys 腳本",
+    "digital-ide.digital-lsp.install.title": "安裝 Digital LSP 語言伺服器"
 }

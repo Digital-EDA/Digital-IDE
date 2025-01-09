@@ -117,5 +117,8 @@
     "info.addDevice.add-success": "device {0} 已被成功添加",
     "info.delDevice.placeholder": "选择需要删除的 device",
     "info.delDevice.del-success": "device {0} 已被成功删除",
-    "info.progress.launch-lsp": "启动 Digital LSP 语言服务器"
+    "info.progress.launch-lsp": "启动 Digital LSP 语言服务器",
+    "info.choose.digital-lsp-targz": "选择 Digital LSP 的压缩包",
+    "info.digital-lsp.targz": "Digital LSP 压缩包",
+    "error.digital-lsp.incorrect-filename": "您提供的 digital lsp 压缩包文件 {0} 并不是一个符合当前系统架构的，请下载名为 {1} 的压缩包文件！"
 }

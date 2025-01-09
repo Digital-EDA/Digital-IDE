@@ -13,7 +13,7 @@ import * as tar from 'tar';
 import { platform } from "os";
 import { IProgress, LspClient, opeParam } from '../../global';
 import axios, { AxiosResponse } from "axios";
-import { chooseBestDownloadSource } from "./cdn";
+import { chooseBestDownloadSource, getLspFileName } from "./cdn";
 import { hdlDir, hdlPath } from "../../hdlFs";
 import { registerConfigurationUpdater, registerLinter } from "./config";
 import { t } from "../../i18n";
@@ -115,7 +115,7 @@ export async function downloadLsp(context: vscode.ExtensionContext, version: str
         console.log('choose download link: ' + downloadLink);
               
         clearInterval(intervalHandler);
-        return downloadLink
+        return downloadLink;
     });
 
     const tarGzFilePath = await vscode.window.withProgress({
@@ -126,6 +126,48 @@ export async function downloadLsp(context: vscode.ExtensionContext, version: str
         const response = await axios.get(downloadLink, { responseType: 'stream' });
         return await streamDownload(context, progress, response);
     });
+
+    await vscode.window.withProgress({
+        location: vscode.ProgressLocation.Notification,
+        title: t('info.progress.extract-digital-lsp')
+    }, async (progress: vscode.Progress<IProgress>, token: vscode.CancellationToken) => {
+        if (fs.existsSync(tarGzFilePath)) {
+            console.log('check finish, begin to extract');
+            await extractTarGz(tarGzFilePath, versionFolderPath);
+        } else {
+            vscode.window.showErrorMessage(t('error.lsp.download-digital-lsp') + version);
+        }
+    });
+
+    return false;
+}
+
+
+export async function installLsp(context: vscode.ExtensionContext, version: string, versionFolderPath: string): Promise<boolean> {
+
+    const uri = await vscode.window.showOpenDialog({
+        title: t('info.choose.digital-lsp-targz'),
+        canSelectFiles: true,
+        canSelectFolders: false,
+        canSelectMany: false,
+        filters: {
+            [t('info.digital-lsp.targz')]: ['tar.gz'],
+            [t('info.vcd-viewer.all-file')]: ['*']
+        }
+    });
+
+    if (!uri) {
+        return false;
+    }
+
+    const tarGzFilePath = uri[0].fsPath;
+    const filename = path.basename(tarGzFilePath);
+    const signature = getPlatformPlatformSignature().toString();
+    const expectFilename = getLspFileName(version, signature);
+    if (expectFilename !== filename) {
+        vscode.window.showErrorMessage(t('error.digital-lsp.incorrect-filename', filename, expectFilename));
+        return false;
+    }
 
     await vscode.window.withProgress({
         location: vscode.ProgressLocation.Notification,

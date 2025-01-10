@@ -120,5 +120,9 @@
     "info.progress.launch-lsp": "Digital LSP 言語サーバーを起動する",
     "info.choose.digital-lsp-targz": "Digital LSPのアーカイブを選択してください",
     "info.digital-lsp.targz": "デジタルLSPパッケージ",
-    "error.digital-lsp.incorrect-filename": "提供されたデジタルLSPアーカイブファイル{0}は、現在のシステムアーキテクチャに適合していません。{1}という名前のアーカイブファイルをダウンロードしてください！"
+    "error.digital-lsp.incorrect-filename": "提供されたデジタルLSPアーカイブファイル{0}は、現在のシステムアーキテクチャに適合していません。{1}という名前のアーカイブファイルをダウンロードしてください！",
+    "error.not-valid-browser": "{0} は有効なブラウザのパスではありません！",
+    "info.config-browser-path": "ブラウザのパスを設定",
+    "info.pdf.exporting": "PDFを{0}にエクスポート中",
+    "info.generate-pdf-to": "PDFは{0}に生成されました"
 }

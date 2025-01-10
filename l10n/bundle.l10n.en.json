@@ -120,5 +120,9 @@
     "info.progress.launch-lsp": "Start the Digital LSP language server",
     "info.choose.digital-lsp-targz": "Select the Digital LSP archive",
     "info.digital-lsp.targz": "Digital LSP Package",
-    "error.digital-lsp.incorrect-filename": "The digital LSP archive file {0} you provided does not match the current system architecture. Please download the archive file named {1}!"
+    "error.digital-lsp.incorrect-filename": "The digital LSP archive file {0} you provided does not match the current system architecture. Please download the archive file named {1}!",
+    "error.not-valid-browser": "{0} is not a valid browser path!",
+    "info.config-browser-path": "Configure browser path",
+    "info.pdf.exporting": "Exporting PDF to {0}",
+    "info.generate-pdf-to": "PDF has been generated to {0}"
 }

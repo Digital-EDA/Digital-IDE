@@ -170,7 +170,7 @@ async function html2pdf(htmlPath: string, pdfPath: string, moduleName: string, w
         scale: 1,
         displayHeaderFooter: true,
         // headerTemplate: `<div style="font-size: 12px; margin-left: 1cm;">module ${moduleName}</div>`,
-        footerTemplate: `<div style="font-size: 15px; margin: 0 auto;">Netlist for <code>${moduleName}</code> - 由 Digital IDE 生成 </div>`,
+        footerTemplate: `<div style="font-size: 15px; margin: 0 auto;">Netlist for <code>${moduleName}</code> - Powered By Digital IDE</div>`,
         printBackground: true,
         landscape: true,
         width: width

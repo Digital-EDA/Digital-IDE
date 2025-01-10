@@ -43,6 +43,11 @@ function registerFileDocExport(context: vscode.ExtensionContext) {
             new ExportFunctionItem('html', ' html', 'only support light theme', exportCurrentFileDocAsHTML)
         ];
 
+        if (uri === undefined && vscode.window.activeTextEditor) {
+            // TODO: 制作新的 doc UI
+            uri = vscode.Uri.file(vscode.window.activeTextEditor.document.fileName);
+        }
+        
         const item = await vscode.window.showQuickPick(items, option);
 		if (item) {
             item.exportFunc(uri);

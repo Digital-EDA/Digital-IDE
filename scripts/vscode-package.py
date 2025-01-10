@@ -64,12 +64,12 @@ def modify_vsix():
     os.remove(dist_path)
 
     # webview
-    print("")
+    print("move netlist")
     copy_dir('./resources/dide-netlist/view', os.path.join(extract_folder, 'extension', 'resources', 'dide-netlist', 'view'))
-    copy_dir('./resources/dide-netlist/static/share', os.path.join(extract_folder, 'extension', 'resources', 'dide-viewer', 'static', 'share'))
-    copy_file('./resources/dide-netlist/static/yosys.wasm', os.path.join(extract_folder, 'extension', 'resources', 'dide-viewer', 'static', 'yosys.wasm'))
+    copy_dir('./resources/dide-netlist/static/share', os.path.join(extract_folder, 'extension', 'resources', 'dide-netlist', 'static', 'share'))
+    copy_file('./resources/dide-netlist/static/yosys.wasm', os.path.join(extract_folder, 'extension', 'resources', 'dide-netlist', 'static', 'yosys.wasm'))
 
-    print("")
+    print("move vcd")
     copy_dir('./resources/dide-viewer/view', os.path.join(extract_folder, 'extension', 'resources', 'dide-viewer', 'view'))
 
     # remake

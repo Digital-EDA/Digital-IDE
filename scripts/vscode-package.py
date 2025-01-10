@@ -96,6 +96,9 @@ def install_extension():
     vsix_path = os.path.join('dist', vsix_files[0])
     os.system('code --install-extension ' + vsix_path)
 
+if os.path.exists('dist'):
+    shutil.rmtree('dist')
+
 pipe = CommandPipe()
 pipe.add_command('uninstall original extension', 'code --uninstall-extension sterben.fpga-support')
 pipe.add_command('compile typescript', 'tsc -p ./ --outDir out-js')

@@ -311,6 +311,7 @@ class Netlist {
             wasi_snapshot_preview1: wasi.wasiImport
         });
 
+
         try {
             const exitCode = wasi.start(instance);
         } catch (error) {

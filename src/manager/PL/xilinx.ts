@@ -444,6 +444,10 @@ class XilinxOperation {
      * @param context 
      */
     public refresh(context: PLContext) {
+        vscode.window.showInformationMessage(
+            "Xilinx: Refresh",
+            { title: 'ok', value: true }
+        );
         const cmd = this.getRefreshXprDesignSourceCommand();
         context.process?.stdin.write(cmd + '\n');
     }
@@ -477,6 +481,11 @@ class XilinxOperation {
     }
 
     public simulateGui(context: PLContext) {
+        vscode.window.showInformationMessage(
+            "Xilinx: Simulate GUI",
+            { title: 'ok', value: true }
+        );
+
         const scriptPath = `${this.xilinxPath}/simulate.tcl`;
 
         const script = `
@@ -508,6 +517,11 @@ file delete ${scriptPath} -force\n`;
     }
 
     public simulateCli(context: PLContext) {
+        vscode.window.showInformationMessage(
+            "Xilinx: Simulate CLI",
+            { title: 'ok', value: true }
+        );
+
         const scriptPath = hdlPath.join(this.xilinxPath, 'simulate.tcl');
         const script = `
 if {[current_sim] != ""} {
@@ -536,6 +550,11 @@ file delete ${scriptPath} -force\n`;
     }
 
     public synth(context: PLContext) {
+        vscode.window.showInformationMessage(
+            "Xilinx: Synth",
+            { title: 'ok', value: true }
+        );
+
         let quietArg = '';
         if (opeParam.prjInfo.enableShowLog) {
             quietArg = '-quiet';
@@ -550,6 +569,11 @@ file delete ${scriptPath} -force\n`;
     }
 
     impl(context: PLContext) {
+        vscode.window.showInformationMessage(
+            "Xilinx: Impl",
+            { title: 'ok', value: true }
+        );
+
         let quietArg = '';
         if (opeParam.prjInfo.enableShowLog) {
             quietArg = '-quiet';
@@ -566,6 +590,10 @@ file delete ${scriptPath} -force\n`;
     }
 
     build(context: PLContext) {
+        vscode.window.showInformationMessage(
+            "Xilinx: Build",
+            { title: 'ok', value: true }
+        );
         let quietArg = '';
         if (this.prjConfig.enableShowLog) {
             quietArg = '-quiet';
@@ -595,6 +623,11 @@ file delete ${scriptPath} -force\n`;
 
 
     generateBit(context: PLContext) {
+        vscode.window.showInformationMessage(
+            "Xilinx: BitStream",
+            { title: 'ok', value: true }
+        );
+
         let scripts: string[] = [];
         let core = this.prjConfig.soc.core;
         let sysdefPath = `${this.prjInfo.path}/${this.prjInfo.name}.runs` + 
@@ -626,6 +659,11 @@ file delete ${scriptPath} -force\n`;
     }
 
     program(context: PLContext) {
+        vscode.window.showInformationMessage(
+            "Xilinx: Program",
+            { title: 'ok', value: true }
+        );
+
         let scriptPath = `${this.xilinxPath}/program.tcl`;
         let script = `
 open_hw -quiet
@@ -672,6 +710,10 @@ file delete ${scriptPath} -force\n`;
         }
 
         tclProcess.stdin.write('start_gui -quiet\n');
+        vscode.window.showInformationMessage(
+            t('info.vivado-gui.started'),
+            { title: t('ok'), value: true }
+        );
         HardwareOutput.report(t('info.pl.gui.report-title'), {
             level: ReportType.Info
         });

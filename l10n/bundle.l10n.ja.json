@@ -124,5 +124,7 @@
     "error.not-valid-browser": "{0} は有効なブラウザのパスではありません！",
     "info.config-browser-path": "ブラウザのパスを設定",
     "info.pdf.exporting": "PDFを{0}にエクスポート中",
-    "info.generate-pdf-to": "PDFは{0}に生成されました"
+    "info.generate-pdf-to": "PDFは{0}に生成されました",
+    "info.vivado-gui.started": "Vivado GUI を起動しています、少々お待ちください",
+    "ok": "良い"
 }

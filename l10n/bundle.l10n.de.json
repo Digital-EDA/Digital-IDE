@@ -124,5 +124,7 @@
     "error.not-valid-browser": "{0} ist kein gültiger Browser-Pfad!",
     "info.config-browser-path": "Browser-Pfad konfigurieren",
     "info.pdf.exporting": "PDF wird nach {0} exportiert",
-    "info.generate-pdf-to": "PDF wurde unter {0} generiert"
+    "info.generate-pdf-to": "PDF wurde unter {0} generiert",
+    "info.vivado-gui.started": "Vivado GUI wird gestartet, bitte warten Sie einen Moment",
+    "ok": "Gut"
 }

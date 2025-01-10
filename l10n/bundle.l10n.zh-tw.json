@@ -124,5 +124,7 @@
     "error.not-valid-browser": "{0} 並不是一個有效的瀏覽器路徑！",
     "info.config-browser-path": "配置瀏覽器路徑",
     "info.pdf.exporting": "正在導出PDF到{0}",
-    "info.generate-pdf-to": "PDF 已生成至 {0}"
+    "info.generate-pdf-to": "PDF 已生成至 {0}",
+    "info.vivado-gui.started": "Vivado GUI 正在啟動中，稍等片刻",
+    "ok": "好的"
 }

@@ -344,17 +344,15 @@ class PrjManage {
 
                 const sourcePath = hdlPath.join(workspace, file);
 
-                // 排除非 hdl 文件
-                if (hdlFile.isFile(sourcePath) && !hdlFile.isHDLFile(sourcePath)) {
-                    continue;
-                }
-
                 if (file.startsWith(plname)) {
                     const targetFolder = hdlPath.join(workspace, 'prj', 'xilinx');
                     hdlFile.move(sourcePath, targetFolder);
                 } else {
+                    // 排除非 hdl 文件
+                    if (hdlFile.isFile(sourcePath) && !hdlFile.isHDLFile(sourcePath)) {
+                        continue;
+                    }
                     const targetFolder = hdlPath.join(workspace, 'user', 'src');
-                    
                     hdlFile.move(sourcePath, targetFolder);
                 }
             }

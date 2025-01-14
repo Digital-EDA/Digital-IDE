@@ -117,5 +117,14 @@
     "info.addDevice.add-success": "デバイス {0} が正常に追加されました",
     "info.delDevice.placeholder": "削除するデバイスを選択してください",
     "info.delDevice.del-success": "デバイス {0} は正常に削除されました",
-    "info.progress.launch-lsp": "Digital LSP 言語サーバーを起動する"
+    "info.progress.launch-lsp": "Digital LSP 言語サーバーを起動する",
+    "info.choose.digital-lsp-targz": "Digital LSPのアーカイブを選択してください",
+    "info.digital-lsp.targz": "デジタルLSPパッケージ",
+    "error.digital-lsp.incorrect-filename": "提供されたデジタルLSPアーカイブファイル{0}は、現在のシステムアーキテクチャに適合していません。{1}という名前のアーカイブファイルをダウンロードしてください！",
+    "error.not-valid-browser": "{0} は有効なブラウザのパスではありません！",
+    "info.config-browser-path": "ブラウザのパスを設定",
+    "info.pdf.exporting": "PDFを{0}にエクスポート中",
+    "info.generate-pdf-to": "PDFは{0}に生成されました",
+    "info.vivado-gui.started": "Vivado GUI を起動しています、少々お待ちください",
+    "ok": "良い"
 }

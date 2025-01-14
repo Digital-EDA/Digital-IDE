@@ -16,7 +16,7 @@ import * as FSM from './fsm';
 import * as Netlist from './dide-netlist';
 import * as WaveView from './dide-viewer';
 import { ModuleDataItem } from './treeView/tree';
-import { downloadLsp } from './lsp-client';
+import { downloadLsp, installLsp } from './lsp-client';
 import { hdlPath } from '../hdlFs';
 
 function registerDocumentation(context: vscode.ExtensionContext) {
@@ -99,6 +99,13 @@ function registerLsp(context: vscode.ExtensionContext, version: string) {
             path.join('resources', 'dide-lsp', 'server', version)
         );
         downloadLsp(context, version, versionFolderPath)
+    });
+
+    vscode.commands.registerCommand('digital-ide.digital-lsp.install', () => {
+        const versionFolderPath = context.asAbsolutePath(
+            path.join('resources', 'dide-lsp', 'server', version)
+        );
+        installLsp(context, version, versionFolderPath);
     });
 
     const vlogSelector: vscode.DocumentSelector = {scheme: 'file', language: 'verilog'};

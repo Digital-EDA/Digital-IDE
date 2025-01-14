@@ -5,6 +5,7 @@ import * as puppeteer from 'puppeteer-core';
 import { makeShowHTML } from './html';
 import { hdlFile, hdlPath } from '../../hdlFs';
 import { AbsPath, MainOutput, opeParam, ReportType } from '../../global';
+import { t } from '../../i18n';
 
 // TODO : finish it in each platform
 function getDefaultBrowerPath(): AbsPath {
@@ -27,10 +28,18 @@ function getDefaultBrowerPath(): AbsPath {
 async function htmlFile2PdfFile(htmlPath: AbsPath, pdfPath: AbsPath) {    
     const pdfConfig = vscode.workspace.getConfiguration("digital-ide.function.doc.pdf");
     const platformDefaultBrowerPath = getDefaultBrowerPath();
-    const browserPath = pdfConfig.get('browserPath', platformDefaultBrowerPath);
+    
+    const browserPath = pdfConfig.get<string>('browserPath') || platformDefaultBrowerPath;
     
     if (!fs.existsSync(browserPath)) {
-        vscode.window.showErrorMessage("Path " + browserPath + " is not a valid browser path!");
+        const res = await vscode.window.showErrorMessage(
+            t('error.not-valid-browser', browserPath),
+            { title: t('info.config-browser-path'), value: true }
+        );
+
+        if (res?.value) {
+            await vscode.commands.executeCommand('workbench.action.openSettings', 'digital-ide.function.doc.pdf.browserPath');
+        }
         return;
     }
     const browser = await puppeteer.launch({
@@ -48,7 +57,7 @@ async function htmlFile2PdfFile(htmlPath: AbsPath, pdfPath: AbsPath) {
         scale: pdfConfig.scale,
         displayHeaderFooter: pdfConfig.displayHeaderFooter,
         headerTemplate: pdfConfig.headerTemplate,
-        footerTemplate: pdfConfig.footerTemplate,
+        footerTemplate: `<div style="font-size: 15px; margin: 0 auto;">CodeDoc - Powered By Digital IDE</div>`,
         printBackground: pdfConfig.printBackground,
         landscape: pdfConfig.landscape,
         format: pdfConfig.format,
@@ -74,7 +83,8 @@ async function exportCurrentFileDocAsPDF(uri: vscode.Uri) {
 
     return vscode.window.withProgress({
         location: vscode.ProgressLocation.Notification,
-        title: '[Digital-IDE]: Export ' + currentFilePath + '...'
+        title: t('info.pdf.exporting', currentFilePath),
+        cancellable: true
     }, async progress => {
         try {
             const html = await makeShowHTML(uri, "pdf");
@@ -102,15 +112,18 @@ async function exportCurrentFileDocAsPDF(uri: vscode.Uri) {
         
             fs.writeFileSync(tempHtmlPath, html);
             await htmlFile2PdfFile(tempHtmlPath, pdfPath);
-            hdlFile.rmSync(tempHtmlPath);
+            // hdlFile.rmSync(tempHtmlPath);
 
             // 在当前编辑器中打开生成的 pdf
-            vscode.window.showInformationMessage('pdf generated at ' + pdfPath);
+            if (fs.existsSync(pdfPath)) {
+                vscode.window.showInformationMessage(t('info.generate-pdf-to', pdfFolderPath));
+            }
             
         } catch (error) {
             MainOutput.report("error happen in export pdf: " + error, {
                 level: ReportType.Error
             });
+            return;
         }
     });
 }

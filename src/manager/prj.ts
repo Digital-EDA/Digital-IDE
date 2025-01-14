@@ -342,17 +342,52 @@ class PrjManage {
                     continue;
                 }
 
+                const sourcePath = hdlPath.join(workspace, file);
+
                 if (file.startsWith(plname)) {
                     const targetFolder = hdlPath.join(workspace, 'prj', 'xilinx');
-                    const sourcePath = hdlPath.join(workspace, file);
                     hdlFile.move(sourcePath, targetFolder);
                 } else {
+                    // 排除非 hdl 文件
+                    if (hdlFile.isFile(sourcePath) && !hdlFile.isHDLFile(sourcePath)) {
+                        continue;
+                    }
                     const targetFolder = hdlPath.join(workspace, 'user', 'src');
-                    const sourcePath = hdlPath.join(workspace, file);
                     hdlFile.move(sourcePath, targetFolder);
                 }
             }
         }
+
+        /**
+         * @description 搬移 Xilinx 项目中的 BD
+         * 
+         * bd 一般在 ${workspace}/${plname}.srcs/sources_xxx/bd 里面
+         */
+        function transformBD(
+            matchPrefix: string,
+            workspace: string,
+            plname: string
+        ) {
+            const xilinxSrcsPath = hdlPath.join(workspace, plname + '.srcs');
+            const standardBdPath = hdlPath.join(workspace, 'user', 'bd');
+            if (!fs.existsSync(xilinxSrcsPath)) {
+                return;
+            }
+            const sourceNames = fs.readdirSync(xilinxSrcsPath).filter(filename => filename.startsWith(matchPrefix));
+            for (const sn of sourceNames) {
+                const bdPath = hdlPath.join(xilinxSrcsPath, sn, 'bd');
+                if (!hdlFile.isDir(bdPath)) {
+                    continue;
+                }
+
+                for (const bdname of fs.readdirSync(bdPath)) {
+                    const sourcePath = hdlPath.join(bdPath, bdname);
+                    hdlDir.mvdir(sourcePath, standardBdPath, true);
+                }
+                hdlDir.rmdir(bdPath);
+            }
+        }
+        
 
         /**
          * @description 搬移 Xilinx 项目中的 IP
@@ -481,11 +516,15 @@ class PrjManage {
             // 创建标准项目结构基本文件夹
             // xilinx prj
             hdlDir.mkdir(hdlPath.join(workspacePath, 'prj', 'xilinx'));
+
             // hardware
             hdlDir.mkdir(hdlPath.join(workspacePath, 'user', 'src'));
             hdlDir.mkdir(hdlPath.join(workspacePath, 'user', 'sim'));
             hdlDir.mkdir(hdlPath.join(workspacePath, 'user', 'data'));
             hdlDir.mkdir(hdlPath.join(workspacePath, 'user', 'ip'));
+
+            hdlDir.mkdir(hdlPath.join(workspacePath, 'user', 'bd'));
+
             // software
             hdlDir.mkdir(hdlPath.join(workspacePath, 'user', 'sdk'));
             hdlDir.mkdir(hdlPath.join(workspacePath, 'user', 'sdk', 'data'));
@@ -497,6 +536,10 @@ class PrjManage {
             // 迁移 IP
             transformIP('sources_', workspacePath, plname);
             transformIP('sim_', workspacePath, plname);
+
+            // 迁移 BD
+            transformBD('sources_', workspacePath, plname);
+            transformBD('sim_', workspacePath, plname);
 
             // 迁移文件夹 ${workspace}/${plname}.srcs
             transformXilinxPL('src', 'sources_', workspacePath, plname);

@@ -117,5 +117,14 @@
     "info.addDevice.add-success": "Gerät {0} wurde erfolgreich hinzugefügt",
     "info.delDevice.placeholder": "Wählen Sie das zu löschende Gerät aus",
     "info.delDevice.del-success": "Gerät {0} wurde erfolgreich gelöscht",
-    "info.progress.launch-lsp": "Starten Sie den Digital LSP-Sprachserver"
+    "info.progress.launch-lsp": "Starten Sie den Digital LSP-Sprachserver",
+    "info.choose.digital-lsp-targz": "Wählen Sie das Digital LSP-Archiv aus",
+    "info.digital-lsp.targz": "Digitales LSP-Paket",
+    "error.digital-lsp.incorrect-filename": "Die von Ihnen bereitgestellte Digital-LSP-Archivdatei {0} entspricht nicht der aktuellen Systemarchitektur. Bitte laden Sie die Archivdatei mit dem Namen {1} herunter!",
+    "error.not-valid-browser": "{0} ist kein gültiger Browser-Pfad!",
+    "info.config-browser-path": "Browser-Pfad konfigurieren",
+    "info.pdf.exporting": "PDF wird nach {0} exportiert",
+    "info.generate-pdf-to": "PDF wurde unter {0} generiert",
+    "info.vivado-gui.started": "Vivado GUI wird gestartet, bitte warten Sie einen Moment",
+    "ok": "Gut"
 }

@@ -20,7 +20,6 @@ interface SimpleOpe {
     extensionPath: string
 }
 
-const workerScriptPath = hdlPath.join(__dirname, 'worker.js');
 
 class NetlistRender {
     panel?: vscode.WebviewPanel;
@@ -177,6 +176,7 @@ function checkResource() {
 
 export async function openNetlistViewer(context: vscode.ExtensionContext, uri: vscode.Uri, moduleName: string) {
     checkResource();
+    const workerScriptPath = hdlPath.join(opeParam.extensionPath, 'out', 'function', 'dide-netlist', 'worker.js');
     const worker = new Worker(workerScriptPath);
     let success = true;
     
@@ -245,6 +245,7 @@ async function showErrorLogFile(data: any) {
 
 export async function runYsScript(context: vscode.ExtensionContext, uri: vscode.Uri) {
     checkResource();
+    const workerScriptPath = hdlPath.join(opeParam.extensionPath, 'out', 'function', 'dide-netlist', 'worker.js');
     const worker = new Worker(workerScriptPath);
 
     worker.on('message', message => {

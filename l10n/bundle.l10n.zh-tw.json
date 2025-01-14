@@ -117,5 +117,14 @@
     "info.addDevice.add-success": "設備 {0} 已成功添加",
     "info.delDevice.placeholder": "選擇需要刪除的設備",
     "info.delDevice.del-success": "設備 {0} 已被成功刪除",
-    "info.progress.launch-lsp": "啟動 Digital LSP 語言伺服器"
+    "info.progress.launch-lsp": "啟動 Digital LSP 語言伺服器",
+    "info.choose.digital-lsp-targz": "選擇 Digital LSP 的壓縮包",
+    "info.digital-lsp.targz": "數位LSP壓縮包",
+    "error.digital-lsp.incorrect-filename": "您提供的 digital lsp 壓縮包文件 {0} 並不是一個符合當前系統架構的，請下載名為 {1} 的壓縮包文件！",
+    "error.not-valid-browser": "{0} 並不是一個有效的瀏覽器路徑！",
+    "info.config-browser-path": "配置瀏覽器路徑",
+    "info.pdf.exporting": "正在導出PDF到{0}",
+    "info.generate-pdf-to": "PDF 已生成至 {0}",
+    "info.vivado-gui.started": "Vivado GUI 正在啟動中，稍等片刻",
+    "ok": "好的"
 }

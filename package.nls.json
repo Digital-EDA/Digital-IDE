@@ -105,5 +105,6 @@
     "digital-ide.function.netlist.schema-mode.0.title": "Pre-Behavioral Synthesis",
     "digital-ide.function.netlist.schema-mode.1.title": "Post-Behavioral Synthesis",
     "digital-ide.function.netlist.schema-mode.2.title": "Post-RTL Synthesis",
-    "digital-ide.run-ys.title": "Run yosys script"
+    "digital-ide.run-ys.title": "Run yosys script",
+    "digital-ide.digital-lsp.install.title": "Install Digital LSP Language Server"
 }

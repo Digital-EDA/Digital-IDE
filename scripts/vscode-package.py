@@ -107,6 +107,6 @@ pipe.add_command('make vsix installer', 'vsce package')
 pipe.add_command('modify vsix installer', lambda : modify_vsix())
 # pipe.add_command('remove out-js', lambda : remove_folder('out-js'))
 # pipe.add_command('remove out', lambda : remove_folder('out'))
-pipe.add_command('install', lambda : install_extension())
+# pipe.add_command('install', lambda : install_extension())
 
 pipe.run()

@@ -1,8 +1,10 @@
 import * as vscode from 'vscode';
 import * as os from 'os';
+import * as fs from 'fs';
+import * as fspath from 'path';
 
-import { LinterOutput, ReportType, AbsPath, IProgress } from '../../../global';
-import { HdlLangID } from '../../../global/enum';
+import { LinterOutput, ReportType, AbsPath, IProgress, opeParam } from '../../../global';
+import { HdlLangID, LibraryState } from '../../../global/enum';
 import { hdlFile, hdlPath } from '../../../hdlFs';
 import { t } from '../../../i18n';
 import { getLinterConfigurationName, getLinterInstallConfigurationName, getLinterMode, getLinterName, IConfigReminder, LinterItem, LinterMode, makeLinterNamePickItem, makeLinterOptions, SupportLinterName, updateLinterConfigurationName } from './common';
@@ -244,10 +246,33 @@ export class LinterManager {
     }
 }
 
+function getLibrarySearchPaths(path: string): string[] {
+    const paths = new Set<string>();
+    const langID = hdlFile.getLanguageId(path);
+    const linterName = getLinterName(langID);
+    if (linterName === 'iverilog' || linterName === 'verilator') {
+        const userCommonLibs = opeParam.prjInfo.getLibraryCommonPaths(true, LibraryState.Remote);
+        for (const path of userCommonLibs) {
+            const state = fs.statSync(path);
+            if (state.isDirectory()) {
+                paths.add(path);
+            } else {
+                const parent = fspath.dirname(path);
+                paths.add(parent);
+            }
+        }
+    }
+
+    return [...paths];
+}
+
 export async function publishDiagnostics(
     client: LanguageClient,
     path: string
 ) {
+    // 找到所有的库前缀，进行诊断（用于 verilator）
+    // const searchPaths = getLibrarySearchPaths(path);
+
     await client.sendRequest("workspace/executeCommand", {
         command: 'publish-diagnostics',
         arguments: [path]

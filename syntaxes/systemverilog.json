@@ -176,6 +176,10 @@
                     "name": "keyword.other.verilog"
                 },
                 {
+                    "match": "\\b(byte|program|config|incdir|instance|int|shortint|longint|bind|liblist|void|local|endconfig|package|library|const|virtual|automatic|constraint|include|var|covergroup|string|null|randc|class|extends|sequence|shortreal|interface|protected|rand)\\b",
+                    "name": "keyword.other.verilog"
+                },
+                {
                     "match": "\\b(initial|always|wait|force|release|assign|always_comb|always_ff|always_latch|forever|repeat|while|for|if|iff|else|case|casex|casez|default|endcase|return|break|continue|do|foreach|with|inside|dist|clocking|cover|coverpoint|property|bins|binsof|illegal_bins|ignore_bins|randcase|modport|matches|solve|static|assert|assume|before|expect|cross|ref|first_match|srandom|struct|packed|final|chandle|alias|tagged|extern|throughout|timeprecision|timeunit|priority|type|union|uwire|wait_order|triggered|randsequence|import|export|context|pure|intersect|wildcard|within|new|typedef|enum|this|super|begin|fork|forkjoin|unique|unique0|priority)\\b",
                     "name": "keyword.other.systemverilog"
                 },

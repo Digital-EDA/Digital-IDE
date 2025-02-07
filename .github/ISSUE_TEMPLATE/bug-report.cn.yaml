@@ -1,6 +1,6 @@
 name: 报告 Bug
 description: 向我们报告 Bug。
-title: ""
+title: "[Bug]: "
 labels: ["bug"]
 body:
   - type: markdown

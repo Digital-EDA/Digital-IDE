@@ -1,64 +1,89 @@
 name: Bug Report
-description: File a bug report.
+description: Report a bug to us.
 title: "[Bug]: "
-labels: ["bug", "triage"]
-projects: ["octo-org/1", "octo-org/44"]
-assignees:
-  - octocat
+labels: ["bug"]
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to fill out this bug report!
-  - type: input
-    id: contact
-    attributes:
-      label: Contact Details
-      description: How can we get in touch with you if we need more info?
-      placeholder: ex. email@example.com
-    validations:
-      required: false
-  - type: textarea
-    id: what-happened
-    attributes:
-      label: What happened?
-      description: Also tell us, what did you expect to happen?
-      placeholder: Tell us what you see!
-      value: "A bug happened!"
-    validations:
-      required: true
+        "You give me a peach, I repay you with a jade."
+        Please read [nc-ai | About Feedback](https://nc-ai.cn/article/cxnqr517/#%E5%85%B3%E4%BA%8E%E5%8F%8D%E9%A6%88) before filling out this form.
   - type: dropdown
-    id: version
+    id: os
     attributes:
-      label: Version
-      description: What version of our software are you running?
+      label: Operating System
+      description: What operating system are you running on?
       options:
-        - 1.0.2 (Default)
-        - 1.0.3 (Edge)
+        - Windows
+        - Mac
+        - Linux
+        - Other
       default: 0
     validations:
       required: true
   - type: dropdown
-    id: browsers
+    id: chip
     attributes:
-      label: What browsers are you seeing the problem on?
-      multiple: true
+      label: Chip Architecture
+      description: What chip architecture are you running on?
       options:
-        - Firefox
-        - Chrome
-        - Safari
-        - Microsoft Edge
+        - x86
+        - arm
+        - loongson
+        - Other
+      default: 0
+    validations:
+      required: true
+  - type: dropdown
+    id: connect
+    attributes:
+      label: Running Method
+      description: How are you running the software?
+      options:
+        - Desktop
+        - SSH Remote Connection
+        - WSL2
+        - Virtual Machine
+        - Other
+      default: 0
+    validations:
+      required: true
+  - type: input
+    id: vscode-version
+    attributes:
+      label: Vscode / Vscodium Version
+      placeholder: "1.96.2"
+    validations:
+      required: true
+  - type: input
+    id: dide-version
+    attributes:
+      label: Digital IDE Version
+      placeholder: "0.4.0"
+    validations:
+      required: true
   - type: textarea
-    id: logs
+    id: meet-question
     attributes:
-      label: Relevant log output
-      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+      label: Issue You Encountered
+    validations:
+      required: true
+  - type: textarea
+    id: expect
+    attributes:
+      label: Expected Result
+    validations:
+      required: false
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Result
+    validations:
+      required: false
+  - type: textarea
+    id: log
+    attributes:
+      label: Runtime Log
       render: shell
-  - type: checkboxes
-    id: terms
-    attributes:
-      label: Code of Conduct
-      description: By submitting this issue, you agree to follow our [Code of Conduct](https://example.com). 
-      options:
-        - label: I agree to follow this project's Code of Conduct
-          required: true
+    validations:
+      required: false

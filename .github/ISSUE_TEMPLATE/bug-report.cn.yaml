@@ -1,64 +1,89 @@
-name: 报告错误
-description: 提交一个错误报告。
-title: "[Bug]: "
-labels: ["bug", "triage"]
-projects: ["octo-org/1", "octo-org/44"]
-assignees:
-  - octocat
+name: 报告 Bug
+description: 向我们报告 Bug。
+title: ""
+labels: ["bug"]
 body:
   - type: markdown
     attributes:
       value: |
-        感谢您抽出时间填写此错误报告！
-  - type: input
-    id: contact
-    attributes:
-      label: 联系方式
-      description: 如果需要更多信息，我们如何联系您？
-      placeholder: 例如：email@example.com
-    validations:
-      required: false
-  - type: textarea
-    id: what-happened
-    attributes:
-      label: 发生了什么？
-      description: 请告诉我们，您期望发生什么？
-      placeholder: 告诉我们您看到的情况！
-      value: "发生了一个错误！"
-    validations:
-      required: true
+        投我以木桃，报之以琼瑶。
+        填写之前请阅读 [nc-ai | 关于反馈](https://nc-ai.cn/article/cxnqr517/#%E5%85%B3%E4%BA%8E%E5%8F%8D%E9%A6%88)
   - type: dropdown
-    id: version
+    id: os
     attributes:
-      label: 版本
-      description: 您正在运行的软件版本是什么？
+      label: 操作系统
+      description: 您在什么操作系统上运行？
       options:
-        - 1.0.2 (默认)
-        - 1.0.3 (最新)
+        - Windows
+        - Mac
+        - Linux
+        - 其他
       default: 0
     validations:
       required: true
   - type: dropdown
-    id: browsers
+    id: chip
     attributes:
-      label: 您在哪些浏览器上遇到此问题？
-      multiple: true
+      label: 芯片架构
+      description: 您在什么架构的芯片上运行？
       options:
-        - Firefox
-        - Chrome
-        - Safari
-        - Microsoft Edge
+        - x86
+        - arm
+        - loongson
+        - 其他
+      default: 0
+    validations:
+      required: true
+  - type: dropdown
+    id: connect
+    attributes:
+      label: 运行方式
+      description: 您采用何种方式运行？
+      options:
+        - 桌面运行
+        - SSH 远程连接
+        - WSL2
+        - 虚拟机
+        - 其他
+      default: 0
+    validations:
+      required: true
+  - type: input
+    id: vscode-version
+    attributes:
+      label: Vscode / Vscodium 版本
+      placeholder: "1.96.2"
+    validations:
+      required: true
+  - type: input
+    id: dide-version
+    attributes:
+      label: Digital IDE 版本
+      placeholder: "0.4.0"
+    validations:
+      required: true
   - type: textarea
-    id: logs
+    id: meet-question
     attributes:
-      label: 相关日志输出
-      description: 请复制并粘贴任何相关的日志输出。这将自动格式化为代码，因此无需使用反引号。
+      label: 你遇到的问题
+    validations:
+      required: true
+  - type: textarea
+    id: expect
+    attributes:
+      label: 你希望的运行结果
+    validations:
+      required: false
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际的运行结果
+    validations:
+      required: false
+  - type: textarea
+    id: log
+    attributes:
+      label: 运行日志
       render: shell
-  - type: checkboxes
-    id: terms
-    attributes:
-      label: 行为准则
-      description: 提交此问题即表示您同意遵守我们的 [行为准则](https://example.com)。
-      options:
-        - label: 我同意遵守本项目的行为准则
-          required: true
+    validations:
+      required: false

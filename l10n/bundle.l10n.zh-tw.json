@@ -126,5 +126,10 @@
     "info.pdf.exporting": "正在導出PDF到{0}",
     "info.generate-pdf-to": "PDF 已生成至 {0}",
     "info.vivado-gui.started": "Vivado GUI 正在啟動中，稍等片刻",
-    "ok": "好的"
+    "ok": "好的",
+    "netlist.save-as-markdown": "儲存為 Markdown",
+    "markdown-file": "Markdown 檔案",
+    "toolbar.save-as-html": "保存為HTML",
+    "html-file": "HTML檔案",
+    "dide-doc.error.loading-html": "Digital CodeDoc 資源加載失敗，安裝目錄已經損壞，請重新安裝！"
 }

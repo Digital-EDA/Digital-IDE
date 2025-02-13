@@ -126,5 +126,10 @@
     "info.pdf.exporting": "Exporting PDF to {0}",
     "info.generate-pdf-to": "PDF has been generated to {0}",
     "info.vivado-gui.started": "Vivado GUI is starting, please wait a moment",
-    "ok": "Good"
+    "ok": "Good",
+    "netlist.save-as-markdown": "Save as Markdown",
+    "markdown-file": "Markdown file",
+    "toolbar.save-as-html": "Save as HTML",
+    "html-file": "HTML file",
+    "dide-doc.error.loading-html": "Digital CodeDoc resource loading failed, the installation directory is corrupted, please reinstall!"
 }

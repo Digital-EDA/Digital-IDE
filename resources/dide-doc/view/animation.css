@@ -1,0 +1,127 @@
+:root {
+    --main-during: 0.35s;
+    --fade-during: .5s;
+}
+
+.fade-animation-effect {
+    transition: var(--animation-5s);
+    -webkit-transition: var(--animation-5s);
+    -ms-transition: var(--animation-5s);
+}
+
+.easy-hidden {
+    visibility: hidden;
+}
+
+.main-fade-enter-from,
+.main-fade-leave-to {
+    opacity: 0;
+}
+.main-fade-enter-to,
+.main-fade-leave-from {
+    opacity: 1;
+}
+.main-fade-enter-active,
+.main-fade-leave-active {
+    transition: opacity var(--main-during);
+    -moz-transition: opacity var(--main-during);
+    -webkit-transition: opacity var(--main-during);
+}
+
+.slide-enter-active,
+.slide-leave-active {
+    transition: all .5s ease-out;
+    -moz-transition: all .5s ease-out;
+    -webkit-transition: all .5s ease-out;
+}
+.slide-enter-from {
+    position: relative;
+    transform: translateY(-100px);
+    opacity: 0%;
+}
+.slide-leave-to {
+    transform: translateY(100px);
+    opacity: 0%;
+}
+
+
+.slide-down-enter-active,
+.slide-down-leave-active {
+    transition: all .5s ease-out;
+    -moz-transition: all .5s ease-out;
+    -webkit-transition: all .5s ease-out;
+}
+.slide-down-enter-from {
+    position: relative;
+    transform: translateY(100px);
+    opacity: 0%;
+}
+.slide-down-leave-to {
+    transform: translateY(100px);
+    opacity: 0%;
+}
+
+.slide-up-enter-active,
+.slide-up-leave-active {
+    transition: all .5s ease-out;
+    -moz-transition: all .5s ease-out;
+    -webkit-transition: all .5s ease-out;
+}
+.slide-up-enter-from {
+    position: relative;
+    transform: translateY(-100px);
+    opacity: 0%;
+}
+.slide-up-leave-to {
+    transform: translateY(-100px);
+    opacity: 0%;
+}
+
+.collapse-from-top-enter-active,
+.collapse-from-top-leave-active {
+    transition: var(--animation-3s);
+    -moz-transition: var(--animation-3s);
+    -webkit-transition: var(--animation-3s);
+}
+
+.collapse-from-top-enter-from {
+    transform: scaleY(0);
+    transform-origin: center top;
+    opacity: 0%;
+}
+.collapse-from-top-leave-to {
+    transform: scaleY(0);
+    transform-origin: center top;
+    opacity: 0%;
+}
+
+@keyframes loading-mask {
+    0% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0 50%;
+    }
+}
+
+@keyframes word-jump {
+    0% {
+        transform: translateY(0);
+    }
+
+    20% {
+        transform: translateY(-5px);
+    }
+
+    80% {
+        transform: translateY(2px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.fast-transition {
+    transition: var(--animation-3s);
+}

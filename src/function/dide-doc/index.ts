@@ -1,9 +1,13 @@
 import * as vscode from 'vscode';
+import * as fspath from 'path';
 
-import { hdlIcon } from "../../hdlFs";
+import { hdlFile, hdlIcon, hdlPath } from "../../hdlFs";
 import { exportCurrentFileDocAsMarkdown, exportProjectDocAsMarkdown } from './markdown';
-import { exportCurrentFileDocAsHTML, exportProjectDocAsHTML, showDocWebview, makeDocWebview } from './html';
+import { exportCurrentFileDocAsHTML, exportProjectDocAsHTML, makeDocWebview } from './html';
 import { exportCurrentFileDocAsPDF, exportProjectDocAsPDF } from './pdf';
+import { downloadSvg, exportDocHtml, exportDocMarkdown, exportDocPdf, getDocIR } from './codedoc';
+import { opeParam } from '../../global';
+import { t } from '../../i18n';
 
 const availableFormat = [
     'markdown', 'pdf', 'html'
@@ -32,7 +36,7 @@ export interface IDocManagerItem {
 
 export const docManager = new Map<string, IDocManagerItem>();
 
-function registerFileDocExport(context: vscode.ExtensionContext) {
+export function registerFileDocExport(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('digital-ide.hdlDoc.exportFile', async uri => {
         const option = {
             placeHolder: 'Select an Export Format'
@@ -55,7 +59,7 @@ function registerFileDocExport(context: vscode.ExtensionContext) {
 	});
 }
 
-function registerProjectDocExport(context: vscode.ExtensionContext) {
+export function registerProjectDocExport(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('digital-ide.hdlDoc.exportProject', async () => {
         const option = {
             placeHolder: 'Select an Export Format'
@@ -73,9 +77,68 @@ function registerProjectDocExport(context: vscode.ExtensionContext) {
 	});
 }
 
-export {
-    registerFileDocExport,
-    registerProjectDocExport,
-    showDocWebview,
-    makeDocWebview
-};
+
+function getWebviewContent(panel: vscode.WebviewPanel) {
+    const netlistPath = hdlPath.join(opeParam.extensionPath, 'resources', 'dide-doc', 'view');
+    const htmlIndexPath = hdlPath.join(netlistPath, 'index.html');
+    
+    const html = hdlFile.readFile(htmlIndexPath)?.replace(/(<link.+?href="|<script.+?src="|<img.+?src=")(.+?)"/g, (m, $1, $2) => {
+        const absLocalPath = fspath.resolve(netlistPath, $2);
+        const webviewUri = panel.webview.asWebviewUri(vscode.Uri.file(absLocalPath));
+        const replaceHref = $1 + webviewUri?.toString() + '"';
+        return replaceHref;
+    });
+    return html;
+}
+
+export async function showDocWebview(uri: vscode.Uri) {
+    const panel = vscode.window.createWebviewPanel(
+        'CodeDoc', 
+        'CodeDoc',
+        vscode.ViewColumn.Two,
+        {
+            enableScripts: true,
+            enableForms: true,
+            retainContextWhenHidden: true
+        }
+    );
+
+    panel.iconPath = hdlIcon.getIconConfig('documentation');
+    panel.onDidDispose(() => {});
+    
+    const html = getWebviewContent(panel);
+    if (html) {
+        panel.webview.html = html;
+        registerMessageEvent(panel);
+    } else {
+        vscode.window.showErrorMessage(t('dide-doc.error.loading-html'));
+    }
+}
+
+function registerMessageEvent(panel: vscode.WebviewPanel) {
+    panel.webview.onDidReceiveMessage(message => {
+        const { command, data } = message;
+
+        // TODO: finish this
+        const codeDocIr = {};
+
+        switch (command) {
+            case 'get-doc-ir':
+                getDocIR(data, panel, codeDocIr);
+                break;
+            case 'download-svg':
+                downloadSvg(data, panel);
+            case 'export-doc-html':
+                exportDocHtml(data, panel);
+                break;
+            case 'export-doc-pdf':
+                exportDocPdf(data, panel);
+                break;
+            case 'export-doc-markdown':
+                exportDocMarkdown(data, panel);
+                break;
+            default:
+                break;
+        }
+    });
+}

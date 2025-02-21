@@ -46,5 +46,5 @@
 ## Bug Fixes
 - Fixed a bug where comments on `input` and `output` were not displayed correctly in the documentation.
 - Fixed a bug in the Icarus Verilog simulation feature where duplicate paths were included as compilation parameters.
-- Fixed a bug in the Icarus Verilog simulation feature where adding or removing <code>`include</code>` would cause simulation compilation to fail (the `instModPathStatus` property of the instance was not updated).
+- Fixed a bug in the Icarus Verilog simulation feature where adding or removing <code>include</code> would cause simulation compilation to fail (the `instModPathStatus` property of the instance was not updated).
 - Fixed other known bugs.

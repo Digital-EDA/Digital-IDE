@@ -302,8 +302,8 @@ export class IcarusSimulate extends Simulate {
             command += ' ' + extaArgs;
         }
 
-        const parent = fspath.dirname(path);
-        command += ' ' + '-I"' + parent + '"';
+        // const parent = fspath.dirname(path);
+        // command += ' ' + '-I "' + parent + '"';
 
         return command;
     }

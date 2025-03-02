@@ -15,5 +15,5 @@ $ npm install vsce -g
 ```
 
 ```bash
-$ python script/command/make_package.py
+$ python scripts/command/make_package.py
 ```

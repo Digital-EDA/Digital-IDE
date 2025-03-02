@@ -4,12 +4,12 @@
     "description": "all in one vscode plugin for Verilog/VHDL development",
     "publisher": "sterben",
     "homepage": "https://digital-eda.github.io/DIDE-doc-Cn",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "main": "./out/extension",
     "l10n": "./l10n",
     "icon": "images/icon.png",
     "engines": {
-        "vscode": "^1.94.0"
+        "vscode": "^1.89.0"
     },
     "keywords": [
         "FPGA Develop Support",
@@ -1267,6 +1267,7 @@
     "dependencies": {
         "axios": "^1.7.7",
         "bson": "^6.8.0",
+        "bufferutil": "^4.0.9",
         "chokidar": "^4.0.1",
         "minimatch": "^10.0.1",
         "pako": "^2.1.0",
@@ -1275,10 +1276,12 @@
         "state-machine-cat": "^9.2.5",
         "tar": "^7.4.3",
         "temp": "^0.9.4",
+        "utf-8-validate": "^5.0.10",
         "vscode-jsonrpc": "^8.2.1",
         "vscode-languageclient": "^9.0.1",
         "vscode-textmate": "^9.0.0",
         "wavedrom": "^2.9.1",
+        "webpack": "^5.98.0",
         "zlib": "^1.0.5"
     }
 }

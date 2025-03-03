@@ -13,7 +13,7 @@
 
 </div>
 
-## New in 0.4.0
+## Features
 
 **Rewritten Parser and Language Services in Rust**: Supports Verilog, VHDL, and SystemVerilog with faster performance and more stable services.
 
@@ -31,8 +31,8 @@
 
 ![](./figures/netlist.png)
 
-## Features
-- Added comprehensive support for VHDL (file tree, LSP, etc.)
+## New 0.4.1
+- Added comprehensive support for VHDL & SV (file tree, LSP, etc.)
 - Added workspace icons for languages or generated files such as Verilog, VHDL, XDC, TCL, VVP, VCD, etc.
 - Added support for Vivado, ModelSim, and Verilator. Users can use these third-party tools for simulation and auto-correction by setting `function.lsp.linter.vhdl.diagnostor` (for VHDL) and `function.lsp.linter.vlog.diagnostor` (for Verilog).
 - Added LSP and syntax highlighting support for scripts like TCL, XDC, and VVP.

@@ -51,8 +51,9 @@ function measureRequestTimecost(url: string, timeout: number = 5): Promise<numbe
 
 export async function chooseBestDownloadSource(signature: string, version: string, timeout: number = 3000) {
     const links = [
-        getGithubDownloadLink(signature, version),
-        getGiteeDownloadLink(signature, version)
+        // TODO: lsp update
+        getGithubDownloadLink(signature, '0.4.0'),
+        getGiteeDownloadLink(signature, '0.4.0')
     ];
     const pools: Promise<number>[] = [];
     for (const link of links) {

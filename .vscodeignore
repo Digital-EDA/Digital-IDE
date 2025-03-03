@@ -2,6 +2,8 @@
 .gitignore
 **/.gitignore
 .git
+.github
+doc
 **/*.map
 .eslintrc.json
 dist

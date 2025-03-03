@@ -64,7 +64,7 @@ def modify_vsix():
     os.remove(dist_path)
 
     # move public
-    copy_dir('./resources/public', os.path.join(extract_folder, 'extension', 'resources', 'public'))
+    # copy_dir('./resources/public', os.path.join(extract_folder, 'extension', 'resources', 'public'))
 
     # webview
     copy_dir('./resources/dide-netlist/view', os.path.join(extract_folder, 'extension', 'resources', 'dide-netlist', 'view'))
@@ -101,7 +101,7 @@ pipe.add_command('webpack', 'webpack --mode production')
 pipe.add_command('make vsix installer', 'vsce package')
 pipe.add_command('modify vsix installer', lambda : modify_vsix())
 pipe.add_command('remove out-js', lambda : remove_folder('out-js'))
-pipe.add_command('remove out', lambda : remove_folder('out'))
-pipe.add_command('install', lambda : install_extension())
+# pipe.add_command('remove out', lambda : remove_folder('out'))
+# pipe.add_command('install', lambda : install_extension())
 
 pipe.run()

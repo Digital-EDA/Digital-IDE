@@ -75,7 +75,7 @@ class XilinxOperation {
     }
 
     public get xbdPath(): AbsPath {
-        return hdlPath.join(opeParam.extensionPath, 'lib', 'xilinx', 'bd');
+        return hdlPath.join(opeParam.extensionPath, 'library', 'Factory', 'xilinx', 'bd');
     }
 
     public get xilinxPath(): AbsPath {
@@ -355,19 +355,7 @@ class XilinxOperation {
                     vscode.window.showErrorMessage(`cp ${bd} failed, can not find ${bdSrcPath}`);
                 }
             }
-    
-            const bdPaths = [
-                hdlPath.join(this.HWPath, 'bd'),
-                hdlPath.join(this.prjInfo.path, this.prjInfo.name + '.src', 'sources_1', 'bd')
-            ];
 
-            hdlFile.pickFileRecursive(bdPaths, filePath => {
-                if (filePath.endsWith('.bd')) {
-                    scripts.push(`add_files ${filePath} -quiet`);
-                    scripts.push(`add_files ${fspath.dirname(filePath)}/hdl -quiet`);
-                }
-            });
-    
             if (bd) {
                 const loadBdPath = hdlPath.join(this.HWPath, 'bd', bd, bdFile);
                 scripts.push(`generate_target all [get_files ${loadBdPath}] -quiet`);
@@ -375,6 +363,18 @@ class XilinxOperation {
                 scripts.push(`open_bd_design ${loadBdPath} -quiet`);
             }
         }
+        
+        const bdPaths = [
+            hdlPath.join(this.HWPath, 'bd'),
+            hdlPath.join(this.prjInfo.path, this.prjInfo.name + '.src', 'sources_1', 'bd')
+        ];
+
+        hdlFile.pickFileRecursive(bdPaths, filePath => {
+            if (filePath.endsWith('.bd')) {
+                scripts.push(`add_files ${filePath} -quiet`);
+                scripts.push(`add_files ${fspath.dirname(filePath)}/hdl -quiet`);
+            }
+        });
 
         const mrefPath = hdlPath.join(this.HWPath, 'bd', 'mref');
         hdlFile.pickFileRecursive(mrefPath, filePath => {

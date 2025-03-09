@@ -102,7 +102,6 @@ class PlManage extends BaseManage {
         this.context.ope.exit(this.context);
     }
 
-
     public setSrcTop(item: ModuleDataItem) {        
         this.context.ope.setSrcTop(item.name, this.context);
         const type = moduleTreeProvider.getItemType(item);

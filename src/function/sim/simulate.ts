@@ -13,6 +13,7 @@ import { ModuleDataItem } from '../treeView/tree';
 import { defaultMacro, doFastApi } from '../../hdlParser/util';
 import { t } from '../../i18n';
 import { openWaveViewer } from '../dide-viewer';
+import { HdlDependence } from '../../hdlParser/common';
 
 type Path = string;
 
@@ -68,7 +69,7 @@ class Simulate {
             rst : '',                   // 设置的复位信号
             end : '',                   // 
             wave : '',                  // wave存放的路径     
-            simulationHome : '',               // sim运行的路径
+            simulationHome : '',        // sim运行的路径
             gtkwavePath : '',           // gtkwave安装路径
             installPath : '',           // 第三方仿真工具的安装路径
             iverilogPath: 'iverilog',   // iverilog仿真器所在路径
@@ -99,7 +100,6 @@ class Simulate {
         if (!fs.existsSync(simConfig.simulationHome)) {
             simConfig.simulationHome = defaultSimulationDir;
         }
-        
         
         if (!hdlFile.isDir(simConfig.simulationHome)) {
             MainOutput.report('create dir ' + simConfig.simulationHome, {
@@ -239,7 +239,7 @@ export class IcarusSimulate extends Simulate {
      * @description 获取 iverilog 仿真的命令
      * @returns 
      */
-    private getCommand(name: string, path: AbsPath, dependences: string[]): string | undefined {
+    private getCommand(name: string, path: AbsPath, dependences?: HdlDependence): string | undefined {
         MainOutput.clear();
 
         const simConfig = this.getConfig(path, 'iverilog');
@@ -263,7 +263,17 @@ export class IcarusSimulate extends Simulate {
         const simLibPaths = this.getSimLibArr(this.toolChain);
 
         const macroIncludeArgs = this.makeMacroIncludeArguments(iverilogCompileOptions.includes);        
-        const dependenceArgs = this.makeDependenceArguments(dependences);
+        let otherdeps: string[] = []; 
+        let alldeps: string[] = [];
+        if (dependences) {
+            otherdeps = dependences.others;
+            alldeps = dependences.include;
+        }
+        else {
+            otherdeps = [];
+            alldeps = [];
+        }
+        const dependenceArgs = this.makeDependenceArguments(otherdeps);
         const thirdLibraryArgs = this.makeThirdLibraryArguments(simLibPaths);
 
         const thirdLibraryFileArgs = thirdLibraryArgs.fileArgsString;
@@ -297,13 +307,22 @@ export class IcarusSimulate extends Simulate {
         }
 
         const extaArgs = args.join(' ');
-        let command = `${iverilogPath} ${argu} -o ${outVvpPath} -s ${name}`;
+        let command = `${iverilogPath} ${argu}`;
+
+        // const parent = fspath.dirname(path);
+        if (alldeps.length) {            
+            command += ' ' + '-I';
+            for (let index = 0; index < alldeps.length; index++) {
+                const element = alldeps[index];
+                command += ' ' + '"' + hdlPath.resolve(element, '..') + '"'; 
+            }
+        }
+
+        command += ' ' + `-o ${outVvpPath} -s ${name}`;
+
         if (extaArgs) {
             command += ' ' + extaArgs;
         }
-
-        // const parent = fspath.dirname(path);
-        // command += ' ' + '-I "' + parent + '"';
 
         return command;
     }
@@ -361,7 +380,7 @@ export class IcarusSimulate extends Simulate {
      * @description 运行 iverilog xxx 的命令
      */
     private runIverilog(simConfig: SimulateConfig, command: string, cwd: string, hdlModule: HdlModule) {
-        child_process.exec(command, (error, stdout, stderr) => {
+        child_process.exec(command, { cwd }, (error, stdout, stderr) => {
             if (error) {
                 this.reportCommandError(command, stderr);
                 return;
@@ -391,7 +410,7 @@ export class IcarusSimulate extends Simulate {
     }
 
     /**
-     * @description 陨星 vvp xxx 的命令
+     * @description 运行 vvp xxx 的命令
      */
     private runVvp(command: string, cwd: string) {
         child_process.exec(command, { cwd }, (error, stdout, stderr) => {
@@ -496,11 +515,10 @@ export class IcarusSimulate extends Simulate {
         //     MainOutput.report(warningMsg, ReportType.Warn, true);
         //     return;
         // }
-        
-        const dependences = this.getAllOtherDependences(path, name);        
+        const dependences = hdlParam.getAllDependences(path, name);
         const simulationCommand = this.getCommand(name, path, dependences);
         if (simulationCommand) {
-            const cwd = hdlPath.resolve(path, '..');            
+            const cwd = hdlPath.resolve(path, '..');   
             this.exec(simulationCommand, cwd, hdlModule);
         } else {
             const errorMsg = 'Fail to generate command';

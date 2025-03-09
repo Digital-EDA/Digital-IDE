@@ -126,5 +126,10 @@
     "info.pdf.exporting": "PDF wird nach {0} exportiert",
     "info.generate-pdf-to": "PDF wurde unter {0} generiert",
     "info.vivado-gui.started": "Vivado GUI wird gestartet, bitte warten Sie einen Moment",
-    "ok": "Gut"
+    "ok": "Gut",
+    "netlist.save-as-markdown": "Als Markdown speichern",
+    "markdown-file": "Markdown-Datei",
+    "toolbar.save-as-html": "Als HTML speichern",
+    "html-file": "HTML-Datei",
+    "dide-doc.error.loading-html": "Digital CodeDoc-Ressourcen konnten nicht geladen werden, das Installationsverzeichnis ist beschädigt. Bitte installieren Sie das Programm neu!"
 }

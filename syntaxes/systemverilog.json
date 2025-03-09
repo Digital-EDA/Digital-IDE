@@ -172,7 +172,11 @@
         "keywords": {
             "patterns": [
                 {
-                    "match": "\\b(always|and|assign|attribute|begin|buf|bufif0|bufif1|case(xz)?|cmos|deassign|default|defparam|disable|edge|else|end(attribute|case|function|generate|module|primitive|specify|table|task)?|event|for|force|forever|fork|function|generate|genvar|highz(01)|if(none)?|initial|inout|input|output|integer|join|localparam|medium|module|large|macromodule|nand|negedge|nmos|nor|not|notif(01)|or|parameter|pmos|posedge|primitive|pull0|pull1|pulldown|pullup|rcmos|real|realtime|reg|release|repeat|rnmos|rpmos|rtran|rtranif(01)|scalared|signed|small|specify|specparam|strength|strong0|strong1|supply0|supply1|table|task|time|tran|tranif(01)|tri(01)?|tri(and|or|reg)|unsigned|vectored|wait|wand|weak(01)|while|wire|wor|xnor|xor|logic)\\b",
+                    "match": "\\b(always|and|assign|attribute|begin|buf|bufif0|bufif1|case(xz)?|cmos|deassign|default|defparam|disable|edge|else|end(attribute|case|function|generate|module|primitive|specify|table|task)?|event|for|force|forever|fork|function|generate|genvar|highz(01)|if(none)?|initial|inout|input|output|logic|integer|join|localparam|medium|module|large|macromodule|nand|negedge|nmos|nor|not|notif(01)|or|parameter|pmos|posedge|primitive|pull0|pull1|pulldown|pullup|rcmos|real|realtime|reg|release|repeat|rnmos|rpmos|rtran|rtranif(01)|scalared|signed|small|specify|specparam|strength|strong0|strong1|supply0|supply1|table|task|time|tran|tranif(01)|tri(01)?|tri(and|or|reg)|unsigned|vectored|wait|wand|weak(01)|while|wire|wor|xnor|xor)\\b",
+                    "name": "keyword.other.verilog"
+                },
+                {
+                    "match": "\\b(byte|program|config|incdir|instance|int|shortint|longint|bind|liblist|void|local|endconfig|package|library|const|virtual|automatic|constraint|include|var|covergroup|string|null|randc|class|extends|sequence|shortreal|interface|protected|rand)\\b",
                     "name": "keyword.other.verilog"
                 },
                 {

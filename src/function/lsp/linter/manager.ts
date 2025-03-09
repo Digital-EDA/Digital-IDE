@@ -271,8 +271,6 @@ export async function publishDiagnostics(
     path: string
 ) {
     // 找到所有的库前缀，进行诊断（用于 verilator）
-    // const searchPaths = getLibrarySearchPaths(path);
-
     await client.sendRequest("workspace/executeCommand", {
         command: 'publish-diagnostics',
         arguments: [path]

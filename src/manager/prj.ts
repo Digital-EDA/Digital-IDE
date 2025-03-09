@@ -270,7 +270,6 @@ class PrjManage {
         }
     }
 
-
     public async createFolderByDefault(rawPrjInfo: RawPrjInfo) {
         // create prj first
         const defaultPrjPath = hdlPath.join(opeParam.workspacePath, 'prj');

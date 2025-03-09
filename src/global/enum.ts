@@ -34,6 +34,7 @@ function validToolChainType(name: ToolChainType) {
     const allTypes = [
         'xilinx',
         'intel',
+        'efinity',
         'custom'
     ];
     return allTypes.includes(name);

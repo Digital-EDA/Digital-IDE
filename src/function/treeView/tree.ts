@@ -288,8 +288,14 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
 
     public setFirstTop(type: keyof FirstTop, name: string, path: AbsPath | undefined) {
         this.firstTop[type] = {name, path};
+        if (type == "src") {            
+            opeParam.firstSrcTopModule.name = name;
+            opeParam.firstSrcTopModule.path = path;
+        } else if (type == "sim") {
+            opeParam.firstSimTopModule.name = name;
+            opeParam.firstSimTopModule.path = path;
+        }   
     }
-
 
     private makeFirstTopIconName(type: string): string {
         return 'current-' + type + '-top';

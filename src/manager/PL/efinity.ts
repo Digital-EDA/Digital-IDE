@@ -96,13 +96,25 @@ const security = `  <efx:security>
     <efx:param name="auth_key_file" value="NONE" value_type="e_string"/>
   </efx:security>`;
 
+export interface ePLContext {
+    // 保留启动上下文
+    terminal? : vscode.Terminal,
+    // 目前使用的启动上下文
+    process?: ChildProcessWithoutNullStreams,
+    // 工具类型
+    tool? : string,
+    // 第三方工具运行路径
+    path? : string,
+    // 操作类
+    ope : EfinityOperation,
+};
 
 export class EfinityOperation {
     script: string;
     efxPath: string;
     constructor() {
         this.script = '';
-        this.efxPath = hdlPath.join(opeParam.workspacePath, `${opeParam.prjInfo.prjName}.xml`);
+        this.efxPath = hdlPath.join(opeParam.workspacePath, `${opeParam.prjInfo.prjName.PL}.xml`);
     }
 
     private getDeviceInfo(device: string): string {
@@ -120,12 +132,22 @@ export class EfinityOperation {
     }
 
     private getDesignInfo(): string {
-
         let designFile = `    <efx:top_module name="${opeParam.firstSrcTopModule.name}"/>\n`;
         for (const hdlFile of hdlParam.getAllHdlFiles()) {
-            // ${hdlFile.path}
-            designFile += `    <efx:design_file name="${hdlFile.path}" version="default" library="default"/>\n`;
-
+            switch (hdlFile.projectType) {
+                case HdlFileProjectType.Src:
+                case HdlFileProjectType.LocalLib:
+                case HdlFileProjectType.RemoteLib:
+                case HdlFileProjectType.Sim:
+                    designFile += `    <efx:design_file name="${hdlFile.path}" version="default" library="default"/>\n`;
+                    break;
+                case HdlFileProjectType.IP:
+                case HdlFileProjectType.Primitive:
+                    // IP 和 原语不用管
+                    break;
+                default:
+                    break;
+            }
         }
         designFile += `    <efx:top_vhdl_arch name=""/>`
         return `  <efx:design_info def_veri_version="verilog_2k" def_vhdl_version="vhdl_2008">\n${designFile}
@@ -136,25 +158,24 @@ export class EfinityOperation {
         let constraintFile = '';
         hdlFile.pickFileRecursive(opeParam.prjInfo.arch.hardware.data, filePath => {
             if (filePath.endsWith('.sdc')) {
-                constraintFile += `    <efx:constraint_file name="${filePath}" />\n`;
+                constraintFile += `  <efx:constraint_file name="${filePath}" />\n`;
             }
         });
 
         constraintFile += `    <efx:inter_file name="" />\n`;
 
-        return `    <efx:constraint_info>\n${constraintFile}    </efx:constraint_info>`;
+        return `  <efx:constraint_info>\n${constraintFile}    </efx:constraint_info>`;
     }
 
     public launch() {
-        this.script = `<efx:project xmlns:efx="http://www.efinixinc.com/enf_proj" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="${opeParam.prjInfo.prjName}" description="" last_change="1724639062" sw_version="2023.2.307" last_run_state="pass" last_run_flow="bitstream" config_result_in_sync="sync" design_ood="sync" place_ood="sync" route_ood="sync" xsi:schemaLocation="http://www.efinixinc.com/enf_proj enf_proj.xsd">\n${this.getDeviceInfo}\n${this.getDesignInfo}\n${this.getConstraintInfo}\n  <efx:sim_info />\n  <efx:misc_info />\n  <efx:ip_info />\n${syn}\n${pnr}\n${bit}\n${debug}\n${security}\n</efx:project>`;
+        this.script = `<efx:project xmlns:efx="http://www.efinixinc.com/enf_proj" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="${opeParam.prjInfo.prjName}" description="" last_change="1724639062" sw_version="2023.2.307" last_run_state="pass" last_run_flow="bitstream" config_result_in_sync="sync" design_ood="sync" place_ood="sync" route_ood="sync" xsi:schemaLocation="http://www.efinixinc.com/enf_proj enf_proj.xsd">\n${this.getDeviceInfo(opeParam.prjInfo.device)}\n${this.getDesignInfo()}\n${this.getConstraintInfo()}\n  <efx:sim_info />\n  <efx:misc_info />\n  <efx:ip_info />\n${syn}\n${pnr}\n${bit}\n${debug}\n${security}\n</efx:project>`;
 
         fs.writeFileSync(this.efxPath, this.script);
 
     }
 
     public build() {
-        const efxPath = hdlPath.join(opeParam.workspacePath, `${opeParam.prjInfo.prjName}.xml`);
-        exec(`${this.updateEfinixPath()} ${efxPath} --flow compile --work_dir=${opeParam.workspacePath}/prj/efinix --output_dir ${opeParam.workspacePath}/prj/efinix/outflow --cleanup_work_dir work_pt`, (error, stdout, stderr) => {
+        exec(`${this.updateEfinixPath()} ${this.efxPath} --flow compile --work_dir=${opeParam.workspacePath}/prj/efinix --output_dir ${opeParam.workspacePath}/prj/efinix/outflow --cleanup_work_dir work_pt`, (error, stdout, stderr) => {
             console.log(error);
             
         })

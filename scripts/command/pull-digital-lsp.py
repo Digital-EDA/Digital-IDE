@@ -4,7 +4,7 @@ import os
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--version', default='0.4.0')
+parser.add_argument('--version', default='0.4.1')
 args = parser.parse_args()
 version_string = args.version
 

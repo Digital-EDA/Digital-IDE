@@ -5,12 +5,13 @@ import * as fspath from 'path';
 import { AbsPath, opeParam } from '../global';
 import { hdlDir, hdlFile, hdlPath } from '../hdlFs';
 import { Library } from '../global/prjInfo';
-import { Path } from '../../resources/hdlParser';
 import { LibraryState } from '../global/enum';
 import { PathSet } from '../global/util';
 import { hdlIgnore } from './ignore';
 import { hdlParam } from '../hdlParser';
 import { refreshArchTree } from '../function/treeView';
+
+type Path = string;
 
 interface LibFileChange {
     add: AbsPath[],
@@ -124,9 +125,6 @@ class LibManage {
                     hdlFile.copyFile(src, dist);
                 });
 
-                this.remote2Local(del, (src, dist) => {                    
-                    hdlFile.removeFile(dist);
-                });
             break;
             default: break;
         }
@@ -146,8 +144,7 @@ class LibManage {
             libPathSet.checkAdd(path);
         }
 
-        const ignores = hdlIgnore.getIgnoreFiles();
-        const libPathList = hdlFile.getHDLFiles(libPathSet.files, ignores);        
+        const libPathList = hdlFile.getHDLFiles(libPathSet.files);     
         return libPathList;
     }
 
@@ -171,8 +168,7 @@ class LibManage {
     }
 
     public deleteLocalLib() {
-        const ignores = hdlIgnore.getIgnoreFiles();
-        const hdlFileList = hdlFile.getHDLFiles([this.localLibPath], ignores);
+        const hdlFileList = hdlFile.getHDLFiles([this.localLibPath]);
         for (const path of hdlFileList) {
             hdlParam.deleteHdlFile(path);
         }

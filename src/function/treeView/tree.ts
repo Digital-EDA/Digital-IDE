@@ -3,20 +3,22 @@ import * as vscode from 'vscode';
 import { AbsPath, MainOutput, opeParam, ReportType } from '../../global';
 import { SimPath, SrcPath } from '../../global/prjInfo';
 import { HdlInstance, hdlParam } from '../../hdlParser/core';
-import { HdlFileType, Range } from '../../hdlParser/common';
+import { HdlFileProjectType, Range } from '../../hdlParser/common';
 import { hdlFile, hdlPath } from '../../hdlFs';
 import { xilinx, itemModes, otherModes } from './common';
 import { getIconConfig } from '../../hdlFs/icons';
+import { DoFastFileType } from '../../global/lsp';
+import { t } from '../../i18n';
 
-let needExpand = true;
 
 interface ModuleDataItem {
     icon: string,           // 图标
     name: string,           // module name
     type: string,
-    range: Range | null,   
+    doFastFileType: DoFastFileType | undefined,
+    range: Range | undefined,   
     path: AbsPath | undefined,      // path of the file
-    parent: ModuleDataItem | null   // parent file
+    parent: ModuleDataItem | undefined   // parent file
 }
 
 interface FirstTopItem {
@@ -65,8 +67,26 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
             src: null,
             sim: null,
         };
-        this.srcRootItem = {icon: 'src', type: HdlFileType.Src, name: 'src', range: null, path: '', parent: null};
-        this.simRootItem = {icon: 'sim', type: HdlFileType.Sim, name: 'sim', range: null, path: '', parent: null};
+
+        this.srcRootItem = {
+            icon: 'src',
+            type: HdlFileProjectType.Src,
+            doFastFileType: undefined,
+            name: 'src',
+            range: undefined,
+            path: '',
+            parent: undefined
+        };
+
+        this.simRootItem = {
+            icon: 'sim',
+            type: HdlFileProjectType.Sim,
+            doFastFileType: undefined,
+            name: 'sim',
+            range: undefined,
+            path: '',
+            parent: undefined
+        };
     }
 
     public refresh(element?: ModuleDataItem) {
@@ -93,15 +113,17 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
         if (itemModes.has(element.icon)) {
             itemName = `${element.type}(${itemName})`;
         }
-
         const expandable = canExpandable(element);
         let collapsibleState;
         if (!expandable) {
             collapsibleState = vscode.TreeItemCollapsibleState.None;
-        } else if (needExpand) {
-            collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
-        } else {
-            collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
+        }  else {
+            // 默认只让 src 和 sim 展开
+            if (element.parent === undefined) {
+                collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
+            } else {
+                collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
+            }
         }
 
         const treeItem = new vscode.TreeItem(itemName, collapsibleState);
@@ -115,7 +137,7 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
         // set tooltip
         treeItem.tooltip = element.path;
         if (!treeItem.tooltip) {
-            treeItem.tooltip = "can't find the module of this instance";
+            treeItem.tooltip = 'src';
         }
 
         // set iconPath
@@ -125,7 +147,7 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
         treeItem.command = {
             title: "Open this HDL File",
             command: 'digital-ide.treeView.arch.openFile',
-            arguments: [element.path, element.range],
+            arguments: [element.path, element.range, element],
         };
 
         return treeItem;
@@ -134,8 +156,9 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
     public getChildren(element?: ModuleDataItem | undefined): vscode.ProviderResult<ModuleDataItem[]> {                
         if (element) {
             const name = element.name;
+            
             if (name === 'sim' || name === 'src') {
-                element.parent = null;
+                element.parent = undefined;
                 return this.getTopModuleItemList(element);
             } else {
                 return this.getInstanceItemList(element);
@@ -155,54 +178,66 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
 
     public getTopModuleItemList(element: ModuleDataItem): ModuleDataItem[] {
         // src or sim
-        const hardwarePath = opeParam.prjInfo.arch.hardware;
         const moduleType = element.name as keyof (SrcPath & SimPath);
 
-        const topModules = hdlParam.getTopModulesByType(moduleType);
-        const topModuleItemList = topModules.map<ModuleDataItem>(module => ({
-            icon: 'top',
+        // 获取所有对应类型（src | sim）下的顶层模块数量
+        const topModules = hdlParam.getTopModulesByType(moduleType);        
+        
+        // 将所有顶层模块转换成 ModuleDataItem 自定义 treeview item 数据结构
+        let topModuleItemList = topModules.map<ModuleDataItem>(module => ({
+            icon: this.judgeTopModuleIconByDoFastType(module.file.doFastType),
             type: moduleType,
-            name: module.name,
+            doFastFileType: module.file.doFastType,
+            name: module.archName === undefined ? module.name : `${module.name}(${module.archName})`,
             range: module.range,
             path: module.path,
             parent: element,
         }));
 
+        // 根据字母序列进行排序
+        topModuleItemList.sort((a, b) => a.name.localeCompare(b.name));
+
         if (topModuleItemList.length > 0) {
             const type = moduleType as keyof FirstTop;
 
-            const firstTop = topModuleItemList[0];
-            if (!this.firstTop[type]) {
-                this.setFirstTop(type, firstTop.name, firstTop.path);
-            }
-            const name = this.firstTop[type]!.name;
-            const path = this.firstTop[type]!.path;
-            const icon = this.makeFirstTopIconName(type);
-            const range = firstTop.range;
-            const parent = element;
+            // 默认选择依赖模块最多的作为 first top
+            let firstTop = this.firstTop[type];
 
-            const tops = topModuleItemList.filter(item => item.path === path && item.name === name);
-            const adjustItemList = [];
-            if (tops.length > 0 || !hdlParam.hasHdlModule(path, name)) {
-                // mean that the seleted top is an original top module
-                // push it to the top of the *topModuleItemList*
-                const headItem = tops[0] ? tops[0] : topModuleItemList[0];
-
-                headItem.icon = icon;
-                adjustItemList.push(headItem);
-                for (const item of topModuleItemList) {
-                    if (item !== headItem) {
-                        adjustItemList.push(item);
+            if (!firstTop) {
+                let maxDepSize = 0;            
+                for (const hdlModule of topModules) {
+                    // 此处断言是因为当前的 name 和 path 是从 topModules 中提取的
+                    // 它们对应的 hdlModule 一定存在
+                    const deps = hdlParam.getAllDependences(hdlModule.path, hdlModule.name)!;
+                    const depSize = deps.include.length + deps.others.length;
+                    if (depSize > maxDepSize) {
+                        maxDepSize = depSize;
+                        firstTop = { path: hdlModule.path, name: hdlModule.name };
                     }
                 }
-            } else {
-                // mean the selected top is not an original top module
-                // create it and add it to the head of *topModuleItemList*
-                const selectedTopItem: ModuleDataItem = {icon, type, name, range, path, parent};
-                adjustItemList.push(selectedTopItem);
-                adjustItemList.push(...topModuleItemList);
+
+                if (firstTop) {
+                    // 将当前模块设置为 first top
+                    this.setFirstTop(type, firstTop.name, firstTop.path);
+                }
             }
-            return adjustItemList;
+
+            if (!firstTop) {
+                // 没有找到顶层模块，代表当前本来就是空的
+                // 此时 topModuleItemList 一定是 []
+                return topModuleItemList;
+            }
+
+            // 将 first top 放到数据列表开头
+            const firstTopIcon = this.makeFirstTopIconName(type);
+
+            // 将 topModuleItemList 中的 first top 元素调整到第一个位置
+            const dataItem = topModuleItemList.filter(item => item.name === firstTop!.name && item.path === firstTop!.path)[0];
+            dataItem.icon = firstTopIcon;
+            let newTopModuleItemList = [dataItem];
+            newTopModuleItemList = newTopModuleItemList.concat(topModuleItemList.filter(item => item !== dataItem));
+            
+            return newTopModuleItemList;
         }
 
         return topModuleItemList;
@@ -213,19 +248,24 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
         if (!element.path) {
             return [];
         }
-
+        
         const moduleDataItemList: ModuleDataItem[] = [];
         const targetModule = hdlParam.getHdlModule(element.path, element.name);
-
+        
         if (targetModule) {
-            for (const instance of targetModule.getAllInstances()) {
+            const allInstances = targetModule.getAllInstances();            
+            // 根据出现次序进行排序
+            allInstances.sort((a, b) => a.range.start.line - b.range.start.line);
+            for (const instance of allInstances) {
+                // 所有的例化模块都定向到它的定义文件上
                 const item: ModuleDataItem = {
                     icon: 'file',
                     type: instance.name,
                     name: instance.type,
-                    range: instance.range,
-                    path: instance.parentMod.path,
-                    parent: element
+                    range: instance.module?.range,
+                    path: instance.module?.path,
+                    parent: element,
+                    doFastFileType: instance.getDoFastFileType
                 };
 
                 if (item.type === element.type &&            // 防止递归
@@ -238,9 +278,11 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
                 moduleDataItemList.push(item);
             }
         } else {
-            MainOutput.report(`cannot find ${element} in hdlParam when constructing treeView`, ReportType.Error);
+            MainOutput.report(`cannot find ${element} in hdlParam when constructing treeView`, {
+                level: ReportType.Error
+            });
         }
-
+        
         return moduleDataItemList;
     }
 
@@ -259,6 +301,12 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
             return 'File Error';
         }
 
+        if (item.doFastFileType === 'ip') {
+            return 'ip';
+        } else if (item.doFastFileType === 'primitives') {
+            return 'celllib';
+        }
+
         if (hdlPath.exist(item.path)) {
             if (!item.path?.includes(workspacePath)) {
                 return 'remote';
@@ -273,6 +321,19 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
                 return 'File Error';
             }
         }
+    }
+
+    private judgeTopModuleIconByDoFastType(doFastType: DoFastFileType): string {
+        switch (doFastType) {
+            case 'common':
+                return 'top';
+        
+            case 'ip':
+                return 'ip';
+            case 'primitives':
+                return 'celllib';
+        }
+        return 'top';
     }
 
     public getItemType(item: ModuleDataItem): string | null {

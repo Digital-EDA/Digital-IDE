@@ -225,22 +225,22 @@ function matchInstance(singleWord: string, module: HdlModule): AllowNull<HdlInst
 }
 
 
-function filterInstanceByPosition(position: vscode.Position, symbols: RawSymbol[], module: HdlModule): AllowNull<HdlInstance> {
-    if (!symbols) {
-        return null;
-    }
-    for (const symbol of symbols) {
-        const inst = module.getInstance(symbol.name);
+// function filterInstanceByPosition(position: vscode.Position, symbols: RawSymbol[], module: HdlModule): AllowNull<HdlInstance> {
+//     if (!symbols) {
+//         return null;
+//     }
+//     for (const symbol of symbols) {
+//         const inst = module.getInstance(symbol.name);
                 
-        if (positionAfterEqual(position, symbol.range.start) && 
-            positionAfterEqual(symbol.range.end, position) &&
-            inst) {
+//         if (positionAfterEqual(position, symbol.range.start) && 
+//             positionAfterEqual(symbol.range.end, position) &&
+//             inst) {
             
-            return inst;
-        }
-    }
-    return null;
-}
+//             return inst;
+//         }
+//     }
+//     return null;
+// }
 
 
 async function getInstPortByPosition(inst: HdlInstance, position: vscode.Position, singleWord: string): Promise<AllowNull<HdlModulePort>> {
@@ -468,7 +468,6 @@ export {
     transformRange,
     locateVlogSymbol,
     locateVhdlSymbol,
-    filterInstanceByPosition,
     isPositionInput,
     isInComment,
     matchInclude,

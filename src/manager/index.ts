@@ -4,16 +4,13 @@ import * as assert from 'assert';
 import { prjManage } from './prj';
 import { pickLibrary } from './libPick';
 
-function registerManagerCommands(context: vscode.ExtensionContext) {
+export function registerManagerCommands(context: vscode.ExtensionContext) {
     // make ps and ps have been prepared
     assert(prjManage.pl, 'pl is undefined');
     // assert(prjManage.ps, 'ps is undefined');
 
     const plManage = prjManage.pl;
     // const psManage = prjManage.ps;
-
-    vscode.commands.registerCommand('digital-ide.property-json.generate', prjManage.generatePropertyJson);
-    vscode.commands.registerCommand('digital-ide.property-json.overwrite', prjManage.overwritePropertyJson);    
 
     // libpick 
     vscode.commands.registerCommand('digital-ide.pickLibrary', pickLibrary);
@@ -48,6 +45,5 @@ function registerManagerCommands(context: vscode.ExtensionContext) {
 }
 
 export {
-    prjManage,
-    registerManagerCommands
+    prjManage
 };

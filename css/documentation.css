@@ -125,7 +125,6 @@ input {
 }
 
 a {
-    color: #4078c0;
     text-decoration: none;
 }
 
@@ -498,11 +497,11 @@ img {
 
 
 .vscode-dark #write table thead th {
-    background-color: rgb(76,55,114);
+    background-color: rgb(76, 55, 114);
 }
 
 .vscode-light #write table thead th {
-    background-color: rgb(236,226,254);
+    background-color: rgb(236, 226, 254);
 }
 
 .vscode-dark table tr:nth-child(even) {

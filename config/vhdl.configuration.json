@@ -22,5 +22,8 @@
         ["(", ")"],
         ["\"", "\""],
         ["'", "'"]
-    ]
+    ],
+    "onTypeFormatting": {
+        "autoFormatTriggerCharacters": ["\n"]
+    }
 }

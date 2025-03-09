@@ -3,6 +3,8 @@ import { HdlLangID } from '../../global/enum';
 import { hdlParam } from '../../hdlParser';
 import { HdlModulePort, HdlModuleParam, HdlModulePortType } from '../../hdlParser/common';
 import { HdlModule } from '../../hdlParser/core';
+import { hdlFile, hdlPath } from '../../hdlFs';
+import { t } from '../../i18n';
 
 class ModuleInfoItem {
     label: string;
@@ -14,7 +16,7 @@ class ModuleInfoItem {
      */
     constructor(module: HdlModule) {
         // TODO : 等到sv的解析做好后，写入对于不同hdl的图标
-        let iconID = '$(instance-' + module.file.languageId + ') ';
+        let iconID = '$(instance-' + module.file.languageId + ') ';        
         this.label = iconID + module.name;
         this.description = module.params.length + ' $(instance-param) ' + 
                            module.ports.length + ' $(instance-port) ' + 
@@ -63,9 +65,9 @@ function instanceVlogCode(module: HdlModule, prefix: string = '', returnSnippetS
  * @param module 模块信息
  */
 function instanceVhdlCode(module: HdlModule) {
-    // module 2001 style
-    let port = vhdlPort(module.ports);
+    // module 2001 style    
     let param = vhdlParam(module.params);
+    let port = vhdlPort(module.ports);
 
     let instContent = `u_${module.name} : ${module.name}\n`;
 
@@ -73,7 +75,7 @@ function instanceVhdlCode(module: HdlModule) {
         instContent += `generic map(\n${param})\n`;
     }
 
-    instContent += `port map(\n${port});\n`;
+    instContent += `port map(\n${port.trim()}\n);\n`;
 
     return instContent;
 }
@@ -180,7 +182,7 @@ function vhdlPort(ports: HdlModulePort[]): string {
     let nmax = getlmax(ports, 'name');
     
     // NAME => NAME,
-    let portStr = `\n\t-- ports\n`;
+    let portStr = `\t-- ports\n`;
     for (let i = 0; i < ports.length; i++) {
         let name = ports[i].name;
         let padding = nmax - name.length + 1;
@@ -275,7 +277,7 @@ function getSelectItem(modules: HdlModule[]) {
  */
 async function selectModuleFromAll() {
     const option = {
-        placeHolder: 'Select a Module'
+        placeHolder: t('info.command.instantiation.pick-title')
     };
 
     const selectModuleInfo = await vscode.window.showQuickPick(
@@ -289,8 +291,8 @@ async function selectModuleFromAll() {
     }
 }
 
-function instanceByLangID(module: HdlModule): string {    
-    switch (module.languageId) {
+function instanceByLangID(langID: HdlLangID, module: HdlModule): string {    
+    switch (langID) {
         case HdlLangID.Verilog: return instanceVlogCode(module);
         case HdlLangID.Vhdl: return instanceVhdlCode(module);
         // TODO : add support for svlog
@@ -300,11 +302,16 @@ function instanceByLangID(module: HdlModule): string {
 }
 
 async function instantiation() {
+    const editor = vscode.window.activeTextEditor;
+    if (editor === undefined) {
+        return;
+    }
+    const file = hdlPath.toSlash(editor.document.fileName);
+    const langID = hdlFile.getLanguageId(file);
+
     const module = await selectModuleFromAll();    
     if (module) {
-        console.log(module);
-
-        const code = instanceByLangID(module);        
+        const code = instanceByLangID(langID, module);        
         const editor = vscode.window.activeTextEditor;
         if (editor) {
             selectInsert(code, editor);

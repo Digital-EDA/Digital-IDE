@@ -1,32 +1,62 @@
-import { Fast, vlogAll, vlogFast, vhdlAll, svFast, svAll, vhdlFast, All } from '../../resources/hdlParser';
+import * as vscode from 'vscode';
 import { hdlFile } from '../hdlFs';
-import { HdlLangID } from '../global/enum';
-import { AbsPath } from '../global';
+import { AbsPath, LspClient, opeParam } from '../global';
+import { DoFastRequestType, DoFastFileType, DoFastToolChainType, DoPrimitivesJudgeType } from '../global/lsp';
+import { Fast, Macro, Range } from './common';
 
-namespace HdlSymbol {
-    export function fast(path: AbsPath): Promise<Fast | undefined> {
-        const langID = hdlFile.getLanguageId(path);
-        switch (langID) {
-            case HdlLangID.Verilog: return vlogFast(path);
-            case HdlLangID.Vhdl: return vhdlFast(path);
-            case HdlLangID.SystemVerilog: return svFast(path);
-            default: return new Promise(resolve => resolve(undefined));
-        }
-    }
 
-    export function all(path: AbsPath): Promise<All | undefined> {
+export async function doFastApi(path: string, fileType: DoFastFileType): Promise<Fast | undefined> {
+    try {
+        const client = LspClient.DigitalIDE;
         const langID = hdlFile.getLanguageId(path);
-        switch (langID) {
-            case HdlLangID.Verilog: return vlogAll(path);
-            case HdlLangID.Vhdl: return vhdlAll(path);
-            case HdlLangID.SystemVerilog: return svAll(path);
-            default: return new Promise(resolve => resolve(undefined));
+        const toolChain = opeParam.prjInfo.toolChain as DoFastToolChainType;
+        if (client) {
+            const response = await client.sendRequest(DoFastRequestType, { path, fileType, toolChain });
+            response.languageId = langID;
+            return response;
         }
+    } catch (error) {
+        console.error("error happen when run doFastApi, " + error);
+        console.error("error file path: " + path);
+        return undefined;
     }
 }
 
+export async function doPrimitivesJudgeApi(primitiveName: string): Promise<boolean> {
+    try {
+        const client = LspClient.DigitalIDE;
+        if (client) {
+            const response = await client.sendRequest(DoPrimitivesJudgeType, { name: primitiveName });
+            return response;
+        }
+    } catch (error) {
+        console.error("error happen when run judgePrimitivesApi, " + error);
+        console.error("error query primitive name: " + primitiveName);
+        return false;
+    }
+    return false;
+}
 
 
-export {
-    HdlSymbol,
+export namespace HdlSymbol {
+    /**
+     * @description 计算出模块级的信息
+     * @param path 文件绝对路径
+     * @returns 
+     */
+    export function fast(path: AbsPath, fileType: DoFastFileType): Promise<Fast | undefined> {
+        return doFastApi(path, fileType);
+    }
+}
+
+export const defaultRange: Range = {
+    start: { line: 0, character: 0 },
+    end: { line: 0, character: 0 }
+};
+
+export const defaultMacro: Macro = {
+    errors: [],
+    includes: [],
+    defines: [],
+    invalid: []
 };

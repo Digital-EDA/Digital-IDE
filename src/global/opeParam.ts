@@ -2,6 +2,8 @@ import * as assert from 'assert';
 import * as fs from 'fs';
 
 import { Arch, PrjInfo, RawPrjInfo, resolve } from './prjInfo';
+import { hdlPath } from '../hdlFs';
+import { getUserHomeDir } from './util';
 
 type AbsPath = string;
 type RelPath = string;
@@ -53,6 +55,7 @@ class OpeParam {
 
     private _firstSrcTopModule: FirstTopModuleDesc = OpeParamDefaults.topModule;
     private _firstSimTopModule: FirstTopModuleDesc = OpeParamDefaults.topModule;
+    private _openMode: 'folder' | 'file' = 'folder';
 
     public get os() : string {
         return this._os;
@@ -78,10 +81,22 @@ class OpeParam {
     }
 
     /**
+     * .dideignore 的路径
+     */
+    public get dideignorePath(): AbsPath {
+        const workspace = this._workspacePath;
+        return hdlPath.join(workspace, '.dideignore');
+    }
+
+    /**
      * path of property-schema.json
      */
     public get propertySchemaPath() : AbsPath {
         return this._propertySchemaPath;
+    }
+
+    public get dideHome() : AbsPath {
+        return hdlPath.join(getUserHomeDir(), '.digital-ide');
     }
 
     /**
@@ -103,6 +118,10 @@ class OpeParam {
         return this._prjInfo.arch;
     }
 
+    public get openMode(): 'file' | 'folder' {
+        return this._openMode;
+    }
+
     public setBasicInfo(os: string, 
                         extensionPath: AbsPath, 
                         workspacePath: AbsPath, 
@@ -112,7 +131,6 @@ class OpeParam {
         this._os = os;
 
         assert(fs.existsSync(extensionPath), 'extensionPath ' + extensionPath + ' not exist!');
-        assert(fs.existsSync(workspacePath), 'workspacePath ' + workspacePath + ' not exist!');
         assert(fs.existsSync(propertySchemaPath), 'propertySchemaPath ' + propertySchemaPath + ' not exist!');
         assert(fs.existsSync(propertyInitPath), 'propertyInitPath ' + propertyInitPath + ' not exist!');
 
@@ -121,6 +139,13 @@ class OpeParam {
         this._propertyJsonPath = propertyJsonPath;
         this._propertySchemaPath = propertySchemaPath;
         this._propertyInitPath = propertyInitPath;
+
+        // 如果 workspacePath 为空，说明当前是以单文件形式打开的
+        if (fs.existsSync(workspacePath)) {
+            this._openMode = 'folder';
+        } else {
+            this._openMode = 'file';
+        }
     }
 
     public setFirstSrcTopModule(name: string | null, path: AbsPath | null) {

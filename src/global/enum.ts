@@ -9,7 +9,8 @@ enum HdlLangID {
 
 enum ToolChainType {
     Xilinx = 'xilinx',
-    Intel = 'intel', 
+    Intel = 'intel',
+    Efinity = 'efinity',
     Custom = 'custom'
 };
 

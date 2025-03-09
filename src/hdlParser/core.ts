@@ -1,13 +1,16 @@
 import * as vscode from 'vscode';
+import * as os from 'os';
 
-import { AbsPath, opeParam } from '../global';
+import { AbsPath, IProgress, opeParam } from '../global';
 import { HdlLangID } from '../global/enum';
 import { MainOutput, ReportType } from '../global/outputChannel';
 
 import * as common from './common';
 import { hdlFile, hdlPath } from '../hdlFs';
-import { HdlSymbol } from './util';
-import { vhdlFast } from '../../resources/hdlParser';
+import { defaultMacro, defaultRange, doPrimitivesJudgeApi, HdlSymbol } from './util';
+import { DoFastFileType } from '../global/lsp';
+import { t } from '../i18n';
+
 
 class HdlParam {
     private readonly topModules : Set<HdlModule> = new Set<HdlModule>();
@@ -27,6 +30,18 @@ class HdlParam {
     
     public getHdlFile(path: AbsPath): HdlFile | undefined {
         return this.pathToHdlFiles.get(path);
+    }
+
+    /**
+     * @description 清空
+     */
+    public clear() {
+        this.topModules.clear();
+        this.srcTopModules.clear();
+        this.simTopModules.clear();
+        this.pathToHdlFiles.clear();
+        this.modules.clear();
+        this.unhandleInstances.clear();
     }
 
     public getAllHdlFiles(): HdlFile[] {
@@ -52,10 +67,12 @@ class HdlParam {
      */
     public async addHdlPath(path: AbsPath) {
         path = hdlPath.toSlash(path);
-        await this.initHdlFiles([path]);
+        await this.doHdlFast(path, 'common');
         const hdlFile = this.getHdlFile(path);
         if (!hdlFile) {
-            MainOutput.report('error happen when we attempt to add file by path: ' + path, ReportType.Error);
+            MainOutput.report('error happen when we attempt to add file by path: ' + path, {
+                level: ReportType.Error
+            });
         } else {
             hdlFile.makeInstance();
             // when a new file is added, retry the solution of dependency
@@ -131,11 +148,11 @@ class HdlParam {
     }
 
     public selectTopModuleSourceByFileType(hdlModule: HdlModule): Set<HdlModule> {
-        switch (hdlModule.file.type) {
-            case common.HdlFileType.Src: return this.srcTopModules;
-            case common.HdlFileType.Sim: return this.simTopModules;
-            case common.HdlFileType.LocalLib: return this.srcTopModules;
-            case common.HdlFileType.RemoteLib: return this.srcTopModules;
+        switch (hdlModule.file.projectType) {
+            case common.HdlFileProjectType.Src: return this.srcTopModules;
+            case common.HdlFileProjectType.Sim: return this.simTopModules;
+            case common.HdlFileProjectType.LocalLib: return this.srcTopModules;
+            case common.HdlFileProjectType.RemoteLib: return this.srcTopModules;
             default: return this.srcTopModules;        
         }
     }
@@ -149,11 +166,21 @@ class HdlParam {
         topModuleSource.add(hdlModule);
     }
 
+    /**
+     * @description 根据输入的 module 把它从所属的 src 或者 sim 的 topmodules 中去除
+     * @param hdlModule 
+     */
     public deleteTopModuleToSource(hdlModule: HdlModule) {
         const topModuleSource = this.selectTopModuleSourceByFileType(hdlModule);
         topModuleSource.delete(hdlModule);
     }
 
+    /**
+     * @description 获取模块的所有依赖项目
+     * @param path 
+     * @param name 
+     * @returns 
+     */
     public getAllDependences(path: AbsPath, name: string): common.HdlDependence | undefined {        
         const module = this.getHdlModule(path, name);
         if (!module) {
@@ -178,11 +205,14 @@ class HdlParam {
             } else if (status === common.InstModPathStatus.Others && inst.instModPath) {
                 dependencies.others.push(inst.instModPath);
             }
-            const instDependencies = this.getAllDependences(inst.module.path, inst.module.name);
-            if (instDependencies) {
-                dependencies.current.push(...instDependencies.current);
-                dependencies.include.push(...instDependencies.include);
-                dependencies.others.push(...instDependencies.others);
+            // 防止无限递归
+            if (inst.module && inst.module !== module) {
+                const instDependencies = this.getAllDependences(inst.module.path, inst.module.name);            
+                if (instDependencies) {
+                    dependencies.current.push(...instDependencies.current);
+                    dependencies.include.push(...instDependencies.include);
+                    dependencies.others.push(...instDependencies.others);
+                }
             }
         }
 
@@ -193,13 +223,38 @@ class HdlParam {
         return this.unhandleInstances.size;
     }
 
-    public getUnhandleInstanceByType(typeName: string): HdlInstance | undefined {
+    /**
+     * @description 获取所有 scope 内存在 unhandle instance 的 module
+     */
+    public getAllUnhandleInstanceBelongedModule(): HdlModule[] {
+        const modules = new Set<HdlModule>();
+        for (const instance of this.unhandleInstances) {
+            modules.add(instance.parentMod);
+        }
+        return [...modules];
+    }
+
+    /**
+     * @description 输入 moduleName，找到这个 module 的所有置于 unhandleInstances 中的例化，并去 solve 它们
+     * 因为一个 module 对应的 unsolved instance 可能不止一个。比如现在项目中，有两个地方存在 AGC 模块的例化，
+     * 但是当前项目并没有引入 AGC 的 module 申明，那么当引入 AGC 后，外部就应该调用 getUnhandleInstancesByModuleName("AGC")
+     * 并返回两个 AGC 的例化模块，然后去 solve 它们
+     * @param moduleName 
+     * @returns 
+     */
+    public getUnhandleInstancesByModuleName(moduleName: string): HdlInstance[] {
+        const unsolvedInstances = [];
         for (const inst of this.unhandleInstances) {
-            if (inst.type === typeName) {
-                return inst;
+            if (inst.type === moduleName) {
+                unsolvedInstances.push(inst);
+            } else if (inst.type.includes('(')) {
+                const entityName = moduleName.split('(')[0];
+                if (entityName === moduleName) {
+                    unsolvedInstances.push(inst);
+                }
             }
         }
-        return undefined;
+        return unsolvedInstances;
     }
 
     public addUnhandleInstance(inst: HdlInstance) {
@@ -210,49 +265,141 @@ class HdlParam {
         this.unhandleInstances.delete(inst);
     }
 
-    /**
-     * vlog -> HdlLangID.Verilog
-     * svlog -> HdlLangID.SystemVerilog
-     * vhdl -> HdlLangID.Vhdl
-     * @param langID 
-     */
-    private alignLanguageId(langID: string) : HdlLangID {
-        switch (langID) {
-            case 'vhdl': return HdlLangID.Vhdl;
-            case 'vlog': return HdlLangID.Verilog;
-            case 'svlog': return HdlLangID.SystemVerilog;
-            default: return HdlLangID.Unknown;
-        }
-    }
-
-    private async doHdlFast(path: AbsPath) {
+    private async doHdlFast(path: AbsPath, fileType: DoFastFileType) {
         try {
-            const fast = await HdlSymbol.fast(path);                   
+            const fast = await HdlSymbol.fast(path, fileType);
             if (fast) {
-                const languageId = this.alignLanguageId(fast.languageId);
+                const languageId = this.getRealLanguageId(path, fast.fileType);
+                const fileProjectType = this.getHdlFileProjectType(path, fast.fileType);
                 new HdlFile(path,
                             languageId,
                             fast.macro,
-                            fast.content);
+                            fast.content,
+                            fileProjectType,
+                            fast.fileType);
             }
         } catch (error) {
-            MainOutput.report('Error happen when parse ' + path, ReportType.Error);
-            MainOutput.report('Reason: ' + error, ReportType.Error);
+            MainOutput.report('Error happen when parse ' + path, {
+                level: ReportType.Error
+            });
+            MainOutput.report('Reason: ' + error, {
+                level: ReportType.Error
+            });
         }
     }
 
-    public async initHdlFiles(hdlFiles: AbsPath[] | Generator<AbsPath>) {
+    private getRealLanguageId(path: string, fileType: DoFastFileType): HdlLangID {
+        if (fileType === 'ip' && opeParam.prjInfo.toolChain === 'xilinx') {
+            return HdlLangID.Vhdl;
+        }
+        return hdlFile.getLanguageId(path);
+    }
+
+    public getHdlFileProjectType(path: string, fileType: DoFastFileType): common.HdlFileProjectType {
+        switch (fileType) {
+            case 'common':
+                // 根据前缀来判断对应的类型
+                path = hdlPath.toSlash(path);
+                const prjInfo = opeParam.prjInfo;
+                
+                if (path.startsWith(prjInfo.hardwareSrcPath)) {
+                    return common.HdlFileProjectType.Src;
+                } else if (path.startsWith(prjInfo.hardwareSimPath)) {
+                    return common.HdlFileProjectType.Sim;
+                } else if (path.startsWith(prjInfo.ipPath)) {
+                    return common.HdlFileProjectType.IP;
+                } else if (path.startsWith(prjInfo.localLibPath)) {
+                    return common.HdlFileProjectType.LocalLib;
+                } else if (path.startsWith(prjInfo.remoteLibPath)) {
+                    return common.HdlFileProjectType.RemoteLib;
+                } else if (path.startsWith(prjInfo.libCustomPath)) {
+                    return common.HdlFileProjectType.RemoteLib;
+                } else {
+                    return common.HdlFileProjectType.Unknown;
+                }
+            case 'ip':
+                return common.HdlFileProjectType.IP;
+            case 'primitives':
+                return common.HdlFileProjectType.Primitive;            
+        }
+    }
+
+    public async initializeHdlFiles(hdlFiles: AbsPath[], progress: vscode.Progress<IProgress>) {        
+        let count: number = 0;
+        let fileNum = hdlFiles.length;
+        const parallelChunk = Math.min(os.cpus().length, 32);
+        console.log("use cpu: " + parallelChunk);
+
+        const pools: { id: number, promise: Promise<void>, path: string }[] = [];
+        const reportTitle = t('info.progress.build-module-tree');
+        progress.report({ message: reportTitle + ` ${1}/${fileNum}`, increment: 0 });
+
+        async function consumePools() {
+            for (const p of pools) {
+                const increment = Math.floor(p.id / fileNum * 100);
+                await p.promise;
+                // console.log("handle id " + p.id + ' increment: ' + increment);           
+                progress.report({ message: reportTitle + ` ${p.id}/${fileNum}`, increment });
+            }
+            pools.length = 0;
+        }
+
         for (const path of hdlFiles) {
-            await this.doHdlFast(path);
+            count ++;            
+            const p = this.doHdlFast(path, 'common');
+            pools.push({ id: count, promise: p, path });
+            if (pools.length % parallelChunk === 0) {
+                // 消费并发池
+                await consumePools();
+            }
+        }
+
+        if (pools.length > 0) {
+            await consumePools();
         }
     }
 
-    public async initialize(hdlFiles: AbsPath[] | Generator<AbsPath>) {
-        // await this.initHdlFiles(hdlFiles);
+    public async initializeIPsPath(IPsPath: string[], progress: vscode.Progress<IProgress>) {
+        let count: number = 0;
+        let fileNum = IPsPath.length;
+
+        const parallelChunk = Math.min(os.cpus().length, 32);
+        console.log("use cpu: " + parallelChunk);
+
+        const pools: { id: number, promise: Promise<void>, path: string }[] = [];
         
-        // for (const hdlFile of this.getAllHdlFiles()) {
-        //     hdlFile.makeInstance();
-        // }        
+        const reportTitle = t('info.progress.build-ip-module-tree');
+        progress.report({ message: reportTitle + ` ${1}/${fileNum}`, increment: 0 });
+
+        async function consumePools() {
+            for (const p of pools) {
+                const increment = Math.floor(p.id / fileNum * 100);
+                await p.promise;
+                // console.log("handle id " + p.id + ' increment: ' + increment);              
+                progress?.report({ message: reportTitle + ` ${p.id}/${fileNum}`, increment });
+            }
+            pools.length = 0;
+        }
+
+        for (const path of IPsPath) {
+            count ++;            
+            const p = this.doHdlFast(path, 'ip');
+            pools.push({ id: count, promise: p, path });
+            if (pools.length % parallelChunk === 0) {
+                // 消费并发池
+                await consumePools();
+            }
+        }
+
+        if (pools.length > 0) {
+            await consumePools();
+        }
+    }
+
+    public async makeAllInstance() {
+        for (const hdlFile of this.getAllHdlFiles()) {
+            hdlFile.makeInstance();
+        }
     }
 
     public getTopModulesByType(type: string): HdlModule[] {
@@ -262,8 +409,8 @@ class HdlParam {
         }
 
         switch (type) {
-            case common.HdlFileType.Src: return this.getSrcTopModules();
-            case common.HdlFileType.Sim: return this.getSimTopModules();
+            case common.HdlFileProjectType.Src: return this.getSrcTopModules();
+            case common.HdlFileProjectType.Sim: return this.getSimTopModules();
             default: return [];
         }
     }
@@ -292,6 +439,9 @@ class HdlParam {
         return moduleFiles;
     }
 
+    public removeFromHdlFile(hdlFile: HdlFile) {
+        this.pathToHdlFiles.delete(hdlFile.path);
+    }
 
     public deleteHdlFile(path: AbsPath) {
         path = hdlPath.toSlash(path);
@@ -304,17 +454,70 @@ class HdlParam {
         }
     }
 
+    /**
+     * @description 往 hdlparam 中添加路径中的若干模块
+     * @param path 
+     */
     public async addHdlFile(path: AbsPath) {
         path = hdlPath.toSlash(path);
-        await this.initHdlFiles([path]);
+        // 解析并构建
+        await this.doHdlFast(path, 'common');
+        // 初始化
         const moduleFile = this.getHdlFile(path);
         if (!moduleFile) {
-            MainOutput.report('error happen when create moduleFile ' + path, ReportType.Warn);
+            MainOutput.report('error happen when create moduleFile ' + path, {
+                level: ReportType.Warn
+            });
         } else {
             moduleFile.makeInstance();
-            for (const module of moduleFile.getAllHdlModules()) {
+            for (const module of moduleFile.getAllHdlModules()) {                
                 module.solveUnhandleInstance();
             }
+        }
+    }
+
+    public updateFast(path: string, fast: common.Fast) {
+        const moduleFile = this.getHdlFile(path);
+        if (moduleFile === undefined) {
+            return;
+        }
+
+        // 1. 更新 macro
+        moduleFile.updateMacro(fast.macro);
+        
+        // 2. 增量更新所有 module
+        const uncheckedModuleNames = new Set<string>();
+        for (const name of moduleFile.getAllModuleNames()) {
+            uncheckedModuleNames.add(name);
+        }
+    
+        for (const rawHdlModule of fast.content) {
+            const renderName = moduleFile.makeKey(rawHdlModule.name, rawHdlModule.archName);
+            if (uncheckedModuleNames.has(renderName)) {     
+                // match the same module, check then
+                const originalModule = moduleFile.getHdlModule(renderName);
+                uncheckedModuleNames.delete(renderName);
+                originalModule?.update(rawHdlModule);        
+            } else {
+                // no matched, create it
+                const newModule = moduleFile.createHdlModule(rawHdlModule);
+                newModule.makeNameToInstances();
+                newModule.solveUnhandleInstance();
+            }
+        }
+
+        // 3. 删除没有被访问到的 module
+        for (const moduleName of uncheckedModuleNames) {
+            moduleFile.deleteHdlModule(moduleName);
+        }
+    }
+
+    public async updateByMonitor(addFiles: AbsPath[], delFiles: AbsPath[]) {
+        for (const path of addFiles) {
+            await this.addHdlFile(path);
+        }
+        for (const path of delFiles) {
+            this.deleteHdlFile(path);
         }
     }
 };
@@ -322,15 +525,93 @@ class HdlParam {
 const hdlParam = new HdlParam();
 
 class HdlInstance {
-    name: string;                                   // name of the instance
-    type: string;                                   // type
+    /**
+     * @description 例化的名字
+     * 
+     * 对于下面的例子，唯一例化 的 name 就是 `u_tool`
+     * @example
+     * module hello()
+     *   tool u_tool();
+     * endmodule
+     *
+     */
+    name: string;
+
+    /**
+     * @description 例化的模块名
+     * 
+     * 对于下面的例子，唯一例化 的 type 就是 `tool`
+     * @example
+     * module hello()
+     *   tool u_tool();
+     * endmodule
+     *
+     */
+    type: string;
+
+    /**
+     * @description 例化的 range
+     */
     range: common.Range;                            // range of instance
-    instModPath: AbsPath | undefined;               // path of the definition
-    instModPathStatus: common.InstModPathStatus;    // status of the instance (current, include, others)
-    instparams: common.InstRange;                   // range of params
-    instports: common.InstRange;                    // range of ports
-    parentMod: HdlModule;                           // HdlModule that the instance serves
-    module: HdlModule | undefined;                  // module
+    
+    /**
+     * @description 例化的模块的定义路径
+     * 
+     * 对于下面的例子，唯一例化 的 instModPath 就是 `tool` 这个模块 `module tool` 申明所在的文件的路径
+     * @example
+     * module hello()
+     *   tool u_tool();
+     * endmodule
+     *
+     */
+    instModPath: AbsPath | undefined;
+
+    /**
+     * @description 用于描述当前例化是如何被引入的，以下是三类枚举
+     * - current: 例化对应的模块就在当前文件中
+     * - include: 通过 `include
+     * - others: 其他
+     */
+    instModPathStatus: common.InstModPathStatus;
+
+    /**
+     * @description 例化 params 部分的 range.
+     * 如果是 vhdl，则是 generic map 部分的 range
+     */
+    instparams: common.InstRange;
+    
+    /**
+     * @description 例化 ports 部分的 range.
+     * 如果是 vhdl，则是 port map 部分的 range
+     */
+    instports: common.InstRange;
+    
+    /**
+     * @description 例化模块例化地点的外层 module
+     * 
+     * 对于下面的例子， 例化 `u_tool` 的 parentMod 就是 `hello`
+     * @example
+     * module hello()
+     *   tool u_tool();
+     * endmodule
+     *
+     */
+    parentMod: HdlModule;
+
+    /**
+     * @description 例化模块的定义模块
+     * 
+     * 对于下面的例子， 例化 `u_tool` 的 `module` 就是 tool
+     * @example
+     * module hello();
+     *   tool u_tool();
+     * endmodule
+     * 
+     * module tool();
+     *  ...
+     * endmodule
+     */
+    module: HdlModule | undefined;
 
     constructor(name: string, 
                 type: string,
@@ -355,41 +636,78 @@ class HdlInstance {
         this.locateHdlModule();
     }
 
+    /**
+     * @description 定位出当前 instance 的模块是什么，并将模块对应的 HdlModule （普通 HDL、IP、原语） 赋值到 this.module 上
+     * 对于存在于结构树中的 HdlModule （普通 HDL & IP），改变这些 HdlModule 的 ref 并修改顶层模块相关的属性
+     */
     public locateHdlModule() {
         const instModPath = this.instModPath;
         const instModName = this.type;
 
         if (instModPath) {
-            this.module = hdlParam.getHdlModule(instModPath, instModName);
-            
-            // add refer for module 
-            this.module?.addGlobalReferedInstance(this);
-            // if module and parent module share the same source (e.g both in src folder)
-            if (this.isSameSource()) {
-                this.module?.addLocalReferedInstance(this);
+            const module = hdlParam.getHdlModule(instModPath, instModName);
+            if (module) {
+                this.module = module;
+                // 增加当前模块的 global ref
+                this.module.addGlobalReferedInstance(this);
+                // 如果当前 instance 对应的例化是同源例化，则
+                // 增加当前 instance 的 local ref，并从对应类型的顶层模块中剔除
+                if (this.isSameSourceInstantiation()) {
+                    this.module?.addLocalReferedInstance(this);
+                }
             }
+        } else {
+            doPrimitivesJudgeApi(instModName).then(isPrimitive => {                
+                if (isPrimitive) {
+                    // 构造 fake hdlfile
+                    if (opeParam.prjInfo.toolChain === 'xilinx') {
+                        const fakeModule = new HdlModule(
+                            XilinxPrimitivesHdlFile, instModName, undefined, defaultRange, [], [], []);
+                        this.module = fakeModule;
+                        // 原语在任何情况下都不是顶层模块
+                        hdlParam.deleteTopModule(fakeModule);
+                        hdlParam.deleteTopModuleToSource(fakeModule);
+                    }
+                }
+            });
         }
     }
 
+
     /**
-     * judge if the instance is a cross source reference
-     * e.g. this.module is from src, this.parentMod is from sim, then
-     * isSameSource will return false, meaning that the instance is a cross source reference
+     * @description 判断当前的 `instance` 对应的例化行为是否为一个同源例化 (SSI, same source instantiation)
      * 
-     * a cross source reference won't affect the top module reference of this.module,
-     * meaning that a top module in one source can have its instance in other source
+     * - 对于标准项目结构，也就是 src + sim ，如果在 moduleA 中完成了 moduleB 的例化，且 moduleA 和 moduleB 都是 src 文件夹下的，
+     * 那么这个例化就是一个同源例化；如果 moduleB 在 sim 下， moduleA 在 src 下，那么当前的例化就是一个非同源例化。
+     * - 对于 library 和 IP 这两种类型的 module，对于它们的例化一律视为同源引用。
+     * - 同源例化造成的引用为 local ref，非同源例化 + 同源例化造成的引用为 global ref。在模块树下， src 文件夹下的只有 local ref 为空的 module 才是顶层模块
+     * 换句话说，非同源例化一定不会造成顶层模块的变化，但是同源例化有可能会。
+     * @returns 
      */
-    public isSameSource(): boolean {
-        const parentMod = this.parentMod;
-        const instMod = this.module;
-        if (instMod) {
-            return parentMod.file.type === instMod.file.type;
+    public isSameSourceInstantiation(): boolean {
+        const parentModule = this.parentMod;
+        const belongModule = this.module;
+
+        // 当前 instance 仍然是 unsolved 状态，返回 false 不参与后续的 ref 计算
+        if (!belongModule) {
+            return false;
         }
-        return false;
+        
+        // instance 模块本身是 library / IP / 原语，一律视为 SSI
+        if (belongModule.file.projectType === common.HdlFileProjectType.IP ||
+            belongModule.file.projectType === common.HdlFileProjectType.Primitive ||
+            belongModule.file.projectType === common.HdlFileProjectType.LocalLib ||
+            belongModule.file.projectType === common.HdlFileProjectType.RemoteLib
+        ) {
+            return true;
+        }
+
+        // 剩余情况下，一律根据 type 判断
+        return parentModule.file.projectType === belongModule.file.projectType;
     }
 
     /**
-     * @description update Instance of each time
+     * @description 更新当前的 instance
      * @param newInstance 
      */
     public update(newInstance: common.RawHdlInstance) {        
@@ -398,18 +716,51 @@ class HdlInstance {
         this.instparams = newInstance.instparams;
         this.instports = newInstance.instports;
 
-        this.instModPath = this.parentMod.path;
-        this.instModPathStatus = this.parentMod.solveInstModPathStatus();
+        this.instModPath = this.module?.path || '';
+        this.updateInstModPathStatus();
+    }
+
+    /**
+     * @description 用于解决例化的路径引入状态，对于 A 模块，它的两个例化 u_A1 和 u_A2
+     * 使用 u_A1 和 u_A2 的模块需要知道 u_A1 是如何被引入的，此时需要调用 u_A1.updateInstModPathStatus() 来更新
+     * u_A1 的 instModPathStatus
+     */
+    public updateInstModPathStatus() {
+        const module = this.module;
+        if (module) {
+            const userModule = this.parentMod;
+            if (userModule.path === module.path) {
+                this.instModPathStatus = common.InstModPathStatus.Current;
+            } else {
+                const userIncludePaths = userModule.file.macro.includes.map(
+                    include => hdlPath.rel2abs(userModule.path, include.path)
+                );
+    
+                if (userIncludePaths.includes(module.path)) {
+                    this.instModPathStatus = common.InstModPathStatus.Include;
+                } else {
+                    this.instModPathStatus = common.InstModPathStatus.Others;
+                }
+            }
+        } else {
+            this.instModPathStatus = common.InstModPathStatus.Unknown;
+        }
+    }
+
+    public get getDoFastFileType(): DoFastFileType | undefined {
+        return this.module?.file.doFastType;
     }
 };
 
 class HdlModule {
     file: HdlFile;
     name: string;
+    archName: string | undefined;
     range: common.Range;
     params: common.HdlModuleParam[];
     ports: common.HdlModulePort[];
-    private rawInstances: common.RawHdlInstance[] | undefined;
+    public rawInstances: common.RawHdlInstance[] | undefined;
+    // TODO: 此处无法采用 instance name 作为主键，是因为 verilog 允许 instance name 同名出现
     private nameToInstances: Map<string, HdlInstance>;
     private unhandleInstances: Set<HdlInstance>;
     private globalRefers: Set<HdlInstance>;
@@ -417,6 +768,7 @@ class HdlModule {
 
     constructor(file: HdlFile, 
                 name: string, 
+                archName: string | undefined,
                 range: common.Range, 
                 params: common.HdlModuleParam[], 
                 ports: common.HdlModulePort[], 
@@ -424,6 +776,7 @@ class HdlModule {
         
         this.file = file;
         this.name = name;
+        this.archName = archName;
         this.range = range;
         this.params = params ? params : [];
         this.ports = ports ? ports : [];
@@ -458,8 +811,12 @@ class HdlModule {
         return this.file.languageId;
     }
 
-    public getInstance(name: string): HdlInstance | undefined {
-        return this.nameToInstances.get(name);
+    public makeInstanceKey(instanceName: string, moduleName: string): string {
+        return instanceName + '-' + moduleName;
+    }
+
+    public getInstance(name: string, moduleName: string): HdlInstance | undefined {
+        return this.nameToInstances.get(this.makeInstanceKey(name, moduleName));
     }
 
     public getAllInstances(): HdlInstance[] {
@@ -474,10 +831,81 @@ class HdlModule {
         return this.nameToInstances.size;
     }
 
+    /**
+     * @description 获取当前模块的所有依赖路径
+     * @returns 
+     */
+    public getAllDependences(): common.HdlDependence {
+        const dependencies : common.HdlDependence = {
+            current: [],
+            include: [],
+            others: []
+        };
+
+        for (const inst of this.getAllInstances()) {
+            if (!inst.module) {
+                continue;
+            }
+            const status = inst.instModPathStatus;
+            if (status === common.InstModPathStatus.Current && inst.instModPath) {
+                dependencies.current.push(inst.instModPath);
+            } else if (status === common.InstModPathStatus.Include && inst.instModPath) {
+                dependencies.include.push(inst.instModPath);
+            } else if (status === common.InstModPathStatus.Others && inst.instModPath) {
+                dependencies.others.push(inst.instModPath);
+            }
+            if (inst.module) {
+                const instDependencies = inst.module.getAllDependences();
+                dependencies.current.push(...instDependencies.current);
+                dependencies.include.push(...instDependencies.include);
+                dependencies.others.push(...instDependencies.others);
+            }
+        }
+
+        return dependencies;
+    }
+
+    /**
+     * @description 递归获取当前模块所有依赖
+     */
+    public getAllDependenceInstance(): Set<HdlInstance> {
+        const instances = new Set<HdlInstance>();
+        // 获取自身的        
+        for (const inst of this.nameToInstances.values()) {
+            instances.add(inst);
+            // 递归获取 inst 的，防止无限递归
+            if (inst.module && inst.module !== this) {
+                for (const subInst of inst.module.getAllDependenceInstance()) {
+                    instances.add(subInst);
+                }
+            }
+        }
+        return instances;
+    }
+
     public createHdlInstance(rawHdlInstance: common.RawHdlInstance): HdlInstance {
         const instModName = rawHdlInstance.type;
-        
+
         if (this.languageId === HdlLangID.Verilog || this.languageId === HdlLangID.SystemVerilog) {
+            const searchResult = this.searchInstModPath(instModName);            
+            const hdlInstance = new HdlInstance(rawHdlInstance.name,
+                                                rawHdlInstance.type,
+                                                searchResult.path,
+                                                searchResult.status,
+                                                rawHdlInstance.instparams,
+                                                rawHdlInstance.instports,
+                                                rawHdlInstance.range,
+                                                this);
+            if (!searchResult.path || !hdlPath.exist(searchResult.path)) {
+                hdlParam.addUnhandleInstance(hdlInstance);
+                this.addUnhandleInstance(hdlInstance);
+            }
+            if (this.nameToInstances) {
+                const key = this.makeInstanceKey(rawHdlInstance.name, rawHdlInstance.type);
+                this.nameToInstances.set(key, hdlInstance);
+            }
+            return hdlInstance; 
+        } else if (this.languageId === HdlLangID.Vhdl) {
             const searchResult = this.searchInstModPath(instModName);
             const hdlInstance = new HdlInstance(rawHdlInstance.name,
                                                 rawHdlInstance.type,
@@ -487,26 +915,14 @@ class HdlModule {
                                                 rawHdlInstance.instports,
                                                 rawHdlInstance.range,
                                                 this);
-            if (!searchResult.path) {
+            
+            if (!searchResult.path || !hdlPath.exist(searchResult.path)) {
                 hdlParam.addUnhandleInstance(hdlInstance);
                 this.addUnhandleInstance(hdlInstance);
             }
             if (this.nameToInstances) {
-                this.nameToInstances.set(rawHdlInstance.name, hdlInstance);
-            }
-            return hdlInstance; 
-        } else if (this.languageId === HdlLangID.Vhdl) {
-            const hdlInstance = new HdlInstance(rawHdlInstance.name,
-                                                rawHdlInstance.type,
-                                                this.path,
-                                                common.InstModPathStatus.Current,
-                                                rawHdlInstance.instparams,
-                                                this.ports[0].range,
-                                                rawHdlInstance.range,
-                                                this);
-            hdlInstance.module = this;
-            if (this.nameToInstances) {
-                this.nameToInstances.set(rawHdlInstance.name, hdlInstance);
+                const key = this.makeInstanceKey(rawHdlInstance.name, rawHdlInstance.type);
+                this.nameToInstances.set(key, hdlInstance);
             }           
             return hdlInstance;
         } else {
@@ -525,24 +941,22 @@ class HdlModule {
     }
 
     public makeNameToInstances() {
-        if (this.name === 'u_reg_cfg') {
-            console.log('[u_reg_cfg debug]');
-            console.log(this.rawInstances);
-        }    
         if (this.rawInstances !== undefined) {            
             this.nameToInstances.clear();
+
             for (const inst of this.rawInstances) {
-                this.createHdlInstance(inst);
+                const instance = this.createHdlInstance(inst);
             }
             // this.rawInstances = undefined;
         } else {
-            MainOutput.report('call makeNameToInstances but this.rawInstances is undefined', 
-                              ReportType.Warn);
+            MainOutput.report('call makeNameToInstances but this.rawInstances is undefined', {
+                level: ReportType.Warn
+            });
         }
     }
 
-    public deleteInstanceByName(name: string) {
-        const inst = this.getInstance(name);
+    public deleteInstanceByName(instanceName: string, moduleName: string) {
+        const inst = this.getInstance(instanceName, moduleName);
         this.deleteInstance(inst);
     }
 
@@ -551,19 +965,25 @@ class HdlModule {
             this.deleteUnhandleInstance(inst);
             hdlParam.deleteUnhandleInstance(inst);
             if (this.nameToInstances) {
-                this.nameToInstances.delete(inst.name);
+                const key = this.makeInstanceKey(inst.name, inst.type);
+                this.nameToInstances.delete(key);
             }
             // delete reference from instance's instMod
             const instMod = inst.module;
             if (instMod) {
                 instMod.deleteGlobalReferedInstance(inst);
-                if (inst.isSameSource()) {
+                if (inst.isSameSourceInstantiation()) {
                     instMod.deleteLocalReferedInstance(inst);
                 }
             }
         }
     }
 
+    /**
+     * @description 计算出当前 instance 和父组件的 包含关系
+     * @param instModName instance 的名字
+     * @returns InstModPathSearchResult
+     */
     private searchInstModPath(instModName: string): common.InstModPathSearchResult {        
         // search path of instance
         // priority:  "current file" -> "included files" -> "other hdls in the project"
@@ -583,6 +1003,7 @@ class HdlModule {
         for (const include of this.file.macro.includes) {
             const absIncludePath = hdlPath.rel2abs(this.path, include.path);
             const includeFile = hdlParam.getHdlFile(absIncludePath);
+            
             if (includeFile) {
                 excludeFile.add(includeFile);
                 if (includeFile.hasHdlModule(instModName)) {
@@ -594,7 +1015,10 @@ class HdlModule {
         // search other files in the project
         for (const hdlFile of hdlParam.getAllHdlFiles()) {
             if (!excludeFile.has(hdlFile) && hdlFile.hasHdlModule(instModName)) {
-                return {path: hdlFile.path, status: common.InstModPathStatus.Others};
+                return {
+                    path: hdlFile.path,
+                    status: common.InstModPathStatus.Others
+                };
             }
         }
 
@@ -651,44 +1075,25 @@ class HdlModule {
         }
     }
 
-    public solveInstModPathStatus(): common.InstModPathStatus {
-        const inst = hdlParam.getUnhandleInstanceByType(this.name);
-        if (!inst) {
-            return common.InstModPathStatus.Unknown;
-        }
-        const userModule = inst.parentMod;
-        if (userModule.path === this.path) {
-            return common.InstModPathStatus.Current;
-        } else {
-            const userIncludePaths = userModule.file.macro.includes.map(
-                include => hdlPath.rel2abs(userModule.path, include.path));
-
-            if (userIncludePaths.includes(this.path)) {
-                return common.InstModPathStatus.Include;
-            } else {
-                return common.InstModPathStatus.Others;
-            }
-        }
-    }
-
+    /**
+     * @description 从全局寻找这个 module 的例化，并尝试修改它的状态
+     */
     public solveUnhandleInstance() {
-        const inst = hdlParam.getUnhandleInstanceByType(this.name);
+        const instances = hdlParam.getUnhandleInstancesByModuleName(this.name);
+        
+        for (const instance of instances) {
+            const belongScopeModule = instance.parentMod;
+            // 先从 unsolved 堆中删除当前的 instance
+            hdlParam.deleteUnhandleInstance(instance);
+            belongScopeModule.deleteUnhandleInstance(instance);
 
-        if (inst) {
-            const userModule = inst.parentMod;
-            // match a inst with the same type name of the module
-            // remove from unhandle list
-            hdlParam.deleteUnhandleInstance(inst);
-            userModule.deleteUnhandleInstance(inst);
+            // 解决
+            instance.instModPath = this.path;
+            instance.updateInstModPathStatus();
 
-            // assign instModPath
-            inst.instModPath = this.path;
-
-            // judge the type of instModPathStatus
-            inst.instModPathStatus = this.solveInstModPathStatus();
-            
-            // assign module in the instance
-            inst.locateHdlModule();            
+            // 找寻这个 instance 对应的真正的 module（也有可能是原语）
+            // 并将这个 instance 加入这个 module 的计数器中
+            instance.locateHdlModule();
         }
     }
 
@@ -697,73 +1102,125 @@ class HdlModule {
         this.params = newModule.params;
         this.range = newModule.range;        
         // compare and make change to instance
-        const uncheckedInstanceNames = new Set<string>();
+        const uncheckedInstanceNames = new Map<string, HdlInstance>();
         for (const inst of this.getAllInstances()) {
-            uncheckedInstanceNames.add(inst.name);
+            const key = this.makeInstanceKey(inst.name, inst.type);
+            uncheckedInstanceNames.set(key, inst);
         }
 
         for (const newInst of newModule.instances) {
-            if (uncheckedInstanceNames.has(newInst.name)) {     
+            const newInstKey = this.makeInstanceKey(newInst.name, newInst.type);
+            if (uncheckedInstanceNames.has(newInstKey)) {     
                 // match exist instance, compare and update
-                const originalInstance = this.getInstance(newInst.name);
+                const originalInstance = this.getInstance(newInst.name, newInst.type);
                 originalInstance?.update(newInst);
-                uncheckedInstanceNames.delete(newInst.name);
+                uncheckedInstanceNames.delete(newInstKey);
             } else {        
                 // unknown instance, create it
                 this.createHdlInstance(newInst);
             }
         }
         // delete Instance that not visited
-        for (const instName of uncheckedInstanceNames) {
-            this.deleteInstanceByName(instName);
+        for (const inst of uncheckedInstanceNames.values()) {
+            this.deleteInstanceByName(inst.name, inst.type);
         }
     }
 };
 
-class HdlFile {
+export class HdlFile {
+    // 标准化的文件绝对路径
     public path: string;
+    // 对应的 HDL 语言 ID
     public languageId: HdlLangID;
-    public type: common.HdlFileType;
+    // 文件的项目类型
+    public projectType: common.HdlFileProjectType;
+    // 文件的解析模式
+    public doFastType: DoFastFileType;
+    // 当前文件的宏
     public macro: common.Macro;
+    // 维护当前文件内部 module 的 map
     private readonly nameToModule: Map<string, HdlModule>;
 
     constructor(path: string, 
                 languageId: HdlLangID, 
                 macro: common.Macro, 
-                modules: common.RawHdlModule[]) {
+                modules: common.RawHdlModule[],
+                projectType: common.HdlFileProjectType,
+                doFastType: DoFastFileType) {
 
         this.path = path;
         this.languageId = languageId;
         this.macro = macro;
-        this.type = hdlFile.getHdlFileType(path);
+        this.projectType = projectType;
+        this.doFastType = doFastType;
 
         // add to global hdlParam
         hdlParam.setHdlFile(this);
 
         // make nameToModule
-        this.nameToModule = new Map<string, HdlModule>();   
+        this.nameToModule = new Map<string, HdlModule>();
         for (const rawHdlModule of modules) {
             this.createHdlModule(rawHdlModule);
         }
     }
 
     public createHdlModule(rawHdlModule: common.RawHdlModule): HdlModule {
+        const archName = rawHdlModule.archName.trim().length === 0 ? undefined: rawHdlModule.archName;
         const module: HdlModule = new HdlModule(this,
                                                 rawHdlModule.name,
+                                                archName,
                                                 rawHdlModule.range,
                                                 rawHdlModule.params,
                                                 rawHdlModule.ports,
                                                 rawHdlModule.instances);
-        this.nameToModule.set(rawHdlModule.name, module);
+        const key = this.makeKey(rawHdlModule.name, archName);
+        this.nameToModule.set(key, module);
         return module;
     }
 
+    public makeKey(name: string, archName: string | undefined): string {
+        archName = archName ? archName: undefined;
+        return archName === undefined ? name: `${name}(${archName})`;
+    }
+
+    /**
+     * @description 判断一个名为 name 的 module 在不在当前文件中
+     * 如果存在关于 name 的映射，则直接返回，否则，寻找全文匹配含有 name 的 item
+     * @param name 
+     * @returns 
+     */
     public hasHdlModule(name: string): boolean {
-        return this.nameToModule.has(name);
+        if (this.nameToModule.has(name)) {
+            return true;
+        }
+
+        for (const moduleName of this.nameToModule.keys()) {
+            if (moduleName.includes('(')) {
+                const entityName = moduleName.split('(')[0];
+                if (entityName === name) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public getHdlModule(name: string): HdlModule | undefined {
-        return this.nameToModule.get(name);
+        const hdlModule = this.nameToModule.get(name);
+        if (hdlModule !== undefined) {
+            return hdlModule;
+        }
+
+        for (const [moduleName, hdlModule] of this.nameToModule.entries()) {
+            if (moduleName.includes('(')) {
+                const entityName = moduleName.split('(')[0];
+                if (entityName === name) {
+                    return hdlModule;
+                }
+            }
+        }
+
+        return undefined;
     }
 
     public getAllModuleNames(): string[] {
@@ -783,7 +1240,8 @@ class HdlFile {
     }
 
     public deleteHdlModule(name: string) {
-        const hdlModule = this.getHdlModule(name);
+        let hdlModule = this.getHdlModule(name);
+        
         if (hdlModule) {
             // delete child reference in the module which use this
             for (const childInst of hdlModule.getAllGlobalRefers()) {
@@ -805,7 +1263,27 @@ class HdlFile {
             hdlParam.deleteTopModule(hdlModule);
             hdlParam.deleteTopModuleToSource(hdlModule);
             hdlParam.modules.delete(hdlModule);
-            this.nameToModule.delete(hdlModule.name);
+            
+            // TODO: 未来迁移这段逻辑
+            hdlModule = this.nameToModule.get(name);
+            if (hdlModule !== undefined) {
+                this.nameToModule.delete(name);
+            } else {
+                let entityComName: undefined | string = undefined;
+                for (const moduleName of this.nameToModule.keys()) {
+                    if (moduleName.includes('(')) {
+                        const entityName = moduleName.split('(')[0];
+                        if (entityName === name) {
+                            entityComName = moduleName;
+                            break;
+                        }
+                    }
+                }
+
+                if (entityComName) {
+                    this.nameToModule.delete(entityComName);
+                }
+            }
         }
     }
     
@@ -819,6 +1297,14 @@ class HdlFile {
         this.macro = macro;
     }
 }
+
+export const XilinxPrimitivesHdlFile = new HdlFile(
+    'xilinx-primitives',
+    HdlLangID.Verilog,
+    defaultMacro,
+    [],
+    common.HdlFileProjectType.Primitive,
+    'primitives');
 
 
 export {

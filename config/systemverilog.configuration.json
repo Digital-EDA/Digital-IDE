@@ -27,5 +27,8 @@
 		{"open":"[", "close":"]", "notIn":["string", "comment"]},
 		{"open":"{", "close":"}", "notIn":["string", "comment"]},
 		{"open":"\"", "close":"\"", "notIn":["string", "comment"]}
-	]
+	],
+    "onTypeFormatting": {
+        "autoFormatTriggerCharacters": ["\n"]
+    }
 }

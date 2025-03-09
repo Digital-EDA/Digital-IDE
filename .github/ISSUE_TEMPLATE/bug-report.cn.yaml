@@ -1,0 +1,89 @@
+name: 报告 Bug
+description: 向我们报告 Bug。
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        投我以木桃，报之以琼瑶。
+        填写之前请阅读 [nc-ai | 关于反馈](https://nc-ai.cn/article/cxnqr517/#%E5%85%B3%E4%BA%8E%E5%8F%8D%E9%A6%88)
+  - type: dropdown
+    id: os
+    attributes:
+      label: 操作系统
+      description: 您在什么操作系统上运行？
+      options:
+        - Windows
+        - Mac
+        - Linux
+        - 其他
+      default: 0
+    validations:
+      required: true
+  - type: dropdown
+    id: chip
+    attributes:
+      label: 芯片架构
+      description: 您在什么架构的芯片上运行？
+      options:
+        - x86
+        - arm
+        - loongson
+        - 其他
+      default: 0
+    validations:
+      required: true
+  - type: dropdown
+    id: connect
+    attributes:
+      label: 运行方式
+      description: 您采用何种方式运行？
+      options:
+        - 桌面运行
+        - SSH 远程连接
+        - WSL2
+        - 虚拟机
+        - 其他
+      default: 0
+    validations:
+      required: true
+  - type: input
+    id: vscode-version
+    attributes:
+      label: Vscode / Vscodium 版本
+      placeholder: "1.96.2"
+    validations:
+      required: true
+  - type: input
+    id: dide-version
+    attributes:
+      label: Digital IDE 版本
+      placeholder: "0.4.0"
+    validations:
+      required: true
+  - type: textarea
+    id: meet-question
+    attributes:
+      label: 你遇到的问题
+    validations:
+      required: true
+  - type: textarea
+    id: expect
+    attributes:
+      label: 你希望的运行结果
+    validations:
+      required: false
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际的运行结果
+    validations:
+      required: false
+  - type: textarea
+    id: log
+    attributes:
+      label: 运行日志
+      render: shell
+    validations:
+      required: false

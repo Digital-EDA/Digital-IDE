@@ -36,7 +36,7 @@ interface PLContext {
     // 第三方工具运行路径
     path? : string,
     // 操作类
-    ope : XilinxOperation,
+    ope : Record<string, any>
 };
 
 interface PLPrjInfo {
@@ -53,7 +53,6 @@ interface BootInfo {
     bitPath : AbsPath,
     fsblPath : AbsPath
 };
-
 
 /**
  * xilinx operation under PL
@@ -394,7 +393,6 @@ class XilinxOperation {
         });
 
         // 导入非本地的设计源文件
-        console.log(hdlParam.getAllHdlFiles());
         for (const hdlFile of hdlParam.getAllHdlFiles()) {
             switch (hdlFile.projectType) {
                 case HdlFileProjectType.Src:
@@ -619,7 +617,6 @@ file delete ${scriptPath} -force\n`;
 
         context.process?.stdin.write(cmd + '\n');
     }
-
 
     generateBit(context: PLContext) {
         vscode.window.showInformationMessage(

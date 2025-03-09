@@ -22,7 +22,7 @@ const OpeParamDefaults = {
 
 interface FirstTopModuleDesc {
     name: string
-    path: AbsPath
+    path: AbsPath | undefined
 };
 
 function readJSON(path: AbsPath): object {

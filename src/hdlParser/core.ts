@@ -312,6 +312,8 @@ class HdlParam {
                     return common.HdlFileProjectType.LocalLib;
                 } else if (path.startsWith(prjInfo.remoteLibPath)) {
                     return common.HdlFileProjectType.RemoteLib;
+                } else if (path.startsWith(prjInfo.libCustomPath)) {
+                    return common.HdlFileProjectType.RemoteLib;
                 } else {
                     return common.HdlFileProjectType.Unknown;
                 }

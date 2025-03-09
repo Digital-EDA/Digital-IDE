@@ -4,9 +4,9 @@
 ## <code>Digital IDE</code> | All in one <code>vscode</code> plugin for Verilog/VHDL development
 
 
-[Document (New)](https://nc-ai.cn/) | [中文文档 (New)](https://nc-ai.cn/zh/) | [Bilibili Video](https://www.bilibili.com/video/BV1t14y1179V/?spm_id_from=333.999.0.0)
+[Document (New)](https://nc-ai.cn/) | [中文文档 (New)](https://nc-ai.cn/zh/) | [Bilibili Video](https://www.bilibili.com/video/BV1L19HYcEz6/?spm_id_from=333.1387.list.card_archive.click) | [Github](https://github.com/Digital-EDA/Digital-IDE)
 
-![](https://img.shields.io/badge/version-0.4.0-purple)
+![](https://img.shields.io/badge/version-0.4.2-purple)
 ![](https://img.shields.io/badge/Verilog-support-green)
 ![](https://img.shields.io/badge/VHDL-support-green)
 ![](https://img.shields.io/badge/SystemVerilog-support-green)
@@ -31,7 +31,7 @@
 
 ![](./figures/netlist.png)
 
-## New 0.4.1
+## New 0.4.2
 - Added comprehensive support for VHDL & SV (file tree, LSP, etc.)
 - Added workspace icons for languages or generated files such as Verilog, VHDL, XDC, TCL, VVP, VCD, etc.
 - Added support for Vivado, ModelSim, and Verilator. Users can use these third-party tools for simulation and auto-correction by setting `function.lsp.linter.vhdl.diagnostor` (for VHDL) and `function.lsp.linter.vlog.diagnostor` (for Verilog).
@@ -47,4 +47,7 @@
 - Fixed a bug where comments on `input` and `output` were not displayed correctly in the documentation.
 - Fixed a bug in the Icarus Verilog simulation feature where duplicate paths were included as compilation parameters.
 - Fixed a bug in the Icarus Verilog simulation feature where adding or removing <code>include</code> would cause simulation compilation to fail (the `instModPathStatus` property of the instance was not updated).
+- Fixed simulation issues with Icarus Verilog version 12
+- Fixed the issue of being unable to import Block Design (BD) during Vivado project generation
+- Fixed the issue where libraries in custom mode could not be imported into Vivado
 - Fixed other known bugs.

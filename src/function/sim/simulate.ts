@@ -307,16 +307,21 @@ export class IcarusSimulate extends Simulate {
         }
 
         const extaArgs = args.join(' ');
-        let command = `${iverilogPath} ${argu} -o ${outVvpPath} -s ${name}`;
-        if (extaArgs) {
-            command += ' ' + extaArgs;
-        }
+        let command = `${iverilogPath} ${argu}`;
 
         // const parent = fspath.dirname(path);
-        command += ' ' + '-I';
-        for (let index = 0; index < alldeps.length; index++) {
-            const element = alldeps[index];
-            command += ' ' + '"' + hdlPath.resolve(element, '..') + '"'; 
+        if (alldeps.length) {            
+            command += ' ' + '-I';
+            for (let index = 0; index < alldeps.length; index++) {
+                const element = alldeps[index];
+                command += ' ' + '"' + hdlPath.resolve(element, '..') + '"'; 
+            }
+        }
+
+        command += ' ' + `-o ${outVvpPath} -s ${name}`;
+
+        if (extaArgs) {
+            command += ' ' + extaArgs;
         }
 
         return command;

@@ -97,7 +97,6 @@ export class WebviewCollection {
 	}
 }
 
-
 export function replacePlaceholders(template: string, ...args: string[]): string {
     return template.replace(/\$(\d+)/g, (match, p1) => {
         const index = parseInt(p1, 10) - 1;

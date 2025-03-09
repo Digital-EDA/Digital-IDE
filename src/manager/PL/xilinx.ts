@@ -121,7 +121,6 @@ class XilinxOperation {
         };
     }
     
-
     public get topMod(): TopMod {
         return {
             src : opeParam.firstSrcTopModule.name,
@@ -136,7 +135,6 @@ class XilinxOperation {
             device : opeParam.prjInfo.device
         };
     }
-
 
     /**
      * xilinx下的launch运行，打开存在的工程或者再没有工程时进行新建
@@ -396,6 +394,7 @@ class XilinxOperation {
         });
 
         // 导入非本地的设计源文件
+        console.log(hdlParam.getAllHdlFiles());
         for (const hdlFile of hdlParam.getAllHdlFiles()) {
             switch (hdlFile.projectType) {
                 case HdlFileProjectType.Src:

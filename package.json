@@ -65,6 +65,11 @@
                     "default": "C:/Xilinx/Vivado/2018.3/bin",
                     "description": "%digital-ide.prj.vivado.install.path.title%"
                 },
+                "digital-ide.prj.efinix.install.path": {
+                    "type": "string",
+                    "default": "C:/Efinity/2023.2/bin",
+                    "description": "%digital-ide.prj.efinix.install.path.title%"
+                },
                 "digital-ide.prj.modelsim.install.path": {
                     "type": "string",
                     "default": "C:/modeltech64_10.4/win64",
@@ -836,15 +841,18 @@
             "TreeView": [
                 {
                     "id": "digital-ide-treeView-arch",
-                    "name": "architecture"
+                    "name": "architecture",
+                    "icon": "images/svg/view.svg"
                 },
                 {
                     "id": "digital-ide-treeView-tool",
-                    "name": "TOOL Options"
+                    "name": "TOOL Options",
+                    "icon": "images/svg/view.svg"
                 },
                 {
                     "id": "digital-ide-treeView-hardware",
-                    "name": "HARD Options"
+                    "name": "HARD Options",
+                    "icon": "images/svg/view.svg"
                 }
             ]
         },
@@ -1256,7 +1264,6 @@
         "@types/pako": "^2.0.3",
         "@types/showdown": "^2.0.0",
         "@types/vscode": "^1.72.0",
-        "@types/xml2js": "^0.4.14",
         "@typescript-eslint/eslint-plugin": "^5.42.0",
         "@typescript-eslint/parser": "^5.42.0",
         "@vscode/test-electron": "^2.2.0",
@@ -1268,7 +1275,6 @@
     "dependencies": {
         "axios": "^1.7.7",
         "bson": "^6.8.0",
-        "bufferutil": "^4.0.9",
         "chokidar": "^4.0.1",
         "minimatch": "^10.0.1",
         "pako": "^2.1.0",
@@ -1277,12 +1283,10 @@
         "state-machine-cat": "^12.0.21",
         "tar": "^7.4.3",
         "temp": "^0.9.4",
-        "utf-8-validate": "^5.0.10",
         "vscode-jsonrpc": "^8.2.1",
         "vscode-languageclient": "^9.0.1",
         "vscode-textmate": "^9.0.0",
         "wavedrom": "^2.9.1",
-        "xml2js": "^0.6.2",
         "zlib": "^1.0.5"
     }
 }

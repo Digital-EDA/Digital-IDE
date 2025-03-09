@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { ChildProcessWithoutNullStreams, exec, spawn } from 'child_process';
 import * as fspath from 'path';
 import * as fs from 'fs';
+import * as os from 'os';
 
 import { AbsPath, opeParam, PrjInfo } from '../../global';
 import { hdlParam } from '../../hdlParser/core';
@@ -13,6 +14,9 @@ import { HardwareOutput, MainOutput, ReportType } from '../../global/outputChann
 import { debounce, getPIDsWithName, killProcess } from '../../global/util';
 import { t } from '../../i18n';
 import { HdlFileProjectType } from '../../hdlParser/common';
+import { integer } from 'vscode-languageclient';
+
+type ChainInfo = [number, number, number, number];
 
 const syn = `  <efx:synthesis tool_name="efx_map">
     <efx:param name="work_dir" value="work_syn" value_type="e_string"/>
@@ -96,24 +100,11 @@ const security = `  <efx:security>
     <efx:param name="auth_key_file" value="NONE" value_type="e_string"/>
   </efx:security>`;
 
-export interface ePLContext {
-    // 保留启动上下文
-    terminal? : vscode.Terminal,
-    // 目前使用的启动上下文
-    process?: ChildProcessWithoutNullStreams,
-    // 工具类型
-    tool? : string,
-    // 第三方工具运行路径
-    path? : string,
-    // 操作类
-    ope : EfinityOperation,
-};
-
 export class EfinityOperation {
-    script: string;
+    prjScript: string;
     efxPath: string;
     constructor() {
-        this.script = '';
+        this.prjScript = '';
         this.efxPath = hdlPath.join(opeParam.workspacePath, `${opeParam.prjInfo.prjName.PL}.xml`);
     }
 
@@ -123,7 +114,7 @@ export class EfinityOperation {
         if (device.slice(0, 2).toLowerCase() === 'ti') {
             family = 'Titanium';
         }
-        
+
         return `  <efx:device_info>
     <efx:family name="${family}"/>
     <efx:device name="${deviceInfo[0]}"/>
@@ -153,12 +144,12 @@ export class EfinityOperation {
         return `  <efx:design_info def_veri_version="verilog_2k" def_vhdl_version="vhdl_2008">\n${designFile}
   </efx:design_info>`
     };
-    
+
     private getConstraintInfo(): string {
         let constraintFile = '';
         hdlFile.pickFileRecursive(opeParam.prjInfo.arch.hardware.data, filePath => {
             if (filePath.endsWith('.sdc')) {
-                constraintFile += `  <efx:constraint_file name="${filePath}" />\n`;
+                constraintFile += `  <efx:sdc_file name="${filePath}" />\n`;
             }
         });
 
@@ -168,17 +159,215 @@ export class EfinityOperation {
     }
 
     public launch() {
-        this.script = `<efx:project xmlns:efx="http://www.efinixinc.com/enf_proj" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="${opeParam.prjInfo.prjName}" description="" last_change="1724639062" sw_version="2023.2.307" last_run_state="pass" last_run_flow="bitstream" config_result_in_sync="sync" design_ood="sync" place_ood="sync" route_ood="sync" xsi:schemaLocation="http://www.efinixinc.com/enf_proj enf_proj.xsd">\n${this.getDeviceInfo(opeParam.prjInfo.device)}\n${this.getDesignInfo()}\n${this.getConstraintInfo()}\n  <efx:sim_info />\n  <efx:misc_info />\n  <efx:ip_info />\n${syn}\n${pnr}\n${bit}\n${debug}\n${security}\n</efx:project>`;
+        this.prjScript = `<efx:project xmlns:efx="http://www.efinixinc.com/enf_proj" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="${opeParam.prjInfo.prjName.PL}" description="" last_change="1724639062" sw_version="2023.2.307" last_run_state="pass" last_run_flow="bitstream" config_result_in_sync="sync" design_ood="sync" place_ood="sync" route_ood="sync" xsi:schemaLocation="http://www.efinixinc.com/enf_proj enf_proj.xsd">\n${this.getDeviceInfo(opeParam.prjInfo.device)}\n${this.getDesignInfo()}\n${this.getConstraintInfo()}\n  <efx:sim_info />\n  <efx:misc_info />\n  <efx:ip_info />\n${syn}\n${pnr}\n${bit}\n${debug}\n${security}\n</efx:project>`;
 
-        fs.writeFileSync(this.efxPath, this.script);
+        fs.writeFileSync(this.efxPath, this.prjScript);
 
+        hdlParam.getHdlModule(opeParam.firstSrcTopModule.path || '', opeParam.firstSrcTopModule.name);
+
+    }
+
+    public simulate() {
+
+    }
+
+    public simulateCli() {
+
+    }
+
+    public simulateGui() {
+
+    }
+
+    public refresh() {
+        this.launch();
     }
 
     public build() {
         exec(`${this.updateEfinixPath()} ${this.efxPath} --flow compile --work_dir=${opeParam.workspacePath}/prj/efinix --output_dir ${opeParam.workspacePath}/prj/efinix/outflow --cleanup_work_dir work_pt`, (error, stdout, stderr) => {
             console.log(error);
-            
+
         })
+    }
+
+    public synth() {
+
+    }
+
+    public impl() {
+
+    }
+
+    public bitstream() {
+
+    }
+
+    public program() {
+        const bitPath = hdlPath.join(opeParam.workspacePath, 'outflow/efinix.bit');
+        const svfPath = hdlPath.join(opeParam.workspacePath, 'efinix.svf');
+        this.convert_to_SVF_TrionX(bitPath, svfPath, "10660A79", "6E6", 2000, true, [0, 0, 0, 0]);
+
+        // exec()
+    }
+
+    public gui() {
+
+    }
+
+    public exit() {
+
+    }
+
+    public setSrcTop() {
+
+    }
+
+    public setSimTop() {
+
+    }
+
+    private convert_to_SVF_TrionX(
+        inputFile: string,
+        destSVFFile: string,
+        idcode: string,
+        freq: string,
+        sdrSize: number,
+        enterUserMode: boolean,
+        chainInfo: ChainInfo
+    ): void {
+        const N = sdrSize;
+
+        // 读取 HEX 文件并转换为位数组（模拟 bitarray）
+        const hexContent = fs.readFileSync(inputFile, 'utf-8').split(/\r?\n/);
+        const numBits = this.get_bitstream_num_bits(inputFile);
+
+        const arr: boolean[] = [];
+        hexContent.forEach(line => {
+            const byte = parseInt(line, 16);
+            const bits = byte.toString(2).padStart(8, '0');
+            bits.split('').forEach(b => arr.push(b === '1'));
+        });
+
+        // 处理 JTAG chain 信息
+        const [len_hir, len_tir, len_hdr, len_tdr] = chainInfo;
+
+        const generateTDI = (length: number, bit: '0' | '1'): string => {
+            if (length === 0) return '';
+            const binary = Array(length).fill(bit).join('');
+            const decimal = parseInt(binary, 2);
+            return ` TDI (${decimal.toString(16).toUpperCase()})`;
+        };
+
+        const hir_tdi = generateTDI(len_hir, '1');
+        const tir_tdi = generateTDI(len_tir, '1');
+        const hdr_tdi = generateTDI(len_hdr, '0');
+        const tdr_tdi = generateTDI(len_tdr, '0');
+
+        // 构建 SVF 内容
+        const svfLines: string[] = [
+            'TRST OFF;',
+            'ENDIR IDLE;',
+            'ENDDR IDLE;',
+            'STATE RESET;',
+            'STATE IDLE;',
+            `FREQUENCY ${freq} HZ;`,
+            `TIR ${len_tir}${tir_tdi};`,
+            `HIR ${len_hir}${hir_tdi};`,
+            `TDR ${len_tdr}${tdr_tdi};`,
+            `HDR ${len_hdr}${hdr_tdi};`,
+            '// ',
+            '// Check idcode',
+            'SIR 5 TDI (3);',
+            `SDR 32 TDI (00000000) TDO (${idcode}) MASK (ffffffff);`,
+            '// ',
+            '// Enter programming mode',
+            'SIR 5 TDI (4);'
+        ];
+
+        if (idcode.toUpperCase() === '10660A79' || idcode.toUpperCase() === '10661A79') {
+            svfLines.push('RUNTEST RESET 100 TCK;', 'SIR 5 TDI (4);');
+        }
+
+        svfLines.push(
+            '// ',
+            '// Begin bitstream',
+            '// ',
+            'ENDDR DRPAUSE;',
+            'HDR 0;',
+            `TDR ${len_tdr}${tdr_tdi};`
+        );
+
+        // 生成 SDR 命令
+        let currBit = 0;
+        while (currBit < numBits) {
+            const demarcIndex = Math.min(currBit + N, numBits);
+            const lineLength = demarcIndex - currBit;
+
+            let currLine = '';
+            let nibbleBuffer = '';
+            for (let i = currBit; i < demarcIndex; i++) {
+                nibbleBuffer = (arr[i] ? '1' : '0') + nibbleBuffer;
+                if (nibbleBuffer.length === 4) {
+                    currLine += parseInt(nibbleBuffer, 2).toString(16).toUpperCase();
+                    nibbleBuffer = '';
+                }
+            }
+
+            if (nibbleBuffer.length > 0) {
+                currLine += parseInt(nibbleBuffer.padEnd(4, '0'), 2).toString(16).toUpperCase();
+            }
+
+            svfLines.push(`SDR ${lineLength} TDI (${currLine.split('').reverse().join('')});`);
+            currBit = demarcIndex;
+        }
+
+        // 添加额外 TCK
+        const NUM_EXTRA_TCK = 2000;
+        const NUM_EXTRA_TCK_LOOPS = (NUM_EXTRA_TCK / N) + 1;
+        svfLines.push('// Extra clock ticks in SDR state');
+        const tdiPattern = '0'.repeat(Math.ceil(N / 4));
+        for (let i = 0; i < NUM_EXTRA_TCK_LOOPS; i++) {
+            svfLines.push(`SDR ${N} TDI (${tdiPattern});`);
+        }
+
+        // 用户模式处理
+        svfLines.push('// ');
+        if (enterUserMode) {
+            svfLines.push(
+                '// Enter user mode',
+                'SIR 5 TDI (7);',
+                'RUNTEST 100 TCK;'
+            );
+        } else {
+            svfLines.push(
+                '// Enter user mode -- DISABLED PER REQUEST',
+                '// SIR 5 TDI (7);',
+                '// RUNTEST 100 TCK;'
+            );
+        }
+
+        // 写入文件
+        fs.writeFileSync(destSVFFile, svfLines.join('\n'));
+    }
+
+    private get_bitstream_num_bits(input_file: string): integer {
+        let ext = hdlPath.extname(input_file);
+        let num_bytes = 0;
+        if (ext === '.hex' || ext == '.bit') {
+            const lines = fs.readFileSync(input_file, 'utf-8').split(/\r?\n/);
+            num_bytes = lines.filter(line => {
+                const trimmed = line.trim();
+
+                // 有效性检查条件（根据你的 HEX 格式调整）
+                return trimmed.length > 0 &&                // 非空行
+                    trimmed.length >= 2 &&              // 每行 2 个字符（例如 "1A"）
+                    /^[0-9A-Fa-f]{2}$/.test(trimmed);    // 合法 HEX 字符
+            }).length;
+        } else if (ext === '.bin') {
+            num_bytes = fs.statSync(input_file).size;
+        }
+
+        return num_bytes * 8;
     }
 
     public updateEfinixPath(): string {

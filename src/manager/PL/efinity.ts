@@ -14,8 +14,6 @@ import { debounce, getPIDsWithName, killProcess } from '../../global/util';
 import { t } from '../../i18n';
 import { HdlFileProjectType } from '../../hdlParser/common';
 
-import { parseString, Builder, processors } from 'xml2js';
-
 const syn = `  <efx:synthesis tool_name="efx_map">
     <efx:param name="work_dir" value="work_syn" value_type="e_string"/>
     <efx:param name="write_efx_verilog" value="on" value_type="e_bool"/>
@@ -100,10 +98,79 @@ const security = `  <efx:security>
 
 
 export class EfinityOperation {
-    // config: Record<string, any>;
+    script: string;
+    efxPath: string;
     constructor() {
+        this.script = '';
+        this.efxPath = hdlPath.join(opeParam.workspacePath, `${opeParam.prjInfo.prjName}.xml`);
+    }
+
+    private getDeviceInfo(device: string): string {
+        const deviceInfo = device.split('-');
+        let family = 'Trion';
+        if (device.slice(0, 2).toLowerCase() === 'ti') {
+            family = 'Titanium';
+        }
+        
+        return `  <efx:device_info>
+    <efx:family name="${family}"/>
+    <efx:device name="${deviceInfo[0]}"/>
+    <efx:timing_model name="${deviceInfo[1]}"/>
+  </efx:device_info>`;
+    }
+
+    private getDesignInfo(): string {
+
+        let designFile = `    <efx:top_module name="${opeParam.firstSrcTopModule.name}"/>\n`;
+        for (const hdlFile of hdlParam.getAllHdlFiles()) {
+            // ${hdlFile.path}
+            designFile += `    <efx:design_file name="${hdlFile.path}" version="default" library="default"/>\n`;
+
+        }
+        designFile += `    <efx:top_vhdl_arch name=""/>`
+        return `  <efx:design_info def_veri_version="verilog_2k" def_vhdl_version="vhdl_2008">\n${designFile}
+  </efx:design_info>`
+    };
+    
+    private getConstraintInfo(): string {
+        let constraintFile = '';
+        hdlFile.pickFileRecursive(opeParam.prjInfo.arch.hardware.data, filePath => {
+            if (filePath.endsWith('.sdc')) {
+                constraintFile += `    <efx:constraint_file name="${filePath}" />\n`;
+            }
+        });
+
+        constraintFile += `    <efx:inter_file name="" />\n`;
+
+        return `    <efx:constraint_info>\n${constraintFile}    </efx:constraint_info>`;
+    }
+
+    public launch() {
+        this.script = `<efx:project xmlns:efx="http://www.efinixinc.com/enf_proj" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="${opeParam.prjInfo.prjName}" description="" last_change="1724639062" sw_version="2023.2.307" last_run_state="pass" last_run_flow="bitstream" config_result_in_sync="sync" design_ood="sync" place_ood="sync" route_ood="sync" xsi:schemaLocation="http://www.efinixinc.com/enf_proj enf_proj.xsd">\n${this.getDeviceInfo}\n${this.getDesignInfo}\n${this.getConstraintInfo}\n  <efx:sim_info />\n  <efx:misc_info />\n  <efx:ip_info />\n${syn}\n${pnr}\n${bit}\n${debug}\n${security}\n</efx:project>`;
+
+        fs.writeFileSync(this.efxPath, this.script);
 
     }
 
-    
+    public build() {
+        const efxPath = hdlPath.join(opeParam.workspacePath, `${opeParam.prjInfo.prjName}.xml`);
+        exec(`${this.updateEfinixPath()} ${efxPath} --flow compile --work_dir=${opeParam.workspacePath}/prj/efinix --output_dir ${opeParam.workspacePath}/prj/efinix/outflow --cleanup_work_dir work_pt`, (error, stdout, stderr) => {
+            console.log(error);
+            
+        })
+    }
+
+    public updateEfinixPath(): string {
+        const efinixBinFolder = vscode.workspace.getConfiguration('digital-ide.prj.efinix.install').get<string>('path') || '';
+        if (hdlFile.isDir(efinixBinFolder)) {
+            let efinixPath = hdlPath.join(hdlPath.toSlash(efinixBinFolder), 'efx_run');
+            if (opeParam.os === 'win32') {
+                efinixPath += '.bat';
+            }
+            return efinixPath;
+        } else {
+            // 没有设置 Efinix bin 文件夹，就认为用户已经把对应的路径加入环境变量了
+            return 'efx_run';
+        }
+    }
 }

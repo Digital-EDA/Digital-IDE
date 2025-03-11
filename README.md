@@ -4,7 +4,7 @@
 ## <code>Digital IDE</code> | All in one <code>vscode</code> plugin for Verilog/VHDL development
 
 
-[Document (New)](https://nc-ai.cn/) | [中文文档 (New)](https://nc-ai.cn/zh/) | [Bilibili Video](https://www.bilibili.com/video/BV1L19HYcEz6/?spm_id_from=333.1387.list.card_archive.click) | [Github](https://github.com/Digital-EDA/Digital-IDE)
+[Document (New)](https://nc-ai.cn/en/) | [中文文档 (New)](https://nc-ai.cn/) | [Bilibili Video](https://www.bilibili.com/video/BV1L19HYcEz6/?spm_id_from=333.1387.list.card_archive.click) | [Github](https://github.com/Digital-EDA/Digital-IDE)
 
 ![](https://img.shields.io/badge/version-0.4.2-purple)
 ![](https://img.shields.io/badge/Verilog-support-green)

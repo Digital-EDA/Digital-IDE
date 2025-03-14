@@ -16,14 +16,23 @@ import { t } from '../../i18n';
 import { HdlFileProjectType } from '../../hdlParser/common';
 import { integer } from 'vscode-languageclient';
 import { AnyARecord } from 'dns';
+import { interfaces } from 'mocha';
+import { readJSON } from '../../hdlFs/file';
+import { c } from 'tar';
 
 type ChainInfo = [number, number, number, number];
+
+interface efinixIO {
+    name: string;
+}
 
 export class EfinityOperation {
     prjScript: string;
     efxPath: string;
+    deviceName: string;
     constructor() {
         this.prjScript = '';
+        this.deviceName = '';
         this.efxPath = hdlPath.join(opeParam.workspacePath, `${opeParam.prjInfo.prjName.PL}.xml`);
     }
 
@@ -32,8 +41,10 @@ export class EfinityOperation {
 
         fs.writeFileSync(this.efxPath, this.prjScript);
 
-        hdlParam.getHdlModule(opeParam.firstSrcTopModule.path || '', opeParam.firstSrcTopModule.name);
+        const peri_xml = `<?xml version="1.0" encoding="UTF-8"?>
+<efxpt:design_db name="${opeParam.prjInfo.prjName.PL}" device_def="${this.deviceName}" location="${opeParam.workspacePath}" version="2023.2.307" db_version="20232999" xmlns:efxpt="http://www.efinixinc.com/peri_design_db" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.efinixinc.com/peri_design_db peri_design_db.xsd ">\n${this.getIODeviceConfig()}\n${this.getGPIOInfo()}\n${this.getPLLInfo()}\n${this.getOscInfo()}\n${this.getLVDSInfo()}\n${this.getJtagInfo()}\n${this.getMIPIInfo()}\n${this.getFlashInfo()}\n${this.getHBRAMConfig()}\n</efxpt:design_db>`;
 
+        fs.writeFileSync(hdlPath.join(opeParam.workspacePath, `${opeParam.prjInfo.prjName.PL}.peri.xml`), peri_xml);
     }
 
     public simulate() {
@@ -55,7 +66,8 @@ export class EfinityOperation {
     public build() {
         exec(`${this.updateEfinixPath()} ${this.efxPath} --flow compile --work_dir=${opeParam.workspacePath}/prj/efinix --output_dir ${opeParam.workspacePath}/prj/efinix/outflow --cleanup_work_dir work_pt`, (error, stdout, stderr) => {
             console.log(error);
-
+            console.log(stdout);
+            console.log(stderr);
         })
     }
 
@@ -97,6 +109,7 @@ export class EfinityOperation {
 
     private getDeviceInfo(device: string): string {
         const deviceInfo = device.split('-');
+        this.deviceName = deviceInfo[0];
         let family = 'Trion';
         if (device.slice(0, 2).toLowerCase() === 'ti') {
             family = 'Titanium';
@@ -104,7 +117,7 @@ export class EfinityOperation {
 
         return `  <efx:device_info>
     <efx:family name="${family}"/>
-    <efx:device name="${deviceInfo[0]}"/>
+    <efx:device name="${this.deviceName}"/>
     <efx:timing_model name="${deviceInfo[1]}"/>
   </efx:device_info>`;
     }
@@ -294,24 +307,71 @@ export class EfinityOperation {
     </efxpt:device_info>`
     }
 
-    private setCompInputGPIO(param:Record<string, string>): string {
-        return `    <efxpt:comp_gpio_info>
-        <efxpt:comp_gpio name="comp_gpio_inst1" block_def="COMP_GPIO0">
-            <efxpt:gen_pin>
-                <efxpt:pin name="comp_gpio_in" type_name="IN" is_bus="true"/>
-                <efxpt:pin name="comp_gpio_out" type_name="OUT" is_bus="true"/>
-                <efxpt:pin name="comp_gpio_oe" type_name="OE" is_bus="true"/>
-            </efxpt:gen_pin>
-        </efxpt:comp_gpio>`
+    private getGPIOInfo(): string {
+        const topModule = hdlParam.getHdlModule(opeParam.firstSrcTopModule.path || '', opeParam.firstSrcTopModule.name);
+
+        if (!topModule) {
+            return '';
+        }
+
+        const edc = readJSON(hdlPath.join(opeParam.prjInfo.arch.hardware.data, 'edc.json'));
+
+        let compGPIO = '';
+        for (let index = 0; index < topModule.ports.length; index++) {
+            const port = topModule.ports[index];
+            if (port.type === 'input') {
+                compGPIO += setCompInputGPIO(port.name, edc);
+            } else if (port.type === 'output') {
+                compGPIO += setCompOutputGPIO(port.name, edc);
+            }
+        }
+
+        return `    <efxpt:gpio_info>\n${compGPIO}    </efxpt:gpio_info>`;
+
+        function setCompOutputGPIO(name:string, param:Record<string, any>) {
+            return `        <efxpt:comp_gpio name="${name}" gpio_def="${param[name].type}" mode="output" bus_name="" io_standard="${param[name].iostd}">
+            <efxpt:output_config name="${name}" name_ddio_lo="" register_option="none" clock_name="" is_clock_inverted="false" is_slew_rate="false" tied_option="none" ddio_type="none" delay="0" is_serial="false" drive_strength="4" fastclk_name=""/>
+        </efxpt:comp_gpio>\n`;
+        }
+
+        function setCompInputGPIO(name:string, param:Record<string, any>): string {
+            return `        <efxpt:comp_gpio name="${name}" gpio_def="${param[name].type}" mode="input" bus_name="" io_standard="${param[name].iostd}">
+            <efxpt:input_config name="${name}" name_ddio_lo="" conn_type="normal" is_register="false" clock_name="" is_clock_inverted="false" pull_option="none" is_schmitt_trigger="false" ddio_type="none" is_bus_hold="false" delay="0" is_serial="false" is_dyn_delay="false" fastclk_name="" pullup_ena_name="${name}_PULL_UP_ENA" dyn_delay_en_name="${name}_DLY_ENA" dyn_delay_reset_name="${name}_DLY_RST" dyn_delay_ctrl_name="${name}_DLY_CTRL" clkmux_buf_name=""/>
+        </efxpt:comp_gpio>\n`;
+        }
+    }
+
+    private getPLLInfo(): string {
+        return `    <efxpt:pll_info/>`;
+    }
+
+    private getOscInfo(): string {
+        return `    <efxpt:osc_info/>`;
+    }
+
+    private getLVDSInfo(): string {
+        return `    <efxpt:lvds_info/>`;
+    }
+
+    private getJtagInfo(): string {
+        return `    <efxpt:jtag_info/>`;
+    }
+
+    private getMIPIInfo(): string {
+        return `    <efxpt:mipi_dphy_info/>`;
+    }
+
+    private getFlashInfo(): string {
+        return `    <efxpt:spi_flash_info/>`;
     }
 
     private getHBRAMConfig(): string {
         return `    <efxpt:hyper_ram_info>
-        <efxpt:hyper_ram name="hyper_ram_inst1" block_def="HYPER_RAM0">
+        <efxpt:hyper_ram name="hbc" block_def="HYPER_RAM0">
             <efxpt:gen_pin>
-                <efxpt:pin name="" type_name="CLK" is_bus="false" is_clk="true" is_clk_invert="false"/>
-                <efxpt:pin name="" type_name="CLK90" is_bus="false" is_clk="true" is_clk_invert="false"/>
-                <efxpt:pin name="" type_name="CLKCAL" is_bus="false" is_clk="true" is_clk_invert="false"/>
+                <efxpt:pin name="ram_clk" type_name="CLK" is_bus="false" is_clk="true" is_clk_invert="false"/>
+                <efxpt:pin name="ramclk90" type_name="CLK90" is_bus="false" is_clk="true" is_clk_invert="false"/>
+                <efxpt:pin name="ram_clk_cal" type_name="CLKCAL" is_bus="false" is_clk="true" is_clk_invert="false"/>
                 <efxpt:pin name="hbc_rst_n" type_name="RST_N" is_bus="false"/>
                 <efxpt:pin name="hbc_cs_n" type_name="CS_N" is_bus="false"/>
                 <efxpt:pin name="hbc_ck_p_HI" type_name="CK_P_HI" is_bus="false"/>

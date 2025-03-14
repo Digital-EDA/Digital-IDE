@@ -286,8 +286,13 @@ class XilinxOperation {
         const plName = opeParam.prjInfo.prjName.PL;
         const targetPath = fspath.dirname(opeParam.prjInfo.arch.hardware.src);
 
-        const sourceIpPath = `${workspacePath}/prj/xilinx/${plName}.srcs/sources_1/ip`;
-        const sourceBdPath = `${workspacePath}/prj/xilinx/${plName}.srcs/sources_1/bd`;
+        let type = 'srcs';
+        if (hdlDir.isDir(`${workspacePath}/prj/xilinx/${plName}.gen`)) {
+            type = 'gen'
+        }
+
+        const sourceIpPath = `${workspacePath}/prj/xilinx/${plName}.${type}/sources_1/ip`;
+        const sourceBdPath = `${workspacePath}/prj/xilinx/${plName}.${type}/sources_1/bd`;
 
         hdlDir.mvdir(sourceIpPath, targetPath, true);
         HardwareOutput.report("move dir from " + sourceIpPath + " to " + targetPath);
@@ -1081,7 +1086,6 @@ const tools = {
             filePath => filePath.endsWith('.elf') && !filePath.endsWith('fsbl.elf'));
     }
 };
-
 
 export {
     XilinxOperation,

@@ -398,10 +398,13 @@ class PrjManage {
             workspace: string,
             plname: string
         ) {
-            const xilinxSrcsPath = hdlPath.join(workspace, plname + '.srcs');
-            const standardIpPath = hdlPath.join(workspace, 'user', 'ip');
+            let standardIpPath = hdlPath.join(workspace, 'user', 'ip');
+            let xilinxSrcsPath = hdlPath.join(workspace, plname + '.gen');
             if (!fs.existsSync(xilinxSrcsPath)) {
-                return;
+                xilinxSrcsPath = hdlPath.join(workspace, plname + '.srcs');
+                if (!fs.existsSync(xilinxSrcsPath)) {
+                    return;
+                }
             }
             const sourceNames = fs.readdirSync(xilinxSrcsPath).filter(filename => filename.startsWith(matchPrefix));
             for (const sn of sourceNames) {

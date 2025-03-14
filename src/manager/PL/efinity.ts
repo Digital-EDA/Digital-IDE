@@ -147,7 +147,7 @@ export class EfinityOperation {
 
     private getSynthInfo(): string {
         return `  <efx:synthesis tool_name="efx_map">
-    <efx:param name="work_dir" value="work_syn" value_type="e_string"/>
+    <efx:param name="work_dir" value="${opeParam.prjInfo.prjPath}/efinix/work_syn" value_type="e_string"/>
     <efx:param name="write_efx_verilog" value="on" value_type="e_bool"/>
     <efx:param name="mode" value="speed" value_type="e_option"/>
     <efx:param name="max_ram" value="-1" value_type="e_integer"/>
@@ -183,7 +183,7 @@ export class EfinityOperation {
 
     private getPnRInfo(): string {
         return `  <efx:place_and_route tool_name="efx_pnr">
-    <efx:param name="work_dir" value="work_pnr" value_type="e_string"/>
+    <efx:param name="work_dir" value="${opeParam.prjInfo.prjPath}/efinix/work_pnr" value_type="e_string"/>
     <efx:param name="verbose" value="off" value_type="e_bool"/>
     <efx:param name="load_delaym" value="on" value_type="e_bool"/>
     <efx:param name="optimization_level" value="NULL" value_type="e_option"/>
@@ -196,7 +196,7 @@ export class EfinityOperation {
     }
 
     private getBitstreamInfo(): string {
-        return `  <efx:bitstream_generation tool_name="efx_pgm">
+        return `  <efx:bitstream_generation tool_name="${opeParam.prjInfo.prjPath}/efinix/efx_pgm">
     <efx:param name="mode" value="active" value_type="e_option"/>
     <efx:param name="width" value="1" value_type="e_option"/>
     <efx:param name="enable_roms" value="smart" value_type="e_option"/>
@@ -220,7 +220,7 @@ export class EfinityOperation {
 
     private getDebugInfo(): string {
         return `  <efx:debugger>
-    <efx:param name="work_dir" value="work_dbg" value_type="e_string"/>
+    <efx:param name="work_dir" value="${opeParam.prjInfo.prjPath}/efinix/work_dbg" value_type="e_string"/>
     <efx:param name="auto_instantiation" value="off" value_type="e_bool"/>
     <efx:param name="profile" value="NONE" value_type="e_string"/>
   </efx:debugger>`;

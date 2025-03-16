@@ -398,27 +398,44 @@ class PrjManage {
             workspace: string,
             plname: string
         ) {
-            let standardIpPath = hdlPath.join(workspace, 'user', 'ip');
-            let xilinxSrcsPath = hdlPath.join(workspace, plname + '.gen');
-            if (!fs.existsSync(xilinxSrcsPath)) {
-                xilinxSrcsPath = hdlPath.join(workspace, plname + '.srcs');
-                if (!fs.existsSync(xilinxSrcsPath)) {
-                    return;
+            const standardIpPath = hdlPath.join(workspace, 'user', 'ip');
+            
+            if (hdlDir.isDir(hdlPath.join(workspace, plname + '.gen'))) {                
+                const xilinxSrcsPath = hdlPath.join(workspace, plname + '.gen');
+    
+                const sourceNames = fs.readdirSync(xilinxSrcsPath).filter(filename => filename.startsWith(matchPrefix));
+                for (const sn of sourceNames) {
+                    const ipPath = hdlPath.join(xilinxSrcsPath, sn, 'ip');
+    
+                    if (!hdlFile.isDir(ipPath)) {
+                        continue;
+                    }
+    
+                    for (const ipname of fs.readdirSync(ipPath)) {
+                        const sourcePath = hdlPath.join(ipPath, ipname);
+                        hdlDir.mvdir(sourcePath, standardIpPath, true);
+                    }
+                    hdlDir.rmdir(ipPath);
                 }
             }
-            const sourceNames = fs.readdirSync(xilinxSrcsPath).filter(filename => filename.startsWith(matchPrefix));
-            for (const sn of sourceNames) {
-                const ipPath = hdlPath.join(xilinxSrcsPath, sn, 'ip');
 
-                if (!hdlFile.isDir(ipPath)) {
-                    continue;
+            if (hdlDir.isDir(hdlPath.join(workspace, plname + '.srcs'))) {                
+                const xilinxSrcsPath = hdlPath.join(workspace, plname + '.srcs');
+    
+                const sourceNames = fs.readdirSync(xilinxSrcsPath).filter(filename => filename.startsWith(matchPrefix));
+                for (const sn of sourceNames) {
+                    const ipPath = hdlPath.join(xilinxSrcsPath, sn, 'ip');
+    
+                    if (!hdlFile.isDir(ipPath)) {
+                        continue;
+                    }
+    
+                    for (const ipname of fs.readdirSync(ipPath)) {
+                        const sourcePath = hdlPath.join(ipPath, ipname);
+                        hdlDir.mvdir(sourcePath, standardIpPath, true);
+                    }
+                    hdlDir.rmdir(ipPath);
                 }
-
-                for (const ipname of fs.readdirSync(ipPath)) {
-                    const sourcePath = hdlPath.join(ipPath, ipname);
-                    hdlDir.mvdir(sourcePath, standardIpPath, true);
-                }
-                hdlDir.rmdir(ipPath);
             }
         }
 

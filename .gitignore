@@ -1,15 +1,9 @@
-<<<<<<< HEAD
 library
 node_modules
 out
 ./*.log
 ./*.str
 dist
-=======
-out
-dist
-node_modules
->>>>>>> 199b7a8af3ea01baea4b20c89273a490dc0dc9d2
 script/__pycache__
 .vscode-test/
 *.vsix
@@ -17,7 +11,13 @@ parser_stuck.v
 out-js/
 *.pyc
 *.pyd
+*.zip
 resources/hdlParser/parser.js
 resources/hdlParser/parser.wasm
 resources/dide-viewer/view/*
 resources/dide-lsp/server/*
+resources/dide-lsp/static/*
+resources/dide-netlist/static/*
+resources/dide-netlist/view/*
+scripts/update-icon.py
+scripts/vscode-package.py

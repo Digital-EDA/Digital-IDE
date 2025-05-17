@@ -1,10 +1,15 @@
 {  
+    "clock": {
+        "prefix": "create_pll",
+        "body": [
+            "create_clock -period 20.000 [get_ports clock]",
+            "set_input_jitter [get_clocks -of_objects [get_ports clock]] 0.200",
+            "set_property PHASESHIFT_MODE WAVEFORM [get_cells -hierarchical *adv*]"
+        ]
+    },
+
     "ILA_CORE": {
-<<<<<<< HEAD
-        "prefix": "ila",
-=======
         "prefix": "create_ILA_CORE",
->>>>>>> 199b7a8af3ea01baea4b20c89273a490dc0dc9d2
         "body": [
             "set_property C_CLK_INPUT_FREQ_HZ  ${1:100000000} [get_debug_cores dbg_hub]",
             "set_property C_ENABLE_CLK_DIVIDER false     [get_debug_cores dbg_hub]",
@@ -12,12 +17,9 @@
             "connect_debug_port dbg_hub/clk              [get_nets [list CLK_Global_u/clk_out${2:3}]]"
         ]
     },
+
     "Debug_CORE": {
-<<<<<<< HEAD
-        "prefix": "debug",
-=======
         "prefix": "create_Debug_CORE",
->>>>>>> 199b7a8af3ea01baea4b20c89273a490dc0dc9d2
         "body": [
             "create_debug_core u_ila_${1:0} ila",
             "set_property ALL_PROBE_SAME_MU true  [get_debug_cores u_ila_$1]",
@@ -32,6 +34,7 @@
             "connect_debug_port u_ila_$1/clk       [get_nets [list CLK_Global_u/clk_out${3:3}]]"
         ]
     },
+
     "Debug_add_port": {
         "prefix": "add_port",
         "body": [

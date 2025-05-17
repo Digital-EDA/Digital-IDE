@@ -6,6 +6,5 @@
     "soc": {
         "core": "none"
     },
-    "enableShowLog": false,
     "device": "none"
 }

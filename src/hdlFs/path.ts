@@ -1,13 +1,14 @@
 import * as fspath from 'path';
 import * as fs from 'fs';
+import * as os from 'os';
 
-import { AbsPath, RelPath } from '../global';
+import { AbsPath, opeParam, RelPath } from '../global';
 
 /**
  * @param path
  * @returns 
  */
-function toSlash(path: AbsPath | RelPath): AbsPath | RelPath {
+export function toSlash(path: AbsPath | RelPath): AbsPath | RelPath {
     return path.replace(/\\/g,"\/");
 }
 
@@ -17,7 +18,7 @@ function toSlash(path: AbsPath | RelPath): AbsPath | RelPath {
  * @param relPath relative path in curPath
  * @returns 
  */
-function rel2abs(curPath: AbsPath, relPath: RelPath): AbsPath {
+export function rel2abs(curPath: AbsPath, relPath: RelPath): AbsPath {
     if (fspath.isAbsolute(relPath)) {
         return relPath;
     }
@@ -27,7 +28,7 @@ function rel2abs(curPath: AbsPath, relPath: RelPath): AbsPath {
 }
 
 
-function relative(from: AbsPath, to: AbsPath): RelPath {
+export function relative(from: AbsPath, to: AbsPath): RelPath {
     let rel = fspath.relative(from, to);
     if (!rel.startsWith('.') && !rel.startsWith('./')) {
         rel = './' + rel;
@@ -40,7 +41,7 @@ function relative(from: AbsPath, to: AbsPath): RelPath {
  * @param paths 
  * @returns 
  */
-function join(...paths: string[]): AbsPath | RelPath {
+export function join(...paths: string[]): AbsPath | RelPath {
     return paths.join('/');
 }
 
@@ -50,7 +51,7 @@ function join(...paths: string[]): AbsPath | RelPath {
  * @param paths 
  * @returns 
  */
-function resolve(...paths: string[]): AbsPath | RelPath {
+export function resolve(...paths: string[]): AbsPath | RelPath {
     const absPath = fspath.resolve(...paths);
     return toSlash(absPath);
 }
@@ -63,7 +64,7 @@ function resolve(...paths: string[]): AbsPath | RelPath {
  * @returns reserveSplitor=true  src/file.txt -> .txt
  *          reserveSplitor=false src/file.txt -> txt
  */
-function extname(path: AbsPath | RelPath, reserveSplitor: boolean = true): string {
+export function extname(path: AbsPath | RelPath, reserveSplitor: boolean = true): string {
     let ext = fspath.extname(path).toLowerCase();
     if (!reserveSplitor && ext.startsWith('.')) {
         ext = ext.substring(1);
@@ -71,7 +72,7 @@ function extname(path: AbsPath | RelPath, reserveSplitor: boolean = true): strin
     return ext;
 }
 
-function basename(path: AbsPath | RelPath) {
+export function basename(path: AbsPath | RelPath) {
     return fspath.basename(path, extname(path, true));
 }
 
@@ -81,26 +82,30 @@ function basename(path: AbsPath | RelPath) {
  * @param path 
  * @returns src/file.txt -> file
  */
-function filename(path: AbsPath | RelPath): string {
+export function filename(path: AbsPath | RelPath): string {
     const ext = extname(path, true);
     return fspath.basename(path, ext);
 }
 
-function exist(path: AbsPath | undefined): boolean {
+export function exist(path: AbsPath | undefined): boolean {
     if (!path) {
         return false;
     }
     return fs.existsSync(path);
 }
 
-export {
-    toSlash,
-    rel2abs,
-    relative,
-    join,
-    resolve,
-    filename,
-    extname,
-    basename,
-    exist
-};
+export function toEscapePath(path: AbsPath): AbsPath {
+    if (os.platform() === 'win32') {
+        return path.startsWith('/') ? toSlash(path.slice(1)) : toSlash(path);
+    } else {
+        return toSlash(path);
+    }
+}
+
+export function toPureRelativePath(path: RelPath): RelPath {
+        
+    if (path.startsWith('./') || path.startsWith('.\\')) {
+        return path.slice(2);
+    }
+    return path;
+}

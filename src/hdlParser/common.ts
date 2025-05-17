@@ -2,6 +2,8 @@
 import * as vscode from 'vscode';
 
 import { AbsPath, RelPath } from '../global';
+import { HdlLangID } from '../global/enum';
+import { DoFastFileType } from '../global/lsp';
 
 interface Position {
     // row/line of the cursor, index from 0
@@ -24,18 +26,33 @@ interface Range {
 enum HdlModulePortType {
     Inout = 'inout', 
     Output = 'output', 
-    Input = 'input', 
+    Input = 'input',
+    VhdlInput = 'in',
+    VhdlOutput = 'out',
     Unknown = 'unknown'
 };
 
 enum HdlModuleParamType {LocalParam, Parameter, Unknown};
 
-enum HdlFileType {
+/**
+ * @description 用于描述当前的这个 HDL 文件是会被系统视为哪一种进行处理
+ * - Src: src 目录文件
+ * - Sim: sim 目录文件
+ * - LocalLib: 局部库文件
+ * - RemoteLib: 全局库文件
+ * - IP: IP 核
+ * - Primitive: 原语
+ */
+enum HdlFileProjectType {
     Src = 'src', 
     Sim = 'sim',
     LocalLib = 'local_lib',
-    RemoteLib = 'remote_lib' 
+    RemoteLib = 'remote_lib',
+    IP = 'ip',
+    Primitive = 'primitive',
+    Unknown = 'unknown'
 };
+
 enum InstModPathStatus {Current, Include, Others, Unknown};
 // enum SymbolType {
 //     Module = 'module',
@@ -157,6 +174,7 @@ interface RawHdlInstance {
 
 interface RawHdlModule {
     name: string
+    archName: string
     params: HdlModuleParam[]
     ports: HdlModulePort[]
     instances: RawHdlInstance[]
@@ -191,6 +209,19 @@ interface CommentResult {
     length: number
 }
 
+interface Fast {
+    content: RawHdlModule[]
+    languageId: string
+    macro: Macro,
+    fileType: DoFastFileType
+}
+
+interface All {
+    content: RawSymbol[]
+    languageId: HdlLangID
+    macro: Macro
+    error: Error[]
+}
 
 export {
     Position,
@@ -198,7 +229,7 @@ export {
     InstRange,
     HdlModulePortType,
     HdlModuleParamType,
-    HdlFileType,
+    HdlFileProjectType,
     InstModPathStatus,
     Error,
     Define,
@@ -212,5 +243,7 @@ export {
     HdlDependence,
     RawSymbol,
     CommentResult,
-    makeVscodePosition
+    makeVscodePosition,
+    Fast,
+    All
 };

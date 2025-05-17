@@ -4,25 +4,22 @@ import * as assert from 'assert';
 import { prjManage } from './prj';
 import { pickLibrary } from './libPick';
 
-function registerManagerCommands(context: vscode.ExtensionContext) {
+export function registerManagerCommands(context: vscode.ExtensionContext) {
     // make ps and ps have been prepared
     assert(prjManage.pl, 'pl is undefined');
-    // assert(prjManage.ps, 'ps is undefined');
+    assert(prjManage.ps, 'ps is undefined');
 
     const plManage = prjManage.pl;
-    // const psManage = prjManage.ps;
-
-    vscode.commands.registerCommand('digital-ide.property-json.generate', prjManage.generatePropertyJson);
-    vscode.commands.registerCommand('digital-ide.property-json.overwrite', prjManage.overwritePropertyJson);    
+    const psManage = prjManage.ps;
 
     // libpick 
     vscode.commands.registerCommand('digital-ide.pickLibrary', pickLibrary);
 
     // ps toolbox commands (soft tool in treeView)
     // TODO : finish digital-ide.soft.download
-    // vscode.commands.registerCommand('digital-ide.soft.launch', () => psManage.launch());
-    // vscode.commands.registerCommand('digital-ide.soft.build', () => psManage.build());
-    // vscode.commands.registerCommand('digital-ide.soft.download', () => psManage.program());
+    vscode.commands.registerCommand('digital-ide.soft.launch', () => psManage.launch());
+    vscode.commands.registerCommand('digital-ide.soft.build', () => psManage.build());
+    vscode.commands.registerCommand('digital-ide.soft.download', () => psManage.program());
 
     // pl functional commands
     vscode.commands.registerCommand('digital-ide.pl.setSrcTop', (item) => plManage.setSrcTop(item));
@@ -48,6 +45,5 @@ function registerManagerCommands(context: vscode.ExtensionContext) {
 }
 
 export {
-    prjManage,
-    registerManagerCommands
+    prjManage
 };

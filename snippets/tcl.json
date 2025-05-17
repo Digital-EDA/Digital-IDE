@@ -8,6 +8,7 @@
 		],
 		"description": "For Loop"
 	},
+
 	"foreach": {
 		"prefix": "foreach",
 		"body": [
@@ -17,6 +18,7 @@
 		],
 		"description": "Foreach Loop"
 	},
+
 	"if": {
 		"prefix": "if",
 		"body": [
@@ -26,6 +28,7 @@
 		],
 		"description": "If Condition"
 	},
+
 	"elseif": {
 		"prefix": "elseif",
 		"body": [
@@ -35,6 +38,7 @@
 		],
 		"description": "ElseIf Condition"
 	},
+
 	"else": {
 		"prefix": "else",
 		"body": [
@@ -44,6 +48,7 @@
 		],
 		"description": "Else Block"
 	},
+
 	"proc": {
 		"prefix": "proc",
 		"body": [
@@ -53,6 +58,7 @@
 		],
 		"description": "Proc Block"
 	},
+
 	"while": {
 		"prefix": "while",
 		"body": [
@@ -62,6 +68,7 @@
 		],
 		"description": "While Loop"
 	},
+
 	"catch": {
 		"prefix": "catch",
 		"body": [
@@ -69,6 +76,7 @@
 		],
 		"description": "Catch Block"
 	},
+
 	"try": {
 		"prefix": "try",
 		"body": [
@@ -80,6 +88,7 @@
 		],
 		"description": "Try Block"
 	},
+
 	"switch": {
 		"prefix": "switch",
 		"body": [
@@ -90,6 +99,7 @@
 		],
 		"description": "Switch Block"
 	},
+
 	"oo::class create": {
 		"prefix": "oo::class create",
 		"body": [
@@ -105,6 +115,7 @@
 		],
 		"description": "Class Create"
 	},
+
 	"tk_chooseDirectory": {
 		"prefix": "tk_chooseDirectory",
 		"body": [
@@ -112,6 +123,7 @@
 		],
 		"description": "Choose Directory"
 	},
+
 	"tk_getOpenFile": {
 		"prefix": "tk_getOpenFile",
 		"body": [
@@ -122,6 +134,7 @@
 		],
 		"description": "Open File Dialog"
 	},
+
 	"tk_getSaveFile": {
 		"prefix": "tk_getSaveFile",
 		"body": [
@@ -132,6 +145,7 @@
 		],
 		"description": "Save File Dialog"
 	},
+
 	"tk_messageBox": {
 		"prefix": "tk_messageBox",
 		"body": [
@@ -139,6 +153,7 @@
 		],
 		"description": "Message Box"
 	},
+
     "set_property": {
 		"prefix": "set_property",
         "body": [
@@ -146,18 +161,21 @@
         ],
         "description": "set property"
     },
+
     "create_clock": {
 		"prefix": "create_clock",
         "body": [
             "create_clock ${1:signal_name} ${2:clock_name} ${3:frequency} ${4:uncertainty}"
         ]
     },
+
     "set_initial_state": {
         "prefix": "set_initial_state",
         "body": [
             "set_initial_5state ${1:initial_state}"
         ]
     },
+    
     "connect_port": {
         "prefix": "connect_port",
         "body": [

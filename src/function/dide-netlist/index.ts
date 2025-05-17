@@ -120,10 +120,6 @@ async function generateFilelist(path: AbsPath): Promise<AbsPath[]> {
     pathset.add(path);
     
     const filelist = [...pathset.files];
-
-    console.log(filelist);
-    console.log(opeParam.prjInfo.prjPath);
-
     return filelist;
 }
 

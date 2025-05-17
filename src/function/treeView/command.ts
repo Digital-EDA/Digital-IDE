@@ -245,14 +245,27 @@ export async function clean() {
     const plName = opeParam.prjInfo.prjName.PL;
     const targetPath = fspath.dirname(opeParam.prjInfo.arch.hardware.src);
 
-    const sourceIpPath = `${workspacePath}/prj/xilinx/${plName}.srcs/sources_1/ip`;
-    const sourceBdPath = `${workspacePath}/prj/xilinx/${plName}.srcs/sources_1/bd`;
+    if (hdlDir.isDir(`${workspacePath}/prj/xilinx/${plName}.gen`)) {
+        const sourceIpPath = `${workspacePath}/prj/xilinx/${plName}.gen/sources_1/ip`;
+        const sourceBdPath = `${workspacePath}/prj/xilinx/${plName}.gen/sources_1/bd`;
 
-    hdlDir.mvdir(sourceIpPath, targetPath, true);
-    MainOutput.report("move dir from " + sourceIpPath + " to " + targetPath);
+        hdlDir.mvdir(sourceIpPath, targetPath, true);
+        MainOutput.report("move dir from " + sourceIpPath + " to " + targetPath);
 
-    hdlDir.mvdir(sourceBdPath, targetPath, true);
-    MainOutput.report("move dir from " + sourceBdPath + " to " + targetPath);
+        hdlDir.mvdir(sourceBdPath, targetPath, true);
+        MainOutput.report("move dir from " + sourceBdPath + " to " + targetPath);
+    }
+
+    if (hdlDir.isDir(`${workspacePath}/prj/xilinx/${plName}.srcs`)) {
+        const sourceIpPath = `${workspacePath}/prj/xilinx/${plName}.srcs/sources_1/ip`;
+        const sourceBdPath = `${workspacePath}/prj/xilinx/${plName}.srcs/sources_1/bd`;
+
+        hdlDir.mvdir(sourceIpPath, targetPath, true);
+        MainOutput.report("move dir from " + sourceIpPath + " to " + targetPath);
+
+        hdlDir.mvdir(sourceBdPath, targetPath, true);
+        MainOutput.report("move dir from " + sourceBdPath + " to " + targetPath);
+    }
             
     if (prjPath !== opeParam.workspacePath) {
         hdlDir.rmdir(prjPath);

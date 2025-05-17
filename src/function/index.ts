@@ -2,13 +2,13 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 
 import * as hdlDoc from './dide-doc';
+import { makeDocWebview } from './dide-doc/html';
 import * as sim from './sim';
 import * as treeView from './treeView';
 
 import { tclCompletionProvider } from './lsp/completion/tcl';
 import * as lspFormatter from '../../resources/formatter';
 import * as lspTranslator from '../../resources/translator';
-
 import * as tool from './tool';
 
 // special function
@@ -27,7 +27,7 @@ function registerDocumentation(context: vscode.ExtensionContext) {
             // 展示 webview
             item.panel.reveal(vscode.ViewColumn.Two);
         } else {
-            const panel = await hdlDoc.makeDocWebview(uri, context);
+            const panel = await makeDocWebview(uri, context);
             // TODO: 注册文件变动监听
             const fileChangeDisposer = vscode.window.onDidChangeActiveTextEditor(async event => {
                 // const client = LspClient.DigitalIDE;
@@ -46,7 +46,7 @@ function registerDocumentation(context: vscode.ExtensionContext) {
                 // }
             });
             hdlDoc.docManager.set(standardPath, { panel, fileChangeDisposer });
-            panel.onDidDispose(event => {
+            panel.onDidDispose(() => {
                 hdlDoc.docManager.delete(standardPath);
                 fileChangeDisposer.dispose();
             });
@@ -73,7 +73,7 @@ function registerFunctionCommands(context: vscode.ExtensionContext) {
 
 function registerTreeViewDataProvider(context: vscode.ExtensionContext) {
     vscode.window.registerTreeDataProvider('digital-ide-treeView-hardware', treeView.hardwareTreeProvider);
-    // vscode.window.registerTreeDataProvider('digital-ide-treeView-software', treeView.softwareTreeProvider);
+    vscode.window.registerTreeDataProvider('digital-ide-treeView-software', treeView.softwareTreeProvider);
     
     vscode.window.registerTreeDataProvider('digital-ide-treeView-arch', treeView.moduleTreeProvider);
     // vscode.window.registerTreeDataProvider('digital-ide-treeView-tool', treeView.toolTreeProvider);

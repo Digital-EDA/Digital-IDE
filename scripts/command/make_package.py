@@ -64,7 +64,7 @@ def modify_vsix():
     os.remove(dist_path)
 
     # move public
-    # copy_dir('./resources/public', os.path.join(extract_folder, 'extension', 'resources', 'public'))
+    copy_dir('./out-js/function/dide-netlist', os.path.join(extract_folder, 'extension', 'out', 'function', 'dide-netlist'))
 
     # webview
     copy_dir('./resources/dide-netlist/view', os.path.join(extract_folder, 'extension', 'resources', 'dide-netlist', 'view'))
@@ -95,7 +95,7 @@ def install_extension():
     os.system('code --install-extension ' + vsix_path)
 
 pipe = CommandPipe()
-pipe.add_command('uninstall original extension', 'code --uninstall-extension sterben.fpga-support')
+# pipe.add_command('uninstall original extension', 'code --uninstall-extension sterben.fpga-support')
 pipe.add_command('compile typescript', 'tsc -p ./ --outDir out-js')
 pipe.add_command('webpack', 'webpack --mode production')
 pipe.add_command('make vsix installer', 'vsce package')

@@ -1,0 +1,59 @@
+/* .node rect,
+.node circle,
+.node ellipse,
+.node polygon,
+.node path {
+    fill: rgba(203, 129, 208, 0.1) !important;
+    stroke: rgb(203, 129, 208) !important;
+    stroke-width: 1px !important;
+} */
+
+.node rect {
+    rx: 5 !important;
+    ry: 5 !important;
+}
+
+.info {
+    fill: var(--main-color) !important;
+}
+
+.common-svg-container,
+.diagram-container {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 10px;
+    border-radius: .3em;
+    transition: var(--animation-3s);
+}
+
+.container-inner {
+    display: flex;
+    justify-content: center;
+    min-height: 200px;
+    max-height: 880px;
+    width: 100%;
+    height: 100%;
+    padding: 30px 10px;
+    overflow: hidden;
+}
+
+.vscode-dark .common-svg-container,
+.vscode-dark .diagram-container {
+    border: var(--dark-theme-border);
+}
+
+.vscode-dark .common-svg-container:hover,
+.vscode-dark .diagram-container:hover {
+    border: 1px solid var(--main-color);
+}
+
+.vscode-light .common-svg-container,
+.vscode-light .diagram-container {
+    border: var(--light-theme-border);
+}
+
+.vscode-light .common-svg-container:hover,
+.vscode-light .diagram-container:hover {
+    border: 1px solid var(--main-color);
+}

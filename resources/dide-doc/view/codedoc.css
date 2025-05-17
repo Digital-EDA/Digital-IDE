@@ -1,15 +1,138 @@
 :root {
-    --dark-main-color : #df733d;
-    --light-main-color : #cc6633;
+    --display-signal-info-height: 50px;
+    --signal-default-color: #4CAF50;
+    --main-color: #CB81DA;
+    --main-transplate-color: rgba(203, 129, 208, 0.1);
+    --main-hover-color: rgba(203, 129, 208, 0.5);
+    --shadow-color: rgba(139, 73, 225, 0.99);
+    --main-dark-color: #2D323B;
+    --main-light-color: var(--main-color);
+    --monospace-font: "Cascadia code", monospace;
+    --dark-theme-border: 1px solid rgba(242, 242, 242, 0.3);
+    --light-theme-border: 1px solid rgba(142, 142, 142, 0.3);
+
+    /* css 动画属性 */
+    --animation-7s: .7s cubic-bezier(0.23,1,0.32,1);
+    --animation-5s: .5s cubic-bezier(0.23,1,0.32,1);
+    --animation-3s: .35s cubic-bezier(0.23,1,0.32,1);
+    --gray-box-shadow-0: 0 0 8px 3px rgba(182, 181, 182, 0.9);
+    --gray-box-shadow-1: 0 0 5px 1px rgba(16, 16, 16, 0.5);
 }
 
+@font-face {
+    font-family: "Cascadia code";
+    src: url("./CascadiaCode.woff2");
+}
+
+html, body {
+    background-color: var(--background);
+    color: var(--foreground);
+}
+
+*::selection {
+    background-color: var(--main-hover-color) !important;
+}
+
+body::-webkit-scrollbar {
+    width: 0;
+}
+
+* hr {
+    border: none;
+    background-color: var(--main-color);
+    height: 1.5px;
+    width: 95%;
+}
+/* 
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--sidebar);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-background);
+    border-radius: .3em;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-hover);
+    border-radius: .3em;
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: var(--scrollbar-active);
+    border-radius: .3em;
+}
+
+::-webkit-scrollbar-button {
+    height: 0;
+    width: 0;
+}
+
+::-webkit-scrollbar-corner {
+    background: none;
+    display: none;
+} */
+
+.el-select__wrapper {
+    min-width: 100px;
+    padding: 13px;
+    color: var(--sidebar-item-text);
+}
+
+.el-select-group__title {
+    color: var(--main-color) !important;
+}
+
+.el-select__placeholder {
+    color: var(--sidebar-item-text) !important;
+}
+
+.el-select-dropdown {
+    background-color: var(--sidebar);
+    border: 1.0px solid var(--main-color);
+}
+
+.el-checkbox-button__inner {
+    font-size: 16px !important;
+}
+
+
+a {
+    color: var(--main-color);
+}
+
+.digital-ide-icon {
+    background-image: url(./icon.svg);
+    background-size: 100%;
+    height: 50px;
+    width: 50px;
+}
+
+.digital-ide-icon.big {
+    background-image: url(./icon.svg);
+    background-size: 100%;
+    height: 150px;
+    width: 150px;
+}
+
+.el-radio-button__original-radio:disabled:checked+.el-radio-button__inner {
+    opacity: 0.6;
+}
+
+.el-select__wrapper.is-disabled {
+    opacity: 0.6;
+    box-shadow: unset !important;
+}
 
 body {
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
     line-height: 1.5;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    font-size: 16px;
     line-height: 1.5;
     word-wrap: break-word;
     background-attachment: fixed;
@@ -37,8 +160,8 @@ a {
 }
 
 #write {
-    padding: 15px 30px;
-    width: 1000px;
+    padding: 10px;
+    width: 800px;
 }
 
 .ImgCaption {
@@ -435,27 +558,6 @@ li+li {
     margin-top: 0.25em;
 }
 
-/* 
-table {
-    display: block;
-    width: 100%;
-    overflow: auto;
-}
-
-table th {
-    font-weight: bold;
-}
-
-table th,
-table td {
-    padding: 6px 13px;
-    border: .7px solid;
-}
-
-table tr {
-    border-top: .7px solid;
-} */
-
 
 img {
     max-width: 100%;
@@ -479,16 +581,13 @@ img {
 
 #write table thead th {
     /* background-color: var(--dark-main-color); */
-    font-size: 20px;
     font-weight: bolder;
-    width: 100px;
-    text-align: center;
     vertical-align: middle;
     padding: 10px;
 }
 
 .vscode-dark table {
-    color: #F0F0F0;
+    color: var(--vscode-foreground);
 }
 
 .vscode-light table {
@@ -595,7 +694,7 @@ img {
     padding-left: 0;
     padding: 20px 0px;
     margin: 10px 0 10px 0px;
-    width: 105px;
+    width: 95px;
 }
 
 .diagram-container .arrow-wrapper {
@@ -672,6 +771,106 @@ img {
     background-color: #a09c9c;
 }
 
-#write table, th, td {
-    border: 1px solid var(--vscode-foreground) !important;
+.vscode-dark table, th, td {
+    border: 1px solid rgba(242, 242, 242, 0.1) !important;
+}
+
+.vscode-light table, th, td {
+    border: 1px solid rgba(142, 142, 142, 0.1) !important;
+}
+
+/* #write table, th {
+    border-bottom: 1px solid rgb(76, 55, 114) !important;
+} */
+
+/* #write table, td {
+    border-bottom: 1px solid rgba(242, 242, 242, 0.3) !important;
+} */
+
+#write table {
+    border-radius: .3em;
+}
+
+.left-align {
+    text-align: left;
+}
+
+.markdown-ext-block {
+    border-radius: .3em;
+    border: 1px solid var(--main-color);
+    background-color: var(--main-transplate-color);
+    padding: 3px 15px;
+    margin-bottom: 25px;
+}
+
+.markdown-ext-block .iconfont {
+    font-size: 1.2rem;
+    margin-right: .7rem;
+    color: var(--main-color);
+}
+
+.markdown-ext-block .title {
+    color: var(--main-color);
+    font-weight: 700;
+    font-size: 1.3rem;
+    letter-spacing: unset;
+    line-height: unset;
+}
+
+.markdown-ext-block .desc {
+    color: black;
+    font-weight: 700;
+    margin-left: .7rem;
+}
+
+.pre-dot::before {
+    content: "";
+    display: inline-table;
+    width: 12px;
+    height: 12px;
+    margin-right: 7px;
+    background-color: var(--main-color);
+    border-radius: .5em;
+}
+
+pre {
+    -webkit-overflow-scrolling: touch;
+    font-family: var(--monospace-font), "Courier New", monospace;
+    font-size: 0.9em;
+    margin: 0 0 2em 0;
+    position: relative;
+}
+
+
+pre > code {
+    display: block;
+    line-height: 1.75;
+    padding: 1em 1.5em;
+    overflow-x: auto;
+    border-top: rgba(230, 235, 237, 0) solid 35px;
+    background-color: var(--vscode-textCodeBlock-background);
+    border-radius: .3em;
+    font-family: var(--monospace-font), "Courier New", monospace;
+    font-size: 15px;
+    margin: 0 0.25em;
+    transition: all 0.3s linear;
+    -moz-transition: all 0.3s linear;
+    -webkit-transition: all 0.3s linear;
+}
+
+pre > code:before {
+    content: "";
+    background: var(--shadow-color);
+    box-shadow: 23px 0 #b6bdc9, 45px 0 #b6bdc9;
+    border-radius: 50%;
+    margin-top: -36px;
+    margin-left: -6px;
+    position: absolute;
+    height: 13px;
+    width: 13px;
+}
+
+
+.el-popper {
+    color: white !important;
 }

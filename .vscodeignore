@@ -2,6 +2,8 @@
 .gitignore
 **/.gitignore
 .git
+.github
+doc
 **/*.map
 .eslintrc.json
 dist
@@ -13,6 +15,7 @@ script
 resources/**/*.js
 resources/**/*.d.ts
 resources/**/*.wasm
+resources/**/*.tar.gz
 resources/dide-lsp/server
 tsconfig.json
 design

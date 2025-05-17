@@ -587,7 +587,7 @@ class PrjInfo implements PrjInfoMeta {
     }
 
     public get libCustomPath(): AbsPath {
-        const libPath = vscode.workspace.getConfiguration().get('digital-ide.lib.custom.path', this._workspacePath);
+        const libPath = join(vscode.workspace.getConfiguration().get('digital-ide.lib.custom.path', this._workspacePath));
         if (!fs.existsSync(libPath)) {                      
             return '';
         }

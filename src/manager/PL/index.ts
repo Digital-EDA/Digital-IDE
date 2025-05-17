@@ -16,6 +16,7 @@ import { PropertySchema } from '../../global/propertySchema';
 import { HardwareOutput, MainOutput, ReportType } from '../../global/outputChannel';
 import { AbsPath } from '../../global';
 import { t } from '../../i18n';
+import { EfinityOperation } from './efinity';
 
 class PlManage extends BaseManage {
     context: PLContext;
@@ -24,7 +25,7 @@ class PlManage extends BaseManage {
         super();
 
         this.context = { 
-            tool: opeParam.prjInfo.toolChain || 'xilinx', 
+            tool: opeParam.prjInfo.toolChain, 
             path: '',
             ope: new XilinxOperation(),
             terminal: undefined,
@@ -34,7 +35,10 @@ class PlManage extends BaseManage {
         const curToolChain = this.context.tool;
         if (curToolChain === ToolChainType.Xilinx) {
             this.context.path = this.context.ope.updateVivadoPath();
-        }       
+        } else if (curToolChain === ToolChainType.Efinity) {
+            this.context.ope = new EfinityOperation();
+            this.context.path = this.context.ope.updateEfinixPath();
+        }      
     }
 
     public launch() {
@@ -97,7 +101,6 @@ class PlManage extends BaseManage {
         HardwareOutput.show();        
         this.context.ope.exit(this.context);
     }
-
 
     public setSrcTop(item: ModuleDataItem) {        
         this.context.ope.setSrcTop(item.name, this.context);
@@ -214,7 +217,6 @@ class PlManage extends BaseManage {
         vscode.window.showInformationMessage(t('info.delDevice.del-success', device));
     }
 }
-
 
 export {
     PlManage,

@@ -4,48 +4,50 @@
 ## <code>Digital IDE</code> | All in one <code>vscode</code> plugin for Verilog/VHDL development
 
 
-[Document (New)](https://nc-ai.cn/en/) | [中文文档 (New)](https://nc-ai.cn/) | [Bilibili Video](https://www.bilibili.com/video/BV1t14y1179V/?spm_id_from=333.999.0.0)
+[Document (New)](https://nc-ai.cn/en/) | [中文文档 (New)](https://nc-ai.cn/) | [Bilibili Video](https://www.bilibili.com/video/BV1L19HYcEz6/?spm_id_from=333.1387.list.card_archive.click) | [Github](https://github.com/Digital-EDA/Digital-IDE)
 
-![](https://img.shields.io/badge/version-0.4.0-purple)
+![](https://img.shields.io/badge/version-0.4.2-purple)
 ![](https://img.shields.io/badge/Verilog-support-green)
 ![](https://img.shields.io/badge/VHDL-support-green)
 ![](https://img.shields.io/badge/SystemVerilog-support-green)
 
 </div>
 
-## 0.4.0 新增内容
+## Features
 
-**使用 Rust 重写全新的解析器与语言服务**：支持 verilog, vhdl, system verilog，性能更快，服务更加稳定。
+**Rewritten Parser and Language Services in Rust**: Supports Verilog, VHDL, and SystemVerilog with faster performance and more stable services.
 
 ![](./figures/lsp.png)
 
-**修缮内容的文档化**：提供更加直接快速的，关于当前 HDL 文件的基本信息和依赖信息。支持 wavedrom 风格的注释并支持将其渲染成可视化的图表。
+**Improved Documentation**: Provides more direct and faster access to basic information and dependencies of the current HDL file. Supports Wavedrom-style comments and renders them into visual diagrams.
 
 ![](./figures/doc.png)
 
-**新增内容的 Vcd 渲染器**：增加顶部工具栏、系统信标等组件；支持左侧面板选定信号的拖拽、分组等功能、支持按住 shift 连续选中一片信号并进行增加和删除操作；支持基于系统信标建立相对坐标系；顶部工具栏支持选中信号的显示数字的进制转换，渲染模态切换，支持将信号渲染为模拟量。
+**New VCD Renderer**: Added top toolbar, system beacon, and other components; supports drag-and-drop and grouping of selected signals in the left panel, as well as selecting multiple signals by holding Shift for addition and deletion; supports establishing a relative coordinate system based on system beacons; the top toolbar supports base conversion for displayed numbers of selected signals, rendering mode switching, and rendering signals as analog values.
 
 ![](./figures/vcd.png)
 
-
-- 全新的 Netlist 渲染器
+- Brand New Netlist Renderer
 
 ![](./figures/netlist.png)
 
-## Feature
-- 增加对于 vhdl 的 全面支持（文件树、LSP等）
-- 增加 verilog, vhdl, xdc, tcl, vvp, vcd 等语言或生成文件的工作区图标
-- 增加对于 vivado, modelsim, verilator 的支持，用户可以通过设置 `function.lsp.linter.vhdl.diagnostor`(设置 vhdl) 和 `function.lsp.linter.vlog.diagnostor`(设置 verilog) 来使用这些第三方工具的仿真和自动纠错。
-- 增加对于 TCL, XDC, VVP 等脚本的 LSP 和 语法高亮 支持。
+## New 0.4.2
+- Added comprehensive support for VHDL & SV (file tree, LSP, etc.)
+- Added workspace icons for languages or generated files such as Verilog, VHDL, XDC, TCL, VVP, VCD, etc.
+- Added support for Vivado, ModelSim, and Verilator. Users can use these third-party tools for simulation and auto-correction by setting `function.lsp.linter.vhdl.diagnostor` (for VHDL) and `function.lsp.linter.vlog.diagnostor` (for Verilog).
+- Added LSP and syntax highlighting support for scripts like TCL, XDC, and VVP.
 
-## Change
-- 将插件的工作状态显示在 vscode 下侧的状态栏上，利于用户了解目前的设置状态
-- 状态栏右下角现在可以看到目前选择的linter以及是否正常工作了
-- 优化项目配置目录
-- 优化自动补全的性能
+## Changes
+- Display the plugin's working status in the status bar at the bottom of VSCode, making it easier for users to understand the current settings.
+- The bottom-right corner of the status bar now shows the currently selected linter and whether it is functioning properly.
+- Optimized project configuration directory.
+- Improved auto-completion performance.
 
-## Bug 修复
-- 修复文档化 input, output 处注释无法正常显示到文档的 bug
-- 修复 iverilog 仿真功能中，将重复的路径作为编译参数编译的 bug
-- 修复 iverilog 仿真功能中，将 <code>`include</code> 加入或去除后，无法通过仿真编译的 bug （没有更新 instance 的 instModPathStatus 属性）
-- 修复其他已知 bug
+## Bug Fixes
+- Fixed a bug where comments on `input` and `output` were not displayed correctly in the documentation.
+- Fixed a bug in the Icarus Verilog simulation feature where duplicate paths were included as compilation parameters.
+- Fixed a bug in the Icarus Verilog simulation feature where adding or removing <code>include</code> would cause simulation compilation to fail (the `instModPathStatus` property of the instance was not updated).
+- Fixed simulation issues with Icarus Verilog version 12
+- Fixed the issue of being unable to import Block Design (BD) during Vivado project generation
+- Fixed the issue where libraries in custom mode could not be imported into Vivado
+- Fixed other known bugs.

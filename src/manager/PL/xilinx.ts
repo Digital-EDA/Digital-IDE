@@ -36,7 +36,7 @@ interface PLContext {
     // 第三方工具运行路径
     path? : string,
     // 操作类
-    ope : XilinxOperation,
+    ope : Record<string, any>
 };
 
 interface PLPrjInfo {
@@ -53,7 +53,6 @@ interface BootInfo {
     bitPath : AbsPath,
     fsblPath : AbsPath
 };
-
 
 /**
  * xilinx operation under PL
@@ -75,7 +74,7 @@ class XilinxOperation {
     }
 
     public get xbdPath(): AbsPath {
-        return hdlPath.join(opeParam.extensionPath, 'lib', 'xilinx', 'bd');
+        return hdlPath.join(opeParam.extensionPath, 'library', 'Factory', 'xilinx', 'bd');
     }
 
     public get xilinxPath(): AbsPath {
@@ -121,7 +120,6 @@ class XilinxOperation {
         };
     }
     
-
     public get topMod(): TopMod {
         return {
             src : opeParam.firstSrcTopModule.name,
@@ -136,7 +134,6 @@ class XilinxOperation {
             device : opeParam.prjInfo.device
         };
     }
-
 
     /**
      * xilinx下的launch运行，打开存在的工程或者再没有工程时进行新建
@@ -289,14 +286,27 @@ class XilinxOperation {
         const plName = opeParam.prjInfo.prjName.PL;
         const targetPath = fspath.dirname(opeParam.prjInfo.arch.hardware.src);
 
-        const sourceIpPath = `${workspacePath}/prj/xilinx/${plName}.srcs/sources_1/ip`;
-        const sourceBdPath = `${workspacePath}/prj/xilinx/${plName}.srcs/sources_1/bd`;
+        if (hdlDir.isDir(`${workspacePath}/prj/xilinx/${plName}.gen`)) {            
+            const sourceIpPath = `${workspacePath}/prj/xilinx/${plName}.gen/sources_1/ip`;
+            const sourceBdPath = `${workspacePath}/prj/xilinx/${plName}.gen/sources_1/bd`;
+    
+            hdlDir.mvdir(sourceIpPath, targetPath, true);
+            HardwareOutput.report("move dir from " + sourceIpPath + " to " + targetPath);
+    
+            hdlDir.mvdir(sourceBdPath, targetPath, true);
+            HardwareOutput.report("move dir from " + sourceBdPath + " to " + targetPath);
+        }
 
-        hdlDir.mvdir(sourceIpPath, targetPath, true);
-        HardwareOutput.report("move dir from " + sourceIpPath + " to " + targetPath);
-
-        hdlDir.mvdir(sourceBdPath, targetPath, true);
-        HardwareOutput.report("move dir from " + sourceBdPath + " to " + targetPath);
+        if (hdlDir.isDir(`${workspacePath}/prj/xilinx/${plName}.srcs`)) {            
+            const sourceIpPath = `${workspacePath}/prj/xilinx/${plName}.srcs/sources_1/ip`;
+            const sourceBdPath = `${workspacePath}/prj/xilinx/${plName}.srcs/sources_1/bd`;
+    
+            hdlDir.mvdir(sourceIpPath, targetPath, true);
+            HardwareOutput.report("move dir from " + sourceIpPath + " to " + targetPath);
+    
+            hdlDir.mvdir(sourceBdPath, targetPath, true);
+            HardwareOutput.report("move dir from " + sourceBdPath + " to " + targetPath);
+        }
 
         await this.closeAllWindows();
     }
@@ -355,19 +365,7 @@ class XilinxOperation {
                     vscode.window.showErrorMessage(`cp ${bd} failed, can not find ${bdSrcPath}`);
                 }
             }
-    
-            const bdPaths = [
-                hdlPath.join(this.HWPath, 'bd'),
-                hdlPath.join(this.prjInfo.path, this.prjInfo.name + '.src', 'sources_1', 'bd')
-            ];
 
-            hdlFile.pickFileRecursive(bdPaths, filePath => {
-                if (filePath.endsWith('.bd')) {
-                    scripts.push(`add_files ${filePath} -quiet`);
-                    scripts.push(`add_files ${fspath.dirname(filePath)}/hdl -quiet`);
-                }
-            });
-    
             if (bd) {
                 const loadBdPath = hdlPath.join(this.HWPath, 'bd', bd, bdFile);
                 scripts.push(`generate_target all [get_files ${loadBdPath}] -quiet`);
@@ -375,6 +373,18 @@ class XilinxOperation {
                 scripts.push(`open_bd_design ${loadBdPath} -quiet`);
             }
         }
+        
+        const bdPaths = [
+            hdlPath.join(this.HWPath, 'bd'),
+            hdlPath.join(this.prjInfo.path, this.prjInfo.name + '.src', 'sources_1', 'bd')
+        ];
+
+        hdlFile.pickFileRecursive(bdPaths, filePath => {
+            if (filePath.endsWith('.bd')) {
+                scripts.push(`add_files ${filePath} -quiet`);
+                scripts.push(`add_files ${fspath.dirname(filePath)}/hdl -quiet`);
+            }
+        });
 
         const mrefPath = hdlPath.join(this.HWPath, 'bd', 'mref');
         hdlFile.pickFileRecursive(mrefPath, filePath => {
@@ -620,7 +630,6 @@ file delete ${scriptPath} -force\n`;
 
         context.process?.stdin.write(cmd + '\n');
     }
-
 
     generateBit(context: PLContext) {
         vscode.window.showInformationMessage(
@@ -1085,7 +1094,6 @@ const tools = {
             filePath => filePath.endsWith('.elf') && !filePath.endsWith('fsbl.elf'));
     }
 };
-
 
 export {
     XilinxOperation,

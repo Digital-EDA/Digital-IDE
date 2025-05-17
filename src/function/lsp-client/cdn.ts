@@ -2,11 +2,13 @@ import axios from 'axios';
 import { performance } from 'perf_hooks';
 
 export function getLspFileName(version: string, signature: string) {
-    return `digital-lsp_${version}_${signature}.tar.gz`;
+    return `digital-lsp-${signature}.tar.gz`;
 }
 
-// const link1 = 'https://gitee.com/Digital-IDE/Digital-IDE/releases/download/0.4.0/digital-lsp_0.4.0_darwin_aarch64.tar.gz';
-// const link2 = 'https://github.com/Digital-EDA/Digital-IDE/releases/download/0.4.0/digital-lsp_0.4.0_darwin_aarch64.tar.gz';
+// const link1 = 'https://gitee.com/Digital-EDA/digital-lsp/releases/download/0.4.1/digital-lsp-aarch64-win.tar.gz';
+// const link2 = 'https://github.com/Digital-EDA/digital-lsp/releases/download/0.4.1/digital-lsp-aarch64-win.tar.gz';
+
+
 
 export function getGithubDownloadLink(signature: string, version: string): string {
     const filename = getLspFileName(version, signature);
@@ -15,7 +17,7 @@ export function getGithubDownloadLink(signature: string, version: string): strin
 
 export function getGiteeDownloadLink(signature: string, version: string): string {
     const filename = getLspFileName(version, signature);
-    return `https://gitee.com/Digital-IDE/Digital-IDE/releases/download/${version}/${filename}`;
+    return `https://gitee.com/Digital-EDA/Digital-IDE/releases/download/${version}/${filename}`;
 }
 
 function measureRequestTimecost(url: string, timeout: number = 5): Promise<number> {
@@ -52,8 +54,8 @@ function measureRequestTimecost(url: string, timeout: number = 5): Promise<numbe
 export async function chooseBestDownloadSource(signature: string, version: string, timeout: number = 3000) {
     const links = [
         // TODO: lsp update
-        getGithubDownloadLink(signature, '0.4.0'),
-        getGiteeDownloadLink(signature, '0.4.0')
+        getGithubDownloadLink(signature, '0.4.1'),
+        getGiteeDownloadLink(signature, '0.4.1')
     ];
     const pools: Promise<number>[] = [];
     for (const link of links) {

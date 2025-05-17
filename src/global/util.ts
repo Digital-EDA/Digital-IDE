@@ -3,7 +3,7 @@ import * as os from 'os';
 import * as vscode from 'vscode';
 import * as childProcess from 'child_process';
 
-import { AbsPath, MainOutput } from ".";
+import { AbsPath, MainOutput, ReportType } from ".";
 import { t } from '../i18n';
 import { hdlPath } from '../hdlFs';
 
@@ -121,12 +121,12 @@ export function debounce(fn: (...args: any[]) => any, timeout: number) {
  * @description 平台签名
  */
 export enum IPlatformSignature {
-    x86Windows = 'windows_amd64',
-    aach64Windows = 'windows_aarch64',
-    x86Darwin = 'darwin_amd64',
-    aarch64Darwin = 'darwin_aarch64',
-    x86Linux = 'linux_amd64',
-    aarch64Linux = 'linux_aarch64',
+    x86Windows = 'x86_64-win',
+    aach64Windows = 'aarch64-win',
+    x86Darwin = 'x86_64-darwin',
+    aarch64Darwin = 'aarch64-darwin',
+    x86Linux = 'x86_64-linux',
+    aarch64Linux = 'aarch64-linux',
     unsupport = 'unsupport'
 };
 
@@ -140,6 +140,9 @@ export function getPlatformPlatformSignature(): IPlatformSignature {
     // Possible values are `'aix'`, `'darwin'`, `'freebsd'`,`'linux'`, `'openbsd'`, `'sunos'`, and `'win32'`.
     const osName = os.platform();
 
+    MainOutput.report(`current os & arch is osName & arch`, {
+        level: ReportType.Info
+    });
     switch (arch) {
         case 'arm':
         case 'arm64':

@@ -20,12 +20,13 @@ import { t } from "../../i18n";
 import { getPlatformPlatformSignature } from "../../global/util";
 
 function getLspServerExecutionName() {
+    const signature = getPlatformPlatformSignature().toString();
     const osname = platform();
     if (osname === 'win32') {
-        return 'digital-lsp.exe';
+        return `digital-lsp-${signature}.exe`;
     }
 
-    return 'digital-lsp';
+    return `digital-lsp-${signature}`;
 }
 
 function extractTarGz(filePath: string, outputDir: string): Promise<void> {
@@ -53,7 +54,7 @@ function extractTarGz(filePath: string, outputDir: string): Promise<void> {
     })
 }
 
-function streamDownload(context: vscode.ExtensionContext, progress: vscode.Progress<IProgress>, response: AxiosResponse<any, any>): Promise<string> {    
+function streamDownload(context: vscode.ExtensionContext, progress: vscode.Progress<IProgress>, response: AxiosResponse<any, any>): Promise<string> {
     const totalLength = response.headers['content-length'];    
     const totalSize = parseInt(totalLength);
     let downloadSize = 0;
@@ -83,7 +84,7 @@ function streamDownload(context: vscode.ExtensionContext, progress: vscode.Progr
 
 async function checkAndDownload(context: vscode.ExtensionContext, version: string): Promise<boolean> {    
     const versionFolderPath = context.asAbsolutePath(
-        path.join('resources', 'dide-lsp', 'server', version)
+        path.join('resources', 'dide-lsp', 'server')
     );
 
     const serverPath = path.join(versionFolderPath, getLspServerExecutionName());
@@ -190,7 +191,7 @@ export async function activate(context: vscode.ExtensionContext, packageJson: an
 
     const lspServerName = getLspServerExecutionName();
     const lspServerPath = context.asAbsolutePath(
-        path.join('resources', 'dide-lsp', 'server', version, lspServerName)
+        path.join('resources', 'dide-lsp', 'server', lspServerName)
     );
 
     if (fs.existsSync(lspServerPath)) {

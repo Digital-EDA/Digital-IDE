@@ -29,16 +29,11 @@ class XilinxOperation {
     public get config(): XilinxOperationConfig {
         return {
             path : hdlPath.join(opeParam.extensionPath, 'resources', 'script', 'xilinx', 'soft'),
-            hw : "SDK_Platform",
-            bsp: "BSP_package",
+            hw : "SDK",
+            bsp: "BSP",
             dat: opeParam.prjInfo.arch.software.data,
             src: opeParam.prjInfo.arch.software.src,
-            soc: {
-                core: "ps7_cortexa9_0",
-                bd: "template",
-                app: "Hello World",
-                os: "standalone"
-            }
+            soc: opeParam.prjInfo.soc,
         };
     }
 
@@ -46,16 +41,20 @@ class XilinxOperation {
         const hdfs = hdlFile.pickFileRecursive(this.config.dat,
             p => p.endsWith('.hdf'));
 
-        if (hdfs.length) {
+        if (!hdfs.length) {
             vscode.window.showErrorMessage(`There is no hdf file in ${this.config.dat}.`);
             return null;
         }
 
+        if (this.config.soc.core === "none") {
+            vscode.window.showErrorMessage(`Please set the correct core in the property.json.`);
+            return null;
+        }
+
         const scriptPath = `${this.config.path}/launch.tcl`;
-        const script = `
-setws ${this.config.src}
+        const script = `setws ${this.config.src}/${opeParam.prjInfo.prjName.PS}
 if { [getprojects -type hw] == "" } {
-    createhw -name ${this.config.hw} -hwspec ${this.config.dat}/
+    createhw -name ${this.config.hw} -hwspec ${hdfs[0]}
 } else {
     openhw ${this.config.src}/[getprojects -type hw]/system.hdf 
 }
@@ -68,7 +67,7 @@ if { [getprojects -type bsp] == "" } {
 }
 
 if { [getprojects -type app] == "" } {
-    createapp -name ${this.config.soc.bd} \\
+    createapp -name ${opeParam.prjInfo.prjName.PS} \\
                 -hwproject ${this.config.hw} \\
                 -bsp ${this.config.bsp} \\
                 -proc ${this.config.soc.core} \\
@@ -76,6 +75,7 @@ if { [getprojects -type app] == "" } {
                 -lang C \\
                 -app {${this.config.soc.app}}
 }
+
 file delete ${scriptPath} -force\n`;
         
         hdlFile.writeFile(scriptPath, script);
@@ -85,9 +85,8 @@ file delete ${scriptPath} -force\n`;
 
     build(config: PSConfig) {        
         const scriptPath = `${this.config.path}/build.tcl`;
-        const script = `
-setws ${this.config.src}
-openhw ${this.config.src}/[getprojects -type hw]/system.hdf
+        const script = `setws ${this.config.src}/${opeParam.prjInfo.prjName.PS}
+openhw ${this.config.src}/${opeParam.prjInfo.prjName.PS}/${this.config.hw}/system.hdf
 projects -build
 file delete ${scriptPath} -force\n`;
         hdlFile.writeFile(scriptPath, script);
@@ -99,9 +98,8 @@ file delete ${scriptPath} -force\n`;
         const len = this.config.soc.core.length;
         const index = this.config.soc.core.slice(len-1, len);
         const scriptPath = `${this.config.path}/program.tcl`;
-        const script = `
-setws ${this.config.src}
-openhw ${this.config.src}/[getprojects -type hw]/system.hdf
+        const script = `setws ${this.config.src}/${opeParam.prjInfo.prjName.PS}
+openhw ${this.config.src}/${opeParam.prjInfo.prjName.PS}/${this.config.hw}/system.hdf
 connect
 targets -set -filter {name =~ "ARM*#${index}"}
 rst -system
@@ -109,8 +107,8 @@ namespace eval xsdb {
     source ${this.config.src}/${this.config.hw}/ps7_init.tcl
     ps7_init
 }
-fpga ./${this.config.soc.bd}.bit
-dow  ${this.config.src}/${this.config.soc.bd}/Debug/${this.config.soc.bd}.elf
+fpga ./${opeParam.prjInfo.prjName.PS}.bit
+dow  ${this.config.src}/${opeParam.prjInfo.prjName.PS}/Debug/${opeParam.prjInfo.prjName.PS}.elf
 con
 file delete ${scriptPath} -force\n`;
         hdlFile.writeFile(scriptPath, script);

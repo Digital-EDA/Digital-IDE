@@ -222,8 +222,7 @@ class PrjManage {
         });
 
         this.pl = new PlManage();
-        // TODO : finish it later
-        // this.ps = new PsManage();
+        this.ps = new PsManage();
 
         if (countTimeCost) {
             console.timeLog('launch');

@@ -347,7 +347,7 @@ class XilinxOperation {
         scripts.push(`update_ip_catalog -quiet`);
 
         // 导入bd设计源文件
-        if (hdlFile.isHasAttr(this.prjConfig, "SOC.bd")) {            
+        if (hdlFile.isHasAttr(this.prjConfig, "SOC.bd")) {
             const bd = this.prjConfig.soc.bd;
             const bdFile = bd + '.bd';
             let bdSrcPath = hdlPath.join(this.xbdPath, bdFile);
@@ -405,7 +405,13 @@ class XilinxOperation {
             }
         });
 
-        // 导入非本地的设计源文件
+        hdlFile.pickFileRecursive(this.srcPath, 
+            filePath => filePath.endsWith('.edf')
+        ).forEach((edfFile) => {
+            scripts.push(`add_file ${edfFile} -quiet`);
+        });
+
+        // 导入设计源文件
         for (const hdlFile of hdlParam.getAllHdlFiles()) {
             switch (hdlFile.projectType) {
                 case HdlFileProjectType.Src:

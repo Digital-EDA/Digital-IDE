@@ -12,12 +12,12 @@ export function getLspFileName(version: string, signature: string) {
 
 export function getGithubDownloadLink(signature: string, version: string): string {
     const filename = getLspFileName(version, signature);
-    return `https://github.com/Digital-EDA/Digital-IDE/releases/download/${version}/${filename}`;
+    return `https://github.com/Digital-EDA/digital-lsp/releases/download/${version}/${filename}`;
 }
 
 export function getGiteeDownloadLink(signature: string, version: string): string {
     const filename = getLspFileName(version, signature);
-    return `https://gitee.com/Digital-EDA/Digital-IDE/releases/download/${version}/${filename}`;
+    return `https://gitee.com/Digital-EDA/digital-lsp/releases/download/${version}/${filename}`;
 }
 
 function measureRequestTimecost(url: string, timeout: number = 5): Promise<number> {

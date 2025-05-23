@@ -20,9 +20,8 @@ class PsManage extends BaseManage {
             tool : 'default',
             path : '',
             ope  : new XilinxOperation(),
-            terminal : this.createTerminal('PS')
+            terminal : this.createTerminal('PS'),
         };
-
 
         // get tool chain
         if (opeParam.prjInfo.toolChain) {
@@ -44,17 +43,17 @@ class PsManage extends BaseManage {
     }
 
     launch() {
-        this.config.terminal = this.createTerminal('Software');
+        this.config.terminal = this.createTerminal('PS');
         this.config.ope.launch(this.config);
     }
 
     build() {
-        this.config.terminal = this.createTerminal('Software');
+        this.config.terminal = this.createTerminal('PS');
         this.config.ope.build(this.config);
     }
 
     program() {
-        this.config.terminal = this.createTerminal('Software');
+        this.config.terminal = this.createTerminal('PS');
         this.config.ope.program(this.config);
     }
 }

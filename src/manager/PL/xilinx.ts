@@ -347,7 +347,7 @@ class XilinxOperation {
         scripts.push(`update_ip_catalog -quiet`);
 
         // 导入bd设计源文件
-        if (hdlFile.isHasAttr(this.prjConfig, "SOC.bd")) {
+        if (hdlFile.isHasAttr(this.prjConfig, "soc.bd")) {
             const bd = this.prjConfig.soc.bd;
             const bdFile = bd + '.bd';
             let bdSrcPath = hdlPath.join(this.xbdPath, bdFile);

@@ -89,6 +89,7 @@
     "digital-ide.function.lsp.linter.vhdl.diagnostor.title": "选择编辑 VHDL 时的诊断器进行语法检查",
     "digital-ide.function.instantiation.addComment.title": "在进行实例化时添加注释，如 // 端口, // 输入, // 输出，包括模块调用的完成",
     "digital-ide.function.instantiation.autoNetOutputDeclaration.title": "在实例化发生时自动在作用域中声明输出类型的网络。",
+    "digital-ide.function.instantiation.instanName.title": "在实例化模块时使用的默认实例名称模板。可以使用 ${moduleName} 作为模块名称的占位符。例如，如果模块名称是 myModule,u_${moduleName} 将实例化为 u_myModule ",
     "fpga-support.onTypeFormattingTriggerCharacters.title": "onTypeFormatting 的触发字符",
     "digital-ide.function.lsp.file-parse-maxsize.title": "最大解析的文件阈值，大小超出这个值的文件不会被解析。单位为 MB，必须是整数。默认为 1MB",
     "digital-ide.structure.from-xilinx-to-standard.title": "将 Xilinx 项目转换成 Digital IDE 标准项目结构",

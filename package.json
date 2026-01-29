@@ -327,6 +327,16 @@
                     "type": "boolean",
                     "default": true
                 },
+                "digital-ide.function.instantiation.autoNetInputDeclaration": {
+                    "description": "%digital-ide.function.instantiation.autoNetInputDeclaration.title%",
+                    "type": "boolean",
+                    "default": true
+                },
+                "digital-ide.function.instantiation.instanName": {
+                    "description": "%digital-ide.function.instantiation.instanName.title%",
+                    "type": "string",
+                    "default": "u_${moduleName}"
+                },
                 "fpga-support.onTypeFormattingTriggerCharacters": {
                     "type": "array",
                     "default": [
@@ -1288,6 +1298,9 @@
         "state-machine-cat": "^9.2.5",
         "tar": "^7.4.3",
         "temp": "^0.9.4",
+        "tree-sitter": "^0.25.0",
+        "tree-sitter-systemverilog": "^0.3.1",
+        "vsce": "^2.15.0",
         "vscode-jsonrpc": "^8.2.1",
         "vscode-languageclient": "^9.0.1",
         "vscode-textmate": "^9.0.0",

@@ -4,7 +4,7 @@
     "description": "all in one vscode plugin for Verilog/VHDL development",
     "publisher": "sterben",
     "homepage": "https://digital-eda.github.io/DIDE-doc-Cn",
-    "version": "0.4.6",
+    "version": "0.5.0",
     "main": "./out/extension",
     "l10n": "./l10n",
     "icon": "images/icon.png",
@@ -34,9 +34,67 @@
         "Snippets"
     ],
     "activationEvents": [
-        "workspaceContains:.vscode/property.json"
+        "*",
+        "workspaceContains:.vscode/property.json",
+        "onStartupFinished"
     ],
     "contributes": {
+        "configurationDefaults": {
+            "[verilog]": {
+                "editor.quickSuggestions": {
+                    "other": "on",
+                    "comments": "off",
+                    "strings": "off"
+                }
+            },
+            "[systemverilog]": {
+                "editor.quickSuggestions": {
+                    "other": "on",
+                    "comments": "off",
+                    "strings": "off"
+                }
+            },
+            "editor.semanticTokenColorCustomizations": {
+                "enabled": true,
+                "rules": {
+                    "*.read:verilog": {
+                        "bold": true
+                    },
+                    "*.write:verilog": {
+                        "bold": true,
+                        "underline": true
+                    },
+                    "*.read:systemverilog": {
+                        "bold": true
+                    },
+                    "*.write:systemverilog": {
+                        "bold": true,
+                        "underline": true
+                    }
+                }
+            }
+        },
+        "customEditors": [
+            {
+                "viewType": "digital-ide.waveformViewer",
+                "displayName": "Digital IDE Waveform",
+                "selector": [
+                    {
+                        "filenamePattern": "*.vcd"
+                    },
+                    {
+                        "filenamePattern": "*.fst"
+                    },
+                    {
+                        "filenamePattern": "*.ghw"
+                    },
+                    {
+                        "filenamePattern": "*.dws"
+                    }
+                ],
+                "priority": "default"
+            }
+        ],
         "configuration": {
             "title": "Digital-IDE",
             "properties": {
@@ -55,6 +113,33 @@
                     "default": "",
                     "description": "%digital-ide.lib.custom.path.title%"
                 },
+                "digital-ide.standard.systemverilog": {
+                    "type": "string",
+                    "default": "2017",
+                    "enum": [
+                        "2017",
+                        "2023"
+                    ]
+                },
+                "digital-ide.function.lsp.systemverilog.expandIncludes": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Expands SystemVerilog include files during parsing and diagnostics."
+                },
+                "digital-ide.standard.vhdl": {
+                    "type": "string",
+                    "default": "2018",
+                    "enum": [
+                        "1993",
+                        "2008",
+                        "2019"
+                    ]
+                },
+                "digital-ide.lib.vhdl.path": {
+                    "type": "string",
+                    "default": "",
+                    "description": "%digital-ide.lib.custom.path.title%"
+                },
                 "digital-ide.prj.file.structure.notice": {
                     "type": "boolean",
                     "default": true,
@@ -65,15 +150,25 @@
                     "default": "C:/Xilinx/Vivado/2018.3/bin",
                     "description": "%digital-ide.prj.vivado.install.path.title%"
                 },
-                "digital-ide.prj.efinix.install.path": {
+                "digital-ide.prj.efinix.package.path": {
                     "type": "string",
-                    "default": "C:/Efinity/2023.2/bin",
-                    "description": "%digital-ide.prj.efinix.install.path.title%"
+                    "default": "",
+                    "description": "%digital-ide.prj.efinix.package.path.title%"
+                },
+                "digital-ide.efinity.install.path": {
+                    "type": "string",
+                    "default": "",
+                    "description": "%digital-ide.efinity.install.path.title%"
                 },
                 "digital-ide.prj.modelsim.install.path": {
                     "type": "string",
                     "default": "C:/modeltech64_10.4/win64",
                     "description": "%digital-ide.prj.modelsim.install.path.title%"
+                },
+                "digital-ide.prj.iverilog.install.path": {
+                    "type": "string",
+                    "default": "",
+                    "description": "%digital-ide.prj.iverilog.install.path.title%"
                 },
                 "digital-ide.prj.verible.install.path": {
                     "type": "string",
@@ -100,78 +195,71 @@
                     "default": "",
                     "description": "%digital-ide.prj.xsdk.install.path.title%"
                 },
-                "digital-ide.function.doc.webview.backgroundImage": {
+                "digital-ide.xilinx.ps.hwServer.path": {
                     "type": "string",
                     "default": "",
-                    "description": "%digital-ide.function.doc.webview.backgroundImage.title%"
+                    "description": "%digital-ide.xilinx.ps.hwServer.path.title%"
                 },
-                "digital-ide.function.doc.pdf.scale": {
-                    "type": "number",
-                    "default": 1,
-                    "description": "%digital-ide.function.doc.pdf.scale.title%"
-                },
-                "digital-ide.function.doc.pdf.printBackground": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "%digital-ide.function.doc.pdf.printBackground.title%"
-                },
-                "digital-ide.function.doc.pdf.landscape": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "%digital-ide.function.doc.pdf.landscape.title%"
-                },
-                "digital-ide.function.doc.pdf.format": {
+                "digital-ide.xilinx.ps.hwServer.host": {
                     "type": "string",
-                    "default": "A4",
-                    "description": "%digital-ide.function.doc.pdf.format.title%"
+                    "default": "127.0.0.1",
+                    "description": "%digital-ide.xilinx.ps.hwServer.host.title%"
                 },
-                "digital-ide.function.doc.pdf.displayHeaderFooter": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "%digital-ide.function.doc.pdf.displayHeaderFooter.title%"
+                "digital-ide.xilinx.ps.hwServer.port": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 65535,
+                    "default": 3121,
+                    "description": "%digital-ide.xilinx.ps.hwServer.port.title%"
                 },
-                "digital-ide.function.doc.pdf.browserPath": {
+                "digital-ide.xilinx.ps.gdb.portBase": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 65532,
+                    "default": 3000,
+                    "description": "%digital-ide.xilinx.ps.gdb.portBase.title%"
+                },
+                "digital-ide.xilinx.ps.gdb.arm.path": {
                     "type": "string",
-                    "default": "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
-                    "description": "%digital-ide.function.doc.pdf.browserPath.title%"
+                    "default": "",
+                    "description": "%digital-ide.xilinx.ps.gdb.arm.path.title%"
                 },
-                "digital-ide.function.doc.pdf.margin.top": {
-                    "type": "number",
-                    "default": 0.5,
-                    "description": "%digital-ide.function.doc.pdf.margin.top.title%"
-                },
-                "digital-ide.function.doc.pdf.margin.right": {
-                    "type": "number",
-                    "default": 0.5,
-                    "description": "%digital-ide.function.doc.pdf.margin.right.title%"
-                },
-                "digital-ide.function.doc.pdf.margin.bottom": {
-                    "type": "number",
-                    "default": 0.5,
-                    "description": "%digital-ide.function.doc.pdf.margin.bottom.title%"
-                },
-                "digital-ide.function.doc.pdf.margin.left": {
-                    "type": "number",
-                    "default": 0.5,
-                    "description": "%digital-ide.function.doc.pdf.margin.left.title%"
-                },
-                "digital-ide.function.doc.pdf.headerTemplate": {
+                "digital-ide.xilinx.ps.gdb.aarch64.path": {
                     "type": "string",
-                    "default": "<div style=\"font-size: 9px; margin-left: 1cm;\"> <span class='title'></span></div> <div style=\"font-size: 9px; margin-left: auto; margin-right: 1cm; \"> <span class='date'></span></div>",
-                    "description": "%digital-ide.function.doc.pdf.headerTemplate.title%"
+                    "default": "",
+                    "description": "%digital-ide.xilinx.ps.gdb.aarch64.path.title%"
                 },
-                "digital-ide.function.doc.pdf.footerTemplate": {
+                "digital-ide.xilinx.ps.gdb.armR5.path": {
                     "type": "string",
-                    "default": "<div style=\"font-size: 9px; margin-left: 1cm;\"> <span class='title'></span></div> <div style=\"font-size: 9px; margin-left: auto; margin-right: 1cm; \"> <span class='date'></span></div>",
-                    "description": "%digital-ide.function.doc.pdf.footerTemplate.title%"
+                    "default": "",
+                    "description": "%digital-ide.xilinx.ps.gdb.armR5.path.title%"
                 },
-                "digital-ide.prj.iverilog.install.path": {
+                "digital-ide.xilinx.ps.gdb.microblaze.path": {
                     "type": "string",
-                    "description": "%digital-ide.prj.iverilog.install.path.title%"
+                    "default": "",
+                    "description": "%digital-ide.xilinx.ps.gdb.microblaze.path.title%"
+                },
+                "digital-ide.xilinx.ps.gdb.microblaze64.path": {
+                    "type": "string",
+                    "default": "",
+                    "description": "%digital-ide.xilinx.ps.gdb.microblaze64.path.title%"
                 },
                 "digital-ide.function.simulate.simulationHome": {
                     "type": "string",
                     "description": "%digital-ide.function.simulate.simulationHome.title%"
+                },
+                "digital-ide.function.simulate.fastSimulator": {
+                    "type": "string",
+                    "enum": [
+                        "verilator",
+                        "cxxrtl",
+                        "vcs",
+                        "iverilog",
+                        "modelsim",
+                        "questa"
+                    ],
+                    "default": "verilator",
+                    "description": "%digital-ide.function.simulate.fastSimulator.title%"
                 },
                 "digital-ide.function.simulate.gtkwavePath": {
                     "type": "string",
@@ -180,7 +268,13 @@
                 },
                 "digital-ide.function.simulate.xilinxLibPath": {
                     "type": "string",
+                    "default": "",
                     "description": "%digital-ide.function.simulate.xilinxLibPath.title%"
+                },
+                "digital-ide.function.simulate.vendorCachePath": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Shared vendor simulation-library cache root. The backend separates entries by vendor, tool version, simulator, and device family."
                 },
                 "digital-ide.function.simulate.runInTerminal": {
                     "type": "boolean",
@@ -230,65 +324,6 @@
                     "type": "number",
                     "default": 4
                 },
-                "digital-ide.function.lsp.completion.vlog.auto-add-include": {
-                    "description": "%digital-ide.function.lsp.completion.vlog.auto-add-include.title%",
-                    "type": "boolean",
-                    "default": true
-                },
-                "digital-ide.function.lsp.completion.vlog.auto-add-output-declaration": {
-                    "description": "%digital-ide.function.lsp.completion.vlog.auto-add-output-declaration.title%",
-                    "type": "boolean",
-                    "default": true
-                },
-                "digital-ide.function.lsp.linter.verilog.diagnostor": {
-                    "type": "string",
-                    "enumDescriptions": [
-                        "iverilog (© Icarus Verilog Project)",
-                        "xvlog (© Xilinx, Inc.)",
-                        "vlog (© Mentor Graphics Corporation)",
-                        "verilator (© Verilator Project)",
-                        "verible-verilog-syntax (© Google LLC)"
-                    ],
-                    "enum": [
-                        "iverilog",
-                        "vivado",
-                        "modelsim",
-                        "verilator",
-                        "verible"
-                    ],
-                    "default": "vivado",
-                    "description": "%digital-ide.function.lsp.linter.verilog.diagnostor.title%"
-                },
-                "digital-ide.function.lsp.linter.systemverilog.diagnostor": {
-                    "type": "string",
-                    "enumDescriptions": [
-                        "xvlog (© Xilinx, Inc.)",
-                        "vlog (© Mentor Graphics Corporation)",
-                        "verilator (© Verilator Project)",
-                        "verible-verilog-syntax (© Google LLC)"
-                    ],
-                    "enum": [
-                        "vivado",
-                        "modelsim",
-                        "verilator",
-                        "verible"
-                    ],
-                    "default": "vivado",
-                    "description": "%digital-ide.function.lsp.linter.systemverilog.diagnostor.title%"
-                },
-                "digital-ide.function.lsp.linter.vhdl.diagnostor": {
-                    "type": "string",
-                    "enumDescriptions": [
-                        "xvlog (© Xilinx, Inc.)",
-                        "vlog (© Mentor Graphics Corporation)"
-                    ],
-                    "enum": [
-                        "vivado",
-                        "modelsim"
-                    ],
-                    "default": "vivado",
-                    "description": "%digital-ide.function.lsp.linter.vhdl.diagnostor.title%"
-                },
                 "digital-ide.function.lsp.linter.mode": {
                     "type": "string",
                     "enumDescriptions": [
@@ -317,6 +352,55 @@
                     "default": "warning",
                     "description": "%digital-ide.function.lsp.linter.linter-level.title%"
                 },
+                "digital-ide.function.lsp.diagnostics.overrides": {
+                    "type": "object",
+                    "scope": "resource",
+                    "default": {},
+                    "additionalProperties": {
+                        "type": "string",
+                        "enum": [
+                            "off"
+                        ]
+                    },
+                    "description": "Disables Digital-IDE diagnostics by diagnostic code."
+                },
+                "digital-ide.function.lsp.crashForensics.enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "%digital-ide.function.lsp.crashForensics.enabled.title%"
+                },
+                "digital-ide.function.lsp.crashForensics.fullMemoryDump": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "%digital-ide.function.lsp.crashForensics.fullMemoryDump.title%"
+                },
+                "digital-ide.function.lsp.crashForensics.retainedSessions": {
+                    "type": "integer",
+                    "default": 3,
+                    "minimum": 1,
+                    "maximum": 10,
+                    "description": "%digital-ide.function.lsp.crashForensics.retainedSessions.title%"
+                },
+                "digital-ide.function.lsp.semantic.tokens.port.clk.rst.enable": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Semantically distinguishes scalar clock and reset ports in Verilog and SystemVerilog."
+                },
+                "digital-ide.function.lsp.semantic.tokens.port.input.output.enable": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Adds read and write semantic modifiers from Verilog and SystemVerilog port directions."
+                },
+                "digital-ide.function.lsp.inlayHints.port.connection.enable": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Shows port names and directions for Verilog and SystemVerilog module connections."
+                },
+                "digital-ide.function.lsp.inlayHints.parameter.assignment.enable": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Shows parameter names for ordered Verilog and SystemVerilog module parameter assignments."
+                },
                 "digital-ide.function.instantiation.addComment": {
                     "description": "%digital-ide.function.instantiation.addComment.title%",
                     "type": "boolean",
@@ -326,18 +410,6 @@
                     "description": "%digital-ide.function.instantiation.autoNetOutputDeclaration.title%",
                     "type": "boolean",
                     "default": true
-                },
-                "fpga-support.onTypeFormattingTriggerCharacters": {
-                    "type": "array",
-                    "default": [
-                        "\n"
-                    ],
-                    "description": "%fpga-support.onTypeFormattingTriggerCharacters.title%"
-                },
-                "digital-ide.function.lsp.file-parse-maxsize": {
-                    "type": "integer",
-                    "default": 1,
-                    "description": "%digital-ide.function.lsp.file-parse-maxsize.title%"
                 },
                 "digital-ide.function.netlist.schema-mode": {
                     "type": "string",
@@ -353,10 +425,46 @@
                         "%digital-ide.function.netlist.schema-mode.2.title%"
                     ],
                     "description": "%digital-ide.function.netlist.schema-mode.title%"
+                },
+                "digital-ide.debugger.waveformUrl": {
+                    "type": "string",
+                    "default": "ws://127.0.0.1:8766",
+                    "description": "Wave Server WebSocket endpoint used for direct hardware capture delivery."
+                },
+                "digital-ide.debugger.vivado.hwServerUrl": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Optional exact Vivado Hardware Server URL."
+                },
+                "digital-ide.debugger.vivado.target": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Optional exact Vivado hardware target name."
+                },
+                "digital-ide.debugger.vivado.programBeforeAccess": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Program the hash-verified bitstream before each Hardware Manager request."
+                },
+                "digital-ide.debugger.vivado.timeoutMs": {
+                    "type": "number",
+                    "default": 120000,
+                    "minimum": 1000,
+                    "description": "Maximum duration of one Vivado Hardware Manager request in milliseconds."
                 }
             }
         },
         "commands": [
+            {
+                "command": "digital-ide.server.openCrashEvidence",
+                "title": "%digital-ide.server.openCrashEvidence.title%",
+                "category": "Digital-IDE"
+            },
+            {
+                "command": "digital-ide.server.exportCrashEvidence",
+                "title": "%digital-ide.server.exportCrashEvidence.title%",
+                "category": "Digital-IDE"
+            },
             {
                 "command": "digital-ide.property-json.generate",
                 "title": "%digital-ide.property-json.generate.title%",
@@ -368,33 +476,18 @@
                 "category": "Digital-IDE"
             },
             {
-                "command": "digital-ide.hdlDoc.exportFile",
-                "title": "%digital-ide.hdlDoc.exportFile.title%",
-                "category": "Digital-IDE"
-            },
-            {
-                "command": "digital-ide.hdlDoc.exportProject",
-                "title": "%digital-ide.hdlDoc.exportProject.title%",
-                "category": "Digital-IDE"
-            },
-            {
-                "command": "digital-ide.hdlDoc.showWebview",
-                "title": "%digital-ide.hdlDoc.showWebview.title%",
-                "category": "Digital-IDE",
-                "icon": {
-                    "light": "images/svg/light/documentation.svg",
-                    "dark": "images/svg/dark/documentation.svg"
-                }
-            },
-            {
                 "command": "digital-ide.tool.instance",
                 "title": "%digital-ide.tool.instance.title%",
                 "category": "Digital-IDE"
             },
             {
-                "command": "digital-ide.tool.testbench",
-                "title": "%digital-ide.tool.testbench.title%",
-                "category": "Digital-IDE"
+                "command": "digital-ide.tool.simulateFile",
+                "title": "%digital-ide.tool.simulateFile.title%",
+                "category": "Digital-IDE",
+                "icon": {
+                    "light": "images/svg/light/debug.svg",
+                    "dark": "images/svg/dark/debug.svg"
+                }
             },
             {
                 "command": "digital-ide.tool.icarus.simulateFile",
@@ -404,6 +497,11 @@
                     "light": "images/svg/light/debug.svg",
                     "dark": "images/svg/dark/debug.svg"
                 }
+            },
+            {
+                "command": "digital-ide.tool.import-filelist",
+                "title": "%digital-ide.tool.import-filelist.title%",
+                "category": "Digital-IDE"
             },
             {
                 "command": "digital-ide.tool.export-filelist",
@@ -462,6 +560,51 @@
                 "title": "%digital-ide.soft.download.title%"
             },
             {
+                "command": "digital-ide.soft.selectElf",
+                "category": "Digital-IDE",
+                "title": "%digital-ide.soft.selectElf.title%"
+            },
+            {
+                "command": "digital-ide.soft.reset",
+                "category": "Digital-IDE",
+                "title": "%digital-ide.soft.reset.title%"
+            },
+            {
+                "command": "digital-ide.soft.halt",
+                "category": "Digital-IDE",
+                "title": "%digital-ide.soft.halt.title%"
+            },
+            {
+                "command": "digital-ide.soft.run",
+                "category": "Digital-IDE",
+                "title": "%digital-ide.soft.run.title%"
+            },
+            {
+                "command": "digital-ide.soft.stop",
+                "category": "Digital-IDE",
+                "title": "%digital-ide.soft.stop.title%"
+            },
+            {
+                "command": "digital-ide.soft.status",
+                "category": "Digital-IDE",
+                "title": "%digital-ide.soft.status.title%"
+            },
+            {
+                "command": "digital-ide.soft.gdb.start",
+                "category": "Digital-IDE",
+                "title": "%digital-ide.soft.gdb.start.title%"
+            },
+            {
+                "command": "digital-ide.soft.gdb.generateConfig",
+                "category": "Digital-IDE",
+                "title": "%digital-ide.soft.gdb.generateConfig.title%"
+            },
+            {
+                "command": "digital-ide.soft.gdb.stop",
+                "category": "Digital-IDE",
+                "title": "%digital-ide.soft.gdb.stop.title%"
+            },
+            {
                 "command": "digital-ide.hard.launch",
                 "category": "Digital-IDE",
                 "title": "%digital-ide.hard.launch.title%"
@@ -510,6 +653,16 @@
                 "command": "digital-ide.hard.program",
                 "category": "Digital-IDE",
                 "title": "%digital-ide.hard.program.title%"
+            },
+            {
+                "command": "digital-ide.hard.program.sram",
+                "category": "Digital-IDE",
+                "title": "%digital-ide.hard.program.sram.title%"
+            },
+            {
+                "command": "digital-ide.hard.program.flash",
+                "category": "Digital-IDE",
+                "title": "%digital-ide.hard.program.flash.title%"
             },
             {
                 "command": "digital-ide.hard.gui",
@@ -570,15 +723,6 @@
                 "title": "%digital-ide.run-ys.title%"
             },
             {
-                "command": "digital-ide.fsm",
-                "icon": {
-                    "light": "images/svg/light/fsm.svg",
-                    "dark": "images/svg/dark/fsm.svg"
-                },
-                "category": "Digital-IDE",
-                "title": "%digital-ide.fsm.title%"
-            },
-            {
                 "command": "digital-ide.lsp.tool.insertTextToUri",
                 "title": "%digital-ide.lsp.tool.insertTextToUri.title%",
                 "category": "Digital-IDE"
@@ -587,54 +731,6 @@
                 "command": "digital-ide.lsp.tool.transformOldPropertyFile",
                 "title": "%digital-ide.lsp.tool.transformOldPropertyFile.title%",
                 "category": "Digital-IDE"
-            },
-            {
-                "command": "digital-ide.lsp.vlog.linter.pick",
-                "category": "Digital-IDE",
-                "title": "%digital-ide.lsp.vlog.linter.pick.title%"
-            },
-            {
-                "command": "digital-ide.lsp.svlog.linter.pick",
-                "category": "Digital-IDE",
-                "title": "%digital-ide.lsp.svlog.linter.pick.title%"
-            },
-            {
-                "command": "digital-ide.lsp.vhdl.linter.pick",
-                "category": "Digital-IDE",
-                "title": "%digital-ide.lsp.vhdl.linter.pick.title%"
-            },
-            {
-                "command": "digital-ide.lsp.systemverilog.linter.pick",
-                "category": "Digital-IDE",
-                "title": "%digital-ide.lsp.systemverilog.linter.pick.title%"
-            },
-            {
-                "command": "digital-ide.digital-lsp.download",
-                "category": "Digital-IDE",
-                "title": "%digital-ide.digital-lsp.download.title%"
-            },
-            {
-                "command": "digital-ide.digital-lsp.install",
-                "category": "Digital-IDE",
-                "title": "%digital-ide.digital-lsp.install.title%"
-            },
-            {
-                "command": "digital-ide.vhdl2vlog",
-                "title": "%digital-ide.vhdl2vlog.title%",
-                "category": "Digital-IDE",
-                "icon": {
-                    "light": "images/svg/light/translate.svg",
-                    "dark": "images/svg/dark/translate.svg"
-                }
-            },
-            {
-                "command": "digital-ide.fsm.show",
-                "icon": {
-                    "light": "images/svg/light/fsm.svg",
-                    "dark": "images/svg/dark/fsm.svg"
-                },
-                "category": "Digital-IDE",
-                "title": "%digital-ide.fsm.show.title%"
             },
             {
                 "command": "digital-ide.netlist.show",
@@ -655,15 +751,6 @@
                 "title": "test"
             },
             {
-                "command": "digital-ide.waveviewer.show",
-                "icon": {
-                    "light": "images/svg/light/vcd.svg",
-                    "dark": "images/svg/dark/vcd.svg"
-                },
-                "category": "Digital-IDE",
-                "title": "%digital-ide.waveviewer.show.title%"
-            },
-            {
                 "command": "digital-ide.tool.clean",
                 "category": "Digital-IDE",
                 "title": "%digital-ide.tool.clean.title%"
@@ -672,6 +759,42 @@
                 "command": "digital-ide.structure.from-xilinx-to-standard",
                 "category": "Digital-IDE",
                 "title": "%digital-ide.structure.from-xilinx-to-standard.title%"
+            },
+            {
+                "command": "digital-ide.debugger.refresh",
+                "category": "Digital-IDE Debugger",
+                "title": "Refresh Debug Build",
+                "icon": "$(refresh)"
+            },
+            {
+                "command": "digital-ide.debugger.status",
+                "category": "Digital-IDE Debugger",
+                "title": "Read Core Status",
+                "icon": "$(pulse)"
+            },
+            {
+                "command": "digital-ide.debugger.capture",
+                "category": "Digital-IDE Debugger",
+                "title": "Capture ILA",
+                "icon": "$(record)"
+            },
+            {
+                "command": "digital-ide.debugger.stop",
+                "category": "Digital-IDE Debugger",
+                "title": "Stop ILA Capture",
+                "icon": "$(debug-stop)"
+            },
+            {
+                "command": "digital-ide.debugger.vioRead",
+                "category": "Digital-IDE Debugger",
+                "title": "Read VIO Inputs",
+                "icon": "$(eye)"
+            },
+            {
+                "command": "digital-ide.debugger.vioWrite",
+                "category": "Digital-IDE Debugger",
+                "title": "Write VIO Outputs",
+                "icon": "$(edit)"
             }
         ],
         "menus": {
@@ -679,7 +802,12 @@
                 {
                     "command": "digital-ide.treeView.arch.collapse",
                     "group": "navigation",
-                    "when": "view == digital-ide-treeView-arch"
+                    "when": "view == digital-ide-treeView-arch && !TOOL-tree-expand"
+                },
+                {
+                    "command": "digital-ide.treeView.arch.expand",
+                    "group": "navigation",
+                    "when": "view == digital-ide-treeView-arch && TOOL-tree-expand"
                 },
                 {
                     "command": "digital-ide.pickLibrary",
@@ -690,6 +818,11 @@
                     "command": "digital-ide.treeView.arch.refresh",
                     "group": "navigation",
                     "when": "view == digital-ide-treeView-arch"
+                },
+                {
+                    "command": "digital-ide.debugger.refresh",
+                    "group": "navigation",
+                    "when": "view == digital-ide-treeView-debugger"
                 }
             ],
             "view/item/context": [
@@ -734,28 +867,38 @@
                     "args": {
                         "file": "${viewItem}"
                     }
+                },
+                {
+                    "command": "digital-ide.debugger.status",
+                    "group": "inline@1",
+                    "when": "view == digital-ide-treeView-debugger && (viewItem == digitalDebuggerIla || viewItem == digitalDebuggerVio)"
+                },
+                {
+                    "command": "digital-ide.debugger.capture",
+                    "group": "inline@2",
+                    "when": "view == digital-ide-treeView-debugger && viewItem == digitalDebuggerIla"
+                },
+                {
+                    "command": "digital-ide.debugger.stop",
+                    "group": "navigation@2",
+                    "when": "view == digital-ide-treeView-debugger && viewItem == digitalDebuggerIla"
+                },
+                {
+                    "command": "digital-ide.debugger.vioRead",
+                    "group": "inline@2",
+                    "when": "view == digital-ide-treeView-debugger && viewItem == digitalDebuggerVio"
+                },
+                {
+                    "command": "digital-ide.debugger.vioWrite",
+                    "group": "inline@3",
+                    "when": "view == digital-ide-treeView-debugger && viewItem == digitalDebuggerVio"
                 }
             ],
             "editor/title": [
                 {
                     "when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
-                    "command": "digital-ide.tool.icarus.simulateFile",
+                    "command": "digital-ide.tool.simulateFile",
                     "group": "navigation@1"
-                },
-                {
-                    "when": "editorLangId == vcd || editorLangId == view",
-                    "command": "digital-ide.waveviewer.show",
-                    "group": "navigation@4"
-                },
-                {
-                    "when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
-                    "command": "digital-ide.hdlDoc.showWebview",
-                    "group": "navigation@5"
-                },
-                {
-                    "when": "resourceLangId == vhdl",
-                    "command": "digital-ide.vhdl2vlog",
-                    "group": "navigation@6"
                 },
                 {
                     "when": "editorLangId == ys",
@@ -768,16 +911,6 @@
                     "when": "editorLangId == verilog || editorLangId == systemverilog || editorLangId == vhdl",
                     "command": "digital-ide.tool.instance",
                     "group": "navigation@3"
-                },
-                {
-                    "when": "resourceLangId == vhdl",
-                    "command": "digital-ide.vhdl2vlog",
-                    "group": "navigation@9"
-                },
-                {
-                    "when": "resourceLangId == verilog || resourceLangId == systemverilog || resourceLangId == vhdl",
-                    "command": "digital-ide.hdlDoc.exportFile",
-                    "group": "navigation@10"
                 }
             ],
             "explorer/context": [
@@ -795,39 +928,9 @@
                     "when": "resourceLangId == verilog || resourceLangId == systemverilog || resourceLangId == vhdl",
                     "command": "digital-ide.tool.instance",
                     "group": "navigation@8"
-                },
-                {
-                    "when": "resourceLangId == vcd || resourceLangId == view",
-                    "command": "digital-ide.waveviewer.show",
-                    "group": "navigation@10"
-                },
-                {
-                    "when": "resourceLangId == vhdl",
-                    "command": "digital-ide.vhdl2vlog",
-                    "group": "navigation@12"
-                },
-                {
-                    "when": "resourceLangId == verilog || resourceLangId == systemverilog || resourceLangId == vhdl",
-                    "command": "digital-ide.hdlDoc.exportFile",
-                    "group": "navigation@13"
                 }
             ]
         },
-        "customEditors": [
-            {
-                "viewType": "digital-ide.vcd.viewer",
-                "displayName": "Digital Viewer",
-                "selector": [
-                    {
-                        "filenamePattern": "*.vcd"
-                    },
-                    {
-                        "filenamePattern": "*.view"
-                    }
-                ],
-                "priority": "default"
-            }
-        ],
         "viewsContainers": {
             "activitybar": [
                 {
@@ -852,12 +955,18 @@
                 {
                     "id": "digital-ide-treeView-hardware",
                     "name": "HARD Options",
-                    "icon": "images/svg/view.svg"
+                    "icon": "images/svg/view.svg",
+                    "visibility": "collapsed"
                 },
                 {
                     "id": "digital-ide-treeView-software",
                     "name": "SOFT Options",
-                    "icon": "images/svg/view.svg"
+                    "icon": "images/svg/view.svg",
+                    "visibility": "collapsed"
+                },
+                {
+                    "id": "digital-ide-treeView-debugger",
+                    "name": "Debugger"
                 }
             ]
         },
@@ -866,12 +975,6 @@
                 "command": "digital-ide.tool.instance",
                 "key": "alt+i",
                 "mac": "alt+i",
-                "when": "editorTextFocus"
-            },
-            {
-                "command": "digital-ide.tool.testbench",
-                "key": "alt+t",
-                "mac": "alt+t",
                 "when": "editorTextFocus"
             }
         ],
@@ -1002,26 +1105,6 @@
                 }
             },
             {
-                "id": "vcd",
-                "extensions": [
-                    ".vcd"
-                ],
-                "icon": {
-                    "dark": "./images/svg/dark/vcd.svg",
-                    "light": "./images/svg/light/vcd.svg"
-                }
-            },
-            {
-                "id": "view",
-                "extensions": [
-                    ".view"
-                ],
-                "icon": {
-                    "dark": "./images/svg/dark/view.svg",
-                    "light": "./images/svg/light/view.svg"
-                }
-            },
-            {
                 "id": "dideignore",
                 "filenames": [
                     ".dideignore"
@@ -1044,7 +1127,7 @@
                 "configuration": "./config/ys.configuration.json"
             },
             {
-                "id": "digital-ide-output",
+                "id": "output",
                 "mimetypes": [
                     "text/x-code-output"
                 ]
@@ -1053,7 +1136,7 @@
         "jsonValidation": [
             {
                 "fileMatch": "property.json",
-                "url": "./project/property-schema.json"
+                "url": "./resources/property/property-schema.json"
             }
         ],
         "grammars": [
@@ -1075,12 +1158,12 @@
             {
                 "language": "vhdl",
                 "scopeName": "source.vhdl",
-                "path": "./syntaxes/vhdl.tmLanguage.json"
+                "path": "./syntaxes/vhdl.json"
             },
             {
                 "language": "verilog",
                 "scopeName": "source.verilog",
-                "path": "./syntaxes/verilog.tmLanguage.json"
+                "path": "./syntaxes/verilog.json"
             },
             {
                 "language": "systemverilog",
@@ -1090,12 +1173,12 @@
             {
                 "language": "vvp",
                 "scopeName": "source.vvp",
-                "path": "./syntaxes/vvp.tmLanguage.json"
+                "path": "./syntaxes/vvp.json"
             },
             {
-                "language": "digital-ide-output",
+                "language": "output",
                 "scopeName": "digital-ide.output",
-                "path": "./syntaxes/digital-ide-output.json"
+                "path": "./syntaxes/output.json"
             },
             {
                 "language": "dideignore",
@@ -1190,27 +1273,6 @@
                     "fontCharacter": "\\ea19"
                 }
             },
-            "export-html": {
-                "description": "export html",
-                "default": {
-                    "fontPath": "./images/icons/iconfont.woff2",
-                    "fontCharacter": "\\e633"
-                }
-            },
-            "export-markdown": {
-                "description": "export markdown",
-                "default": {
-                    "fontPath": "./images/icons/iconfont.woff2",
-                    "fontCharacter": "\\ee68"
-                }
-            },
-            "export-pdf": {
-                "description": "export pdf",
-                "default": {
-                    "fontPath": "./images/icons/iconfont.woff2",
-                    "fontCharacter": "\\e684"
-                }
-            },
             "libpick-folder": {
                 "description": "libpick folder",
                 "default": {
@@ -1256,42 +1318,54 @@
         }
     },
     "scripts": {
-        "vscode:prepublish": "webpack --mode production",
-        "compile": "tsc -p ./",
-        "watch": "tsc -watch -p ./",
-        "pretest": "npm run compile && npm run lint",
-        "lint": "eslint src --ext ts",
-        "test": "node ./out/test/runTest.js"
+        "vscode:prepublish": "npm run build:waveform && npm run build:netlist && npm run compile -- --outDir out-js && node ./node_modules/webpack/bin/webpack.js --mode production",
+        "build:waveform": "npm --prefix ../webui/wave run build && node ./scripts/publish-waveform.js",
+        "check:waveform-publish": "node ./scripts/publish-waveform.js --check",
+        "build:netlist": "npm --prefix ../webui/netlist run build && node ./scripts/publish-netlist.js",
+        "check:netlist-publish": "node ./scripts/publish-netlist.js --check",
+        "check:netlist-fixtures": "node ./scripts/check-netlist-fixtures.js",
+        "build:primitives": "node ./scripts/publish-primitives.js",
+        "check:primitives-publish": "node ./scripts/publish-primitives.js --check",
+        "package:universal": "bash ./scripts/package-universal.sh",
+        "package:win32-x64": "npm run package:universal",
+        "package:linux-x64": "npm run package:universal",
+        "test:lsp-desktop": "npm run compile && npm run build:server && node ./out/test/runTest.js --grep \"SystemVerilog desktop LSP|VHDL desktop LSP\"",
+        "test:win32-lsp": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/test-win32-lsp.ps1",
+        "compile": "npm run build:primitives && node ./node_modules/typescript/bin/tsc -p ./",
+        "watch": "npm run build:netlist && node ./node_modules/typescript/bin/tsc -watch -p ./",
+        "lint": "node ./node_modules/eslint/bin/eslint.js src --ext ts",
+        "build:server": "cargo build --manifest-path ../Cargo.toml --bin digital-server",
+        "test:protocol": "cargo test --manifest-path ../Cargo.toml --test lspprotocol --test syncprotocol --test syncsoak",
+        "test:server": "cargo test --manifest-path ../Cargo.toml --bin digital-server server::",
+        "test:webui": "npm run build:waveform && npm run build:netlist && npm run compile && npm run build:server && node ./out/test/runTest.js --grep \"Webview integration\"",
+        "test:netlist-webui": "npm run check:netlist-fixtures && npm run build:netlist && npm run compile && npm run build:server && node ./out/test/runTest.js --grep \"Netlist Webview integration\"",
+        "test:scale": "cargo test --release --manifest-path ../Cargo.toml --test syncstress -- --ignored --nocapture",
+        "test:soak": "cargo test --release --manifest-path ../Cargo.toml --test syncsoak -- --ignored --nocapture",
+        "test:desktop": "npm run build:waveform && npm run build:netlist && npm run compile && npm run lint && npm run build:server && node ./out/test/runTest.js",
+        "test:all": "npm run test:webui && npm run test:protocol && npm run test:server && npm run test:desktop",
+        "test": "npm run test:all"
     },
     "devDependencies": {
         "@types/mocha": "^10.0.0",
         "@types/node": "16.x",
-        "@types/pako": "^2.0.3",
-        "@types/showdown": "^2.0.0",
         "@types/vscode": "^1.72.0",
+        "@types/ws": "^8.5.10",
         "@typescript-eslint/eslint-plugin": "^5.42.0",
         "@typescript-eslint/parser": "^5.42.0",
         "@vscode/test-electron": "^2.2.0",
         "eslint": "^8.26.0",
+        "ignore": "^5.2.4",
         "mocha": "^10.1.0",
         "typescript": "^4.8.4",
         "webpack-cli": "^5.1.4"
     },
     "dependencies": {
-        "axios": "^1.7.7",
-        "bson": "^6.8.0",
         "chokidar": "^4.0.1",
         "minimatch": "^10.0.1",
-        "pako": "^2.1.0",
         "puppeteer-core": "^19.4.1",
-        "showdown": "^2.1.0",
-        "state-machine-cat": "^9.2.5",
-        "tar": "^7.4.3",
-        "temp": "^0.9.4",
         "vscode-jsonrpc": "^8.2.1",
         "vscode-languageclient": "^9.0.1",
         "vscode-textmate": "^9.0.0",
-        "wavedrom": "^2.9.1",
-        "zlib": "^1.0.5"
+        "ws": "^8.13.0"
     }
 }

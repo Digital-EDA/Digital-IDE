@@ -69,9 +69,6 @@ def modify_vsix():
     copy_dir('./resources/dide-netlist/static/share', os.path.join(extract_folder, 'extension', 'resources', 'dide-netlist', 'static', 'share'))
     copy_file('./resources/dide-netlist/static/yosys.wasm', os.path.join(extract_folder, 'extension', 'resources', 'dide-netlist', 'static', 'yosys.wasm'))
 
-    print("move vcd")
-    copy_dir('./resources/dide-viewer/view', os.path.join(extract_folder, 'extension', 'resources', 'dide-viewer', 'view'))
-
     # remake
     target_path = os.path.join('dist', vsix_path)
     zip_dir(extract_folder, target_path)

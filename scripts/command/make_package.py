@@ -68,8 +68,6 @@ def modify_vsix():
 
     # webview
     copy_dir('./resources/dide-netlist/view', os.path.join(extract_folder, 'extension', 'resources', 'dide-netlist', 'view'))
-    copy_dir('./resources/dide-viewer/view', os.path.join(extract_folder, 'extension', 'resources', 'dide-viewer', 'view'))
-
     # remake
     target_path = os.path.join('dist', vsix_path)
     zip_dir(extract_folder, target_path)

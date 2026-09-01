@@ -135,8 +135,8 @@
     },
 
     "time": {
-        "prefix": "time",
-        "body": ["`timescale 1ns / 1ps"]
+        "prefix": "`time",
+        "body": ["`timescale 1ns/1ps"]
     },
 
     "assign": {
@@ -669,16 +669,5 @@
 			"\\$unsigned($1)"
 		],
 		"description": ""
-	},
-
-    "wavedrom comment": {
-        "prefix" : "wavedrom",
-        "body": [
-            "/* @wavedrom",
-            "{",
-            "    $1",
-            "}",
-            "*/"
-        ]
-    }
+	}
 }

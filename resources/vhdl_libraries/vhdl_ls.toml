@@ -1,0 +1,23 @@
+[libraries]
+
+ieee.files = [
+    'ieee/**/*.vhdl',
+    'synopsys/**/*.vhdl',
+    'vital2000/**/*.vhdl'
+]
+ieee.is_third_party = true
+
+std.files = [
+    'std/**/*.vhd'
+]
+std.is_third_party = true
+
+#synopsys.files = [
+#    'synopsys/**/*.vhdl'
+#]
+#synopsys.is_third_party = true
+#
+#vital2000.files = [
+#    'vital2000/**/*.vhdl'
+#]
+#vital2000.is_third_party = true

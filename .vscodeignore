@@ -15,6 +15,13 @@ script
 resources/**/*.js
 resources/**/*.d.ts
 resources/**/*.wasm
+!resources/kernel/yosys.wasm
+!resources/kernel/place.wasm
+!resources/kernel/route.wasm
+!resources/waveform/**
+!resources/waveform-build-manifest.json
+!resources/netlist/**
+!resources/netlist-build-manifest.json
 resources/**/*.tar.gz
 resources/dide-lsp/server
 tsconfig.json

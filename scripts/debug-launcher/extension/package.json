@@ -1,0 +1,28 @@
+{
+    "name": "digital-ide-current-window-controller",
+    "displayName": "Digital IDE Current Window Controller",
+    "description": "Lets the current remote VS Code window launch the repository extension in a Development Host.",
+    "version": "1.0.0",
+    "publisher": "codex",
+    "engines": {
+        "vscode": "^1.85.0"
+    },
+    "extensionKind": [
+        "workspace"
+    ],
+    "activationEvents": [
+        "*"
+    ],
+    "main": "./extension.js",
+    "categories": [
+        "Other"
+    ],
+    "contributes": {
+        "commands": [
+            {
+                "command": "digitalIdeCurrentWindowController.scan",
+                "title": "Digital IDE: Scan Development Host Requests"
+            }
+        ]
+    }
+}

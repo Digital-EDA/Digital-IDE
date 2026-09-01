@@ -1,0 +1,4 @@
+read_verilog -sv -formal -overwrite "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv"
+hierarchy -check -top hierarchy
+design -reset-vlog; proc;
+write_json "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/netlist/hierarchy.json"

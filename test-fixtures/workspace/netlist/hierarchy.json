@@ -1,0 +1,1647 @@
+{
+  "creator": "Yosys 0.60+51 (git sha1 64a933d77-dirty, clang++ 18.1.2-wasi-sdk -O3)",
+  "modules": {
+    "hierarchy": {
+      "attributes": {
+        "top": "00000000000000000000000000000001",
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:1.1-6.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+        "child": {
+          "hide_name": 0,
+          "type": "hierarchy_level_01",
+          "parameters": {
+          },
+          "attributes": {
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:5.24-5.44"
+          },
+          "port_directions": {
+            "a": "input",
+            "y": "output"
+          },
+          "connections": {
+            "a": [ 2 ],
+            "y": [ 3 ]
+          }
+        }
+      },
+      "netnames": {
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:2.18-2.19"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:3.18-3.19"
+          }
+        }
+      }
+    },
+    "hierarchy_level_01": {
+      "attributes": {
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:8.1-10.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+        "child": {
+          "hide_name": 0,
+          "type": "hierarchy_level_02",
+          "parameters": {
+          },
+          "attributes": {
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:9.24-9.44"
+          },
+          "port_directions": {
+            "a": "input",
+            "y": "output"
+          },
+          "connections": {
+            "a": [ 2 ],
+            "y": [ 3 ]
+          }
+        }
+      },
+      "netnames": {
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:8.40-8.41"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:8.56-8.57"
+          }
+        }
+      }
+    },
+    "hierarchy_level_02": {
+      "attributes": {
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:12.1-14.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+        "child": {
+          "hide_name": 0,
+          "type": "hierarchy_level_03",
+          "parameters": {
+          },
+          "attributes": {
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:13.24-13.44"
+          },
+          "port_directions": {
+            "a": "input",
+            "y": "output"
+          },
+          "connections": {
+            "a": [ 2 ],
+            "y": [ 3 ]
+          }
+        }
+      },
+      "netnames": {
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:12.40-12.41"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:12.56-12.57"
+          }
+        }
+      }
+    },
+    "hierarchy_level_03": {
+      "attributes": {
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:16.1-18.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+        "child": {
+          "hide_name": 0,
+          "type": "hierarchy_level_04",
+          "parameters": {
+          },
+          "attributes": {
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:17.24-17.44"
+          },
+          "port_directions": {
+            "a": "input",
+            "y": "output"
+          },
+          "connections": {
+            "a": [ 2 ],
+            "y": [ 3 ]
+          }
+        }
+      },
+      "netnames": {
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:16.40-16.41"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:16.56-16.57"
+          }
+        }
+      }
+    },
+    "hierarchy_level_04": {
+      "attributes": {
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:20.1-22.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+        "child": {
+          "hide_name": 0,
+          "type": "hierarchy_level_05",
+          "parameters": {
+          },
+          "attributes": {
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:21.24-21.44"
+          },
+          "port_directions": {
+            "a": "input",
+            "y": "output"
+          },
+          "connections": {
+            "a": [ 2 ],
+            "y": [ 3 ]
+          }
+        }
+      },
+      "netnames": {
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:20.40-20.41"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:20.56-20.57"
+          }
+        }
+      }
+    },
+    "hierarchy_level_05": {
+      "attributes": {
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:24.1-26.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+        "child": {
+          "hide_name": 0,
+          "type": "hierarchy_level_06",
+          "parameters": {
+          },
+          "attributes": {
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:25.24-25.44"
+          },
+          "port_directions": {
+            "a": "input",
+            "y": "output"
+          },
+          "connections": {
+            "a": [ 2 ],
+            "y": [ 3 ]
+          }
+        }
+      },
+      "netnames": {
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:24.40-24.41"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:24.56-24.57"
+          }
+        }
+      }
+    },
+    "hierarchy_level_06": {
+      "attributes": {
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:28.1-30.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+        "child": {
+          "hide_name": 0,
+          "type": "hierarchy_level_07",
+          "parameters": {
+          },
+          "attributes": {
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:29.24-29.44"
+          },
+          "port_directions": {
+            "a": "input",
+            "y": "output"
+          },
+          "connections": {
+            "a": [ 2 ],
+            "y": [ 3 ]
+          }
+        }
+      },
+      "netnames": {
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:28.40-28.41"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:28.56-28.57"
+          }
+        }
+      }
+    },
+    "hierarchy_level_07": {
+      "attributes": {
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:32.1-34.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+        "child": {
+          "hide_name": 0,
+          "type": "hierarchy_level_08",
+          "parameters": {
+          },
+          "attributes": {
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:33.24-33.44"
+          },
+          "port_directions": {
+            "a": "input",
+            "y": "output"
+          },
+          "connections": {
+            "a": [ 2 ],
+            "y": [ 3 ]
+          }
+        }
+      },
+      "netnames": {
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:32.40-32.41"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:32.56-32.57"
+          }
+        }
+      }
+    },
+    "hierarchy_level_08": {
+      "attributes": {
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:36.1-38.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+        "child": {
+          "hide_name": 0,
+          "type": "hierarchy_level_09",
+          "parameters": {
+          },
+          "attributes": {
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:37.24-37.44"
+          },
+          "port_directions": {
+            "a": "input",
+            "y": "output"
+          },
+          "connections": {
+            "a": [ 2 ],
+            "y": [ 3 ]
+          }
+        }
+      },
+      "netnames": {
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:36.40-36.41"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:36.56-36.57"
+          }
+        }
+      }
+    },
+    "hierarchy_level_09": {
+      "attributes": {
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:40.1-42.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+        "child": {
+          "hide_name": 0,
+          "type": "hierarchy_level_10",
+          "parameters": {
+          },
+          "attributes": {
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:41.24-41.44"
+          },
+          "port_directions": {
+            "a": "input",
+            "y": "output"
+          },
+          "connections": {
+            "a": [ 2 ],
+            "y": [ 3 ]
+          }
+        }
+      },
+      "netnames": {
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:40.40-40.41"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:40.56-40.57"
+          }
+        }
+      }
+    },
+    "hierarchy_level_10": {
+      "attributes": {
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:44.1-46.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+        "child": {
+          "hide_name": 0,
+          "type": "hierarchy_level_11",
+          "parameters": {
+          },
+          "attributes": {
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:45.24-45.44"
+          },
+          "port_directions": {
+            "a": "input",
+            "y": "output"
+          },
+          "connections": {
+            "a": [ 2 ],
+            "y": [ 3 ]
+          }
+        }
+      },
+      "netnames": {
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:44.40-44.41"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:44.56-44.57"
+          }
+        }
+      }
+    },
+    "hierarchy_level_11": {
+      "attributes": {
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:48.1-50.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+        "child": {
+          "hide_name": 0,
+          "type": "hierarchy_level_12",
+          "parameters": {
+          },
+          "attributes": {
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:49.24-49.44"
+          },
+          "port_directions": {
+            "a": "input",
+            "y": "output"
+          },
+          "connections": {
+            "a": [ 2 ],
+            "y": [ 3 ]
+          }
+        }
+      },
+      "netnames": {
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:48.40-48.41"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:48.56-48.57"
+          }
+        }
+      }
+    },
+    "hierarchy_level_12": {
+      "attributes": {
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:52.1-54.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+        "child": {
+          "hide_name": 0,
+          "type": "hierarchy_level_13",
+          "parameters": {
+          },
+          "attributes": {
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:53.24-53.44"
+          },
+          "port_directions": {
+            "a": "input",
+            "y": "output"
+          },
+          "connections": {
+            "a": [ 2 ],
+            "y": [ 3 ]
+          }
+        }
+      },
+      "netnames": {
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:52.40-52.41"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:52.56-52.57"
+          }
+        }
+      }
+    },
+    "hierarchy_level_13": {
+      "attributes": {
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:56.1-58.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+        "child": {
+          "hide_name": 0,
+          "type": "hierarchy_level_14",
+          "parameters": {
+          },
+          "attributes": {
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:57.24-57.44"
+          },
+          "port_directions": {
+            "a": "input",
+            "y": "output"
+          },
+          "connections": {
+            "a": [ 2 ],
+            "y": [ 3 ]
+          }
+        }
+      },
+      "netnames": {
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:56.40-56.41"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:56.56-56.57"
+          }
+        }
+      }
+    },
+    "hierarchy_level_14": {
+      "attributes": {
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:60.1-62.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+        "child": {
+          "hide_name": 0,
+          "type": "hierarchy_level_15",
+          "parameters": {
+          },
+          "attributes": {
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:61.24-61.44"
+          },
+          "port_directions": {
+            "a": "input",
+            "y": "output"
+          },
+          "connections": {
+            "a": [ 2 ],
+            "y": [ 3 ]
+          }
+        }
+      },
+      "netnames": {
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:60.40-60.41"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:60.56-60.57"
+          }
+        }
+      }
+    },
+    "hierarchy_level_15": {
+      "attributes": {
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:64.1-66.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+        "child": {
+          "hide_name": 0,
+          "type": "hierarchy_level_16",
+          "parameters": {
+          },
+          "attributes": {
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:65.24-65.44"
+          },
+          "port_directions": {
+            "a": "input",
+            "y": "output"
+          },
+          "connections": {
+            "a": [ 2 ],
+            "y": [ 3 ]
+          }
+        }
+      },
+      "netnames": {
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:64.40-64.41"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:64.56-64.57"
+          }
+        }
+      }
+    },
+    "hierarchy_level_16": {
+      "attributes": {
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:68.1-70.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+        "child": {
+          "hide_name": 0,
+          "type": "hierarchy_level_17",
+          "parameters": {
+          },
+          "attributes": {
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:69.24-69.44"
+          },
+          "port_directions": {
+            "a": "input",
+            "y": "output"
+          },
+          "connections": {
+            "a": [ 2 ],
+            "y": [ 3 ]
+          }
+        }
+      },
+      "netnames": {
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:68.40-68.41"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:68.56-68.57"
+          }
+        }
+      }
+    },
+    "hierarchy_level_17": {
+      "attributes": {
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:72.1-74.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+        "child": {
+          "hide_name": 0,
+          "type": "hierarchy_level_18",
+          "parameters": {
+          },
+          "attributes": {
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:73.24-73.44"
+          },
+          "port_directions": {
+            "a": "input",
+            "y": "output"
+          },
+          "connections": {
+            "a": [ 2 ],
+            "y": [ 3 ]
+          }
+        }
+      },
+      "netnames": {
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:72.40-72.41"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:72.56-72.57"
+          }
+        }
+      }
+    },
+    "hierarchy_level_18": {
+      "attributes": {
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:76.1-78.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+        "child": {
+          "hide_name": 0,
+          "type": "hierarchy_level_19",
+          "parameters": {
+          },
+          "attributes": {
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:77.24-77.44"
+          },
+          "port_directions": {
+            "a": "input",
+            "y": "output"
+          },
+          "connections": {
+            "a": [ 2 ],
+            "y": [ 3 ]
+          }
+        }
+      },
+      "netnames": {
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:76.40-76.41"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:76.56-76.57"
+          }
+        }
+      }
+    },
+    "hierarchy_level_19": {
+      "attributes": {
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:80.1-82.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+        "child": {
+          "hide_name": 0,
+          "type": "hierarchy_level_20",
+          "parameters": {
+          },
+          "attributes": {
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:81.24-81.44"
+          },
+          "port_directions": {
+            "a": "input",
+            "y": "output"
+          },
+          "connections": {
+            "a": [ 2 ],
+            "y": [ 3 ]
+          }
+        }
+      },
+      "netnames": {
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:80.40-80.41"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:80.56-80.57"
+          }
+        }
+      }
+    },
+    "hierarchy_level_20": {
+      "attributes": {
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:84.1-86.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+        "child": {
+          "hide_name": 0,
+          "type": "hierarchy_level_21",
+          "parameters": {
+          },
+          "attributes": {
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:85.24-85.44"
+          },
+          "port_directions": {
+            "a": "input",
+            "y": "output"
+          },
+          "connections": {
+            "a": [ 2 ],
+            "y": [ 3 ]
+          }
+        }
+      },
+      "netnames": {
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:84.40-84.41"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:84.56-84.57"
+          }
+        }
+      }
+    },
+    "hierarchy_level_21": {
+      "attributes": {
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:88.1-90.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+        "child": {
+          "hide_name": 0,
+          "type": "hierarchy_level_22",
+          "parameters": {
+          },
+          "attributes": {
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:89.24-89.44"
+          },
+          "port_directions": {
+            "a": "input",
+            "y": "output"
+          },
+          "connections": {
+            "a": [ 2 ],
+            "y": [ 3 ]
+          }
+        }
+      },
+      "netnames": {
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:88.40-88.41"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:88.56-88.57"
+          }
+        }
+      }
+    },
+    "hierarchy_level_22": {
+      "attributes": {
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:92.1-94.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+        "child": {
+          "hide_name": 0,
+          "type": "hierarchy_level_23",
+          "parameters": {
+          },
+          "attributes": {
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:93.24-93.44"
+          },
+          "port_directions": {
+            "a": "input",
+            "y": "output"
+          },
+          "connections": {
+            "a": [ 2 ],
+            "y": [ 3 ]
+          }
+        }
+      },
+      "netnames": {
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:92.40-92.41"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:92.56-92.57"
+          }
+        }
+      }
+    },
+    "hierarchy_level_23": {
+      "attributes": {
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:96.1-98.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+        "child": {
+          "hide_name": 0,
+          "type": "hierarchy_level_24",
+          "parameters": {
+          },
+          "attributes": {
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:97.24-97.44"
+          },
+          "port_directions": {
+            "a": "input",
+            "y": "output"
+          },
+          "connections": {
+            "a": [ 2 ],
+            "y": [ 3 ]
+          }
+        }
+      },
+      "netnames": {
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:96.40-96.41"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:96.56-96.57"
+          }
+        }
+      }
+    },
+    "hierarchy_level_24": {
+      "attributes": {
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:100.1-102.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+        "child": {
+          "hide_name": 0,
+          "type": "hierarchy_level_25",
+          "parameters": {
+          },
+          "attributes": {
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:101.24-101.44"
+          },
+          "port_directions": {
+            "a": "input",
+            "y": "output"
+          },
+          "connections": {
+            "a": [ 2 ],
+            "y": [ 3 ]
+          }
+        }
+      },
+      "netnames": {
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:100.40-100.41"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:100.56-100.57"
+          }
+        }
+      }
+    },
+    "hierarchy_level_25": {
+      "attributes": {
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:104.1-106.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+        "child": {
+          "hide_name": 0,
+          "type": "hierarchy_level_26",
+          "parameters": {
+          },
+          "attributes": {
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:105.24-105.44"
+          },
+          "port_directions": {
+            "a": "input",
+            "y": "output"
+          },
+          "connections": {
+            "a": [ 2 ],
+            "y": [ 3 ]
+          }
+        }
+      },
+      "netnames": {
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:104.40-104.41"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:104.56-104.57"
+          }
+        }
+      }
+    },
+    "hierarchy_level_26": {
+      "attributes": {
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:108.1-110.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+        "child": {
+          "hide_name": 0,
+          "type": "hierarchy_level_27",
+          "parameters": {
+          },
+          "attributes": {
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:109.24-109.44"
+          },
+          "port_directions": {
+            "a": "input",
+            "y": "output"
+          },
+          "connections": {
+            "a": [ 2 ],
+            "y": [ 3 ]
+          }
+        }
+      },
+      "netnames": {
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:108.40-108.41"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:108.56-108.57"
+          }
+        }
+      }
+    },
+    "hierarchy_level_27": {
+      "attributes": {
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:112.1-114.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+        "child": {
+          "hide_name": 0,
+          "type": "hierarchy_level_28",
+          "parameters": {
+          },
+          "attributes": {
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:113.24-113.44"
+          },
+          "port_directions": {
+            "a": "input",
+            "y": "output"
+          },
+          "connections": {
+            "a": [ 2 ],
+            "y": [ 3 ]
+          }
+        }
+      },
+      "netnames": {
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:112.40-112.41"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:112.56-112.57"
+          }
+        }
+      }
+    },
+    "hierarchy_level_28": {
+      "attributes": {
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:116.1-118.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+        "child": {
+          "hide_name": 0,
+          "type": "hierarchy_level_29",
+          "parameters": {
+          },
+          "attributes": {
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:117.24-117.44"
+          },
+          "port_directions": {
+            "a": "input",
+            "y": "output"
+          },
+          "connections": {
+            "a": [ 2 ],
+            "y": [ 3 ]
+          }
+        }
+      },
+      "netnames": {
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:116.40-116.41"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:116.56-116.57"
+          }
+        }
+      }
+    },
+    "hierarchy_level_29": {
+      "attributes": {
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:120.1-122.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+        "child": {
+          "hide_name": 0,
+          "type": "hierarchy_level_30",
+          "parameters": {
+          },
+          "attributes": {
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:121.24-121.44"
+          },
+          "port_directions": {
+            "a": "input",
+            "y": "output"
+          },
+          "connections": {
+            "a": [ 2 ],
+            "y": [ 3 ]
+          }
+        }
+      },
+      "netnames": {
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:120.40-120.41"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:120.56-120.57"
+          }
+        }
+      }
+    },
+    "hierarchy_level_30": {
+      "attributes": {
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:124.1-126.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+        "child": {
+          "hide_name": 0,
+          "type": "hierarchy_level_31",
+          "parameters": {
+          },
+          "attributes": {
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:125.24-125.44"
+          },
+          "port_directions": {
+            "a": "input",
+            "y": "output"
+          },
+          "connections": {
+            "a": [ 2 ],
+            "y": [ 3 ]
+          }
+        }
+      },
+      "netnames": {
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:124.40-124.41"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:124.56-124.57"
+          }
+        }
+      }
+    },
+    "hierarchy_level_31": {
+      "attributes": {
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:128.1-130.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+        "$not$/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:129$1": {
+          "hide_name": 1,
+          "type": "$not",
+          "parameters": {
+            "A_SIGNED": "00000000000000000000000000000000",
+            "A_WIDTH": "00000000000000000000000000000001",
+            "Y_WIDTH": "00000000000000000000000000000001"
+          },
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:129.16-129.18"
+          },
+          "port_directions": {
+            "A": "input",
+            "Y": "output"
+          },
+          "connections": {
+            "A": [ 2 ],
+            "Y": [ 3 ]
+          }
+        }
+      },
+      "netnames": {
+        "$not$/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:129$1_Y": {
+          "hide_name": 1,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:129.16-129.18"
+          }
+        },
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:128.40-128.41"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv:128.56-128.57"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+    "toolChain": "xilinx",
+    "prjName": {
+        "PL": "lsp-test",
+        "PS": "lsp-test"
+    },
+    "arch": {
+        "prjPath": "${workspace}",
+        "hardware": {
+            "src": "${workspace}/src",
+            "sim": "${workspace}/sim",
+            "data": "${workspace}/data"
+        },
+        "software": {
+            "src": "${workspace}/software",
+            "data": "${workspace}/software/data"
+        }
+    },
+    "library": {
+        "state": "local",
+        "hardware": {
+            "common": [],
+            "custom": []
+        }
+    },
+    "filelist": {
+        "sources": [],
+        "includeDirs": [
+            "include"
+        ],
+        "defines": {}
+    },
+    "IP_REPO": [],
+    "soc": {
+        "core": "ps7_cortexa9_0",
+        "bd": "",
+        "os": "standalone",
+        "app": "Hello World"
+    },
+    "device": "xc7a35tftg256-1"
+}

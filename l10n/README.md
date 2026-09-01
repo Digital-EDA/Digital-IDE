@@ -24,16 +24,16 @@
 
 ```json
 {
-    "info.vcd-view.load.button": "加载",
-    "info.vcd-view.load.title": "加载",
-    "info.vcd-view.load.text": "正在加载 ..."
+    "info.monitor.refresh.button": "刷新",
+    "info.monitor.refresh.title": "刷新",
+    "info.monitor.refresh.text": "正在刷新 ..."
 }
 ```
 
-它们都代表了 `vcd-view` 这个功能模块的名为 `load` 的功能的中文翻译，但是这三个文本分别描述了实施这个 load 功能的功能组件：
+它们都代表了 `monitor` 这个功能模块的名为 `refresh` 的功能的中文翻译，但是这三个文本分别描述了实施这个 refresh 功能的功能组件：
 
-- `info.vcd-view.load.button` 描述了 button 位置上需要渲染的文本
-- `info.vcd-view.load.title` 描述了 title 位置上需要渲染的文本
-- `info.vcd-view.load.text` 描述了 text 位置上需要渲染的文本
+- `info.monitor.refresh.button` 描述了 button 位置上需要渲染的文本
+- `info.monitor.refresh.title` 描述了 title 位置上需要渲染的文本
+- `info.monitor.refresh.text` 描述了 text 位置上需要渲染的文本
 
 关于如何进行规定 `<component>` 位置上的值，应该由产品经理来规定。

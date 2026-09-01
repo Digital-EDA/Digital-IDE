@@ -1,150 +1,133 @@
 import * as vscode from 'vscode';
-import * as fs from 'fs';
+import { MainOutput, ReportType, outputChannels } from './global/outputs';
+import { t } from './i18n';
+import { registerToolchainCommands } from './toolchain/commands';
+import { registerProjectCommands } from './project/commands';
+import type { LanguageClient } from 'vscode-languageclient/node';
+import type { ProjectExtensionApi } from './project/commands';
+import type { DigitalServerExtensionApi } from './server/server';
+import { registerWaveformSupport } from './waveform';
+import type { WaveformPanelManager } from './waveform';
+import { normalizeWindowsPath } from './utils/paths';
 
-import { MainOutput, ReportType, IProgress, globalLookup } from './global';
-import { hdlParam } from './hdlParser';
-import * as manager from './manager';
-import * as lspLinter from './function/lsp/linter';
-import * as func from './function';
-import { hdlMonitor } from './monitor';
-
-import * as lspClient from './function/lsp-client';
-import { refreshArchTree } from './function/treeView';
-import { initialiseI18n, t } from './i18n';
-
-
-async function registerCommand(context: vscode.ExtensionContext, packageJson: any) {
-    func.registerFunctionCommands(context);
-    func.registerTreeViewDataProvider(context);
-    func.registerLsp(context, packageJson.version);
-    func.registerToolCommands(context);
-    func.registerNetlist(context);
-    func.registerWaveViewer(context);
-
-    // onCommand 激活事件中的命令
-    context.subscriptions.push(
-        vscode.commands.registerCommand('digital-ide.property-json.generate', () => {
-            manager.prjManage.generatePropertyJson(context);
-        })
-    );
-    context.subscriptions.push(
-        vscode.commands.registerCommand('digital-ide.structure.from-xilinx-to-standard', () => {
-            manager.prjManage.transformXilinxToStandard(context);
-        })
-    );
-    context.subscriptions.push(
-        vscode.commands.registerCommand('digital-ide.property-json.overwrite', () => {
-            manager.prjManage.overwritePropertyJson()
-        })
-    )
+export interface DigitalIdeExtensionApi {
+    readonly project: ProjectExtensionApi;
+    readonly waveform: WaveformPanelManager;
+    readonly ready: Promise<DigitalServerExtensionApi>;
 }
 
-function readPackageJson(context: vscode.ExtensionContext): any | undefined {
-    const extensionPath = context.extensionPath;
-    const packagePath = extensionPath + '/package.json';
-    if (!fs.existsSync(packagePath)) {
-        vscode.window.showErrorMessage("Digital IDE 安装目录已经被污染，请重新安装！");
-        return undefined;
-    }
-    const packageMeta = fs.readFileSync(packagePath, { encoding: 'utf-8' });
-    return JSON.parse(packageMeta);
+let serverModulePromise: Promise<typeof import('./server/server')> | undefined;
+
+export function activate(
+    context: vscode.ExtensionContext,
+): DigitalIdeExtensionApi {
+    context.subscriptions.push(...outputChannels);
+    const version = String(context.extension.packageJSON.version ?? 'unknown');
+    const workspace = vscode.workspace.workspaceFolders?.[0]
+        ? normalizeWindowsPath(vscode.workspace.workspaceFolders[0].uri.fsPath)
+        : 'no workspace';
+    MainOutput.report(`Digital-IDE ${version} extension activation started.`, {
+        level: ReportType.Launch,
+    });
+    MainOutput.report(`Workspace: ${workspace}`, { level: ReportType.Info });
+    let resolveClient!: (client: LanguageClient) => void;
+    let rejectClient!: (reason?: unknown) => void;
+    const clientReady = new Promise<LanguageClient>((resolve, reject) => {
+        resolveClient = resolve;
+        rejectClient = reject;
+    });
+
+    // These providers contain only static nodes and must be registered before
+    // any backend module is loaded or any LSP initialization work begins.
+    registerToolchainCommands(context, clientReady);
+    const project = registerProjectCommands(context, clientReady);
+    const waveform = registerWaveformSupport(context, clientReady);
+    MainOutput.report('Static TOOL/HARD/SOFT views and commands registered.', {
+        level: ReportType.Info,
+    });
+
+    const ready = afterExtensionActivation(() => activateBackend(
+        context,
+        project,
+        waveform,
+        resolveClient,
+        rejectClient,
+    ));
+    void ready.catch(error => {
+        MainOutput.report(`Digital IDE backend activation failed: ${String(error)}`, {
+            level: ReportType.Error,
+        });
+    });
+    return { project, waveform, ready };
 }
 
-async function launch(context: vscode.ExtensionContext) {
-    initialiseI18n(context);
-
-    console.log(t('info.welcome.title'));
-    console.log(t('info.welcome.join-qq-group') + ' https://qm.qq.com/q/1M655h3GsA');
-
-    const packageJson = readPackageJson(context);
-    MainOutput.report(t('info.launch.digital-ide-current-version') + packageJson.version, {
-        level: ReportType.Launch
+async function activateBackend(
+    context: vscode.ExtensionContext,
+    project: ProjectExtensionApi,
+    waveform: WaveformPanelManager,
+    resolveClient: (client: LanguageClient) => void,
+    rejectClient: (reason?: unknown) => void,
+): Promise<DigitalServerExtensionApi> {
+    MainOutput.report('Loading Digital Server integration.', { level: ReportType.Launch });
+    serverModulePromise ??= import('./server/server');
+    const server = await serverModulePromise;
+    const api = await vscode.window.withProgress(
+        {
+            location: vscode.ProgressLocation.Window,
+            title: t('info.progress.launch-lsp'),
+        },
+        async () => {
+            try {
+                const activated = await server.activate(context);
+                resolveClient(activated.client);
+                return activated;
+            } catch (error) {
+                rejectClient(error);
+                throw error;
+            }
+        },
+    );
+    const [filelist, simulation, netlist, debuggerModule] = await Promise.all([
+        import('./filelist/commands'),
+        import('./simulation/commands'),
+        import('./netlist/commands'),
+        import('./debugger/commands'),
+    ]);
+    filelist.registerFilelistCommands(context, api.client);
+    simulation.registerSimulationCommands(context, api.client, waveform);
+    const netlistManager = netlist.registerNetlistCommands(context, api.client);
+    const debuggerApi = debuggerModule.registerDebuggerCommands(context, api.client, waveform);
+    MainOutput.report(
+        'Filelist, simulation, netlist, and debugger commands registered.',
+        { level: ReportType.Info },
+    );
+    MainOutput.report('Digital-IDE extension activation completed successfully.', {
+        level: ReportType.Finish,
     });
+    return { ...api, project, debugger: debuggerApi, waveform, netlist: netlistManager };
+}
 
-    if (packageJson === undefined) {
-        return;
-    }
-    
-    await vscode.window.withProgress({
-        location: vscode.ProgressLocation.Window,
-        title: t('info.progress.register-command')
-    }, async () => {
-        await registerCommand(context, packageJson);
+function afterExtensionActivation<T>(task: () => Promise<T>): Promise<T> {
+    return new Promise<T>((resolve, reject) => {
+        setImmediate(() => {
+            void task().then(resolve, reject);
+        });
     });
+}
 
-    // 注册全局变量
-    globalLookup.activeEditor = vscode.window.activeTextEditor;
-
-    await vscode.window.withProgress({
-        location: vscode.ProgressLocation.Window,
-        title: t('info.progress.initialize-configure')        
-    }, async () => {
-        // 初始化 OpeParam
-        // 包含基本的插件的文件系统信息、用户配置文件和系统配置文件的合并数据结构
-        const refreshPrjConfig = await manager.prjManage.initOpeParam(context);
-        manager.prjManage.refreshPrjFolder(refreshPrjConfig);
-    });
-
-    await vscode.window.withProgress({
-        location: vscode.ProgressLocation.Window,
-        title: t('info.progress.launch-lsp')
-    }, async () => {
-        await lspClient.activate(context, packageJson);
-    });
-        
-    const hdlFiles = await vscode.window.withProgress({
-        location: vscode.ProgressLocation.Window,
-        title: t('info.progress.initialization')
-    }, async (progress: vscode.Progress<IProgress>, token: vscode.CancellationToken) => {
-        // 初始化解析
-        const hdlFiles = await manager.prjManage.initialise(context, progress);
-        
-        // 这里是因为 pl 对象在 initialise 完成初始化，此处再注册它的行为
-        manager.registerManagerCommands(context);
-
-        // 刷新结构树
-        refreshArchTree();
-
-        // 启动监视器
-        hdlMonitor.start();
-
-        return hdlFiles;
-    });
-
-
-    await vscode.window.withProgress({
-        location: vscode.ProgressLocation.Window,
-        title: t('info.progress.doing-diagnostic')
-    }, async (progress: vscode.Progress<IProgress>, token: vscode.CancellationToken) => {
-        // 完成诊断器初始化
-        await lspLinter.initialise(context, hdlFiles, progress);
-    });
-
-    console.log(hdlParam);
-    
-    // show welcome information (if first install)
-    const welcomeSetting = vscode.workspace.getConfiguration('digital-ide.welcome');
-    const showWelcome = welcomeSetting.get('show', true);
- 
-    if (showWelcome) {
-        // don't show in next time
-        welcomeSetting.update('show', false, vscode.ConfigurationTarget.Global);
-        const res = await vscode.window.showInformationMessage(
-            t('info.welcome.title'),
-            { title: t('info.welcome.star'), value: true },
-            { title: t('info.welcome.refuse'), value: false },
-        );
-        if (res?.value) {
-            vscode.env.openExternal(vscode.Uri.parse('https://github.com/Digital-EDA/Digital-IDE'));
+export async function deactivate(): Promise<void> {
+    if (serverModulePromise) {
+        MainOutput.report('Stopping Digital-IDE backend services.', { level: ReportType.Info });
+        try {
+            await (await serverModulePromise).deactivate();
+            MainOutput.report('Digital-IDE backend services stopped.', {
+                level: ReportType.Finish,
+            });
+        } catch (error) {
+            MainOutput.report(`Failed to stop Digital-IDE backend services: ${String(error)}`, {
+                level: ReportType.Error,
+            });
+            throw error;
         }
     }
-}
-
-export function activate(context: vscode.ExtensionContext) {
-    launch(context);
-}
-
-export function deactivate() {
-    lspClient.deactivate();
-    manager.prjManage.pl?.exit();
 }

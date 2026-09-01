@@ -1,0 +1,5 @@
+{
+    "digital-ide.standard.vhdl": "2008",
+    "digital-ide.function.lsp.linter.mode": "full",
+    "digital-ide.function.lsp.linter.linter-level": "warning"
+}

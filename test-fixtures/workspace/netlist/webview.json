@@ -1,0 +1,66 @@
+{
+  "creator": "Yosys 0.60+51 (git sha1 64a933d77-dirty, clang++ 18.1.2-wasi-sdk -O3)",
+  "modules": {
+    "webview": {
+      "attributes": {
+        "top": "00000000000000000000000000000001",
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/webview.sv:1.1-6.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 3 ]
+        }
+      },
+      "cells": {
+        "$not$/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/webview.sv:5$1": {
+          "hide_name": 1,
+          "type": "$not",
+          "parameters": {
+            "A_SIGNED": "00000000000000000000000000000000",
+            "A_WIDTH": "00000000000000000000000000000001",
+            "Y_WIDTH": "00000000000000000000000000000001"
+          },
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/webview.sv:5.16-5.18"
+          },
+          "port_directions": {
+            "A": "input",
+            "Y": "output"
+          },
+          "connections": {
+            "A": [ 2 ],
+            "Y": [ 3 ]
+          }
+        }
+      },
+      "netnames": {
+        "$not$/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/webview.sv:5$1_Y": {
+          "hide_name": 1,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/webview.sv:5.16-5.18"
+          }
+        },
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/webview.sv:2.18-2.19"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/webview.sv:3.18-3.19"
+          }
+        }
+      }
+    }
+  }
+}

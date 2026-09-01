@@ -1,0 +1,2 @@
+module ignored_architecture_top;
+endmodule

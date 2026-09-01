@@ -1,0 +1,65 @@
+
+ /----------------------------------------------------------------------------\
+ |  yosys -- Yosys Open SYnthesis Suite                                       |
+ |  Copyright (C) 2012 - 2025  Claire Xenia Wolf <claire@yosyshq.com>         |
+ |  Distributed under an ISC-like license, type "license" to see terms        |
+ \----------------------------------------------------------------------------/
+ Yosys 0.60+51 (git sha1 64a933d77-dirty, clang++ 18.1.2-wasi-sdk -O3)
+
+-- Running command `read_verilog -sv -formal -overwrite "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv"
+hierarchy -check -top hierarchy
+design -reset-vlog; proc;
+write_json "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/netlist/hierarchy.json"
+' --
+
+1. Executing Verilog-2005 frontend: /home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv
+Parsing formal SystemVerilog input from `/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv' to AST representation.
+verilog frontend filename /home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/hierarchy.sv
+Generating RTLIL representation for module `\hierarchy'.
+Generating RTLIL representation for module `\hierarchy_level_01'.
+Generating RTLIL representation for module `\hierarchy_level_02'.
+Generating RTLIL representation for module `\hierarchy_level_03'.
+Generating RTLIL representation for module `\hierarchy_level_04'.
+Generating RTLIL representation for module `\hierarchy_level_05'.
+Generating RTLIL representation for module `\hierarchy_level_06'.
+Generating RTLIL representation for module `\hierarchy_level_07'.
+Generating RTLIL representation for module `\hierarchy_level_08'.
+Generating RTLIL representation for module `\hierarchy_level_09'.
+Generating RTLIL representation for module `\hierarchy_level_10'.
+Generating RTLIL representation for module `\hierarchy_level_11'.
+Generating RTLIL representation for module `\hierarchy_level_12'.
+Generating RTLIL representation for module `\hierarchy_level_13'.
+Generating RTLIL representation for module `\hierarchy_level_14'.
+Generating RTLIL representation for module `\hierarchy_level_15'.
+Generating RTLIL representation for module `\hierarchy_level_16'.
+Generating RTLIL representation for module `\hierarchy_level_17'.
+Generating RTLIL representation for module `\hierarchy_level_18'.
+Generating RTLIL representation for module `\hierarchy_level_19'.
+Generating RTLIL representation for module `\hierarchy_level_20'.
+Generating RTLIL representation for module `\hierarchy_level_21'.
+Generating RTLIL representation for module `\hierarchy_level_22'.
+Generating RTLIL representation for module `\hierarchy_level_23'.
+Generating RTLIL representation for module `\hierarchy_level_24'.
+Generating RTLIL representation for module `\hierarchy_level_25'.
+Generating RTLIL representation for module `\hierarchy_level_26'.
+Generating RTLIL representation for module `\hierarchy_level_27'.
+Generating RTLIL representation for module `\hierarchy_level_28'.
+Generating RTLIL representation for module `\hierarchy_level_29'.
+Generating RTLIL representation for module `\hierarchy_level_30'.
+Generating RTLIL representation for module `\hierarchy_level_31'.
+Successfully finished Verilog frontend.
+
+2. Executing HIERARCHY pass (managing design hierarchy).
+
+2.1. Analyzing design hierarchy..
+Top module:  \hierarchy
+Used module:     \hierarchy_level_01
+Used module:         \hierarchy_level_02
+Used module:             \hierarchy_level_03
+Used module:                 \hierarchy_level_04
+Used module:                     \hierarchy_level_05
+Used module:                         \hierarchy_level_06
+Used module:                             \hierarchy_level_07
+Used module:                                 \hierarchy_level_08
+Used module:                                     \hierarchy_level_09
+Used module:                             

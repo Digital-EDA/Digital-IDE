@@ -6,26 +6,13 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.4.0]
 
-- 新的 VCD 波形渲染器
 - 新的 Netlist 渲染器
 - 新的 LSP 后端
-
-## [0.3.4] - 2024-08-28
-
-Feature
-
-VCA wave 渲染器 https://nc-ai-lab.feishu.cn/wiki/K7gVwwU02iNMc8krIHucPwhqnff#share-NjuodrRQAoxEotxRicOc7BXDnOh
 
 ## [0.3.3] - 2024-02-05
 
 Feature
 - 重做了文档化功能，并且添加了参数和接口的 diagram 可视化的渲染模块
-- 增加了波形显示器，支持以下特性
-    - 完整的 vcd 支持，对于 IEEE VCD 标准完全支持。
-    - 基于 wasm 的 数据解析 和基于 webgl2 的渲染，拥有接近原生的运行速度。
-    - 主线程渲染和渲染数据的加载实现了调度隔离，再大的 vcd 也不会造成卡顿。
-    - 支持用户自定义调整波形颜色，移动灵敏度等等。
-    - 支持用户自定义搜索信号名称。
 
 Bug 修复
 - Verilog 参数例化位置错误
@@ -38,13 +25,12 @@ Bug 修复
 Feature
 - 增加对于 vhdl 的 全面支持（文件树、LSP等）
 - 增加对 XDC，TCL 等脚本的 LSP 支持
-- 增加 verilog, vhdl, xdc, tcl, vvp, vcd 等语言或生成文件的工作区图标
+- 增加 verilog, vhdl, xdc, tcl, vvp 等语言或生成文件的工作区图标
 - 增加对于 vivado, modelsim, verilator 的支持，用户可以通过设置 `function.lsp.linter.vhdl.diagnostor`(设置 vhdl) 和 `function.lsp.linter.vlog.diagnostor`(设置 verilog) 来使用这些第三方工具的仿真和自动纠错。
 - 增加对于 TCL, XDC, VVP 等脚本的 LSP 和 语法高亮 支持。
 
 Change
 - 将插件的工作状态显示在 vscode 下侧的状态栏上，利于用户了解目前的设置状态
-- 状态栏右下角现在可以看到目前选择的linter以及是否正常工作了
 - 优化项目配置目录
 - 优化自动补全的性能
 
@@ -146,7 +132,7 @@ Bug 修复
 
 ## [0.0.2] - 2020-02-28
 
-- Added testbench / instance function
+- Added instance generation function
 
 ## [0.0.1] - 2020-02-15
 

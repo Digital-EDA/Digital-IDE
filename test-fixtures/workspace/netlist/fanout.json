@@ -1,0 +1,732 @@
+{
+  "creator": "Yosys 0.60+51 (git sha1 64a933d77-dirty, clang++ 18.1.2-wasi-sdk -O3)",
+  "modules": {
+    "fanout": {
+      "attributes": {
+        "top": "00000000000000000000000000000001",
+        "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:1.1-36.10"
+      },
+      "ports": {
+        "source": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "y00": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y01": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y02": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y03": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y04": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y05": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y06": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y07": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y08": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y09": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y10": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y11": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y12": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y13": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y14": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y15": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y16": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y17": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y18": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y19": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y20": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y21": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y22": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y23": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y24": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y25": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y26": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y27": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y28": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y29": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y30": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y31": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y32": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y33": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y34": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y35": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y36": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y37": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y38": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y39": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y40": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y41": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y42": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y43": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y44": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y45": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y46": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y47": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y48": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y49": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y50": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y51": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y52": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y53": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y54": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y55": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y56": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y57": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y58": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y59": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y60": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y61": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y62": {
+          "direction": "output",
+          "bits": [ 2 ]
+        },
+        "y63": {
+          "direction": "output",
+          "bits": [ 2 ]
+        }
+      },
+      "cells": {
+      },
+      "netnames": {
+        "source": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:2.18-2.24"
+          }
+        },
+        "y00": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:3.18-3.21"
+          }
+        },
+        "y01": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:3.36-3.39"
+          }
+        },
+        "y02": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:3.54-3.57"
+          }
+        },
+        "y03": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:3.72-3.75"
+          }
+        },
+        "y04": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:4.18-4.21"
+          }
+        },
+        "y05": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:4.36-4.39"
+          }
+        },
+        "y06": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:4.54-4.57"
+          }
+        },
+        "y07": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:4.72-4.75"
+          }
+        },
+        "y08": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:5.18-5.21"
+          }
+        },
+        "y09": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:5.36-5.39"
+          }
+        },
+        "y10": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:5.54-5.57"
+          }
+        },
+        "y11": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:5.72-5.75"
+          }
+        },
+        "y12": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:6.18-6.21"
+          }
+        },
+        "y13": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:6.36-6.39"
+          }
+        },
+        "y14": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:6.54-6.57"
+          }
+        },
+        "y15": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:6.72-6.75"
+          }
+        },
+        "y16": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:7.18-7.21"
+          }
+        },
+        "y17": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:7.36-7.39"
+          }
+        },
+        "y18": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:7.54-7.57"
+          }
+        },
+        "y19": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:7.72-7.75"
+          }
+        },
+        "y20": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:8.18-8.21"
+          }
+        },
+        "y21": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:8.36-8.39"
+          }
+        },
+        "y22": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:8.54-8.57"
+          }
+        },
+        "y23": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:8.72-8.75"
+          }
+        },
+        "y24": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:9.18-9.21"
+          }
+        },
+        "y25": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:9.36-9.39"
+          }
+        },
+        "y26": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:9.54-9.57"
+          }
+        },
+        "y27": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:9.72-9.75"
+          }
+        },
+        "y28": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:10.18-10.21"
+          }
+        },
+        "y29": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:10.36-10.39"
+          }
+        },
+        "y30": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:10.54-10.57"
+          }
+        },
+        "y31": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:10.72-10.75"
+          }
+        },
+        "y32": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:11.18-11.21"
+          }
+        },
+        "y33": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:11.36-11.39"
+          }
+        },
+        "y34": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:11.54-11.57"
+          }
+        },
+        "y35": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:11.72-11.75"
+          }
+        },
+        "y36": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:12.18-12.21"
+          }
+        },
+        "y37": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:12.36-12.39"
+          }
+        },
+        "y38": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:12.54-12.57"
+          }
+        },
+        "y39": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:12.72-12.75"
+          }
+        },
+        "y40": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:13.18-13.21"
+          }
+        },
+        "y41": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:13.36-13.39"
+          }
+        },
+        "y42": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:13.54-13.57"
+          }
+        },
+        "y43": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:13.72-13.75"
+          }
+        },
+        "y44": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:14.18-14.21"
+          }
+        },
+        "y45": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:14.36-14.39"
+          }
+        },
+        "y46": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:14.54-14.57"
+          }
+        },
+        "y47": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:14.72-14.75"
+          }
+        },
+        "y48": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:15.18-15.21"
+          }
+        },
+        "y49": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:15.36-15.39"
+          }
+        },
+        "y50": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:15.54-15.57"
+          }
+        },
+        "y51": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:15.72-15.75"
+          }
+        },
+        "y52": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:16.18-16.21"
+          }
+        },
+        "y53": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:16.36-16.39"
+          }
+        },
+        "y54": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:16.54-16.57"
+          }
+        },
+        "y55": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:16.72-16.75"
+          }
+        },
+        "y56": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:17.18-17.21"
+          }
+        },
+        "y57": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:17.36-17.39"
+          }
+        },
+        "y58": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:17.54-17.57"
+          }
+        },
+        "y59": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:17.72-17.75"
+          }
+        },
+        "y60": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:18.18-18.21"
+          }
+        },
+        "y61": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:18.36-18.39"
+          }
+        },
+        "y62": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:18.54-18.57"
+          }
+        },
+        "y63": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "/home/icer/Project/FPGAs/SpinalProject/tools/digital-server/tests/0.5.x/test-fixtures/workspace/src/sv/fanout.sv:18.72-18.75"
+          }
+        }
+      }
+    }
+  }
+}

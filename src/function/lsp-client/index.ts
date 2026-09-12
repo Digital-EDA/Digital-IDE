@@ -11,7 +11,7 @@ import * as fs from 'fs';
 import * as zlib from 'zlib';
 import * as tar from 'tar';
 import { platform } from "os";
-import { IProgress, LspClient, opeParam } from '../../global';
+import { IProgress, LspClient, MainOutput, ReportType, opeParam } from '../../global';
 import axios, { AxiosResponse } from "axios";
 import { chooseBestDownloadSource, getLspFileName } from "./cdn";
 import { hdlDir, hdlPath } from "../../hdlFs";
@@ -187,7 +187,7 @@ export async function installLsp(context: vscode.ExtensionContext, version: stri
 
 export async function activate(context: vscode.ExtensionContext, packageJson: any) {
     const version = packageJson.version;
-    await checkAndDownload(context, version);
+    const ready = await checkAndDownload(context, version);
 
     const lspServerName = getLspServerExecutionName();
     const lspServerPath = context.asAbsolutePath(
@@ -197,7 +197,16 @@ export async function activate(context: vscode.ExtensionContext, packageJson: an
     if (fs.existsSync(lspServerPath)) {
         console.log('lsp server found at ' + lspServerPath);
     } else {
-        console.error('cannot found lsp server at ' + lspServerPath);
+        // server 不存在时静默跳过：checkAndDownload 已在上一步处理过
+        // （存在即用、缺失才下载）。这里不再重复触发下载，避免每次打开
+        // 都弹下载进度；用户可经命令面板手动下载/安装。
+        console.error('cannot found lsp server at ' + lspServerPath + ', skip LSP start');
+        MainOutput.report(
+            '未找到 LSP server，已跳过语言服务器启动（跳转/补全走内置解析）。' +
+            '可经命令面板手动下载安装后再 Reload Window。',
+            { level: ReportType.Warn }
+        );
+        return;
     }
     
     const run: Executable = {

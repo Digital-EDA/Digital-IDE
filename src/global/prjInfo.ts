@@ -580,8 +580,11 @@ class PrjInfo implements PrjInfoMeta {
 
     public get libCommonPath(): AbsPath {
         const libPath = join(this._extensionPath, 'library');
+        // 上游 fork 的 vsix 默认不打包 library（仓库里本来就没有），
+        // 缺失时静默返回空路径，由各调用点的 existsSync / checkAdd 自然跳过。
+        // 不再弹窗报错，避免每次打开都在右下角刷 corrupted 提示。
         if (!fs.existsSync(libPath)) {
-            vscode.window.showErrorMessage('common lib path: "' + libPath + '"  in extension is invalid, maybe extension has been corrupted, reinstall the extension');
+            return '' as AbsPath;
         }
         return libPath;
     }

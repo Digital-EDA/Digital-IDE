@@ -29,12 +29,8 @@ async function openFileAtPosition(uri: vscode.Uri, range?: Range) {
     );
 }
 
-function openFileByUri(path: string, range: Range, element: ModuleDataItem) {
-    if (range === undefined) {
-        // vscode.window.showErrorMessage(`${path} not support jump yet`);
-        return;
-    }
-
+function openFileByUri(path: string, range: Range | undefined, element: ModuleDataItem) {
+    // 工程树中的文件节点没有 range（它是文件而非模块），此时直接打开文件
     if (hdlPath.exist(path) && hdlFile.isFile(path)) {
         const uri = vscode.Uri.file(path);
         openFileAtPosition(uri, range);
@@ -76,6 +72,14 @@ function refreshArchTree(element?: ModuleDataItem) {
     moduleTreeProvider.refresh(element);
 }
 
+/**
+ * @description 将某个工程设为激活工程。工作区可有多个工程，硬件相关操作
+ *              （综合 / 实现 / 下载）同时只作用于激活的那个。
+ */
+function activateProject(item: ModuleDataItem) {
+    void moduleTreeProvider.activateProject(item);
+}
+
 function expandTreeView() {
     vscode.commands.executeCommand('setContext', 'TOOL-tree-expand', false);
 }
@@ -95,5 +99,6 @@ export {
     collapseTreeView,
     openFileByUri,
     refreshArchTree,
+    activateProject,
     clean
 };

@@ -131,5 +131,9 @@
     "markdown-file": "Markdown 檔案",
     "toolbar.save-as-html": "保存為HTML",
     "html-file": "HTML檔案",
-    "dide-doc.error.loading-html": "Digital CodeDoc 資源加載失敗，安裝目錄已經損壞，請重新安裝！"
+    "dide-doc.error.loading-html": "Digital CodeDoc 資源加載失敗，安裝目錄已經損壞，請重新安裝！",
+    "treeview.constraint": "約束",
+    "treeview.ip": "IP",
+    "treeview.project.active": "已啟用",
+    "info.treeview.project.already-active": "工程 {0} 已是目前的啟用工程"
 }

@@ -36,7 +36,13 @@ interface PLContext {
     // 第三方工具运行路径
     path? : string,
     // 操作类
-    ope : Record<string, any>
+    ope : Record<string, any>,
+    // 运行完成回调（synth / impl），用于结束后自动分析对应日志
+    onRunComplete?: (run: 'synth' | 'impl') => void,
+    // 进程退出回调，用于上层兜底清理运行状态
+    onProcessExit?: () => void,
+    // 进程输出回调，用于转发到 TCL 控制台等交互界面
+    onOutput?: (text: string) => void
 };
 
 interface PLPrjInfo {

@@ -131,5 +131,9 @@
     "markdown-file": "Markdown file",
     "toolbar.save-as-html": "Save as HTML",
     "html-file": "HTML file",
-    "dide-doc.error.loading-html": "Digital CodeDoc resource loading failed, the installation directory is corrupted, please reinstall!"
+    "dide-doc.error.loading-html": "Digital CodeDoc resource loading failed, the installation directory is corrupted, please reinstall!",
+    "treeview.constraint": "Constraints",
+    "treeview.ip": "IP",
+    "treeview.project.active": "Active",
+    "info.treeview.project.already-active": "Project {0} is already the active project"
 }

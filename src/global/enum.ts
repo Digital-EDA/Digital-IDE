@@ -11,7 +11,8 @@ enum ToolChainType {
     Xilinx = 'xilinx',
     Intel = 'intel',
     Efinity = 'efinity',
-    Custom = 'custom'
+    Custom = 'custom',
+    Anlogic = 'anlogic'
 };
 
 enum LibraryState {
@@ -35,7 +36,8 @@ function validToolChainType(name: ToolChainType) {
         'xilinx',
         'intel',
         'efinity',
-        'custom'
+        'custom',
+        'anlogic'
     ];
     return allTypes.includes(name);
 }

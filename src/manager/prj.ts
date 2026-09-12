@@ -16,6 +16,7 @@ import { t } from '../i18n';
 import { PpyAction } from '../monitor/propery';
 import { checkJson, readJSON, writeJSON } from '../hdlFs/file';
 import { PropertySchema } from '../global/propertySchema';
+import { getProjectFileInfo, normalizePathKey } from './projectFile';
 
 interface RefreshPrjConfig {
     mkdir: boolean
@@ -153,7 +154,47 @@ class PrjManage {
         // 根据搜索路径获取所有 HDL 文件（出现在 .dideignore 中的文件不会被搜索到）
         const hdlFiles = hdlFile.getHDLFiles(searchPathSet.files);
 
-        return hdlFiles;
+        return this.applyProjectFileScope(hdlFiles);
+    }
+
+    /**
+     * @description 可选的解析范围收敛：以工程文件（.al / .xpr）登记的文件为准，
+     *              只保留工程实际编译的 HDL。
+     *
+     *              默认关闭。原因是工程文件只覆盖单个工程，而工作区可能并存多个工程
+     *              （例如 px100.xpr 与 pxf100.al），一旦收敛会把不属于该工程的
+     *              testbench、IP HDL、头文件一并排除，影响这些文件上的跳转与补全。
+     *              需要模块树完全等同工程文件时再开启。
+     */
+    private applyProjectFileScope(hdlFiles: AbsPath[]): AbsPath[] {
+        const enabled = vscode.workspace
+            .getConfiguration('digital-ide.prj.file.scope')
+            .get<boolean>('fromProjectFile', false);
+        if (!enabled) {
+            return hdlFiles;
+        }
+
+        const prjFileInfo = getProjectFileInfo();
+        if (!prjFileInfo) {
+            MainOutput.report('未找到工程文件，解析范围保持目录扫描结果', { level: ReportType.Run });
+            return hdlFiles;
+        }
+
+        const allowed = new Set<string>();
+        for (const entry of [...prjFileInfo.srcFiles, ...prjFileInfo.simFiles]) {
+            allowed.add(normalizePathKey(entry.path));
+        }
+        if (allowed.size === 0) {
+            return hdlFiles;
+        }
+
+        const kept = hdlFiles.filter(f => allowed.has(normalizePathKey(f)));
+        MainOutput.report(
+            `按工程文件收敛解析范围：${hdlFiles.length} -> ${kept.length} 个 HDL 文件` +
+            `（${prjFileInfo.file}）`,
+            { level: ReportType.Run }
+        );
+        return kept;
     }
 
     /**

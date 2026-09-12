@@ -1,9 +1,9 @@
 {
     "name": "fpga-support",
-    "displayName": "Digital IDE",
+    "displayName": "CS FPGA IDE",
     "description": "all in one vscode plugin for Verilog/VHDL development",
     "publisher": "sterben",
-    "homepage": "https://digital-eda.github.io/DIDE-doc-Cn",
+    "homepage": "https://github.com/mengliansheng/CS-FPGA-IDE",
     "version": "0.4.6",
     "main": "./out/extension",
     "l10n": "./l10n",
@@ -26,7 +26,7 @@
     ],
     "repository": {
         "type": "git",
-        "url": "https://github.com/Digital-EDA/Digital-IDE"
+        "url": "https://github.com/mengliansheng/CS-FPGA-IDE"
     },
     "categories": [
         "Extension Packs",
@@ -38,7 +38,7 @@
     ],
     "contributes": {
         "configuration": {
-            "title": "Digital-IDE",
+            "title": "CS FPGA IDE",
             "properties": {
                 "digital-ide.welcome.show": {
                     "type": "boolean",
@@ -69,6 +69,51 @@
                     "type": "string",
                     "default": "C:/Efinity/2023.2/bin",
                     "description": "%digital-ide.prj.efinix.install.path.title%"
+                },
+                "digital-ide.prj.anlogic.install.path": {
+                    "type": "string",
+                    "default": "C:/Anlogic/TD_Release_2026.1_6.2.190.657/bin",
+                    "description": "安路 Tang Dynasty td_commands_prompt.exe 所在目录"
+                },
+                "digital-ide.prj.anlogic.install.speed": {
+                    "type": "string",
+                    "default": "2",
+                    "description": "安路器件速度等级，对应 create_project / import_device 的 -speed 选项"
+                },
+                "digital-ide.prj.anlogic.install.deviceDb": {
+                    "type": "string",
+                    "default": "",
+                    "description": "import_device 使用的器件库文件名（如 ph1_90.db）。留空则按器件型号自动推导并在 TD 的 arch 目录下核对"
+                },
+                "digital-ide.prj.anlogic.project.path": {
+                    "type": "string",
+                    "default": "",
+                    "description": "已有 TD 工程目录（含 .al 文件），支持绝对路径或相对工作区路径。留空则在 <arch.prjPath>/anlogic 下新建工程"
+                },
+                "digital-ide.prj.anlogic.jobs": {
+                    "type": "number",
+                    "default": 8,
+                    "description": "安路 TD 综合/实现并行线程数，对应 launch_runs 的 -jobs 选项"
+                },
+                "digital-ide.prj.file.scope.fromProjectFile": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "解析范围收敛到工程文件（.al/.xpr）登记的文件。默认关闭：工程文件只覆盖单个工程，开启后会排除不属于该工程的 testbench、IP HDL 与头文件"
+                },
+                "digital-ide.prj.file.scope.treeOnly": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "模块树只显示工程文件（.al/.xpr）登记的文件所属模块。仅影响树展示，LSP 仍解析全部文件，未登记的 testbench 等仍可跳转与补全"
+                },
+                "digital-ide.prj.file.scope.projectRoot": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "工程视图以工程为根：根节点显示工程名与器件型号，其下按设计/仿真/约束分类列出工程文件（.al/.xpr）登记的文件，展开文件可见其定义模块与例化层次。关闭后回到按 src/sim 直接列模块的形式"
+                },
+                "digital-ide.prj.activeProjectFile": {
+                    "type": "string",
+                    "default": "",
+                    "description": "当前激活的工程文件（.al/.xpr）路径。工作区中可有多个工程，同一时间只有一个生效，综合、实现与下载都以它为准。留空时自动取扫描到的第一个工程，也可在工程视图右键非激活工程切换"
                 },
                 "digital-ide.prj.modelsim.install.path": {
                     "type": "string",
@@ -360,27 +405,27 @@
             {
                 "command": "digital-ide.property-json.generate",
                 "title": "%digital-ide.property-json.generate.title%",
-                "category": "Digital-IDE"
+                "category": "CS FPGA IDE"
             },
             {
                 "command": "digital-ide.property-json.overwrite",
                 "title": "%digital-ide.property-json.overwrite.title%",
-                "category": "Digital-IDE"
+                "category": "CS FPGA IDE"
             },
             {
                 "command": "digital-ide.hdlDoc.exportFile",
                 "title": "%digital-ide.hdlDoc.exportFile.title%",
-                "category": "Digital-IDE"
+                "category": "CS FPGA IDE"
             },
             {
                 "command": "digital-ide.hdlDoc.exportProject",
                 "title": "%digital-ide.hdlDoc.exportProject.title%",
-                "category": "Digital-IDE"
+                "category": "CS FPGA IDE"
             },
             {
                 "command": "digital-ide.hdlDoc.showWebview",
                 "title": "%digital-ide.hdlDoc.showWebview.title%",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "icon": {
                     "light": "images/svg/light/documentation.svg",
                     "dark": "images/svg/dark/documentation.svg"
@@ -389,17 +434,17 @@
             {
                 "command": "digital-ide.tool.instance",
                 "title": "%digital-ide.tool.instance.title%",
-                "category": "Digital-IDE"
+                "category": "CS FPGA IDE"
             },
             {
                 "command": "digital-ide.tool.testbench",
                 "title": "%digital-ide.tool.testbench.title%",
-                "category": "Digital-IDE"
+                "category": "CS FPGA IDE"
             },
             {
                 "command": "digital-ide.tool.icarus.simulateFile",
                 "title": "%digital-ide.tool.icarus.simulateFile.title%",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "icon": {
                     "light": "images/svg/light/debug.svg",
                     "dark": "images/svg/dark/debug.svg"
@@ -408,7 +453,7 @@
             {
                 "command": "digital-ide.tool.export-filelist",
                 "title": "%digital-ide.tool.export-filelist.title%",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "icon": {
                     "light": "images/svg/light/export.svg",
                     "dark": "images/svg/dark/export.svg"
@@ -421,134 +466,144 @@
                     "light": "images/svg/light/library.svg",
                     "dark": "images/svg/dark/library.svg"
                 },
-                "category": "Digital-IDE"
+                "category": "CS FPGA IDE"
             },
             {
                 "command": "digital-ide.treeView.arch.expand",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "icon": "$(expand-all)",
                 "title": "%digital-ide.treeView.arch.expand.title%"
             },
             {
                 "command": "digital-ide.treeView.arch.collapse",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "icon": "$(collapse-all)",
                 "title": "%digital-ide.treeView.arch.collapse.title%"
             },
             {
                 "command": "digital-ide.treeView.arch.refresh",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "icon": "$(refresh)",
                 "title": "%digital-ide.treeView.arch.refresh.title%"
             },
             {
                 "command": "digital-ide.treeView.arch.openFile",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.treeView.arch.openFile.title%"
             },
             {
+                "command": "digital-ide.treeView.arch.activateProject",
+                "category": "CS FPGA IDE",
+                "title": "%digital-ide.treeView.arch.activateProject.title%"
+            },
+            {
                 "command": "digital-ide.soft.launch",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.soft.launch.title%"
             },
             {
                 "command": "digital-ide.soft.build",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.soft.build.title%"
             },
             {
                 "command": "digital-ide.soft.download",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.soft.download.title%"
             },
             {
                 "command": "digital-ide.hard.launch",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.hard.launch.title%"
             },
             {
                 "command": "digital-ide.hard.simulate",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.hard.simulate.title%"
             },
             {
                 "command": "digital-ide.hard.simulate.cli",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.hard.simulate.cli.title%"
             },
             {
                 "command": "digital-ide.hard.simulate.gui",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.hard.simulate.gui.title%"
             },
             {
                 "command": "digital-ide.hard.refresh",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.hard.refresh.title%"
             },
             {
                 "command": "digital-ide.hard.build",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.hard.build.title%"
             },
             {
                 "command": "digital-ide.hard.build.synth",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.hard.build.synth.title%"
             },
             {
                 "command": "digital-ide.hard.build.impl",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.hard.build.impl.title%"
             },
             {
                 "command": "digital-ide.hard.build.bitstream",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.hard.build.bitstream.title%"
             },
             {
                 "command": "digital-ide.hard.program",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.hard.program.title%"
             },
             {
                 "command": "digital-ide.hard.gui",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.hard.gui.title%"
             },
             {
                 "command": "digital-ide.hard.exit",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.hard.exit.title%"
             },
             {
                 "command": "digital-ide.pl.setSrcTop",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.pl.setSrcTop.title%"
             },
             {
+                "command": "digital-ide.pl.pickProject",
+                "category": "CS FPGA IDE",
+                "title": "%digital-ide.pl.pickProject.title%"
+            },
+            {
                 "command": "digital-ide.pl.setSimTop",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.pl.setSimTop.title%"
             },
             {
                 "command": "digital-ide.pl.addDevice",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.pl.addDevice.title%"
             },
             {
                 "command": "digital-ide.pl.delDevice",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.pl.delDevice.title%"
             },
             {
                 "command": "digital-ide.pl.addFile",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.pl.addFile.title%"
             },
             {
                 "command": "digital-ide.pl.delFile",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.pl.delFile.title%"
             },
             {
@@ -557,7 +612,7 @@
                     "light": "images/svg/light/netlist.svg",
                     "dark": "images/svg/dark/netlist.svg"
                 },
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.netlist.title%"
             },
             {
@@ -566,7 +621,7 @@
                     "light": "images/svg/light/ys.svg",
                     "dark": "images/svg/dark/ys.svg"
                 },
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.run-ys.title%"
             },
             {
@@ -575,53 +630,53 @@
                     "light": "images/svg/light/fsm.svg",
                     "dark": "images/svg/dark/fsm.svg"
                 },
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.fsm.title%"
             },
             {
                 "command": "digital-ide.lsp.tool.insertTextToUri",
                 "title": "%digital-ide.lsp.tool.insertTextToUri.title%",
-                "category": "Digital-IDE"
+                "category": "CS FPGA IDE"
             },
             {
                 "command": "digital-ide.lsp.tool.transformOldPropertyFile",
                 "title": "%digital-ide.lsp.tool.transformOldPropertyFile.title%",
-                "category": "Digital-IDE"
+                "category": "CS FPGA IDE"
             },
             {
                 "command": "digital-ide.lsp.vlog.linter.pick",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.lsp.vlog.linter.pick.title%"
             },
             {
                 "command": "digital-ide.lsp.svlog.linter.pick",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.lsp.svlog.linter.pick.title%"
             },
             {
                 "command": "digital-ide.lsp.vhdl.linter.pick",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.lsp.vhdl.linter.pick.title%"
             },
             {
                 "command": "digital-ide.lsp.systemverilog.linter.pick",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.lsp.systemverilog.linter.pick.title%"
             },
             {
                 "command": "digital-ide.digital-lsp.download",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.digital-lsp.download.title%"
             },
             {
                 "command": "digital-ide.digital-lsp.install",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.digital-lsp.install.title%"
             },
             {
                 "command": "digital-ide.vhdl2vlog",
                 "title": "%digital-ide.vhdl2vlog.title%",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "icon": {
                     "light": "images/svg/light/translate.svg",
                     "dark": "images/svg/dark/translate.svg"
@@ -633,7 +688,7 @@
                     "light": "images/svg/light/fsm.svg",
                     "dark": "images/svg/dark/fsm.svg"
                 },
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.fsm.show.title%"
             },
             {
@@ -642,7 +697,7 @@
                     "light": "images/svg/light/netlist.svg",
                     "dark": "images/svg/dark/netlist.svg"
                 },
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.netlist.show.title%"
             },
             {
@@ -651,7 +706,7 @@
                     "light": "images/svg/light/netlist.svg",
                     "dark": "images/svg/dark/netlist.svg"
                 },
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "test"
             },
             {
@@ -660,17 +715,17 @@
                     "light": "images/svg/light/vcd.svg",
                     "dark": "images/svg/dark/vcd.svg"
                 },
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.waveviewer.show.title%"
             },
             {
                 "command": "digital-ide.tool.clean",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.tool.clean.title%"
             },
             {
                 "command": "digital-ide.structure.from-xilinx-to-standard",
-                "category": "Digital-IDE",
+                "category": "CS FPGA IDE",
                 "title": "%digital-ide.structure.from-xilinx-to-standard.title%"
             }
         ],
@@ -693,6 +748,11 @@
                 }
             ],
             "view/item/context": [
+                {
+                    "command": "digital-ide.treeView.arch.activateProject",
+                    "group": "navigation@1",
+                    "when": "view == digital-ide-treeView-arch && viewItem == prjInactive"
+                },
                 {
                     "command": "digital-ide.tool.icarus.simulateFile",
                     "group": "inline@1",
@@ -841,7 +901,7 @@
             "TreeView": [
                 {
                     "id": "digital-ide-treeView-arch",
-                    "name": "architecture",
+                    "name": "工程",
                     "icon": "images/svg/view.svg"
                 },
                 {

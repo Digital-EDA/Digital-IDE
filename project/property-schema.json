@@ -8,7 +8,8 @@
 			"description": "The tool chain you need",
 			"enum": [
 				"xilinx",
-				"efinity"
+				"efinity",
+				"anlogic"
 			]
 		},
 		"prjName": {

@@ -93,6 +93,11 @@ class HardwareTreeProvider extends BaseCommandTreeProvider {
                 icon: 'cmd',
                 tip: 'Launch FPGA development assist function'
             },
+            '选工程': {
+                cmd: 'digital-ide.pl.pickProject',
+                icon: 'cmd',
+                tip: 'Select the Anlogic TD project (.al) to open'
+            },
             Simulate: {
                 cmd: 'digital-ide.hard.simulate',
                 icon: 'toolBox',
@@ -240,6 +245,19 @@ class ToolTreeProvider extends BaseCommandTreeProvider {
 export async function clean() {
     const workspacePath = opeParam.workspacePath;
     const prjPath = opeParam.prjStructure.prjPath;
+
+    // 该命令会删除整个 prj 目录（prjPath 非工作区根时）与所有 .str 文件，
+    // 属不可逆操作。TOOL Options 视图已下线，但命令仍可从命令面板触发，
+    // 故在此加二次确认。
+    const confirm = await vscode.window.showWarningMessage(
+        `Clean 将删除工程目录 ${prjPath} 及其下全部内容，并移除工作区内所有 .str 文件。此操作不可撤销，是否继续？`,
+        { modal: true },
+        '继续删除'
+    );
+    if (confirm !== '继续删除') {
+        MainOutput.report('已取消 clean');
+        return;
+    }
 
     // move bd * ip
     const plName = opeParam.prjInfo.prjName.PL;

@@ -5,6 +5,7 @@ import * as hdlDoc from './dide-doc';
 import { makeDocWebview } from './dide-doc/html';
 import * as sim from './sim';
 import * as treeView from './treeView';
+import { dispatchTreeCommand } from './treeView/command';
 
 import { tclCompletionProvider } from './lsp/completion/tcl';
 import * as lspFormatter from '../../resources/formatter';
@@ -16,7 +17,7 @@ import * as FSM from './fsm';
 import * as Netlist from './dide-netlist';
 import * as WaveView from './dide-viewer';
 import { ModuleDataItem } from './treeView/tree';
-import { downloadLsp, installLsp } from './lsp-client';
+import { downloadLsp, getLspServerFolder, installLsp } from './lsp-client';
 import { hdlPath } from '../hdlFs';
 
 function registerDocumentation(context: vscode.ExtensionContext) {
@@ -89,6 +90,7 @@ function registerTreeView(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('digital-ide.treeView.arch.refresh', treeView.refreshArchTree);
     vscode.commands.registerCommand('digital-ide.treeView.arch.openFile', treeView.openFileByUri);
     vscode.commands.registerCommand('digital-ide.treeView.arch.activateProject', (item: ModuleDataItem) => treeView.activateProject(item));
+    vscode.commands.registerCommand('digital-ide.treeView.dispatch', dispatchTreeCommand);
     vscode.commands.registerCommand('digital-ide.tool.clean', treeView.clean);
 }
 
@@ -96,16 +98,12 @@ function registerLsp(context: vscode.ExtensionContext, version: string) {
 
     // lsp download
     vscode.commands.registerCommand('digital-ide.digital-lsp.download', () => {
-        const versionFolderPath = context.asAbsolutePath(
-            path.join('resources', 'dide-lsp', 'server', version)
-        );
+        const versionFolderPath = getLspServerFolder(context);
         downloadLsp(context, version, versionFolderPath)
     });
 
     vscode.commands.registerCommand('digital-ide.digital-lsp.install', () => {
-        const versionFolderPath = context.asAbsolutePath(
-            path.join('resources', 'dide-lsp', 'server', version)
-        );
+        const versionFolderPath = getLspServerFolder(context);
         installLsp(context, version, versionFolderPath);
     });
 

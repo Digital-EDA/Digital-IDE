@@ -16,6 +16,25 @@ interface CommandDataItem {
     children: CommandDataItem[]
 }
 
+let pendingCommand: { cmd: string, timer: ReturnType<typeof setTimeout> } | undefined;
+
+export function dispatchTreeCommand(cmd: string) {
+    if (pendingCommand?.cmd === cmd) {
+        clearTimeout(pendingCommand.timer);
+        pendingCommand = undefined;
+        void vscode.commands.executeCommand(cmd);
+        return;
+    }
+
+    if (pendingCommand) {
+        clearTimeout(pendingCommand.timer);
+    }
+    const timer = setTimeout(() => {
+        pendingCommand = undefined;
+    }, 400);
+    pendingCommand = { cmd, timer };
+}
+
 type CommandConfig = Record<string, {
     cmd: string,
     icon: string,
@@ -74,7 +93,8 @@ class BaseCommandTreeProvider implements vscode.TreeDataProvider<CommandDataItem
         treeItem.contextValue = this.contextValue;
         treeItem.command = {
             title: element.cmd,
-            command: element.cmd,
+            command: 'digital-ide.treeView.dispatch',
+            arguments: [element.cmd],
         };
 
         treeItem.tooltip = element.tip;

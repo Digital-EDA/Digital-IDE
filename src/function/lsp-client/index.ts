@@ -29,6 +29,10 @@ function getLspServerExecutionName() {
     return `digital-lsp-${signature}`;
 }
 
+export function getLspServerFolder(context: vscode.ExtensionContext): string {
+    return path.join(context.globalStorageUri.fsPath, 'dide-lsp', 'server');
+}
+
 function extractTarGz(filePath: string, outputDir: string): Promise<void> {
     if (!fs.existsSync(outputDir)) {
         fs.mkdirSync(outputDir, { recursive: true });
@@ -54,48 +58,49 @@ function extractTarGz(filePath: string, outputDir: string): Promise<void> {
     })
 }
 
-function streamDownload(context: vscode.ExtensionContext, progress: vscode.Progress<IProgress>, response: AxiosResponse<any, any>): Promise<string> {
-    const totalLength = response.headers['content-length'];    
-    const totalSize = parseInt(totalLength);
+function streamDownload(context: vscode.ExtensionContext, progress: vscode.Progress<IProgress>, response: AxiosResponse<any, any>, targetDir: string): Promise<string> {
+    const totalLength = response.headers['content-length'];
+    const totalSize = Number.isFinite(parseInt(totalLength)) ? parseInt(totalLength) : 0;
     let downloadSize = 0;
-    const savePath = context.asAbsolutePath(
-        path.join('resources', 'dide-lsp', 'server', 'tmp.tar.gz')
-    );
+    const tmpDir = targetDir || path.join(context.globalStorageUri.fsPath, 'dide-lsp');
+    if (!fs.existsSync(tmpDir)) {
+        fs.mkdirSync(tmpDir, { recursive: true });
+    }
+    const savePath = path.join(tmpDir, 'tmp.tar.gz');
     const fileStream = fs.createWriteStream(savePath);
     response.data.pipe(fileStream);
 
     return new Promise((resolve, reject) => {
         response.data.on('data', (chunk: Buffer) => {
-            downloadSize += chunk.length;            
-            let precent = Math.ceil(downloadSize / totalSize * 100);
-            let increment = chunk.length / totalSize * 100;                
-            progress.report({ message: `${precent}%`, increment });
+            downloadSize += chunk.length;
+            if (totalSize > 0) {
+                const percent = Math.ceil((downloadSize / totalSize) * 100);
+                const increment = (chunk.length / totalSize) * 100;
+                progress.report({ message: `${percent}%`, increment });
+            }
         });
 
         fileStream.on('finish', () => {
-            console.log('finish download');
+            console.log('finish download to', savePath);
             fileStream.close();
             resolve(savePath);
         });
 
-        fileStream.on('error', reject);
+        fileStream.on('error', (err) => {
+            reject(err);
+        });
     });
 }
 
 async function checkAndDownload(context: vscode.ExtensionContext, version: string): Promise<boolean> {    
-    const versionFolderPath = context.asAbsolutePath(
-        path.join('resources', 'dide-lsp', 'server')
-    );
+    const versionFolderPath = getLspServerFolder(context);
 
     const serverPath = path.join(versionFolderPath, getLspServerExecutionName());
-    if (fs.existsSync(versionFolderPath) && fs.existsSync(serverPath)) {
+    if (fs.existsSync(serverPath)) {
         return true;
     }
 
-    const serverFolder = context.asAbsolutePath(
-        path.join('resources', 'dide-lsp', 'server')
-    );
-    hdlDir.mkdir(serverFolder);
+    hdlDir.mkdir(versionFolderPath);
 
     return await downloadLsp(context, version, versionFolderPath);
 }
@@ -125,7 +130,7 @@ export async function downloadLsp(context: vscode.ExtensionContext, version: str
     }, async (progress: vscode.Progress<IProgress>, token: vscode.CancellationToken) => {
         progress.report({ increment: 0 });
         const response = await axios.get(downloadLink, { responseType: 'stream' });
-        return await streamDownload(context, progress, response);
+        return await streamDownload(context, progress, response, versionFolderPath);
     });
 
     await vscode.window.withProgress({
@@ -190,9 +195,7 @@ export async function activate(context: vscode.ExtensionContext, packageJson: an
     const ready = await checkAndDownload(context, version);
 
     const lspServerName = getLspServerExecutionName();
-    const lspServerPath = context.asAbsolutePath(
-        path.join('resources', 'dide-lsp', 'server', lspServerName)
-    );
+    const lspServerPath = path.join(getLspServerFolder(context), lspServerName);
 
     if (fs.existsSync(lspServerPath)) {
         console.log('lsp server found at ' + lspServerPath);

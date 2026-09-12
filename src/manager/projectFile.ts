@@ -93,8 +93,10 @@ function collectFiles(block: string): PrjFileEntry[] {
         if (!raw) {
             continue;
         }
-        // Vivado: AutoDisabled；TD: AutoExcluded
-        const disabled = /Name="(AutoDisabled|AutoExcluded)"\s+Val="(1|true)"/i.test(fb);
+        // Vivado: AutoDisabled；TD 原生禁用标记也可用 UsedInSyn/UsedInP&R=false。
+        const disabled = /Name="(AutoDisabled|AutoExcluded)"\s+Val="(1|true)"/i.test(fb)
+            || /Name="UsedInSyn"\s+Val="false"/i.test(fb)
+            || /Name="UsedInP&R"\s+Val="false"/i.test(fb);
         result.push({ path: unescapeXml(raw), disabled });
     }
     return result;

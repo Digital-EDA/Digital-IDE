@@ -1,0 +1,23 @@
+============================================================
+   Tang Dynasty, V6.2.190657
+   Copyright (c) 2012-2026 Anlogic Inc.
+   Executable = C:/Anlogic/TD_Release_2026.1_6.2.190.657/bin/td_commands_prompt.exe
+   Built at =   17:31:49 Jan 14 2026
+   Run by =     Administrator
+   Run Date =   Sat Sep 12 18:00:41 2026
+
+   Run on =     COMPUTER
+============================================================
+RUN-1002 : start command "import_device ph1_90.db -package PH1A90SEG325 -speed 2"
+ARC-1001 : Device Initialization.
+ARC-1001 : -----------------------------------------------------------
+ARC-1001 :           OPTION          |        IO        |   SETTING   
+ARC-1001 : -----------------------------------------------------------
+ARC-1001 :   non_jtag_persist(none)  |      36 IOs      |    gpio    
+ARC-1001 :            jtag           |  C8/D9/A9/B8/D8  |  dedicate  
+ARC-1001 : -----------------------------------------------------------
+RUN-1003 : finish command "import_device ph1_90.db -package PH1A90SEG325 -speed 2" in  4.862900s wall, 3.234375s user + 0.218750s system = 3.453125s CPU (71.0%)
+
+RUN-1004 : used memory is 1288 MB, reserved memory is 1314 MB, peak memory is 1322 MB
+RUN-1002 : start command "open_project d:/fpga_workspace/test_multiprj/alpha_anlogic/alpha_min.al"
+PRJ-8640 ERROR: Open project file d:/fpga_workspace/test_multiprj/alpha_anlogic/alpha_min.al failed because of previous error(s).

@@ -403,6 +403,10 @@
         },
         "commands": [
             {
+                "command": "digital-ide.treeView.dispatch",
+                "title": "CS FPGA IDE: Execute Options command"
+            },
+            {
                 "command": "digital-ide.property-json.generate",
                 "title": "%digital-ide.property-json.generate.title%",
                 "category": "CS FPGA IDE"

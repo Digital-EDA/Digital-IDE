@@ -21,6 +21,8 @@ class AnlogicOperation {
     // 运行完成回调，由 synth/impl 注册，TD 输出 DIDE_RUN_DONE 时触发，
     // 用于收起 withProgress 进度条
     private runDoneCallback: Partial<Record<'synth' | 'impl', () => void>> = {};
+    private runFailed: Partial<Record<'synth' | 'impl', boolean>> = {};
+    private runActive: Partial<Record<'synth' | 'impl', boolean>> = {};
 
     // 运行前 run.log 的状态基线。TD 在 reset_runs 时清空该日志、直到 run 结束才写回，
     // 若在 wait_run 返回的瞬间读取，会拿到上一次运行遗留的旧日志。
@@ -197,6 +199,10 @@ class AnlogicOperation {
         // 工程归属以「激活工程」为准：工程树右键「激活」切换，综合 / 实现 /
         // 下载都作用于它。未激活安路工程时才回落到旧的 project.path / 扫描兜底。
         const active = this.activeAl();
+        this.runFailed.synth = undefined;
+        this.runFailed.impl = undefined;
+        this.runActive.synth = undefined;
+        this.runActive.impl = undefined;
         if (!active) {
             const projects = this.scanProjects();
             if (projects.length === 0) {
@@ -258,6 +264,12 @@ class AnlogicOperation {
             outputBuffer += text;
             context.onOutput?.(text);
             HardwareOutput.report(text, { level: ReportType.Info });
+            if (/PRJ-\d+\s+ERROR:|\bERROR\s*:/i.test(text)) {
+                const failedKind = this.runLogGuard.synth ? 'synth' : this.runLogGuard.impl ? 'impl' : undefined;
+                if (failedKind) {
+                    this.failRun(failedKind);
+                }
+            }
             if (!promptDetected && (text.includes('Tang Dynasty') || text.includes('td >'))) {
                 promptDetected = true;
                 markPromptReady();
@@ -275,6 +287,10 @@ class AnlogicOperation {
             const text = data.toString();
             context.onOutput?.(text);
             HardwareOutput.report(text, { level: ReportType.Error });
+            const failedKind = this.runLogGuard.synth ? 'synth' : this.runLogGuard.impl ? 'impl' : undefined;
+            if (failedKind) {
+                this.failRun(failedKind);
+            }
         });
         process.on('close', () => {
             context.onProcessExit?.();
@@ -375,18 +391,43 @@ class AnlogicOperation {
         const guard = this.runLogGuard[kind];
         this.runLogGuard[kind] = undefined;
 
+        if (this.runFailed[kind]) {
+            this.runFailed[kind] = undefined;
+            this.runActive[kind] = undefined;
+            this.runDoneCallback?.[kind]?.();
+            this.runDoneCallback[kind] = undefined;
+            return;
+        }
+
         if (guard && !await this.waitFreshLog(guard.path, guard)) {
             HardwareOutput.report(
                 `安路 TD：${guard.path} 在本次运行后未更新，run 可能未真正执行，已跳过日志分析`,
                 { level: ReportType.Warn }
             );
-        } else {
+        } else if (guard) {
             context.onRunComplete?.(kind);
         }
 
         // 通知等待中的进度条收起
         this.runDoneCallback?.[kind]?.();
         this.runDoneCallback[kind] = undefined;
+        this.runActive[kind] = undefined;
+    }
+
+    private failRun(kind: 'synth' | 'impl') {
+        if (this.runFailed[kind]) {
+            return;
+        }
+        this.runFailed[kind] = true;
+        this.runLogGuard[kind] = undefined;
+        this.runActive[kind] = undefined;
+        HardwareOutput.report(`安路 TD：${kind === 'synth' ? '综合' : '实现'}失败，已停止等待`, {
+            level: ReportType.Error
+        });
+        this.runDoneCallback?.[kind]?.();
+        this.runDoneCallback[kind] = undefined;
+        // TD 的错误路径可能没有 DIDE_RUN_DONE 标记，失败状态不能因此永久锁死后续重试。
+        this.runFailed[kind] = undefined;
     }
 
     public refresh(context: PLContext) {
@@ -432,6 +473,17 @@ class AnlogicOperation {
     private runFlow(context: PLContext, run: 'syn_1' | 'phy_1', kind: 'synth' | 'impl'): void {
         const label = kind === 'synth' ? '综合' : '实现';
 
+        if (this.runFailed[kind]) {
+            return;
+        }
+        if (this.runActive[kind]) {
+            HardwareOutput.report(`安路 TD：${label}正在运行，忽略重复启动`, {
+                level: ReportType.Warn
+            });
+            return;
+        }
+        this.runActive[kind] = true;
+
         const done = new Promise<void>(resolve => {
             this.runDoneCallback[kind] = resolve;
         });
@@ -454,6 +506,7 @@ class AnlogicOperation {
 
         // 记录本次运行前的 run.log 基线，结束后据此判断日志是否真的被刷新
         const logPath = this.runLogPath(run);
+        this.runFailed[kind] = undefined;
         this.runLogGuard[kind] = { path: logPath, ...this.logSnapshot(logPath) };
 
         // 1) 复位 run：已有结果时必须先复位，否则 launch_runs 报 PRJ-8805

@@ -30,7 +30,6 @@
     "digital-ide.hard.exit.title": "退出當前項目",
     "digital-ide.pickLibrary.title": "選擇庫文件",
     "digital-ide.pl.setSrcTop.title": "設置為 src 的頂層文件",
-    "digital-ide.pl.pickProject.title": "選擇安路 TD 工程（.al）",
     "digital-ide.pl.setSimTop.title": "設置為 sim 的頂層文件",
     "digital-ide.pl.addDevice.title": "添加 device",
     "digital-ide.pl.delDevice.title": "刪除 device",

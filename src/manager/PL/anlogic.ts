@@ -10,7 +10,7 @@ import { hdlFile, hdlDir, hdlPath } from '../../hdlFs';
 import { HardwareOutput, ReportType } from '../../global/outputChannel';
 import { HdlFileProjectType } from '../../hdlParser/common';
 import { killProcess } from '../../global/util';
-import { projectFileManager } from '../projectFile';
+import { getActiveProjectFile, findAllProjectFiles, parseProjectFileByPath } from '../projectFile';
 import { PLContext } from './xilinx';
 
 /** 安路 Tang Dynasty 6.2 命令行后端。目标器件为 PH1A90SEG325，speed=2。 */
@@ -46,11 +46,30 @@ class AnlogicOperation {
     }
 
     /**
+     * @description 当前激活的安路工程（.al）。工程树里右键「激活」切换，
+     *              综合 / 实现 / 下载都以它为准，无需再经 HARD 菜单选工程。
+     *              非 .al 激活（如 .xpr）或无激活工程时返回 undefined，
+     *              调用方据此提示用户先激活一个安路工程。
+     */
+    private activeAl(): AbsPath | undefined {
+        const active = getActiveProjectFile();
+        if (active && active.toLowerCase().endsWith('.al')) {
+            return hdlPath.toSlash(active);
+        }
+        return undefined;
+    }
+
+    /**
      * @description 解析 TD 工程所在目录。
-     *              配置了 digital-ide.prj.anlogic.project.path 时以该目录为准（支持
-     *              绝对路径或相对工作区路径），否则回落到 <arch.prjPath>/anlogic。
+     *              优先使用当前激活的 .al 所在目录；未激活安路工程时，
+     *              回落到 digital-ide.prj.anlogic.project.path（支持
+     *              绝对路径或相对工作区路径），再回落到 <arch.prjPath>/anlogic。
      */
     private resolvePrjDir(): AbsPath {
+        const active = this.activeAl();
+        if (active) {
+            return hdlPath.toSlash(fspath.dirname(active));
+        }
         const configured = this.configuredPrjDir;
         if (!configured) {
             return hdlPath.join(this.prjPath, 'anlogic');
@@ -62,11 +81,15 @@ class AnlogicOperation {
 
     /**
      * @description 解析 TD 工程名。
-     *              优先沿用目标目录中已有的 .al 文件名，避免与 prjName.PL 不一致时
-     *              在已有工程旁边又新建一个空工程。目录中只有唯一 .al 时以其为准；
-     *              存在多个 .al 时退回 prjName.PL（交由用户显式指定）。
+     *              优先取激活 .al 的文件名，保证与工程登记一致；
+     *              无激活工程时沿用目标目录中唯一的 .al 文件名，
+     *              否则退回 prjName.PL。
      */
     private resolvePrjName(dir: AbsPath): string {
+        const active = this.activeAl();
+        if (active) {
+            return fspath.basename(active).replace(/\.al$/i, '');
+        }
         const preferred = opeParam.prjInfo.prjName.PL;
         try {
             const als = fs.readdirSync(dir).filter(f => f.toLowerCase().endsWith('.al'));
@@ -133,99 +156,11 @@ class AnlogicOperation {
     }
 
     /**
-     * @description 扫描工作区中的 .al 工程文件，供用户选择要打开哪一个。
-     *              排除 .git / node_modules 等无关目录，避免扫描耗时；
-     *              .dideignore 的规则不参与——工程文件本身通常会被忽略，但需要能被列出。
+     * @description 扫描工作区中的 .al 工程文件。激活工程机制接管工程选择后，
+     *              此方法仅供 Launch 在无激活工程时做兜底提示，不再对外弹窗选工程。
      */
     public scanProjects(): AbsPath[] {
-        const skip = new Set(['.git', 'node_modules', '.vscode', 'tmp', 'log', 'doc']);
-        const found: AbsPath[] = [];
-
-        const walk = (dir: AbsPath, depth: number) => {
-            if (depth > 6) {
-                return;
-            }
-            let entries: string[];
-            try {
-                entries = fs.readdirSync(dir);
-            } catch {
-                return;
-            }
-            for (const name of entries) {
-                const full = hdlPath.join(dir, name);
-                let isDirectory = false;
-                try {
-                    isDirectory = fs.statSync(full).isDirectory();
-                } catch {
-                    continue;
-                }
-                if (isDirectory) {
-                    if (skip.has(name)) {
-                        continue;
-                    }
-                    walk(full, depth + 1);
-                } else if (name.toLowerCase().endsWith('.al')) {
-                    found.push(full);
-                }
-            }
-        };
-
-        walk(opeParam.workspacePath, 0);
-        return found;
-    }
-
-    /**
-     * @description 弹出工程选择列表，用户选中后写入工作区配置并返回该工程路径。
-     *              仅有一个候选时直接返回，不打扰用户。
-     */
-    public async pickProject(): Promise<AbsPath | undefined> {
-        const projects = this.scanProjects();
-        if (projects.length === 0) {
-            vscode.window.showWarningMessage('安路 TD：工作区内未找到 .al 工程文件');
-            return undefined;
-        }
-
-        if (projects.length === 1) {
-            return projects[0];
-        }
-
-        const workspace = opeParam.workspacePath;
-        const picked = await vscode.window.showQuickPick(
-            projects.map(p => ({
-                label: fspath.basename(p),
-                description: hdlPath.toSlash(hdlPath.relative(workspace, p)),
-                detail: `修改时间 ${new Date(fs.statSync(p).mtimeMs).toLocaleString()}`,
-                path: p,
-            })),
-            {
-                title: '选择要打开的安路 TD 工程',
-                placeHolder: `工作区内找到 ${projects.length} 个 .al 工程，请选择要打开的一个`,
-            }
-        );
-
-        return picked?.path;
-    }
-
-    /**
-     * @description 让用户选择工程并持久化到工作区配置（.vscode/settings.json），
-     *              后续 Launch / GUI / Program 都会使用该工程。
-     */
-    public async selectProject(): Promise<void> {
-        const path = await this.pickProject();
-        if (!path) {
-            return;
-        }
-
-        const dir = hdlPath.toSlash(fspath.dirname(path));
-        const name = fspath.basename(path);
-
-        // 写入工作区设置，保证与 .al 所在目录一致，无需用户手填
-        await vscode.workspace.getConfiguration('digital-ide.prj.anlogic.project')
-            .update('path', dir, vscode.ConfigurationTarget.Workspace);
-
-        projectFileManager.invalidate();
-        vscode.window.showInformationMessage(`安路 TD：已选定工程 ${name}`);
-        HardwareOutput.report(`安路 TD 工程已切换为：${path}`, { level: ReportType.Run });
+        return findAllProjectFiles().filter(f => f.toLowerCase().endsWith('.al'));
     }
 
     public updateAnlogicPath(): string {
@@ -259,26 +194,42 @@ class AnlogicOperation {
     }
 
     public async launch(context: PLContext): Promise<string | undefined> {
-        // 未配置工程目录时先处理工程归属，避免落到 prj/anlogic 下新建空工程、
-        // 或误打开同目录中的其他 .al。工作区只有唯一工程时直接采用，多个则弹列表。
-        if (!this.configuredPrjDir) {
+        // 工程归属以「激活工程」为准：工程树右键「激活」切换，综合 / 实现 /
+        // 下载都作用于它。未激活安路工程时才回落到旧的 project.path / 扫描兜底。
+        const active = this.activeAl();
+        if (!active) {
             const projects = this.scanProjects();
-            if (projects.length === 1) {
-                await vscode.workspace.getConfiguration('digital-ide.prj.anlogic.project')
-                    .update('path', hdlPath.toSlash(fspath.dirname(projects[0])), vscode.ConfigurationTarget.Workspace);
-                projectFileManager.invalidate();
+            if (projects.length === 0) {
+                vscode.window.showWarningMessage('安路 TD：工作区内未找到 .al 工程文件，请先在工程树中激活一个安路工程');
+                return undefined;
+            }
+            const activeAny = getActiveProjectFile();
+            if (activeAny && !activeAny.toLowerCase().endsWith('.al')) {
+                // 激活的是别家工程（如 .xpr）：提示切回安路，而不是静默用错工程
+                const info = parseProjectFileByPath(activeAny);
+                vscode.window.showWarningMessage(
+                    `当前激活的是 ${info?.kind === 'xpr' ? 'Xilinx' : '未知'} 工程 ${fspath.basename(activeAny)}，` +
+                    '请在工程树中右键安路工程选择「激活」后再 Launch'
+                );
+                return undefined;
+            }
+            if (!this.configuredPrjDir && projects.length > 1) {
+                vscode.window.showWarningMessage('安路 TD：存在多个 .al 工程，请先在工程树中右键目标工程选择「激活」');
+                return undefined;
+            }
+            if (!this.configuredPrjDir && projects.length === 1) {
                 HardwareOutput.report(`安路 TD：采用工作区内唯一工程 ${projects[0]}`, { level: ReportType.Run });
-            } else if (projects.length > 1) {
-                await this.selectProject();
-                if (!this.configuredPrjDir) {
-                    // 用户取消选择，终止本次 Launch
-                    return undefined;
-                }
             }
         }
 
         const prjDir = this.prjInfo.path;
-        if (this.configuredPrjDir) {
+        if (active) {
+            // 激活工程目录必须存在，否则视为工程文件被移动/删除
+            if (!hdlDir.isDir(prjDir)) {
+                vscode.window.showErrorMessage(`安路 TD：激活工程目录不存在 ${prjDir}，请检查工程文件是否被移动或删除`);
+                return undefined;
+            }
+        } else if (this.configuredPrjDir) {
             // 使用已有工程目录：目录必须存在，否则视为配置错误而不是静默新建
             if (!hdlDir.isDir(prjDir)) {
                 vscode.window.showErrorMessage(`安路 TD：工程目录不存在 ${prjDir}，请检查 digital-ide.prj.anlogic.project.path`);

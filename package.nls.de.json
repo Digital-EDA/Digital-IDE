@@ -30,7 +30,6 @@
     "digital-ide.hard.exit.title": "Aktuelles Projekt beenden",
     "digital-ide.pickLibrary.title": "Bibliotheksdatei auswählen",
     "digital-ide.pl.setSrcTop.title": "Als Top-Datei für src festlegen",
-    "digital-ide.pl.pickProject.title": "Anlogic-TD-Projekt (.al) auswählen",
     "digital-ide.pl.setSimTop.title": "Als Top-Datei für sim festlegen",
     "digital-ide.pl.addDevice.title": "Gerät hinzufügen",
     "digital-ide.pl.delDevice.title": "Gerät löschen",

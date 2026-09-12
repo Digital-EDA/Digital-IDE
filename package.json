@@ -577,11 +577,6 @@
                 "title": "%digital-ide.pl.setSrcTop.title%"
             },
             {
-                "command": "digital-ide.pl.pickProject",
-                "category": "CS FPGA IDE",
-                "title": "%digital-ide.pl.pickProject.title%"
-            },
-            {
                 "command": "digital-ide.pl.setSimTop",
                 "category": "CS FPGA IDE",
                 "title": "%digital-ide.pl.setSimTop.title%"

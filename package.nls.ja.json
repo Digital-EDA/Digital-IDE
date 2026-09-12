@@ -30,7 +30,6 @@
     "digital-ide.hard.exit.title": "現在のプロジェクトを終了",
     "digital-ide.pickLibrary.title": "ライブラリファイルを選択",
     "digital-ide.pl.setSrcTop.title": "src のトップファイルとして設定",
-    "digital-ide.pl.pickProject.title": "Anlogic TD プロジェクト (.al) を選択",
     "digital-ide.pl.setSimTop.title": "sim のトップファイルとして設定",
     "digital-ide.pl.addDevice.title": "デバイスを追加",
     "digital-ide.pl.delDevice.title": "デバイスを削除",

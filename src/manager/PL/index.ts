@@ -164,20 +164,6 @@ class PlManage extends BaseManage {
         return new XilinxOperation();
     }
 
-    /**
-     * @description 选择要打开的安路 TD 工程。扫描工作区中的 .al 文件供用户选择，
-     *              选中后写入工作区配置，后续 Launch / GUI / Program 均使用该工程。
-     */
-    public async selectProject() {
-        this.ensureToolchain();
-        const ope = this.context.ope as { selectProject?: () => Promise<void> };
-        if (typeof ope.selectProject !== 'function') {
-            vscode.window.showInformationMessage('当前工具链不需要选择工程文件（仅安路 TD 使用 .al 工程）');
-            return;
-        }
-        await ope.selectProject();
-    }
-
     public setSrcTop(item: ModuleDataItem) {        
         this.context.ope.setSrcTop(item.name, this.context);
         const type = moduleTreeProvider.getItemType(item);

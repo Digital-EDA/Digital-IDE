@@ -93,11 +93,6 @@ class HardwareTreeProvider extends BaseCommandTreeProvider {
                 icon: 'cmd',
                 tip: 'Launch FPGA development assist function'
             },
-            '选工程': {
-                cmd: 'digital-ide.pl.pickProject',
-                icon: 'cmd',
-                tip: 'Select the Anlogic TD project (.al) to open'
-            },
             Simulate: {
                 cmd: 'digital-ide.hard.simulate',
                 icon: 'toolBox',

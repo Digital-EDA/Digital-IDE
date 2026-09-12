@@ -28,7 +28,6 @@ export function registerManagerCommands(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('digital-ide.pl.delDevice', () => plManage.delDevice());
     vscode.commands.registerCommand('digital-ide.pl.addFile', files => plManage.addFiles(files));
     vscode.commands.registerCommand('digital-ide.pl.delFile', files => plManage.delFiles(files));
-    vscode.commands.registerCommand('digital-ide.pl.pickProject', () => plManage.selectProject());
 
     // pl toolbox commands (hard tool in treeView)
     vscode.commands.registerCommand('digital-ide.hard.launch', () => plManage.launch());

@@ -193,12 +193,23 @@ const XPR_FILESET_KIND: Record<string, 'src' | 'sim' | 'data' | 'ip' | 'skip'> =
  *              也有 <Config><Option Name="TopModule" Val="..."/>
  *              Type 决定用途（DesignSrcs/SimulationSrcs/Constrs）。
  *              路径以 $PPRDIR 开头，$PPRDIR 即 .xpr 所在目录。
+ *              器件在 <Configuration><Option Name="Part" Val="xcku040-..."/>，
+ *              与 <Run Part="..."> 一致，取 Configuration 处即可。
  */
 function parseXpr(content: string, file: AbsPath, dir: AbsPath): PrjFileInfo {
     const info: PrjFileInfo = {
         kind: 'xpr', file, dir,
         srcFiles: [], simFiles: [], dataFiles: [], ipFiles: [],
     };
+
+    // 器件：<Configuration><Option Name="Part" Val="..."/></Configuration>
+    const cfgTop = firstTagText(content, 'Configuration');
+    if (cfgTop) {
+        const part = attrOf(cfgTop.match(/<Option\b[^>]*Name="Part"[^>]*\/?>/)?.[0] || '', 'Val');
+        if (part) {
+            info.device = part;
+        }
+    }
 
     for (const fsBlock of tagBlocks(content, 'FileSet')) {
         const type = attrOf(fsBlock, 'Type') || '';

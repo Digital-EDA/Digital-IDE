@@ -14,6 +14,7 @@ import { HardwareOutput, MainOutput, ReportType } from '../../global/outputChann
 import { debounce, getPIDsWithName, killProcess } from '../../global/util';
 import { t } from '../../i18n';
 import { HdlFileProjectType } from '../../hdlParser/common';
+import { getActiveProjectFile, findAllProjectFiles, parseProjectFileByPath } from '../projectFile';
 
 interface XilinxCustom {
     ipRepo: AbsPath, 
@@ -151,31 +152,48 @@ class XilinxOperation {
 
         let scripts: string[] = [];
         let prjFilePath = this.prjPath as AbsPath;
-        // 找到所有的 xilinx 工程文件
-        const prjFiles = hdlFile.pickFileRecursive(prjFilePath, 
-            filePath => filePath.endsWith('.xpr')
-        );
+        // 工程归属以「激活工程」为准：工程树右键「激活」切换。
+        // 激活的是 .xpr 则直接打开它；激活的是别家工程则提示切回；
+        // 无激活工程时回落到旧的 prjPath 扫描逻辑。
+        const active = getActiveProjectFile();
+        if (active && active.toLowerCase().endsWith('.xpr')) {
+            this.open(hdlPath.toSlash(active), scripts);
+        } else if (active) {
+            const info = parseProjectFileByPath(active);
+            vscode.window.showWarningMessage(
+                `当前激活的是 ${info?.kind === 'al' ? '安路' : '未知'} 工程 ${fspath.basename(active)}，` +
+                '请在工程树中右键 Xilinx 工程选择「激活」后再 Launch'
+            );
+            return undefined;
+        } else {
+            // 找到所有的 xilinx 工程文件
+            const prjFiles = hdlFile.pickFileRecursive(prjFilePath,
+                filePath => filePath.endsWith('.xpr')
+            );
 
-        if (prjFiles.length) {
-            if (prjFiles.length > 1) {
-                const selection = await vscode.window.showQuickPick(prjFiles, {
-                    placeHolder : t('info.pl.xilinx.launch.pick-project-placeholder'),
-                    canPickMany: false
-                });
-                if (selection) {
-                    this.open(selection, scripts);
+            if (prjFiles.length) {
+                if (prjFiles.length > 1) {
+                    // 多个候选时不再弹窗，提示用户用激活机制明确意图
+                    vscode.window.showWarningMessage('Xilinx：找到多个 .xpr 工程，请先在工程树中右键目标工程选择「激活」');
+                    return undefined;
+                } else {
+                    prjFilePath = prjFiles[0];
+                    this.open(prjFilePath, scripts);
                 }
             } else {
-                prjFilePath = prjFiles[0];
-                this.open(prjFilePath, scripts);
-            }
-        } else {
-            if (!hdlDir.mkdir(this.prjInfo.path)) {
-                vscode.window.showErrorMessage(`mkdir ${this.prjInfo.path} failed`);
-                return undefined;
-            }
+                // 无 .xpr 但工作区扫描到可解析工程时，引导用户激活而非静默新建
+                const scanned = findAllProjectFiles().filter(f => f.toLowerCase().endsWith('.xpr'));
+                if (scanned.length > 0) {
+                    vscode.window.showWarningMessage('Xilinx：请先在工程树中右键目标工程选择「激活」后再 Launch');
+                    return undefined;
+                }
+                if (!hdlDir.mkdir(this.prjInfo.path)) {
+                    vscode.window.showErrorMessage(`mkdir ${this.prjInfo.path} failed`);
+                    return undefined;
+                }
 
-            this.create(scripts);
+                this.create(scripts);
+            }
         }
 
         const tclPath = hdlPath.join(this.xilinxPath, 'launch.tcl');

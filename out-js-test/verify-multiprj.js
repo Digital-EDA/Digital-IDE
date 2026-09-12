@@ -213,6 +213,7 @@ check('IP 分类为空（alpha 未登记 IP）', alpha.ipFiles.length, 0);
 console.log('\n【3】.xpr 解析（Xilinx）');
 const beta = parseProjectFileByPath(path.join(WORKSPACE, 'beta_xilinx/beta.xpr'));
 check('工程类型', beta.kind, 'xpr');
+check('器件', beta.device, 'xc7a35tftg256-1');
 check('设计顶层', beta.topModuleSrc, 'beta_top');
 check('设计文件数', beta.srcFiles.length, 5);
 check('仿真顶层', beta.topModuleSim, 'tb_beta_top');

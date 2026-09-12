@@ -16,7 +16,8 @@ import { t } from '../i18n';
 import { PpyAction } from '../monitor/propery';
 import { checkJson, readJSON, writeJSON } from '../hdlFs/file';
 import { PropertySchema } from '../global/propertySchema';
-import { getProjectFileInfo, normalizePathKey } from './projectFile';
+import { getActiveProjectFile, getProjectFileInfo, normalizePathKey, parseProjectFileByPath } from './projectFile';
+import { ToolChainType } from '../global/enum';
 
 interface RefreshPrjConfig {
     mkdir: boolean
@@ -198,6 +199,27 @@ class PrjManage {
     }
 
     /**
+     * @description 启动时按激活工程同步器件与工具链。
+     *              激活切换后由树负责同步，这里只补启动那一次，保证
+     *              Xilinx 新建工程的 -part 与安路 import_device 拿到真器件。
+     */
+    private syncActiveProjectToPrjInfo(): void {
+        const active = getActiveProjectFile();
+        if (!active) {
+            return;
+        }
+        const info = parseProjectFileByPath(active);
+        if (!info) {
+            return;
+        }
+        if (info.device) {
+            opeParam.prjInfo.updateDevice(info.device);
+        }
+        opeParam.prjInfo.updateToolChain(info.kind === 'al' ? ToolChainType.Anlogic : ToolChainType.Xilinx);
+        MainOutput.report(`启动同步激活工程：${active}（${info.device || '未知器件'}）`, { level: ReportType.Run });
+    }
+
+    /**
      * @description 获取当前项目中所有的 IP 文件夹
      */
     public async getPrjIPs() {
@@ -243,6 +265,11 @@ class PrjManage {
 
         // 初始化 ignore
         hdlIgnore.updatePatterns();
+
+        // 启动时按激活工程同步器件与工具链：否则 property.json 的 device
+        // 仍是默认值（如 none），Xilinx 新建工程会报 No parts matched 'none'。
+        // 激活切换后由树负责同步，这里只补启动那一次。
+        this.syncActiveProjectToPrjInfo();
 
         // 解析 hdl 文件，构建 hdlParam
         const hdlFiles = await this.getPrjHardwareFiles();

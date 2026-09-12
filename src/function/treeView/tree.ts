@@ -181,8 +181,11 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
         const expandable = canExpandable(element);
         let collapsibleState = vscode.TreeItemCollapsibleState.None;
         if (expandable) {
-            // 工程根与分类默认展开，目录与文件默认折叠，模块节点沿用原有规则
-            if (element.role === 'prj' || element.role === 'group' || element.parent === undefined) {
+            // 工程根与分类默认展开，目录与文件默认折叠；
+            // 顶层模块节点（图标为 current-*-top / top）默认展开，便于直接看到例化层次；
+            // 其余模块节点沿用原有规则
+            if (element.role === 'prj' || element.role === 'group' || element.parent === undefined ||
+                (element.role === undefined && (element.icon === 'top' || element.icon.startsWith('current-')))) {
                 collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
             } else {
                 collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
@@ -507,6 +510,12 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
      * @description 构造一个分类节点。该分类下没有登记文件时返回 undefined，
      *              避免树里出现空节点（例如 .al 不登记 testbench，仿真分类即隐藏）。
      *              分类节点逐工程新建，不能共用单例，否则多个工程会互相覆盖子节点。
+     *
+     *              src / sim 分组内实行「顶层置顶、其余折叠」：登记的顶层模块
+     *              直接列在分组下并默认展开例化层次；其余设计文件收进
+     *              Others，仍可展开找文件、看模块。避免顶层与其子模块的
+     *              定义文件在同一层平铺（如 alpha_top 与 alpha_rx/alpha_tx
+     *              并列），层级与例化关系矛盾。
      */
     private buildGroupItem(
         name: string,
@@ -540,8 +549,113 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
             this.ensureFirstTop(type as keyof FirstTop, prjFile, firstTop, active);
         }
 
-        group.children = this.buildFileNodes(files, type, group, firstTop);
+        group.children = (type === HdlFileProjectType.Src || type === HdlFileProjectType.Sim)
+            ? this.buildTopFirstNodes(files, type, group, firstTop, type as keyof FirstTop)
+            : this.buildFileNodes(files, type, group, firstTop);
         return group.children.length > 0 ? group : undefined;
+    }
+
+    /**
+     * @description src / sim 分组的「顶层置顶、其余折叠」布局。
+     *
+     *              顶层模块节点直接列在分组下（parent 指向分组，而非其定义
+     *              文件），其下即例化层次；定义顶层的文件本身不再单独列出，
+     *              避免同一模块在树里出现两条入口（分组下 + 文件下），也避免
+     *              顶层文件与被例化模块的定义文件平级并列。
+     *              其余文件保持目录 / 文件 / 模块三层，收进 Others 按需展开。
+     */
+    private buildTopFirstNodes(
+        files: PrjFileEntry[],
+        type: string,
+        group: ModuleDataItem,
+        firstTop: FirstTop,
+        topKind: keyof FirstTop
+    ): ModuleDataItem[] {
+        const top = firstTop[topKind];
+        const fileItems = this.buildFileNodes(files, type, group, firstTop);
+        if (!top?.name || !top.path) {
+            return fileItems;
+        }
+
+        // 顶层模块节点：直接挂分组下，parent 指向分组。
+        // 例化层次的 parent 链以它为起点，不再经过定义文件。
+        const topNode: ModuleDataItem = {
+            icon: this.makeFirstTopIconName(topKind),
+            name: top.name,
+            type,
+            doFastFileType: undefined,
+            range: undefined,
+            path: top.path,
+            parent: group,
+            tip: top.path,
+            children: [],
+        };
+        const topModule = hdlParam.getHdlModule(top.path, top.name);
+        if (topModule) {
+            topNode.range = topModule.range;
+            topNode.doFastFileType = topModule.file.doFastType;
+            topNode.icon = this.judgeTopModuleIconByDoFastType(topModule.file.doFastType) === 'top'
+                ? this.makeFirstTopIconName(topKind)
+                : this.judgeTopModuleIconByDoFastType(topModule.file.doFastType);
+        }
+        topNode.children = this.getInstanceItemList(topNode);
+
+        // 其余文件收进 Others：去掉顶层定义文件自身（已由顶层节点代表），
+        // 剩下的保持原样（目录 / 文件 / 模块），按需展开。
+        const topKey = normalizePathKey(top.path);
+        const rest: ModuleDataItem[] = [];
+        const collectRest = (items: ModuleDataItem[]) => {
+            for (const item of items) {
+                if (item.role === 'file' && item.path && normalizePathKey(item.path) === topKey) {
+                    continue;
+                }
+                if (item.role === 'dir' && item.children) {
+                    const kept = item.children.filter(child =>
+                        !(child.role === 'file' && child.path && normalizePathKey(child.path) === topKey));
+                    if (kept.length !== item.children.length) {
+                        item.children = kept;
+                    }
+                    if (item.children.length === 0) {
+                        continue;
+                    }
+                }
+                rest.push(item);
+            }
+        };
+        collectRest(fileItems);
+        if (rest.length === 0) {
+            return [topNode];
+        }
+
+        const others: ModuleDataItem = {
+            icon: 'list-tree',
+            name: 'Others',
+            type,
+            doFastFileType: undefined,
+            range: undefined,
+            path: group.path,
+            parent: group,
+            role: 'dir',
+            tip: `${rest.length} 个其余文件`,
+            children: rest,
+        };
+        for (const item of rest) {
+            item.parent = others;
+            if (item.role === 'dir' && item.children) {
+                this.reparentDirChildren(item, others);
+            }
+        }
+        return [topNode, others];
+    }
+
+    /**
+     * @description 目录节点换父后，其子树 parent 链已在构造时指向旧父，
+     *              这里仅修正直接子节点的 parent，孙级以下保持相对关系。
+     *              实际目录节点的 children parent 均指向自身，无需深改，
+     *              此方法保留作语义说明，后续若改 parent 模型再启用。
+     */
+    private reparentDirChildren(_dir: ModuleDataItem, _newParent: ModuleDataItem): void {
+        return;
     }
 
     /**

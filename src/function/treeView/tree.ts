@@ -25,12 +25,14 @@ import {
 
 /**
  * @description 节点角色。未设置表示模块 / 例化节点，沿用既有行为。
- *  prj   —— 工程根，标签为工程名与器件型号
- *  group —— 分类根（src / sim / 约束）
- *  dir   —— 目录节点，由工程登记文件的路径前缀折叠而来
- *  file  —— 工程登记的源文件
+ *  prj     —— 工程根，标签为工程名与器件型号
+ *  group   —— 分类根（src / sim / 约束）
+ *  dir     —— 目录节点，由工程登记文件的路径前缀折叠而来
+ *  file    —— 工程登记的源文件
+ *  prjfile —— 工程文件本身（.al / .xpr），置于工程节点下最顶端，
+ *             点击直接打开文本，便于在 VS Code 中修改工程登记
  */
-type NodeRole = 'prj' | 'group' | 'dir' | 'file';
+type NodeRole = 'prj' | 'group' | 'dir' | 'file' | 'prjfile';
 
 interface ModuleDataItem {
     icon: string,           // 图标
@@ -198,7 +200,7 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
             if (element.active) {
                 treeItem.description = t('treeview.project.active');
             }
-        } else if (element.role === 'file') {
+        } else if (element.role === 'file' || element.role === 'prjfile') {
             treeItem.contextValue = 'hdlfile';
         } else if (element.role !== undefined) {
             treeItem.contextValue = element.role;
@@ -218,7 +220,7 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
         treeItem.iconPath = getIconConfig(element.icon);
 
         // set command：目录 / 工程根 / 分类节点只负责展开，不打开文件
-        if (element.role === undefined || element.role === 'file') {
+        if (element.role === undefined || element.role === 'file' || element.role === 'prjfile') {
             treeItem.command = {
                 title: "Open this HDL File",
                 command: 'digital-ide.treeView.arch.openFile',
@@ -401,6 +403,20 @@ class ModuleTreeProvider implements vscode.TreeDataProvider<ModuleDataItem> {
 
         const firstTop = this.firstTopOf(info.file);
         const groups: ModuleDataItem[] = [];
+        // 工程文件本身置顶：便于在 VS Code 中直接打开修改登记内容。
+        // 它不参与综合，只是工程的登记清单。
+        groups.push({
+            icon: 'file',
+            name: fspath.basename(info.file),
+            type: 'prjfile',
+            doFastFileType: undefined,
+            range: undefined,
+            path: info.file,
+            parent: prjRoot,
+            role: 'prjfile',
+            tip: info.file,
+            children: [],
+        });
         const candidates: [string, string, string, PrjFileEntry[]][] = [
             ['src', HdlFileProjectType.Src, 'src', info.srcFiles],
             ['sim', HdlFileProjectType.Sim, 'sim', info.simFiles],

@@ -214,7 +214,7 @@ console.log('\n【3】.xpr 解析（Xilinx）');
 const beta = parseProjectFileByPath(path.join(WORKSPACE, 'beta_xilinx/beta.xpr'));
 check('工程类型', beta.kind, 'xpr');
 check('设计顶层', beta.topModuleSrc, 'beta_top');
-check('设计文件数', beta.srcFiles.length, 4);
+check('设计文件数', beta.srcFiles.length, 5);
 check('仿真顶层', beta.topModuleSim, 'tb_beta_top');
 check('仿真文件数', beta.simFiles.length, 1);
 check('约束文件数', beta.dataFiles.length, 1);

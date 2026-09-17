@@ -16,6 +16,7 @@ vhdl_library_source="$server_root/tests/vhdl/vhdl_libraries"
 vhdl_library_resource="$extension_root/resources/vhdl_libraries"
 primitive_source="$server_root/tests/factory/xilinx/primitive"
 primitive_resource="$extension_root/resources/primitive/xilinx"
+kernel_resource="$extension_root/resources/kernel"
 parser_fingerprint_script="$server_root/sv-parser/scripts/windows-prebuilt-source-sha256.sh"
 
 llvm_version="20.1.8"
@@ -134,6 +135,10 @@ validate_vsix() {
         || fail "VSIX does not contain resources/kernel/yosys.wasm"
     [[ -f "$validation_dir/extension/resources/server/win32/x64/digital-server.exe" ]] \
         || fail "VSIX does not contain the Windows server"
+    [[ ! -e "$validation_dir/extension/resources/server/win32/x64/wave-mcp.exe" ]] \
+        || fail "VSIX must not contain a standalone Windows wave-mcp executable"
+    [[ ! -e "$validation_dir/extension/resources/server/linux/x64/wave-mcp" ]] \
+        || fail "VSIX must not contain a standalone Linux wave-mcp executable"
     [[ -f "$validation_dir/extension/resources/server/win32/x64/digital_server.pdb" ]] \
         || fail "VSIX does not contain the Windows server symbols"
     [[ -f "$validation_dir/extension/resources/crash/windows-server-monitor.ps1" ]] \
@@ -388,6 +393,8 @@ if [[ "${DIDE_WINDOWS_RUNTIME_SMOKE:-1}" == "1" ]]; then
 fi
 mkdir -p "$(dirname "$server_resource")"
 install -m 0755 "$built_server" "$server_resource"
+rm -f "$extension_root/resources/server/win32/x64/wave-mcp.exe"
+rm -f "$extension_root/resources/server/linux/x64/wave-mcp"
 install -m 0644 "$built_server_symbols" "$server_symbols_resource"
 rm -f "$extension_root/resources/server/win32/x64/wave-server.exe"
 
@@ -411,6 +418,13 @@ log "Publishing VHDL standard libraries"
 rm -rf "$vhdl_library_resource"
 mkdir -p "$vhdl_library_resource"
 cp -a "$vhdl_library_source/." "$vhdl_library_resource/"
+
+log "Publishing WebUI kernel backends"
+mkdir -p "$kernel_resource"
+for asset in yosys.wasm place.wasm route.wasm; do
+    [[ -f "$server_root/$asset" ]] || fail "required kernel backend is missing: $server_root/$asset"
+    install -m 0644 "$server_root/$asset" "$kernel_resource/$asset"
+done
 
 vsix="$dist_dir/fpga-support-$release_version-$platform.vsix"
 sha_file="$vsix.sha256"

@@ -14,8 +14,6 @@ export type ProjectAction =
     | 'convertXilinx'
     | 'setSrcTop'
     | 'setSimTop'
-    | 'addDevice'
-    | 'delDevice'
     | 'addFile'
     | 'delFile'
     | 'setLibraries'
@@ -593,9 +591,6 @@ export function registerProjectCommands(
         (client, options) => setTop(client, architecture, 'setSrcTop', options));
     registerWithClient(context, clientReady, 'digital-ide.pl.setSimTop',
         (client, options) => setTop(client, architecture, 'setSimTop', options));
-    registerWithClient(context, clientReady, 'digital-ide.pl.addDevice', setDevice);
-    registerWithClient(context, clientReady, 'digital-ide.pl.delDevice',
-        (client, options) => runProjectAction(client, 'delDevice', options));
     registerWithClient(context, clientReady, 'digital-ide.pl.addFile',
         (client, options) => changeProjectFile(client, 'addFile', options));
     registerWithClient(context, clientReady, 'digital-ide.pl.delFile',
@@ -790,23 +785,6 @@ async function setTop(
         architecture.setFirstTop(treeType, node);
     }
     return response;
-}
-
-async function setDevice(
-    client: LanguageClient,
-    options?: ProjectCommandOptions,
-): Promise<ProjectResponse> {
-    let device = typeof options?.device === 'string' ? options.device : undefined;
-    if (!device) {
-        device = await vscode.window.showInputBox({
-            title: 'FPGA Device',
-            validateInput: value => value.trim() ? undefined : 'Device is required',
-        });
-    }
-    if (!device) {
-        throw new Error('No device was selected');
-    }
-    return runProjectAction(client, 'addDevice', { ...options, device });
 }
 
 async function changeProjectFile(

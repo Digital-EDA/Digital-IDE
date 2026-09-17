@@ -3,6 +3,7 @@ import { MainOutput, ReportType, outputChannels } from './global/outputs';
 import { t } from './i18n';
 import { registerToolchainCommands } from './toolchain/commands';
 import { registerProjectCommands } from './project/commands';
+import { registerDeviceCompletion } from './project/deviceCompletion';
 import type { LanguageClient } from 'vscode-languageclient/node';
 import type { ProjectExtensionApi } from './project/commands';
 import type { DigitalServerExtensionApi } from './server/server';
@@ -40,6 +41,7 @@ export function activate(
     // These providers contain only static nodes and must be registered before
     // any backend module is loaded or any LSP initialization work begins.
     registerToolchainCommands(context, clientReady);
+    registerDeviceCompletion(context);
     const project = registerProjectCommands(context, clientReady);
     const waveform = registerWaveformSupport(context, clientReady);
     MainOutput.report('Static TOOL/HARD/SOFT views and commands registered.', {

@@ -1,0 +1,6404 @@
+{
+  "schemaVersion": 1,
+  "vendor": "xilinx",
+  "source": "Vivado 2022.2 / get_parts",
+  "families": {
+    "aartix7": {
+      "xa7a100t": {
+        "xa7a100tcsg324": [
+          "xa7a100tcsg324-1I",
+          "xa7a100tcsg324-1Q",
+          "xa7a100tcsg324-2I"
+        ],
+        "xa7a100tfgg484": [
+          "xa7a100tfgg484-1I",
+          "xa7a100tfgg484-1Q",
+          "xa7a100tfgg484-2I"
+        ]
+      },
+      "xa7a12t": {
+        "xa7a12tcpg238": [
+          "xa7a12tcpg238-1I",
+          "xa7a12tcpg238-1Q",
+          "xa7a12tcpg238-2I"
+        ],
+        "xa7a12tcsg325": [
+          "xa7a12tcsg325-1I",
+          "xa7a12tcsg325-1Q",
+          "xa7a12tcsg325-2I"
+        ]
+      },
+      "xa7a15t": {
+        "xa7a15tcpg236": [
+          "xa7a15tcpg236-1I",
+          "xa7a15tcpg236-1Q",
+          "xa7a15tcpg236-2I"
+        ],
+        "xa7a15tcsg324": [
+          "xa7a15tcsg324-1I",
+          "xa7a15tcsg324-1Q",
+          "xa7a15tcsg324-2I"
+        ],
+        "xa7a15tcsg325": [
+          "xa7a15tcsg325-1I",
+          "xa7a15tcsg325-1Q",
+          "xa7a15tcsg325-2I"
+        ]
+      },
+      "xa7a25t": {
+        "xa7a25tcpg238": [
+          "xa7a25tcpg238-1I",
+          "xa7a25tcpg238-1Q",
+          "xa7a25tcpg238-2I"
+        ],
+        "xa7a25tcsg325": [
+          "xa7a25tcsg325-1I",
+          "xa7a25tcsg325-1Q",
+          "xa7a25tcsg325-2I"
+        ]
+      },
+      "xa7a35t": {
+        "xa7a35tcpg236": [
+          "xa7a35tcpg236-1I",
+          "xa7a35tcpg236-1Q",
+          "xa7a35tcpg236-2I"
+        ],
+        "xa7a35tcsg324": [
+          "xa7a35tcsg324-1I",
+          "xa7a35tcsg324-1Q",
+          "xa7a35tcsg324-2I"
+        ],
+        "xa7a35tcsg325": [
+          "xa7a35tcsg325-1I",
+          "xa7a35tcsg325-1Q",
+          "xa7a35tcsg325-2I"
+        ]
+      },
+      "xa7a50t": {
+        "xa7a50tcpg236": [
+          "xa7a50tcpg236-1I",
+          "xa7a50tcpg236-1Q",
+          "xa7a50tcpg236-2I"
+        ],
+        "xa7a50tcsg324": [
+          "xa7a50tcsg324-1I",
+          "xa7a50tcsg324-1Q",
+          "xa7a50tcsg324-2I"
+        ],
+        "xa7a50tcsg325": [
+          "xa7a50tcsg325-1I",
+          "xa7a50tcsg325-1Q",
+          "xa7a50tcsg325-2I"
+        ]
+      },
+      "xa7a75t": {
+        "xa7a75tcsg324": [
+          "xa7a75tcsg324-1I",
+          "xa7a75tcsg324-1Q",
+          "xa7a75tcsg324-2I"
+        ],
+        "xa7a75tfgg484": [
+          "xa7a75tfgg484-1I",
+          "xa7a75tfgg484-1Q",
+          "xa7a75tfgg484-2I"
+        ]
+      }
+    },
+    "akintex7": {
+      "xa7k160t": {
+        "xa7k160tffg676": [
+          "xa7k160tffg676-1Q"
+        ]
+      }
+    },
+    "artix7": {
+      "xc7a100t": {
+        "xc7a100tcsg324": [
+          "xc7a100tcsg324-1",
+          "xc7a100tcsg324-2",
+          "xc7a100tcsg324-2L",
+          "xc7a100tcsg324-3"
+        ],
+        "xc7a100tfgg484": [
+          "xc7a100tfgg484-1",
+          "xc7a100tfgg484-2",
+          "xc7a100tfgg484-2L",
+          "xc7a100tfgg484-3"
+        ],
+        "xc7a100tfgg676": [
+          "xc7a100tfgg676-1",
+          "xc7a100tfgg676-2",
+          "xc7a100tfgg676-2L",
+          "xc7a100tfgg676-3"
+        ],
+        "xc7a100tftg256": [
+          "xc7a100tftg256-1",
+          "xc7a100tftg256-2",
+          "xc7a100tftg256-2L",
+          "xc7a100tftg256-3"
+        ]
+      },
+      "xc7a100ti": {
+        "xc7a100ticsg324": [
+          "xc7a100ticsg324-1L"
+        ],
+        "xc7a100tifgg484": [
+          "xc7a100tifgg484-1L"
+        ],
+        "xc7a100tifgg676": [
+          "xc7a100tifgg676-1L"
+        ],
+        "xc7a100tiftg256": [
+          "xc7a100tiftg256-1L"
+        ]
+      },
+      "xc7a12t": {
+        "xc7a12tcpg238": [
+          "xc7a12tcpg238-1",
+          "xc7a12tcpg238-2",
+          "xc7a12tcpg238-2L",
+          "xc7a12tcpg238-3"
+        ],
+        "xc7a12tcsg325": [
+          "xc7a12tcsg325-1",
+          "xc7a12tcsg325-2",
+          "xc7a12tcsg325-2L",
+          "xc7a12tcsg325-3"
+        ]
+      },
+      "xc7a12ti": {
+        "xc7a12ticpg238": [
+          "xc7a12ticpg238-1L"
+        ],
+        "xc7a12ticsg325": [
+          "xc7a12ticsg325-1L"
+        ]
+      },
+      "xc7a15t": {
+        "xc7a15tcpg236": [
+          "xc7a15tcpg236-1",
+          "xc7a15tcpg236-2",
+          "xc7a15tcpg236-2L",
+          "xc7a15tcpg236-3"
+        ],
+        "xc7a15tcsg324": [
+          "xc7a15tcsg324-1",
+          "xc7a15tcsg324-2",
+          "xc7a15tcsg324-2L",
+          "xc7a15tcsg324-3"
+        ],
+        "xc7a15tcsg325": [
+          "xc7a15tcsg325-1",
+          "xc7a15tcsg325-2",
+          "xc7a15tcsg325-2L",
+          "xc7a15tcsg325-3"
+        ],
+        "xc7a15tfgg484": [
+          "xc7a15tfgg484-1",
+          "xc7a15tfgg484-2",
+          "xc7a15tfgg484-2L",
+          "xc7a15tfgg484-3"
+        ],
+        "xc7a15tftg256": [
+          "xc7a15tftg256-1",
+          "xc7a15tftg256-2",
+          "xc7a15tftg256-2L",
+          "xc7a15tftg256-3"
+        ]
+      },
+      "xc7a15ti": {
+        "xc7a15ticpg236": [
+          "xc7a15ticpg236-1L"
+        ],
+        "xc7a15ticsg324": [
+          "xc7a15ticsg324-1L"
+        ],
+        "xc7a15ticsg325": [
+          "xc7a15ticsg325-1L"
+        ],
+        "xc7a15tifgg484": [
+          "xc7a15tifgg484-1L"
+        ],
+        "xc7a15tiftg256": [
+          "xc7a15tiftg256-1L"
+        ]
+      },
+      "xc7a200t": {
+        "xc7a200tfbg484": [
+          "xc7a200tfbg484-1",
+          "xc7a200tfbg484-2",
+          "xc7a200tfbg484-2L",
+          "xc7a200tfbg484-3"
+        ],
+        "xc7a200tfbg676": [
+          "xc7a200tfbg676-1",
+          "xc7a200tfbg676-2",
+          "xc7a200tfbg676-2L",
+          "xc7a200tfbg676-3"
+        ],
+        "xc7a200tfbv484": [
+          "xc7a200tfbv484-1",
+          "xc7a200tfbv484-2",
+          "xc7a200tfbv484-2L",
+          "xc7a200tfbv484-3"
+        ],
+        "xc7a200tfbv676": [
+          "xc7a200tfbv676-1",
+          "xc7a200tfbv676-2",
+          "xc7a200tfbv676-2L",
+          "xc7a200tfbv676-3"
+        ],
+        "xc7a200tffg1156": [
+          "xc7a200tffg1156-1",
+          "xc7a200tffg1156-2",
+          "xc7a200tffg1156-2L",
+          "xc7a200tffg1156-3"
+        ],
+        "xc7a200tffv1156": [
+          "xc7a200tffv1156-1",
+          "xc7a200tffv1156-2",
+          "xc7a200tffv1156-2L",
+          "xc7a200tffv1156-3"
+        ],
+        "xc7a200tsbg484": [
+          "xc7a200tsbg484-1",
+          "xc7a200tsbg484-2",
+          "xc7a200tsbg484-2L",
+          "xc7a200tsbg484-3"
+        ],
+        "xc7a200tsbv484": [
+          "xc7a200tsbv484-1",
+          "xc7a200tsbv484-2",
+          "xc7a200tsbv484-2L",
+          "xc7a200tsbv484-3"
+        ]
+      },
+      "xc7a200ti": {
+        "xc7a200tifbg484": [
+          "xc7a200tifbg484-1L"
+        ],
+        "xc7a200tifbg676": [
+          "xc7a200tifbg676-1L"
+        ],
+        "xc7a200tifbv484": [
+          "xc7a200tifbv484-1L"
+        ],
+        "xc7a200tifbv676": [
+          "xc7a200tifbv676-1L"
+        ],
+        "xc7a200tiffg1156": [
+          "xc7a200tiffg1156-1L"
+        ],
+        "xc7a200tiffv1156": [
+          "xc7a200tiffv1156-1L"
+        ],
+        "xc7a200tisbg484": [
+          "xc7a200tisbg484-1L"
+        ],
+        "xc7a200tisbv484": [
+          "xc7a200tisbv484-1L"
+        ]
+      },
+      "xc7a25t": {
+        "xc7a25tcpg238": [
+          "xc7a25tcpg238-1",
+          "xc7a25tcpg238-2",
+          "xc7a25tcpg238-2L",
+          "xc7a25tcpg238-3"
+        ],
+        "xc7a25tcsg325": [
+          "xc7a25tcsg325-1",
+          "xc7a25tcsg325-2",
+          "xc7a25tcsg325-2L",
+          "xc7a25tcsg325-3"
+        ]
+      },
+      "xc7a25ti": {
+        "xc7a25ticpg238": [
+          "xc7a25ticpg238-1L"
+        ],
+        "xc7a25ticsg325": [
+          "xc7a25ticsg325-1L"
+        ]
+      },
+      "xc7a35t": {
+        "xc7a35tcpg236": [
+          "xc7a35tcpg236-1",
+          "xc7a35tcpg236-2",
+          "xc7a35tcpg236-2L",
+          "xc7a35tcpg236-3"
+        ],
+        "xc7a35tcsg324": [
+          "xc7a35tcsg324-1",
+          "xc7a35tcsg324-2",
+          "xc7a35tcsg324-2L",
+          "xc7a35tcsg324-3"
+        ],
+        "xc7a35tcsg325": [
+          "xc7a35tcsg325-1",
+          "xc7a35tcsg325-2",
+          "xc7a35tcsg325-2L",
+          "xc7a35tcsg325-3"
+        ],
+        "xc7a35tfgg484": [
+          "xc7a35tfgg484-1",
+          "xc7a35tfgg484-2",
+          "xc7a35tfgg484-2L",
+          "xc7a35tfgg484-3"
+        ],
+        "xc7a35tftg256": [
+          "xc7a35tftg256-1",
+          "xc7a35tftg256-2",
+          "xc7a35tftg256-2L",
+          "xc7a35tftg256-3"
+        ]
+      },
+      "xc7a35ti": {
+        "xc7a35ticpg236": [
+          "xc7a35ticpg236-1L"
+        ],
+        "xc7a35ticsg324": [
+          "xc7a35ticsg324-1L"
+        ],
+        "xc7a35ticsg325": [
+          "xc7a35ticsg325-1L"
+        ],
+        "xc7a35tifgg484": [
+          "xc7a35tifgg484-1L"
+        ],
+        "xc7a35tiftg256": [
+          "xc7a35tiftg256-1L"
+        ]
+      },
+      "xc7a50t": {
+        "xc7a50tcpg236": [
+          "xc7a50tcpg236-1",
+          "xc7a50tcpg236-2",
+          "xc7a50tcpg236-2L",
+          "xc7a50tcpg236-3"
+        ],
+        "xc7a50tcsg324": [
+          "xc7a50tcsg324-1",
+          "xc7a50tcsg324-2",
+          "xc7a50tcsg324-2L",
+          "xc7a50tcsg324-3"
+        ],
+        "xc7a50tcsg325": [
+          "xc7a50tcsg325-1",
+          "xc7a50tcsg325-2",
+          "xc7a50tcsg325-2L",
+          "xc7a50tcsg325-3"
+        ],
+        "xc7a50tfgg484": [
+          "xc7a50tfgg484-1",
+          "xc7a50tfgg484-2",
+          "xc7a50tfgg484-2L",
+          "xc7a50tfgg484-3"
+        ],
+        "xc7a50tftg256": [
+          "xc7a50tftg256-1",
+          "xc7a50tftg256-2",
+          "xc7a50tftg256-2L",
+          "xc7a50tftg256-3"
+        ]
+      },
+      "xc7a50ti": {
+        "xc7a50ticpg236": [
+          "xc7a50ticpg236-1L"
+        ],
+        "xc7a50ticsg324": [
+          "xc7a50ticsg324-1L"
+        ],
+        "xc7a50ticsg325": [
+          "xc7a50ticsg325-1L"
+        ],
+        "xc7a50tifgg484": [
+          "xc7a50tifgg484-1L"
+        ],
+        "xc7a50tiftg256": [
+          "xc7a50tiftg256-1L"
+        ]
+      },
+      "xc7a75t": {
+        "xc7a75tcsg324": [
+          "xc7a75tcsg324-1",
+          "xc7a75tcsg324-2",
+          "xc7a75tcsg324-2L",
+          "xc7a75tcsg324-3"
+        ],
+        "xc7a75tfgg484": [
+          "xc7a75tfgg484-1",
+          "xc7a75tfgg484-2",
+          "xc7a75tfgg484-2L",
+          "xc7a75tfgg484-3"
+        ],
+        "xc7a75tfgg676": [
+          "xc7a75tfgg676-1",
+          "xc7a75tfgg676-2",
+          "xc7a75tfgg676-2L",
+          "xc7a75tfgg676-3"
+        ],
+        "xc7a75tftg256": [
+          "xc7a75tftg256-1",
+          "xc7a75tftg256-2",
+          "xc7a75tftg256-2L",
+          "xc7a75tftg256-3"
+        ]
+      },
+      "xc7a75ti": {
+        "xc7a75ticsg324": [
+          "xc7a75ticsg324-1L"
+        ],
+        "xc7a75tifgg484": [
+          "xc7a75tifgg484-1L"
+        ],
+        "xc7a75tifgg676": [
+          "xc7a75tifgg676-1L"
+        ],
+        "xc7a75tiftg256": [
+          "xc7a75tiftg256-1L"
+        ]
+      }
+    },
+    "artix7l": {
+      "xc7a100tl": {
+        "xc7a100tlcsg324": [
+          "xc7a100tlcsg324-2L"
+        ],
+        "xc7a100tlfgg484": [
+          "xc7a100tlfgg484-2L"
+        ],
+        "xc7a100tlfgg676": [
+          "xc7a100tlfgg676-2L"
+        ],
+        "xc7a100tlftg256": [
+          "xc7a100tlftg256-2L"
+        ]
+      },
+      "xc7a12tl": {
+        "xc7a12tlcpg238": [
+          "xc7a12tlcpg238-2L"
+        ],
+        "xc7a12tlcsg325": [
+          "xc7a12tlcsg325-2L"
+        ]
+      },
+      "xc7a15tl": {
+        "xc7a15tlcpg236": [
+          "xc7a15tlcpg236-2L"
+        ],
+        "xc7a15tlcsg324": [
+          "xc7a15tlcsg324-2L"
+        ],
+        "xc7a15tlcsg325": [
+          "xc7a15tlcsg325-2L"
+        ],
+        "xc7a15tlfgg484": [
+          "xc7a15tlfgg484-2L"
+        ],
+        "xc7a15tlftg256": [
+          "xc7a15tlftg256-2L"
+        ]
+      },
+      "xc7a200tl": {
+        "xc7a200tlfbg484": [
+          "xc7a200tlfbg484-2L"
+        ],
+        "xc7a200tlfbg676": [
+          "xc7a200tlfbg676-2L"
+        ],
+        "xc7a200tlfbv484": [
+          "xc7a200tlfbv484-2L"
+        ],
+        "xc7a200tlfbv676": [
+          "xc7a200tlfbv676-2L"
+        ],
+        "xc7a200tlffg1156": [
+          "xc7a200tlffg1156-2L"
+        ],
+        "xc7a200tlffv1156": [
+          "xc7a200tlffv1156-2L"
+        ],
+        "xc7a200tlsbg484": [
+          "xc7a200tlsbg484-2L"
+        ],
+        "xc7a200tlsbv484": [
+          "xc7a200tlsbv484-2L"
+        ]
+      },
+      "xc7a25tl": {
+        "xc7a25tlcpg238": [
+          "xc7a25tlcpg238-2L"
+        ],
+        "xc7a25tlcsg325": [
+          "xc7a25tlcsg325-2L"
+        ]
+      },
+      "xc7a35tl": {
+        "xc7a35tlcpg236": [
+          "xc7a35tlcpg236-2L"
+        ],
+        "xc7a35tlcsg324": [
+          "xc7a35tlcsg324-2L"
+        ],
+        "xc7a35tlcsg325": [
+          "xc7a35tlcsg325-2L"
+        ],
+        "xc7a35tlfgg484": [
+          "xc7a35tlfgg484-2L"
+        ],
+        "xc7a35tlftg256": [
+          "xc7a35tlftg256-2L"
+        ]
+      },
+      "xc7a50tl": {
+        "xc7a50tlcpg236": [
+          "xc7a50tlcpg236-2L"
+        ],
+        "xc7a50tlcsg324": [
+          "xc7a50tlcsg324-2L"
+        ],
+        "xc7a50tlcsg325": [
+          "xc7a50tlcsg325-2L"
+        ],
+        "xc7a50tlfgg484": [
+          "xc7a50tlfgg484-2L"
+        ],
+        "xc7a50tlftg256": [
+          "xc7a50tlftg256-2L"
+        ]
+      },
+      "xc7a75tl": {
+        "xc7a75tlcsg324": [
+          "xc7a75tlcsg324-2L"
+        ],
+        "xc7a75tlfgg484": [
+          "xc7a75tlfgg484-2L"
+        ],
+        "xc7a75tlfgg676": [
+          "xc7a75tlfgg676-2L"
+        ],
+        "xc7a75tlftg256": [
+          "xc7a75tlftg256-2L"
+        ]
+      }
+    },
+    "artixuplus": {
+      "xcau10p": {
+        "xcau10p-ffvb676": [
+          "xcau10p-ffvb676-1-e",
+          "xcau10p-ffvb676-1-i",
+          "xcau10p-ffvb676-1L-i",
+          "xcau10p-ffvb676-1LV-i",
+          "xcau10p-ffvb676-2-e",
+          "xcau10p-ffvb676-2-i"
+        ],
+        "xcau10p-sbvb484": [
+          "xcau10p-sbvb484-1-e",
+          "xcau10p-sbvb484-1-i",
+          "xcau10p-sbvb484-1L-i",
+          "xcau10p-sbvb484-1LV-i",
+          "xcau10p-sbvb484-2-e",
+          "xcau10p-sbvb484-2-i"
+        ],
+        "xcau10p-ubva368": [
+          "xcau10p-ubva368-1-e",
+          "xcau10p-ubva368-1-i",
+          "xcau10p-ubva368-1L-i",
+          "xcau10p-ubva368-1LV-i",
+          "xcau10p-ubva368-2-e",
+          "xcau10p-ubva368-2-i"
+        ]
+      },
+      "xcau15p": {
+        "xcau15p-ffvb676": [
+          "xcau15p-ffvb676-1-e",
+          "xcau15p-ffvb676-1-i",
+          "xcau15p-ffvb676-1L-i",
+          "xcau15p-ffvb676-1LV-i",
+          "xcau15p-ffvb676-2-e",
+          "xcau15p-ffvb676-2-i"
+        ],
+        "xcau15p-sbvb484": [
+          "xcau15p-sbvb484-1-e",
+          "xcau15p-sbvb484-1-i",
+          "xcau15p-sbvb484-1L-i",
+          "xcau15p-sbvb484-1LV-i",
+          "xcau15p-sbvb484-2-e",
+          "xcau15p-sbvb484-2-i"
+        ],
+        "xcau15p-ubva368": [
+          "xcau15p-ubva368-1-e",
+          "xcau15p-ubva368-1-i",
+          "xcau15p-ubva368-1L-i",
+          "xcau15p-ubva368-1LV-i",
+          "xcau15p-ubva368-2-e",
+          "xcau15p-ubva368-2-i"
+        ]
+      },
+      "xcau20p": {
+        "xcau20p-ffvb676": [
+          "xcau20p-ffvb676-1-e",
+          "xcau20p-ffvb676-1-i",
+          "xcau20p-ffvb676-1L-i",
+          "xcau20p-ffvb676-1LV-i",
+          "xcau20p-ffvb676-2-e",
+          "xcau20p-ffvb676-2-i"
+        ],
+        "xcau20p-sfvb784": [
+          "xcau20p-sfvb784-1-e",
+          "xcau20p-sfvb784-1-i",
+          "xcau20p-sfvb784-1L-i",
+          "xcau20p-sfvb784-1LV-i",
+          "xcau20p-sfvb784-2-e",
+          "xcau20p-sfvb784-2-i"
+        ]
+      },
+      "xcau25p": {
+        "xcau25p-ffvb676": [
+          "xcau25p-ffvb676-1-e",
+          "xcau25p-ffvb676-1-i",
+          "xcau25p-ffvb676-1L-i",
+          "xcau25p-ffvb676-1LV-i",
+          "xcau25p-ffvb676-2-e",
+          "xcau25p-ffvb676-2-i"
+        ],
+        "xcau25p-sfvb784": [
+          "xcau25p-sfvb784-1-e",
+          "xcau25p-sfvb784-1-i",
+          "xcau25p-sfvb784-1L-i",
+          "xcau25p-sfvb784-1LV-i",
+          "xcau25p-sfvb784-2-e",
+          "xcau25p-sfvb784-2-i"
+        ]
+      }
+    },
+    "aspartan7": {
+      "xa7s100": {
+        "xa7s100fgga484": [
+          "xa7s100fgga484-1I",
+          "xa7s100fgga484-1Q",
+          "xa7s100fgga484-2I"
+        ],
+        "xa7s100fgga676": [
+          "xa7s100fgga676-1I",
+          "xa7s100fgga676-1Q",
+          "xa7s100fgga676-2I"
+        ]
+      },
+      "xa7s15": {
+        "xa7s15cpga196": [
+          "xa7s15cpga196-1I",
+          "xa7s15cpga196-1Q",
+          "xa7s15cpga196-2I"
+        ],
+        "xa7s15csga225": [
+          "xa7s15csga225-1I",
+          "xa7s15csga225-1Q",
+          "xa7s15csga225-2I"
+        ],
+        "xa7s15ftgb196": [
+          "xa7s15ftgb196-1I",
+          "xa7s15ftgb196-1Q",
+          "xa7s15ftgb196-2I"
+        ]
+      },
+      "xa7s25": {
+        "xa7s25csga225": [
+          "xa7s25csga225-1I",
+          "xa7s25csga225-1Q",
+          "xa7s25csga225-2I"
+        ],
+        "xa7s25csga324": [
+          "xa7s25csga324-1I",
+          "xa7s25csga324-1Q",
+          "xa7s25csga324-2I"
+        ],
+        "xa7s25ftgb196": [
+          "xa7s25ftgb196-1I",
+          "xa7s25ftgb196-1Q",
+          "xa7s25ftgb196-2I"
+        ]
+      },
+      "xa7s50": {
+        "xa7s50csga324": [
+          "xa7s50csga324-1I",
+          "xa7s50csga324-1Q",
+          "xa7s50csga324-2I"
+        ],
+        "xa7s50fgga484": [
+          "xa7s50fgga484-1I",
+          "xa7s50fgga484-1Q",
+          "xa7s50fgga484-2I"
+        ],
+        "xa7s50ftgb196": [
+          "xa7s50ftgb196-1I",
+          "xa7s50ftgb196-1Q",
+          "xa7s50ftgb196-2I"
+        ]
+      },
+      "xa7s6": {
+        "xa7s6cpga196": [
+          "xa7s6cpga196-1I",
+          "xa7s6cpga196-1Q",
+          "xa7s6cpga196-2I"
+        ],
+        "xa7s6csga225": [
+          "xa7s6csga225-1I",
+          "xa7s6csga225-1Q",
+          "xa7s6csga225-2I"
+        ],
+        "xa7s6ftgb196": [
+          "xa7s6ftgb196-1I",
+          "xa7s6ftgb196-1Q",
+          "xa7s6ftgb196-2I"
+        ]
+      },
+      "xa7s75": {
+        "xa7s75fgga484": [
+          "xa7s75fgga484-1I",
+          "xa7s75fgga484-1Q",
+          "xa7s75fgga484-2I"
+        ],
+        "xa7s75fgga676": [
+          "xa7s75fgga676-1I",
+          "xa7s75fgga676-1Q",
+          "xa7s75fgga676-2I"
+        ]
+      }
+    },
+    "azynq": {
+      "xa7z010": {
+        "xa7z010clg225": [
+          "xa7z010clg225-1I",
+          "xa7z010clg225-1Q"
+        ],
+        "xa7z010clg400": [
+          "xa7z010clg400-1I",
+          "xa7z010clg400-1Q"
+        ]
+      },
+      "xa7z020": {
+        "xa7z020clg400": [
+          "xa7z020clg400-1I",
+          "xa7z020clg400-1Q"
+        ],
+        "xa7z020clg484": [
+          "xa7z020clg484-1I",
+          "xa7z020clg484-1Q"
+        ]
+      },
+      "xa7z030": {
+        "xa7z030fbg484": [
+          "xa7z030fbg484-1I",
+          "xa7z030fbg484-1Q"
+        ],
+        "xa7z030fbv484": [
+          "xa7z030fbv484-1I",
+          "xa7z030fbv484-1Q"
+        ]
+      }
+    },
+    "azynquplus": {
+      "xazu11eg": {
+        "xazu11eg-ffvf1517": [
+          "xazu11eg-ffvf1517-1-i",
+          "xazu11eg-ffvf1517-1Q-q"
+        ]
+      },
+      "xazu1eg": {
+        "xazu1eg-sbva484": [
+          "xazu1eg-sbva484-1-i",
+          "xazu1eg-sbva484-1LV-i",
+          "xazu1eg-sbva484-1Q-q"
+        ],
+        "xazu1eg-sfva625": [
+          "xazu1eg-sfva625-1-i",
+          "xazu1eg-sfva625-1LV-i",
+          "xazu1eg-sfva625-1Q-q"
+        ],
+        "xazu1eg-sfvc784": [
+          "xazu1eg-sfvc784-1-i",
+          "xazu1eg-sfvc784-1LV-i",
+          "xazu1eg-sfvc784-1Q-q"
+        ]
+      },
+      "xazu2eg": {
+        "xazu2eg-sbva484": [
+          "xazu2eg-sbva484-1-i",
+          "xazu2eg-sbva484-1LV-i",
+          "xazu2eg-sbva484-1Q-q"
+        ],
+        "xazu2eg-sfva625": [
+          "xazu2eg-sfva625-1-i",
+          "xazu2eg-sfva625-1LV-i",
+          "xazu2eg-sfva625-1Q-q"
+        ],
+        "xazu2eg-sfvc784": [
+          "xazu2eg-sfvc784-1-i",
+          "xazu2eg-sfvc784-1LV-i",
+          "xazu2eg-sfvc784-1Q-q"
+        ]
+      },
+      "xazu3eg": {
+        "xazu3eg-sbva484": [
+          "xazu3eg-sbva484-1-i",
+          "xazu3eg-sbva484-1LV-i",
+          "xazu3eg-sbva484-1Q-q"
+        ],
+        "xazu3eg-sfva625": [
+          "xazu3eg-sfva625-1-i",
+          "xazu3eg-sfva625-1LV-i",
+          "xazu3eg-sfva625-1Q-q"
+        ],
+        "xazu3eg-sfvc784": [
+          "xazu3eg-sfvc784-1-i",
+          "xazu3eg-sfvc784-1LV-i",
+          "xazu3eg-sfvc784-1Q-q"
+        ]
+      },
+      "xazu4ev": {
+        "xazu4ev-sfvc784": [
+          "xazu4ev-sfvc784-1-i",
+          "xazu4ev-sfvc784-1LV-i",
+          "xazu4ev-sfvc784-1Q-q"
+        ]
+      },
+      "xazu5ev": {
+        "xazu5ev-sfvc784": [
+          "xazu5ev-sfvc784-1-i",
+          "xazu5ev-sfvc784-1LV-i",
+          "xazu5ev-sfvc784-1Q-q"
+        ]
+      },
+      "xazu7ev": {
+        "xazu7ev-fbvb900": [
+          "xazu7ev-fbvb900-1-i",
+          "xazu7ev-fbvb900-1Q-q"
+        ]
+      }
+    },
+    "kintex7": {
+      "xc7k160t": {
+        "xc7k160tfbg484": [
+          "xc7k160tfbg484-1",
+          "xc7k160tfbg484-2",
+          "xc7k160tfbg484-2L",
+          "xc7k160tfbg484-3"
+        ],
+        "xc7k160tfbg676": [
+          "xc7k160tfbg676-1",
+          "xc7k160tfbg676-2",
+          "xc7k160tfbg676-2L",
+          "xc7k160tfbg676-3"
+        ],
+        "xc7k160tfbv484": [
+          "xc7k160tfbv484-1",
+          "xc7k160tfbv484-2",
+          "xc7k160tfbv484-2L",
+          "xc7k160tfbv484-3"
+        ],
+        "xc7k160tfbv676": [
+          "xc7k160tfbv676-1",
+          "xc7k160tfbv676-2",
+          "xc7k160tfbv676-2L",
+          "xc7k160tfbv676-3"
+        ],
+        "xc7k160tffg676": [
+          "xc7k160tffg676-1",
+          "xc7k160tffg676-2",
+          "xc7k160tffg676-2L",
+          "xc7k160tffg676-3"
+        ],
+        "xc7k160tffv676": [
+          "xc7k160tffv676-1",
+          "xc7k160tffv676-2",
+          "xc7k160tffv676-2L",
+          "xc7k160tffv676-3"
+        ]
+      },
+      "xc7k160ti": {
+        "xc7k160tifbg484": [
+          "xc7k160tifbg484-2L"
+        ],
+        "xc7k160tifbg676": [
+          "xc7k160tifbg676-2L"
+        ],
+        "xc7k160tifbv484": [
+          "xc7k160tifbv484-2L"
+        ],
+        "xc7k160tifbv676": [
+          "xc7k160tifbv676-2L"
+        ],
+        "xc7k160tiffg676": [
+          "xc7k160tiffg676-2L"
+        ],
+        "xc7k160tiffv676": [
+          "xc7k160tiffv676-2L"
+        ]
+      },
+      "xc7k325t": {
+        "xc7k325tfbg676": [
+          "xc7k325tfbg676-1",
+          "xc7k325tfbg676-2",
+          "xc7k325tfbg676-2L",
+          "xc7k325tfbg676-3"
+        ],
+        "xc7k325tfbg900": [
+          "xc7k325tfbg900-1",
+          "xc7k325tfbg900-2",
+          "xc7k325tfbg900-2L",
+          "xc7k325tfbg900-3"
+        ],
+        "xc7k325tfbv676": [
+          "xc7k325tfbv676-1",
+          "xc7k325tfbv676-2",
+          "xc7k325tfbv676-2L",
+          "xc7k325tfbv676-3"
+        ],
+        "xc7k325tfbv900": [
+          "xc7k325tfbv900-1",
+          "xc7k325tfbv900-2",
+          "xc7k325tfbv900-2L",
+          "xc7k325tfbv900-3"
+        ],
+        "xc7k325tffg676": [
+          "xc7k325tffg676-1",
+          "xc7k325tffg676-2",
+          "xc7k325tffg676-2L",
+          "xc7k325tffg676-3"
+        ],
+        "xc7k325tffg900": [
+          "xc7k325tffg900-1",
+          "xc7k325tffg900-2",
+          "xc7k325tffg900-2L",
+          "xc7k325tffg900-3"
+        ],
+        "xc7k325tffv676": [
+          "xc7k325tffv676-1",
+          "xc7k325tffv676-2",
+          "xc7k325tffv676-2L",
+          "xc7k325tffv676-3"
+        ],
+        "xc7k325tffv900": [
+          "xc7k325tffv900-1",
+          "xc7k325tffv900-2",
+          "xc7k325tffv900-2L",
+          "xc7k325tffv900-3"
+        ]
+      },
+      "xc7k325ti": {
+        "xc7k325tifbg676": [
+          "xc7k325tifbg676-2L"
+        ],
+        "xc7k325tifbg900": [
+          "xc7k325tifbg900-2L"
+        ],
+        "xc7k325tifbv676": [
+          "xc7k325tifbv676-2L"
+        ],
+        "xc7k325tifbv900": [
+          "xc7k325tifbv900-2L"
+        ],
+        "xc7k325tiffg676": [
+          "xc7k325tiffg676-2L"
+        ],
+        "xc7k325tiffg900": [
+          "xc7k325tiffg900-2L"
+        ],
+        "xc7k325tiffv676": [
+          "xc7k325tiffv676-2L"
+        ],
+        "xc7k325tiffv900": [
+          "xc7k325tiffv900-2L"
+        ]
+      },
+      "xc7k355t": {
+        "xc7k355tffg901": [
+          "xc7k355tffg901-1",
+          "xc7k355tffg901-2",
+          "xc7k355tffg901-2L",
+          "xc7k355tffg901-3"
+        ],
+        "xc7k355tffv901": [
+          "xc7k355tffv901-1",
+          "xc7k355tffv901-2",
+          "xc7k355tffv901-2L",
+          "xc7k355tffv901-3"
+        ]
+      },
+      "xc7k355ti": {
+        "xc7k355tiffg901": [
+          "xc7k355tiffg901-2L"
+        ],
+        "xc7k355tiffv901": [
+          "xc7k355tiffv901-2L"
+        ]
+      },
+      "xc7k410t": {
+        "xc7k410tfbg676": [
+          "xc7k410tfbg676-1",
+          "xc7k410tfbg676-2",
+          "xc7k410tfbg676-2L",
+          "xc7k410tfbg676-3"
+        ],
+        "xc7k410tfbg900": [
+          "xc7k410tfbg900-1",
+          "xc7k410tfbg900-2",
+          "xc7k410tfbg900-2L",
+          "xc7k410tfbg900-3"
+        ],
+        "xc7k410tfbv676": [
+          "xc7k410tfbv676-1",
+          "xc7k410tfbv676-2",
+          "xc7k410tfbv676-2L",
+          "xc7k410tfbv676-3"
+        ],
+        "xc7k410tfbv900": [
+          "xc7k410tfbv900-1",
+          "xc7k410tfbv900-2",
+          "xc7k410tfbv900-2L",
+          "xc7k410tfbv900-3"
+        ],
+        "xc7k410tffg676": [
+          "xc7k410tffg676-1",
+          "xc7k410tffg676-2",
+          "xc7k410tffg676-2L",
+          "xc7k410tffg676-3"
+        ],
+        "xc7k410tffg900": [
+          "xc7k410tffg900-1",
+          "xc7k410tffg900-2",
+          "xc7k410tffg900-2L",
+          "xc7k410tffg900-3"
+        ],
+        "xc7k410tffv676": [
+          "xc7k410tffv676-1",
+          "xc7k410tffv676-2",
+          "xc7k410tffv676-2L",
+          "xc7k410tffv676-3"
+        ],
+        "xc7k410tffv900": [
+          "xc7k410tffv900-1",
+          "xc7k410tffv900-2",
+          "xc7k410tffv900-2L",
+          "xc7k410tffv900-3"
+        ]
+      },
+      "xc7k410ti": {
+        "xc7k410tifbg676": [
+          "xc7k410tifbg676-2L"
+        ],
+        "xc7k410tifbg900": [
+          "xc7k410tifbg900-2L"
+        ],
+        "xc7k410tifbv676": [
+          "xc7k410tifbv676-2L"
+        ],
+        "xc7k410tifbv900": [
+          "xc7k410tifbv900-2L"
+        ],
+        "xc7k410tiffg676": [
+          "xc7k410tiffg676-2L"
+        ],
+        "xc7k410tiffg900": [
+          "xc7k410tiffg900-2L"
+        ],
+        "xc7k410tiffv676": [
+          "xc7k410tiffv676-2L"
+        ],
+        "xc7k410tiffv900": [
+          "xc7k410tiffv900-2L"
+        ]
+      },
+      "xc7k420t": {
+        "xc7k420tffg1156": [
+          "xc7k420tffg1156-1",
+          "xc7k420tffg1156-2",
+          "xc7k420tffg1156-2L",
+          "xc7k420tffg1156-3"
+        ],
+        "xc7k420tffg901": [
+          "xc7k420tffg901-1",
+          "xc7k420tffg901-2",
+          "xc7k420tffg901-2L",
+          "xc7k420tffg901-3"
+        ],
+        "xc7k420tffv1156": [
+          "xc7k420tffv1156-1",
+          "xc7k420tffv1156-2",
+          "xc7k420tffv1156-2L",
+          "xc7k420tffv1156-3"
+        ],
+        "xc7k420tffv901": [
+          "xc7k420tffv901-1",
+          "xc7k420tffv901-2",
+          "xc7k420tffv901-2L",
+          "xc7k420tffv901-3"
+        ]
+      },
+      "xc7k420ti": {
+        "xc7k420tiffg1156": [
+          "xc7k420tiffg1156-2L"
+        ],
+        "xc7k420tiffg901": [
+          "xc7k420tiffg901-2L"
+        ],
+        "xc7k420tiffv1156": [
+          "xc7k420tiffv1156-2L"
+        ],
+        "xc7k420tiffv901": [
+          "xc7k420tiffv901-2L"
+        ]
+      },
+      "xc7k480t": {
+        "xc7k480tffg1156": [
+          "xc7k480tffg1156-1",
+          "xc7k480tffg1156-2",
+          "xc7k480tffg1156-2L",
+          "xc7k480tffg1156-3"
+        ],
+        "xc7k480tffg901": [
+          "xc7k480tffg901-1",
+          "xc7k480tffg901-2",
+          "xc7k480tffg901-2L",
+          "xc7k480tffg901-3"
+        ],
+        "xc7k480tffv1156": [
+          "xc7k480tffv1156-1",
+          "xc7k480tffv1156-2",
+          "xc7k480tffv1156-2L",
+          "xc7k480tffv1156-3"
+        ],
+        "xc7k480tffv901": [
+          "xc7k480tffv901-1",
+          "xc7k480tffv901-2",
+          "xc7k480tffv901-2L",
+          "xc7k480tffv901-3"
+        ]
+      },
+      "xc7k480ti": {
+        "xc7k480tiffg1156": [
+          "xc7k480tiffg1156-2L"
+        ],
+        "xc7k480tiffg901": [
+          "xc7k480tiffg901-2L"
+        ],
+        "xc7k480tiffv1156": [
+          "xc7k480tiffv1156-2L"
+        ],
+        "xc7k480tiffv901": [
+          "xc7k480tiffv901-2L"
+        ]
+      },
+      "xc7k70t": {
+        "xc7k70tfbg484": [
+          "xc7k70tfbg484-1",
+          "xc7k70tfbg484-2",
+          "xc7k70tfbg484-2L",
+          "xc7k70tfbg484-3"
+        ],
+        "xc7k70tfbg676": [
+          "xc7k70tfbg676-1",
+          "xc7k70tfbg676-2",
+          "xc7k70tfbg676-2L",
+          "xc7k70tfbg676-3"
+        ],
+        "xc7k70tfbv484": [
+          "xc7k70tfbv484-1",
+          "xc7k70tfbv484-2",
+          "xc7k70tfbv484-2L",
+          "xc7k70tfbv484-3"
+        ],
+        "xc7k70tfbv676": [
+          "xc7k70tfbv676-1",
+          "xc7k70tfbv676-2",
+          "xc7k70tfbv676-2L",
+          "xc7k70tfbv676-3"
+        ]
+      }
+    },
+    "kintex7l": {
+      "xc7k160tl": {
+        "xc7k160tlfbg484": [
+          "xc7k160tlfbg484-2L"
+        ],
+        "xc7k160tlfbg676": [
+          "xc7k160tlfbg676-2L"
+        ],
+        "xc7k160tlfbv484": [
+          "xc7k160tlfbv484-2L"
+        ],
+        "xc7k160tlfbv676": [
+          "xc7k160tlfbv676-2L"
+        ],
+        "xc7k160tlffg676": [
+          "xc7k160tlffg676-2L"
+        ],
+        "xc7k160tlffv676": [
+          "xc7k160tlffv676-2L"
+        ]
+      },
+      "xc7k325tl": {
+        "xc7k325tlfbg676": [
+          "xc7k325tlfbg676-2L"
+        ],
+        "xc7k325tlfbg900": [
+          "xc7k325tlfbg900-2L"
+        ],
+        "xc7k325tlfbv676": [
+          "xc7k325tlfbv676-2L"
+        ],
+        "xc7k325tlfbv900": [
+          "xc7k325tlfbv900-2L"
+        ],
+        "xc7k325tlffg676": [
+          "xc7k325tlffg676-2L"
+        ],
+        "xc7k325tlffg900": [
+          "xc7k325tlffg900-2L"
+        ],
+        "xc7k325tlffv676": [
+          "xc7k325tlffv676-2L"
+        ],
+        "xc7k325tlffv900": [
+          "xc7k325tlffv900-2L"
+        ]
+      },
+      "xc7k355tl": {
+        "xc7k355tlffg901": [
+          "xc7k355tlffg901-2L"
+        ],
+        "xc7k355tlffv901": [
+          "xc7k355tlffv901-2L"
+        ]
+      },
+      "xc7k410tl": {
+        "xc7k410tlfbg676": [
+          "xc7k410tlfbg676-2L"
+        ],
+        "xc7k410tlfbg900": [
+          "xc7k410tlfbg900-2L"
+        ],
+        "xc7k410tlfbv676": [
+          "xc7k410tlfbv676-2L"
+        ],
+        "xc7k410tlfbv900": [
+          "xc7k410tlfbv900-2L"
+        ],
+        "xc7k410tlffg676": [
+          "xc7k410tlffg676-2L"
+        ],
+        "xc7k410tlffg900": [
+          "xc7k410tlffg900-2L"
+        ],
+        "xc7k410tlffv676": [
+          "xc7k410tlffv676-2L"
+        ],
+        "xc7k410tlffv900": [
+          "xc7k410tlffv900-2L"
+        ]
+      },
+      "xc7k420tl": {
+        "xc7k420tlffg1156": [
+          "xc7k420tlffg1156-2L"
+        ],
+        "xc7k420tlffg901": [
+          "xc7k420tlffg901-2L"
+        ],
+        "xc7k420tlffv1156": [
+          "xc7k420tlffv1156-2L"
+        ],
+        "xc7k420tlffv901": [
+          "xc7k420tlffv901-2L"
+        ]
+      },
+      "xc7k480tl": {
+        "xc7k480tlffg1156": [
+          "xc7k480tlffg1156-2L"
+        ],
+        "xc7k480tlffg901": [
+          "xc7k480tlffg901-2L"
+        ],
+        "xc7k480tlffv1156": [
+          "xc7k480tlffv1156-2L"
+        ],
+        "xc7k480tlffv901": [
+          "xc7k480tlffv901-2L"
+        ]
+      },
+      "xc7k70tl": {
+        "xc7k70tlfbg484": [
+          "xc7k70tlfbg484-2L"
+        ],
+        "xc7k70tlfbg676": [
+          "xc7k70tlfbg676-2L"
+        ],
+        "xc7k70tlfbv484": [
+          "xc7k70tlfbv484-2L"
+        ],
+        "xc7k70tlfbv676": [
+          "xc7k70tlfbv676-2L"
+        ]
+      }
+    },
+    "kintexu": {
+      "xcku025": {
+        "xcku025-ffva1156": [
+          "xcku025-ffva1156-1-c",
+          "xcku025-ffva1156-1-i",
+          "xcku025-ffva1156-2-e",
+          "xcku025-ffva1156-2-i"
+        ]
+      },
+      "xcku035": {
+        "xcku035-fbva676": [
+          "xcku035-fbva676-1-c",
+          "xcku035-fbva676-1-i",
+          "xcku035-fbva676-1L-i",
+          "xcku035-fbva676-1LV-i",
+          "xcku035-fbva676-2-e",
+          "xcku035-fbva676-2-i",
+          "xcku035-fbva676-3-e"
+        ],
+        "xcku035-fbva900": [
+          "xcku035-fbva900-1-c",
+          "xcku035-fbva900-1-i",
+          "xcku035-fbva900-1L-i",
+          "xcku035-fbva900-1LV-i",
+          "xcku035-fbva900-2-e",
+          "xcku035-fbva900-2-i",
+          "xcku035-fbva900-3-e"
+        ],
+        "xcku035-ffva1156": [
+          "xcku035-ffva1156-1-c",
+          "xcku035-ffva1156-1-i",
+          "xcku035-ffva1156-1L-i",
+          "xcku035-ffva1156-1LV-i",
+          "xcku035-ffva1156-2-e",
+          "xcku035-ffva1156-2-i",
+          "xcku035-ffva1156-3-e"
+        ],
+        "xcku035-sfva784": [
+          "xcku035-sfva784-1-c",
+          "xcku035-sfva784-1-i",
+          "xcku035-sfva784-1L-i",
+          "xcku035-sfva784-1LV-i",
+          "xcku035-sfva784-2-e",
+          "xcku035-sfva784-2-i",
+          "xcku035-sfva784-3-e"
+        ]
+      },
+      "xcku040": {
+        "xcku040-fbva676": [
+          "xcku040-fbva676-1-c",
+          "xcku040-fbva676-1-i",
+          "xcku040-fbva676-1L-i",
+          "xcku040-fbva676-1LV-i",
+          "xcku040-fbva676-2-e",
+          "xcku040-fbva676-2-i",
+          "xcku040-fbva676-3-e"
+        ],
+        "xcku040-fbva900": [
+          "xcku040-fbva900-1-c",
+          "xcku040-fbva900-1-i",
+          "xcku040-fbva900-1L-i",
+          "xcku040-fbva900-1LV-i",
+          "xcku040-fbva900-2-e",
+          "xcku040-fbva900-2-i",
+          "xcku040-fbva900-3-e"
+        ],
+        "xcku040-ffva1156": [
+          "xcku040-ffva1156-1-c",
+          "xcku040-ffva1156-1-i",
+          "xcku040-ffva1156-1L-i",
+          "xcku040-ffva1156-1LV-i",
+          "xcku040-ffva1156-2-e",
+          "xcku040-ffva1156-2-i",
+          "xcku040-ffva1156-3-e"
+        ],
+        "xcku040-sfva784": [
+          "xcku040-sfva784-1-c",
+          "xcku040-sfva784-1-i",
+          "xcku040-sfva784-1L-i",
+          "xcku040-sfva784-1LV-i",
+          "xcku040-sfva784-2-e",
+          "xcku040-sfva784-2-i",
+          "xcku040-sfva784-3-e"
+        ]
+      },
+      "xcku060": {
+        "xcku060-ffva1156": [
+          "xcku060-ffva1156-1-c",
+          "xcku060-ffva1156-1-i",
+          "xcku060-ffva1156-1L-i",
+          "xcku060-ffva1156-1LV-i",
+          "xcku060-ffva1156-2-e",
+          "xcku060-ffva1156-2-i",
+          "xcku060-ffva1156-3-e"
+        ],
+        "xcku060-ffva1517": [
+          "xcku060-ffva1517-1-c",
+          "xcku060-ffva1517-1-i",
+          "xcku060-ffva1517-1L-i",
+          "xcku060-ffva1517-1LV-i",
+          "xcku060-ffva1517-2-e",
+          "xcku060-ffva1517-2-i",
+          "xcku060-ffva1517-3-e"
+        ],
+        "xcku060_CIV-ffva1156": [
+          "xcku060_CIV-ffva1156-2-e",
+          "xcku060_CIV-ffva1156-2-i",
+          "xcku060_CIV-ffva1156-3-e"
+        ],
+        "xcku060_CIV-ffva1517": [
+          "xcku060_CIV-ffva1517-2-e",
+          "xcku060_CIV-ffva1517-2-i",
+          "xcku060_CIV-ffva1517-3-e"
+        ]
+      },
+      "xcku085": {
+        "xcku085-flva1517": [
+          "xcku085-flva1517-1-c",
+          "xcku085-flva1517-1-i",
+          "xcku085-flva1517-1L-i",
+          "xcku085-flva1517-1LV-i",
+          "xcku085-flva1517-2-e",
+          "xcku085-flva1517-2-i",
+          "xcku085-flva1517-3-e"
+        ],
+        "xcku085-flvb1760": [
+          "xcku085-flvb1760-1-c",
+          "xcku085-flvb1760-1-i",
+          "xcku085-flvb1760-1L-i",
+          "xcku085-flvb1760-1LV-i",
+          "xcku085-flvb1760-2-e",
+          "xcku085-flvb1760-2-i",
+          "xcku085-flvb1760-3-e"
+        ],
+        "xcku085-flvf1924": [
+          "xcku085-flvf1924-1-c",
+          "xcku085-flvf1924-1-i",
+          "xcku085-flvf1924-1L-i",
+          "xcku085-flvf1924-1LV-i",
+          "xcku085-flvf1924-2-e",
+          "xcku085-flvf1924-2-i",
+          "xcku085-flvf1924-3-e"
+        ],
+        "xcku085_CIV-flva1517": [
+          "xcku085_CIV-flva1517-1-c",
+          "xcku085_CIV-flva1517-1-i",
+          "xcku085_CIV-flva1517-1L-i",
+          "xcku085_CIV-flva1517-1LV-i",
+          "xcku085_CIV-flva1517-2-e",
+          "xcku085_CIV-flva1517-2-i",
+          "xcku085_CIV-flva1517-3-e"
+        ],
+        "xcku085_CIV-flvb1760": [
+          "xcku085_CIV-flvb1760-1-c",
+          "xcku085_CIV-flvb1760-1-i",
+          "xcku085_CIV-flvb1760-1L-i",
+          "xcku085_CIV-flvb1760-1LV-i",
+          "xcku085_CIV-flvb1760-2-e",
+          "xcku085_CIV-flvb1760-2-i",
+          "xcku085_CIV-flvb1760-3-e"
+        ],
+        "xcku085_CIV-flvf1924": [
+          "xcku085_CIV-flvf1924-1-c",
+          "xcku085_CIV-flvf1924-1-i",
+          "xcku085_CIV-flvf1924-1L-i",
+          "xcku085_CIV-flvf1924-1LV-i",
+          "xcku085_CIV-flvf1924-2-e",
+          "xcku085_CIV-flvf1924-2-i",
+          "xcku085_CIV-flvf1924-3-e"
+        ]
+      },
+      "xcku095": {
+        "xcku095-ffva1156": [
+          "xcku095-ffva1156-1-c",
+          "xcku095-ffva1156-1-i",
+          "xcku095-ffva1156-2-e",
+          "xcku095-ffva1156-2-i"
+        ],
+        "xcku095-ffvb1760": [
+          "xcku095-ffvb1760-1-c",
+          "xcku095-ffvb1760-1-i",
+          "xcku095-ffvb1760-2-e",
+          "xcku095-ffvb1760-2-i"
+        ],
+        "xcku095-ffvb2104": [
+          "xcku095-ffvb2104-1-c",
+          "xcku095-ffvb2104-1-i",
+          "xcku095-ffvb2104-2-e",
+          "xcku095-ffvb2104-2-i"
+        ],
+        "xcku095-ffvc1517": [
+          "xcku095-ffvc1517-1-c",
+          "xcku095-ffvc1517-1-i",
+          "xcku095-ffvc1517-2-e",
+          "xcku095-ffvc1517-2-i"
+        ],
+        "xcku095_CIV-ffva1156": [
+          "xcku095_CIV-ffva1156-1-c",
+          "xcku095_CIV-ffva1156-1-i",
+          "xcku095_CIV-ffva1156-2-e",
+          "xcku095_CIV-ffva1156-2-i"
+        ],
+        "xcku095_CIV-ffvb1760": [
+          "xcku095_CIV-ffvb1760-1-c",
+          "xcku095_CIV-ffvb1760-1-i",
+          "xcku095_CIV-ffvb1760-2-e",
+          "xcku095_CIV-ffvb1760-2-i"
+        ],
+        "xcku095_CIV-ffvb2104": [
+          "xcku095_CIV-ffvb2104-1-c",
+          "xcku095_CIV-ffvb2104-1-i",
+          "xcku095_CIV-ffvb2104-2-e",
+          "xcku095_CIV-ffvb2104-2-i"
+        ],
+        "xcku095_CIV-ffvc1517": [
+          "xcku095_CIV-ffvc1517-1-c",
+          "xcku095_CIV-ffvc1517-1-i",
+          "xcku095_CIV-ffvc1517-2-e",
+          "xcku095_CIV-ffvc1517-2-i"
+        ]
+      },
+      "xcku115": {
+        "xcku115-flva1517": [
+          "xcku115-flva1517-1-c",
+          "xcku115-flva1517-1-i",
+          "xcku115-flva1517-1L-i",
+          "xcku115-flva1517-1LV-i",
+          "xcku115-flva1517-2-e",
+          "xcku115-flva1517-2-i",
+          "xcku115-flva1517-3-e"
+        ],
+        "xcku115-flva2104": [
+          "xcku115-flva2104-1-c",
+          "xcku115-flva2104-1-i",
+          "xcku115-flva2104-1L-i",
+          "xcku115-flva2104-1LV-i",
+          "xcku115-flva2104-2-e",
+          "xcku115-flva2104-2-i",
+          "xcku115-flva2104-3-e"
+        ],
+        "xcku115-flvb1760": [
+          "xcku115-flvb1760-1-c",
+          "xcku115-flvb1760-1-i",
+          "xcku115-flvb1760-1L-i",
+          "xcku115-flvb1760-1LV-i",
+          "xcku115-flvb1760-2-e",
+          "xcku115-flvb1760-2-i",
+          "xcku115-flvb1760-3-e"
+        ],
+        "xcku115-flvb2104": [
+          "xcku115-flvb2104-1-c",
+          "xcku115-flvb2104-1-i",
+          "xcku115-flvb2104-1L-i",
+          "xcku115-flvb2104-1LV-i",
+          "xcku115-flvb2104-2-e",
+          "xcku115-flvb2104-2-i",
+          "xcku115-flvb2104-3-e"
+        ],
+        "xcku115-flvd1517": [
+          "xcku115-flvd1517-1-c",
+          "xcku115-flvd1517-1-i",
+          "xcku115-flvd1517-1L-i",
+          "xcku115-flvd1517-1LV-i",
+          "xcku115-flvd1517-2-e",
+          "xcku115-flvd1517-2-i",
+          "xcku115-flvd1517-3-e"
+        ],
+        "xcku115-flvd1924": [
+          "xcku115-flvd1924-1-c",
+          "xcku115-flvd1924-1-i",
+          "xcku115-flvd1924-1L-i",
+          "xcku115-flvd1924-1LV-i",
+          "xcku115-flvd1924-2-e",
+          "xcku115-flvd1924-2-i",
+          "xcku115-flvd1924-3-e"
+        ],
+        "xcku115-flvf1924": [
+          "xcku115-flvf1924-1-c",
+          "xcku115-flvf1924-1-i",
+          "xcku115-flvf1924-1L-i",
+          "xcku115-flvf1924-1LV-i",
+          "xcku115-flvf1924-2-e",
+          "xcku115-flvf1924-2-i",
+          "xcku115-flvf1924-3-e"
+        ],
+        "xcku115_CIV-flva1517": [
+          "xcku115_CIV-flva1517-1-c",
+          "xcku115_CIV-flva1517-1-i",
+          "xcku115_CIV-flva1517-1L-i",
+          "xcku115_CIV-flva1517-1LV-i",
+          "xcku115_CIV-flva1517-2-e",
+          "xcku115_CIV-flva1517-2-i",
+          "xcku115_CIV-flva1517-3-e"
+        ],
+        "xcku115_CIV-flva2104": [
+          "xcku115_CIV-flva2104-1-c",
+          "xcku115_CIV-flva2104-1-i",
+          "xcku115_CIV-flva2104-1L-i",
+          "xcku115_CIV-flva2104-1LV-i",
+          "xcku115_CIV-flva2104-2-e",
+          "xcku115_CIV-flva2104-2-i",
+          "xcku115_CIV-flva2104-3-e"
+        ],
+        "xcku115_CIV-flvb1760": [
+          "xcku115_CIV-flvb1760-1-c",
+          "xcku115_CIV-flvb1760-1-i",
+          "xcku115_CIV-flvb1760-1L-i",
+          "xcku115_CIV-flvb1760-1LV-i",
+          "xcku115_CIV-flvb1760-2-e",
+          "xcku115_CIV-flvb1760-2-i",
+          "xcku115_CIV-flvb1760-3-e"
+        ],
+        "xcku115_CIV-flvb2104": [
+          "xcku115_CIV-flvb2104-1-c",
+          "xcku115_CIV-flvb2104-1-i",
+          "xcku115_CIV-flvb2104-1L-i",
+          "xcku115_CIV-flvb2104-1LV-i",
+          "xcku115_CIV-flvb2104-2-e",
+          "xcku115_CIV-flvb2104-2-i",
+          "xcku115_CIV-flvb2104-3-e"
+        ],
+        "xcku115_CIV-flvd1517": [
+          "xcku115_CIV-flvd1517-1-c",
+          "xcku115_CIV-flvd1517-1-i",
+          "xcku115_CIV-flvd1517-1L-i",
+          "xcku115_CIV-flvd1517-1LV-i",
+          "xcku115_CIV-flvd1517-2-e",
+          "xcku115_CIV-flvd1517-2-i",
+          "xcku115_CIV-flvd1517-3-e"
+        ],
+        "xcku115_CIV-flvd1924": [
+          "xcku115_CIV-flvd1924-1-c",
+          "xcku115_CIV-flvd1924-1-i",
+          "xcku115_CIV-flvd1924-1L-i",
+          "xcku115_CIV-flvd1924-1LV-i",
+          "xcku115_CIV-flvd1924-2-e",
+          "xcku115_CIV-flvd1924-2-i",
+          "xcku115_CIV-flvd1924-3-e"
+        ],
+        "xcku115_CIV-flvf1924": [
+          "xcku115_CIV-flvf1924-1-c",
+          "xcku115_CIV-flvf1924-1-i",
+          "xcku115_CIV-flvf1924-1L-i",
+          "xcku115_CIV-flvf1924-1LV-i",
+          "xcku115_CIV-flvf1924-2-e",
+          "xcku115_CIV-flvf1924-2-i",
+          "xcku115_CIV-flvf1924-3-e"
+        ]
+      }
+    },
+    "kintexuplus": {
+      "xcku11p": {
+        "xcku11p-ffva1156": [
+          "xcku11p-ffva1156-1-e",
+          "xcku11p-ffva1156-1-i",
+          "xcku11p-ffva1156-1L-i",
+          "xcku11p-ffva1156-1LV-i",
+          "xcku11p-ffva1156-2-e",
+          "xcku11p-ffva1156-2-i",
+          "xcku11p-ffva1156-2L-e",
+          "xcku11p-ffva1156-2LV-e",
+          "xcku11p-ffva1156-3-e"
+        ],
+        "xcku11p-ffvd900": [
+          "xcku11p-ffvd900-1-e",
+          "xcku11p-ffvd900-1-i",
+          "xcku11p-ffvd900-1L-i",
+          "xcku11p-ffvd900-1LV-i",
+          "xcku11p-ffvd900-2-e",
+          "xcku11p-ffvd900-2-i",
+          "xcku11p-ffvd900-2L-e",
+          "xcku11p-ffvd900-2LV-e",
+          "xcku11p-ffvd900-3-e"
+        ],
+        "xcku11p-ffve1517": [
+          "xcku11p-ffve1517-1-e",
+          "xcku11p-ffve1517-1-i",
+          "xcku11p-ffve1517-1L-i",
+          "xcku11p-ffve1517-1LV-i",
+          "xcku11p-ffve1517-2-e",
+          "xcku11p-ffve1517-2-i",
+          "xcku11p-ffve1517-2L-e",
+          "xcku11p-ffve1517-2LV-e",
+          "xcku11p-ffve1517-3-e"
+        ],
+        "xcku11p_CIV-ffva1156": [
+          "xcku11p_CIV-ffva1156-1-e",
+          "xcku11p_CIV-ffva1156-1-i",
+          "xcku11p_CIV-ffva1156-1L-i",
+          "xcku11p_CIV-ffva1156-1LV-i",
+          "xcku11p_CIV-ffva1156-2-e",
+          "xcku11p_CIV-ffva1156-2-i",
+          "xcku11p_CIV-ffva1156-2L-e",
+          "xcku11p_CIV-ffva1156-2LV-e",
+          "xcku11p_CIV-ffva1156-3-e"
+        ],
+        "xcku11p_CIV-ffvd900": [
+          "xcku11p_CIV-ffvd900-1-e",
+          "xcku11p_CIV-ffvd900-1-i",
+          "xcku11p_CIV-ffvd900-1L-i",
+          "xcku11p_CIV-ffvd900-1LV-i",
+          "xcku11p_CIV-ffvd900-2-e",
+          "xcku11p_CIV-ffvd900-2-i",
+          "xcku11p_CIV-ffvd900-2L-e",
+          "xcku11p_CIV-ffvd900-2LV-e",
+          "xcku11p_CIV-ffvd900-3-e"
+        ],
+        "xcku11p_CIV-ffve1517": [
+          "xcku11p_CIV-ffve1517-1-e",
+          "xcku11p_CIV-ffve1517-1-i",
+          "xcku11p_CIV-ffve1517-1L-i",
+          "xcku11p_CIV-ffve1517-1LV-i",
+          "xcku11p_CIV-ffve1517-2-e",
+          "xcku11p_CIV-ffve1517-2-i",
+          "xcku11p_CIV-ffve1517-2L-e",
+          "xcku11p_CIV-ffve1517-2LV-e",
+          "xcku11p_CIV-ffve1517-3-e"
+        ]
+      },
+      "xcku13p": {
+        "xcku13p-ffve900": [
+          "xcku13p-ffve900-1-e",
+          "xcku13p-ffve900-1-i",
+          "xcku13p-ffve900-1L-i",
+          "xcku13p-ffve900-1LV-i",
+          "xcku13p-ffve900-2-e",
+          "xcku13p-ffve900-2-i",
+          "xcku13p-ffve900-2L-e",
+          "xcku13p-ffve900-2LV-e",
+          "xcku13p-ffve900-3-e"
+        ]
+      },
+      "xcku15p": {
+        "xcku15p-ffva1156": [
+          "xcku15p-ffva1156-1-e",
+          "xcku15p-ffva1156-1-i",
+          "xcku15p-ffva1156-1L-i",
+          "xcku15p-ffva1156-1LV-i",
+          "xcku15p-ffva1156-2-e",
+          "xcku15p-ffva1156-2-i",
+          "xcku15p-ffva1156-2L-e",
+          "xcku15p-ffva1156-2LV-e",
+          "xcku15p-ffva1156-3-e"
+        ],
+        "xcku15p-ffva1760": [
+          "xcku15p-ffva1760-1-e",
+          "xcku15p-ffva1760-1-i",
+          "xcku15p-ffva1760-1L-i",
+          "xcku15p-ffva1760-1LV-i",
+          "xcku15p-ffva1760-2-e",
+          "xcku15p-ffva1760-2-i",
+          "xcku15p-ffva1760-2L-e",
+          "xcku15p-ffva1760-2LV-e",
+          "xcku15p-ffva1760-3-e"
+        ],
+        "xcku15p-ffve1517": [
+          "xcku15p-ffve1517-1-e",
+          "xcku15p-ffve1517-1-i",
+          "xcku15p-ffve1517-1L-i",
+          "xcku15p-ffve1517-1LV-i",
+          "xcku15p-ffve1517-2-e",
+          "xcku15p-ffve1517-2-i",
+          "xcku15p-ffve1517-2L-e",
+          "xcku15p-ffve1517-2LV-e",
+          "xcku15p-ffve1517-3-e"
+        ],
+        "xcku15p-ffve1760": [
+          "xcku15p-ffve1760-1-e",
+          "xcku15p-ffve1760-1-i",
+          "xcku15p-ffve1760-1L-i",
+          "xcku15p-ffve1760-1LV-i",
+          "xcku15p-ffve1760-2-e",
+          "xcku15p-ffve1760-2-i",
+          "xcku15p-ffve1760-2L-e",
+          "xcku15p-ffve1760-2LV-e",
+          "xcku15p-ffve1760-3-e"
+        ],
+        "xcku15p_CIV-ffva1156": [
+          "xcku15p_CIV-ffva1156-1-e",
+          "xcku15p_CIV-ffva1156-1-i",
+          "xcku15p_CIV-ffva1156-1L-i",
+          "xcku15p_CIV-ffva1156-1LV-i",
+          "xcku15p_CIV-ffva1156-2-e",
+          "xcku15p_CIV-ffva1156-2-i",
+          "xcku15p_CIV-ffva1156-2L-e",
+          "xcku15p_CIV-ffva1156-2LV-e",
+          "xcku15p_CIV-ffva1156-3-e"
+        ],
+        "xcku15p_CIV-ffva1760": [
+          "xcku15p_CIV-ffva1760-1-e",
+          "xcku15p_CIV-ffva1760-1-i",
+          "xcku15p_CIV-ffva1760-1L-i",
+          "xcku15p_CIV-ffva1760-1LV-i",
+          "xcku15p_CIV-ffva1760-2-e",
+          "xcku15p_CIV-ffva1760-2-i",
+          "xcku15p_CIV-ffva1760-2L-e",
+          "xcku15p_CIV-ffva1760-2LV-e",
+          "xcku15p_CIV-ffva1760-3-e"
+        ],
+        "xcku15p_CIV-ffve1517": [
+          "xcku15p_CIV-ffve1517-1-e",
+          "xcku15p_CIV-ffve1517-1-i",
+          "xcku15p_CIV-ffve1517-1L-i",
+          "xcku15p_CIV-ffve1517-1LV-i",
+          "xcku15p_CIV-ffve1517-2-e",
+          "xcku15p_CIV-ffve1517-2-i",
+          "xcku15p_CIV-ffve1517-2L-e",
+          "xcku15p_CIV-ffve1517-2LV-e",
+          "xcku15p_CIV-ffve1517-3-e"
+        ],
+        "xcku15p_CIV-ffve1760": [
+          "xcku15p_CIV-ffve1760-1-e",
+          "xcku15p_CIV-ffve1760-1-i",
+          "xcku15p_CIV-ffve1760-1L-i",
+          "xcku15p_CIV-ffve1760-1LV-i",
+          "xcku15p_CIV-ffve1760-2-e",
+          "xcku15p_CIV-ffve1760-2-i",
+          "xcku15p_CIV-ffve1760-2L-e",
+          "xcku15p_CIV-ffve1760-2LV-e",
+          "xcku15p_CIV-ffve1760-3-e"
+        ]
+      },
+      "xcku19p": {
+        "xcku19p-ffvb2104": [
+          "xcku19p-ffvb2104-1-e",
+          "xcku19p-ffvb2104-1-i",
+          "xcku19p-ffvb2104-1L-i",
+          "xcku19p-ffvb2104-1LV-i",
+          "xcku19p-ffvb2104-2-e",
+          "xcku19p-ffvb2104-2-i",
+          "xcku19p-ffvb2104-2L-e",
+          "xcku19p-ffvb2104-2LV-e",
+          "xcku19p-ffvb2104-3-e"
+        ],
+        "xcku19p-ffvj1760": [
+          "xcku19p-ffvj1760-1-e",
+          "xcku19p-ffvj1760-1-i",
+          "xcku19p-ffvj1760-1L-i",
+          "xcku19p-ffvj1760-1LV-i",
+          "xcku19p-ffvj1760-2-e",
+          "xcku19p-ffvj1760-2-i",
+          "xcku19p-ffvj1760-2L-e",
+          "xcku19p-ffvj1760-2LV-e",
+          "xcku19p-ffvj1760-3-e"
+        ],
+        "xcku19p_CIV-ffvb2104": [
+          "xcku19p_CIV-ffvb2104-1-e",
+          "xcku19p_CIV-ffvb2104-1-i",
+          "xcku19p_CIV-ffvb2104-1L-i",
+          "xcku19p_CIV-ffvb2104-1LV-i",
+          "xcku19p_CIV-ffvb2104-2-e",
+          "xcku19p_CIV-ffvb2104-2-i",
+          "xcku19p_CIV-ffvb2104-2L-e",
+          "xcku19p_CIV-ffvb2104-2LV-e",
+          "xcku19p_CIV-ffvb2104-3-e"
+        ],
+        "xcku19p_CIV-ffvj1760": [
+          "xcku19p_CIV-ffvj1760-1-e",
+          "xcku19p_CIV-ffvj1760-1-i",
+          "xcku19p_CIV-ffvj1760-1L-i",
+          "xcku19p_CIV-ffvj1760-1LV-i",
+          "xcku19p_CIV-ffvj1760-2-e",
+          "xcku19p_CIV-ffvj1760-2-i",
+          "xcku19p_CIV-ffvj1760-2L-e",
+          "xcku19p_CIV-ffvj1760-2LV-e",
+          "xcku19p_CIV-ffvj1760-3-e"
+        ]
+      },
+      "xcku3p": {
+        "xcku3p-ffva676": [
+          "xcku3p-ffva676-1-e",
+          "xcku3p-ffva676-1-i",
+          "xcku3p-ffva676-1L-i",
+          "xcku3p-ffva676-1LV-i",
+          "xcku3p-ffva676-2-e",
+          "xcku3p-ffva676-2-i",
+          "xcku3p-ffva676-2L-e",
+          "xcku3p-ffva676-2LV-e",
+          "xcku3p-ffva676-3-e"
+        ],
+        "xcku3p-ffvb676": [
+          "xcku3p-ffvb676-1-e",
+          "xcku3p-ffvb676-1-i",
+          "xcku3p-ffvb676-1L-i",
+          "xcku3p-ffvb676-1LV-i",
+          "xcku3p-ffvb676-2-e",
+          "xcku3p-ffvb676-2-i",
+          "xcku3p-ffvb676-2L-e",
+          "xcku3p-ffvb676-2LV-e",
+          "xcku3p-ffvb676-3-e"
+        ],
+        "xcku3p-ffvd900": [
+          "xcku3p-ffvd900-1-e",
+          "xcku3p-ffvd900-1-i",
+          "xcku3p-ffvd900-1L-i",
+          "xcku3p-ffvd900-1LV-i",
+          "xcku3p-ffvd900-2-e",
+          "xcku3p-ffvd900-2-i",
+          "xcku3p-ffvd900-2L-e",
+          "xcku3p-ffvd900-2LV-e",
+          "xcku3p-ffvd900-3-e"
+        ],
+        "xcku3p-sfvb784": [
+          "xcku3p-sfvb784-1-e",
+          "xcku3p-sfvb784-1-i",
+          "xcku3p-sfvb784-1L-i",
+          "xcku3p-sfvb784-1LV-i",
+          "xcku3p-sfvb784-2-e",
+          "xcku3p-sfvb784-2-i",
+          "xcku3p-sfvb784-2L-e",
+          "xcku3p-sfvb784-2LV-e",
+          "xcku3p-sfvb784-3-e"
+        ]
+      },
+      "xcku5p": {
+        "xcku5p-ffva676": [
+          "xcku5p-ffva676-1-e",
+          "xcku5p-ffva676-1-i",
+          "xcku5p-ffva676-1L-i",
+          "xcku5p-ffva676-1LV-i",
+          "xcku5p-ffva676-2-e",
+          "xcku5p-ffva676-2-i",
+          "xcku5p-ffva676-2L-e",
+          "xcku5p-ffva676-2LV-e",
+          "xcku5p-ffva676-3-e"
+        ],
+        "xcku5p-ffvb676": [
+          "xcku5p-ffvb676-1-e",
+          "xcku5p-ffvb676-1-i",
+          "xcku5p-ffvb676-1L-i",
+          "xcku5p-ffvb676-1LV-i",
+          "xcku5p-ffvb676-2-e",
+          "xcku5p-ffvb676-2-i",
+          "xcku5p-ffvb676-2L-e",
+          "xcku5p-ffvb676-2LV-e",
+          "xcku5p-ffvb676-3-e"
+        ],
+        "xcku5p-ffvd900": [
+          "xcku5p-ffvd900-1-e",
+          "xcku5p-ffvd900-1-i",
+          "xcku5p-ffvd900-1L-i",
+          "xcku5p-ffvd900-1LV-i",
+          "xcku5p-ffvd900-2-e",
+          "xcku5p-ffvd900-2-i",
+          "xcku5p-ffvd900-2L-e",
+          "xcku5p-ffvd900-2LV-e",
+          "xcku5p-ffvd900-3-e"
+        ],
+        "xcku5p-sfvb784": [
+          "xcku5p-sfvb784-1-e",
+          "xcku5p-sfvb784-1-i",
+          "xcku5p-sfvb784-1L-i",
+          "xcku5p-sfvb784-1LV-i",
+          "xcku5p-sfvb784-2-e",
+          "xcku5p-sfvb784-2-i",
+          "xcku5p-sfvb784-2L-e",
+          "xcku5p-sfvb784-2LV-e",
+          "xcku5p-sfvb784-3-e"
+        ]
+      },
+      "xcku9p": {
+        "xcku9p-ffve900": [
+          "xcku9p-ffve900-1-e",
+          "xcku9p-ffve900-1-i",
+          "xcku9p-ffve900-1L-i",
+          "xcku9p-ffve900-1LV-i",
+          "xcku9p-ffve900-2-e",
+          "xcku9p-ffve900-2-i",
+          "xcku9p-ffve900-2L-e",
+          "xcku9p-ffve900-2LV-e",
+          "xcku9p-ffve900-3-e"
+        ]
+      }
+    },
+    "qartix7": {
+      "xq7a100t": {
+        "xq7a100tcs324": [
+          "xq7a100tcs324-1I",
+          "xq7a100tcs324-1IL",
+          "xq7a100tcs324-1M",
+          "xq7a100tcs324-2I"
+        ],
+        "xq7a100tfg484": [
+          "xq7a100tfg484-1I",
+          "xq7a100tfg484-1IL",
+          "xq7a100tfg484-1M",
+          "xq7a100tfg484-2I"
+        ]
+      },
+      "xq7a200t": {
+        "xq7a200trb484": [
+          "xq7a200trb484-1I",
+          "xq7a200trb484-1IL",
+          "xq7a200trb484-1M",
+          "xq7a200trb484-2I"
+        ],
+        "xq7a200trb676": [
+          "xq7a200trb676-1I",
+          "xq7a200trb676-1IL",
+          "xq7a200trb676-1M",
+          "xq7a200trb676-2I"
+        ],
+        "xq7a200trs484": [
+          "xq7a200trs484-1I",
+          "xq7a200trs484-1IL",
+          "xq7a200trs484-1M",
+          "xq7a200trs484-2I"
+        ]
+      },
+      "xq7a50t": {
+        "xq7a50tcs325": [
+          "xq7a50tcs325-1I",
+          "xq7a50tcs325-1IL",
+          "xq7a50tcs325-1M",
+          "xq7a50tcs325-2I"
+        ],
+        "xq7a50tfg484": [
+          "xq7a50tfg484-1I",
+          "xq7a50tfg484-1IL",
+          "xq7a50tfg484-1M",
+          "xq7a50tfg484-2I"
+        ]
+      }
+    },
+    "qkintex7": {
+      "xq7k325t": {
+        "xq7k325trf676": [
+          "xq7k325trf676-1I",
+          "xq7k325trf676-1M",
+          "xq7k325trf676-1ML",
+          "xq7k325trf676-2I",
+          "xq7k325trf676-2IL",
+          "xq7k325trf676-2L"
+        ],
+        "xq7k325trf900": [
+          "xq7k325trf900-1I",
+          "xq7k325trf900-1M",
+          "xq7k325trf900-2I",
+          "xq7k325trf900-2IL",
+          "xq7k325trf900-2L"
+        ]
+      },
+      "xq7k410t": {
+        "xq7k410trf676": [
+          "xq7k410trf676-1I",
+          "xq7k410trf676-1M",
+          "xq7k410trf676-2I",
+          "xq7k410trf676-2IL",
+          "xq7k410trf676-2L"
+        ],
+        "xq7k410trf900": [
+          "xq7k410trf900-1I",
+          "xq7k410trf900-1M",
+          "xq7k410trf900-2I",
+          "xq7k410trf900-2IL",
+          "xq7k410trf900-2L"
+        ]
+      }
+    },
+    "qkintex7l": {
+      "xq7k325tl": {
+        "xq7k325tlrf676": [
+          "xq7k325tlrf676-2L"
+        ],
+        "xq7k325tlrf900": [
+          "xq7k325tlrf900-2L"
+        ]
+      },
+      "xq7k410tl": {
+        "xq7k410tlrf676": [
+          "xq7k410tlrf676-2L"
+        ],
+        "xq7k410tlrf900": [
+          "xq7k410tlrf900-2L"
+        ]
+      }
+    },
+    "qkintexu": {
+      "xqku040": {
+        "xqku040-rba676": [
+          "xqku040-rba676-1-i",
+          "xqku040-rba676-1M-m",
+          "xqku040-rba676-2-e",
+          "xqku040-rba676-2-i"
+        ],
+        "xqku040-rfa1156": [
+          "xqku040-rfa1156-1-i",
+          "xqku040-rfa1156-1M-m",
+          "xqku040-rfa1156-2-e",
+          "xqku040-rfa1156-2-i"
+        ]
+      },
+      "xqku060": {
+        "xqku060-rfa1156": [
+          "xqku060-rfa1156-1-i",
+          "xqku060-rfa1156-1M-m",
+          "xqku060-rfa1156-2-e",
+          "xqku060-rfa1156-2-i"
+        ]
+      },
+      "xqku095": {
+        "xqku095-rfa1156": [
+          "xqku095-rfa1156-1-i",
+          "xqku095-rfa1156-1M-m",
+          "xqku095-rfa1156-2-e",
+          "xqku095-rfa1156-2-i"
+        ]
+      },
+      "xqku115": {
+        "xqku115-rld1517": [
+          "xqku115-rld1517-1-i",
+          "xqku115-rld1517-2-e",
+          "xqku115-rld1517-2-i"
+        ],
+        "xqku115-rlf1924": [
+          "xqku115-rlf1924-1-i",
+          "xqku115-rlf1924-2-e",
+          "xqku115-rlf1924-2-i"
+        ]
+      }
+    },
+    "qkintexuplus": {
+      "xqku15p": {
+        "xqku15p-ffra1156": [
+          "xqku15p-ffra1156-1-i",
+          "xqku15p-ffra1156-1L-i",
+          "xqku15p-ffra1156-1LV-i",
+          "xqku15p-ffra1156-1M-m",
+          "xqku15p-ffra1156-2-i"
+        ],
+        "xqku15p-ffre1517": [
+          "xqku15p-ffre1517-1-i",
+          "xqku15p-ffre1517-1L-i",
+          "xqku15p-ffre1517-1LV-i",
+          "xqku15p-ffre1517-1M-m",
+          "xqku15p-ffre1517-2-i"
+        ]
+      },
+      "xqku5p": {
+        "xqku5p-ffrb676": [
+          "xqku5p-ffrb676-1-i",
+          "xqku5p-ffrb676-1L-i",
+          "xqku5p-ffrb676-1LV-i",
+          "xqku5p-ffrb676-1M-m",
+          "xqku5p-ffrb676-2-i"
+        ],
+        "xqku5p-sfrb784": [
+          "xqku5p-sfrb784-1-i",
+          "xqku5p-sfrb784-1L-i",
+          "xqku5p-sfrb784-1LV-i",
+          "xqku5p-sfrb784-1M-m",
+          "xqku5p-sfrb784-2-i"
+        ]
+      }
+    },
+    "qrkintexu": {
+      "xqrku060": {
+        "xqrku060-cna1509": [
+          "xqrku060-cna1509-1M-m"
+        ]
+      }
+    },
+    "qrversalaicore": {
+      "xqrvc1902": {
+        "xqrvc1902-vsra2197": [
+          "xqrvc1902-vsra2197-1MM-b-S"
+        ]
+      }
+    },
+    "qversalaicore": {
+      "xqvc1902": {
+        "xqvc1902-vira1596": [
+          "xqvc1902-vira1596-1LHP-i-S",
+          "xqvc1902-vira1596-1LP-i-S",
+          "xqvc1902-vira1596-1MM-m-S",
+          "xqvc1902-vira1596-1MP-i-S",
+          "xqvc1902-vira1596-2MP-i-S"
+        ],
+        "xqvc1902-vsra2197": [
+          "xqvc1902-vsra2197-1LHP-i-S",
+          "xqvc1902-vsra2197-1LP-i-S",
+          "xqvc1902-vsra2197-1MM-m-S",
+          "xqvc1902-vsra2197-1MP-i-S",
+          "xqvc1902-vsra2197-2MP-i-S"
+        ],
+        "xqvc1902-vsrd1760": [
+          "xqvc1902-vsrd1760-1LHP-i-S",
+          "xqvc1902-vsrd1760-1LP-i-S",
+          "xqvc1902-vsrd1760-1MM-m-S",
+          "xqvc1902-vsrd1760-1MP-i-S",
+          "xqvc1902-vsrd1760-2MP-i-S"
+        ]
+      }
+    },
+    "qversalprime": {
+      "xqvm1802": {
+        "xqvm1802-vsra2197": [
+          "xqvm1802-vsra2197-1LHP-i-S",
+          "xqvm1802-vsra2197-1LP-i-S",
+          "xqvm1802-vsra2197-1MM-m-S",
+          "xqvm1802-vsra2197-1MP-i-S",
+          "xqvm1802-vsra2197-2MP-i-S"
+        ],
+        "xqvm1802-vsrd1760": [
+          "xqvm1802-vsrd1760-1LHP-i-S",
+          "xqvm1802-vsrd1760-1LP-i-S",
+          "xqvm1802-vsrd1760-1MM-m-S",
+          "xqvm1802-vsrd1760-1MP-i-S",
+          "xqvm1802-vsrd1760-2MP-i-S"
+        ]
+      }
+    },
+    "qvirtex7": {
+      "xq7v585t": {
+        "xq7v585trf1157": [
+          "xq7v585trf1157-1I",
+          "xq7v585trf1157-1M",
+          "xq7v585trf1157-2I",
+          "xq7v585trf1157-2L"
+        ],
+        "xq7v585trf1761": [
+          "xq7v585trf1761-1I",
+          "xq7v585trf1761-1M",
+          "xq7v585trf1761-2I",
+          "xq7v585trf1761-2L"
+        ]
+      },
+      "xq7vx330t": {
+        "xq7vx330trf1157": [
+          "xq7vx330trf1157-1I",
+          "xq7vx330trf1157-1M",
+          "xq7vx330trf1157-2I",
+          "xq7vx330trf1157-2L"
+        ],
+        "xq7vx330trf1761": [
+          "xq7vx330trf1761-1I",
+          "xq7vx330trf1761-1M",
+          "xq7vx330trf1761-2I",
+          "xq7vx330trf1761-2L"
+        ]
+      },
+      "xq7vx485t": {
+        "xq7vx485trf1761": [
+          "xq7vx485trf1761-1I",
+          "xq7vx485trf1761-1M",
+          "xq7vx485trf1761-2I",
+          "xq7vx485trf1761-2L"
+        ],
+        "xq7vx485trf1930": [
+          "xq7vx485trf1930-1I",
+          "xq7vx485trf1930-1M",
+          "xq7vx485trf1930-2I",
+          "xq7vx485trf1930-2L"
+        ]
+      },
+      "xq7vx690t": {
+        "xq7vx690trf1157": [
+          "xq7vx690trf1157-1I",
+          "xq7vx690trf1157-2I"
+        ],
+        "xq7vx690trf1158": [
+          "xq7vx690trf1158-1I",
+          "xq7vx690trf1158-2I"
+        ],
+        "xq7vx690trf1761": [
+          "xq7vx690trf1761-1I",
+          "xq7vx690trf1761-2I"
+        ],
+        "xq7vx690trf1930": [
+          "xq7vx690trf1930-1I",
+          "xq7vx690trf1930-2I"
+        ]
+      },
+      "xq7vx980t": {
+        "xq7vx980trf1930": [
+          "xq7vx980trf1930-1I",
+          "xq7vx980trf1930-2L"
+        ]
+      }
+    },
+    "qvirtexuplus": {
+      "xqvu11p": {
+        "xqvu11p-flrc2104": [
+          "xqvu11p-flrc2104-1-i",
+          "xqvu11p-flrc2104-2-i",
+          "xqvu11p-flrc2104-2L-e",
+          "xqvu11p-flrc2104-2LV-e"
+        ],
+        "xqvu11p-fsqd2104": [
+          "xqvu11p-fsqd2104-1-i",
+          "xqvu11p-fsqd2104-2-i",
+          "xqvu11p-fsqd2104-2L-e",
+          "xqvu11p-fsqd2104-2LV-e"
+        ]
+      },
+      "xqvu13p": {
+        "xqvu13p-fhqa2104": [
+          "xqvu13p-fhqa2104-1-i",
+          "xqvu13p-fhqa2104-2-i",
+          "xqvu13p-fhqa2104-2L-e",
+          "xqvu13p-fhqa2104-2LV-e"
+        ],
+        "xqvu13p-fhqb2104": [
+          "xqvu13p-fhqb2104-1-i",
+          "xqvu13p-fhqb2104-2-i",
+          "xqvu13p-fhqb2104-2L-e",
+          "xqvu13p-fhqb2104-2LV-e"
+        ],
+        "xqvu13p-fiqd2104": [
+          "xqvu13p-fiqd2104-1-i",
+          "xqvu13p-fiqd2104-2-i",
+          "xqvu13p-fiqd2104-2L-e",
+          "xqvu13p-fiqd2104-2LV-e"
+        ]
+      },
+      "xqvu3p": {
+        "xqvu3p-ffrc1517": [
+          "xqvu3p-ffrc1517-1-i",
+          "xqvu3p-ffrc1517-1M-m",
+          "xqvu3p-ffrc1517-2-i",
+          "xqvu3p-ffrc1517-2L-e",
+          "xqvu3p-ffrc1517-2LV-e"
+        ]
+      },
+      "xqvu7p": {
+        "xqvu7p-flra2104": [
+          "xqvu7p-flra2104-1-i",
+          "xqvu7p-flra2104-2-i",
+          "xqvu7p-flra2104-2L-e",
+          "xqvu7p-flra2104-2LV-e"
+        ],
+        "xqvu7p-flrb2104": [
+          "xqvu7p-flrb2104-1-i",
+          "xqvu7p-flrb2104-2-i",
+          "xqvu7p-flrb2104-2L-e",
+          "xqvu7p-flrb2104-2LV-e"
+        ]
+      },
+      "xqvu9p": {
+        "xqvu9p-flqa2104": [
+          "xqvu9p-flqa2104-1-i",
+          "xqvu9p-flqa2104-2-i",
+          "xqvu9p-flqa2104-2L-e",
+          "xqvu9p-flqa2104-2LV-e"
+        ],
+        "xqvu9p-flqb2104": [
+          "xqvu9p-flqb2104-1-i",
+          "xqvu9p-flqb2104-2-i",
+          "xqvu9p-flqb2104-2L-e",
+          "xqvu9p-flqb2104-2LV-e"
+        ],
+        "xqvu9p-fsqd2104": [
+          "xqvu9p-fsqd2104-1-i",
+          "xqvu9p-fsqd2104-2-i",
+          "xqvu9p-fsqd2104-2L-e",
+          "xqvu9p-fsqd2104-2LV-e"
+        ]
+      }
+    },
+    "qvirtexuplusHBM": {
+      "xqvu37p": {
+        "xqvu37p-fsqh2892": [
+          "xqvu37p-fsqh2892-2-e"
+        ]
+      }
+    },
+    "qzynq": {
+      "xq7z020": {
+        "xq7z020cl400": [
+          "xq7z020cl400-1I",
+          "xq7z020cl400-1IL",
+          "xq7z020cl400-1Q",
+          "xq7z020cl400-2I"
+        ],
+        "xq7z020cl484": [
+          "xq7z020cl484-1I",
+          "xq7z020cl484-1IL",
+          "xq7z020cl484-1Q",
+          "xq7z020cl484-2I"
+        ]
+      },
+      "xq7z030": {
+        "xq7z030rb484": [
+          "xq7z030rb484-1I",
+          "xq7z030rb484-1Q",
+          "xq7z030rb484-2I",
+          "xq7z030rb484-2IL"
+        ],
+        "xq7z030rf676": [
+          "xq7z030rf676-1I",
+          "xq7z030rf676-1Q",
+          "xq7z030rf676-2I",
+          "xq7z030rf676-2IL"
+        ]
+      },
+      "xq7z045": {
+        "xq7z045rf676": [
+          "xq7z045rf676-1I",
+          "xq7z045rf676-1Q",
+          "xq7z045rf676-2I",
+          "xq7z045rf676-2IL"
+        ],
+        "xq7z045rf900": [
+          "xq7z045rf900-1I",
+          "xq7z045rf900-1Q",
+          "xq7z045rf900-2I",
+          "xq7z045rf900-2IL"
+        ],
+        "xq7z045rfg676": [
+          "xq7z045rfg676-1QL"
+        ]
+      },
+      "xq7z100": {
+        "xq7z100rf1156": [
+          "xq7z100rf1156-1I",
+          "xq7z100rf1156-2I",
+          "xq7z100rf1156-2IL"
+        ],
+        "xq7z100rf900": [
+          "xq7z100rf900-1I",
+          "xq7z100rf900-2I",
+          "xq7z100rf900-2IL"
+        ]
+      }
+    },
+    "qzynquplus": {
+      "xqzu11eg": {
+        "xqzu11eg-ffrc1156": [
+          "xqzu11eg-ffrc1156-1-i",
+          "xqzu11eg-ffrc1156-1L-i",
+          "xqzu11eg-ffrc1156-1LV-i",
+          "xqzu11eg-ffrc1156-1M-m",
+          "xqzu11eg-ffrc1156-2-i"
+        ],
+        "xqzu11eg-ffrc1760": [
+          "xqzu11eg-ffrc1760-1-i",
+          "xqzu11eg-ffrc1760-1L-i",
+          "xqzu11eg-ffrc1760-1LV-i",
+          "xqzu11eg-ffrc1760-1M-m",
+          "xqzu11eg-ffrc1760-2-i"
+        ]
+      },
+      "xqzu15eg": {
+        "xqzu15eg-ffrb1156": [
+          "xqzu15eg-ffrb1156-1-i",
+          "xqzu15eg-ffrb1156-1L-i",
+          "xqzu15eg-ffrb1156-1LV-i",
+          "xqzu15eg-ffrb1156-1M-m",
+          "xqzu15eg-ffrb1156-2-i"
+        ],
+        "xqzu15eg-ffrc900": [
+          "xqzu15eg-ffrc900-1-i",
+          "xqzu15eg-ffrc900-1L-i",
+          "xqzu15eg-ffrc900-1LV-i",
+          "xqzu15eg-ffrc900-1M-m",
+          "xqzu15eg-ffrc900-2-i"
+        ]
+      },
+      "xqzu19eg": {
+        "xqzu19eg-ffrb1517": [
+          "xqzu19eg-ffrb1517-1-i",
+          "xqzu19eg-ffrb1517-1L-i",
+          "xqzu19eg-ffrb1517-1LV-i",
+          "xqzu19eg-ffrb1517-1M-m",
+          "xqzu19eg-ffrb1517-2-i"
+        ],
+        "xqzu19eg-ffrc1760": [
+          "xqzu19eg-ffrc1760-1-i",
+          "xqzu19eg-ffrc1760-1L-i",
+          "xqzu19eg-ffrc1760-1LV-i",
+          "xqzu19eg-ffrc1760-1M-m",
+          "xqzu19eg-ffrc1760-2-i"
+        ]
+      },
+      "xqzu3eg": {
+        "xqzu3eg-sfra484": [
+          "xqzu3eg-sfra484-1-i",
+          "xqzu3eg-sfra484-1L-i",
+          "xqzu3eg-sfra484-1LV-i",
+          "xqzu3eg-sfra484-1M-m",
+          "xqzu3eg-sfra484-2-i"
+        ],
+        "xqzu3eg-sfrc784": [
+          "xqzu3eg-sfrc784-1-i",
+          "xqzu3eg-sfrc784-1L-i",
+          "xqzu3eg-sfrc784-1LV-i",
+          "xqzu3eg-sfrc784-1M-m",
+          "xqzu3eg-sfrc784-2-i"
+        ]
+      },
+      "xqzu4eg": {
+        "xqzu4eg-sfrc784": [
+          "xqzu4eg-sfrc784-1-i",
+          "xqzu4eg-sfrc784-1L-i",
+          "xqzu4eg-sfrc784-1LV-i",
+          "xqzu4eg-sfrc784-2-i"
+        ]
+      },
+      "xqzu5ev": {
+        "xqzu5ev-ffrb900": [
+          "xqzu5ev-ffrb900-1-i",
+          "xqzu5ev-ffrb900-1L-i",
+          "xqzu5ev-ffrb900-1LV-i",
+          "xqzu5ev-ffrb900-1M-m",
+          "xqzu5ev-ffrb900-2-i"
+        ],
+        "xqzu5ev-sfrc784": [
+          "xqzu5ev-sfrc784-1-i",
+          "xqzu5ev-sfrc784-1L-i",
+          "xqzu5ev-sfrc784-1LV-i",
+          "xqzu5ev-sfrc784-1M-m",
+          "xqzu5ev-sfrc784-2-i"
+        ]
+      },
+      "xqzu7ev": {
+        "xqzu7ev-ffrb900": [
+          "xqzu7ev-ffrb900-1-i",
+          "xqzu7ev-ffrb900-1L-i",
+          "xqzu7ev-ffrb900-1LV-i",
+          "xqzu7ev-ffrb900-1M-m",
+          "xqzu7ev-ffrb900-2-i"
+        ],
+        "xqzu7ev-ffrc1156": [
+          "xqzu7ev-ffrc1156-1-i",
+          "xqzu7ev-ffrc1156-1L-i",
+          "xqzu7ev-ffrc1156-1LV-i",
+          "xqzu7ev-ffrc1156-1M-m",
+          "xqzu7ev-ffrc1156-2-i"
+        ]
+      },
+      "xqzu9eg": {
+        "xqzu9eg-ffrb1156": [
+          "xqzu9eg-ffrb1156-1-i",
+          "xqzu9eg-ffrb1156-1L-i",
+          "xqzu9eg-ffrb1156-1LV-i",
+          "xqzu9eg-ffrb1156-1M-m",
+          "xqzu9eg-ffrb1156-2-i"
+        ],
+        "xqzu9eg-ffrc900": [
+          "xqzu9eg-ffrc900-1-i",
+          "xqzu9eg-ffrc900-1L-i",
+          "xqzu9eg-ffrc900-1LV-i",
+          "xqzu9eg-ffrc900-1M-m",
+          "xqzu9eg-ffrc900-2-i"
+        ]
+      }
+    },
+    "qzynquplusRFSOC": {
+      "xqzu21dr": {
+        "xqzu21dr-ffrd1156": [
+          "xqzu21dr-ffrd1156-1-i",
+          "xqzu21dr-ffrd1156-1L-i",
+          "xqzu21dr-ffrd1156-1LV-i",
+          "xqzu21dr-ffrd1156-1M-m",
+          "xqzu21dr-ffrd1156-2-i"
+        ]
+      },
+      "xqzu28dr": {
+        "xqzu28dr-ffre1156": [
+          "xqzu28dr-ffre1156-1-i",
+          "xqzu28dr-ffre1156-1L-i",
+          "xqzu28dr-ffre1156-1LV-i",
+          "xqzu28dr-ffre1156-1M-m",
+          "xqzu28dr-ffre1156-2-i"
+        ],
+        "xqzu28dr-ffrg1517": [
+          "xqzu28dr-ffrg1517-1-i",
+          "xqzu28dr-ffrg1517-1L-i",
+          "xqzu28dr-ffrg1517-1LV-i",
+          "xqzu28dr-ffrg1517-1M-m",
+          "xqzu28dr-ffrg1517-2-i"
+        ]
+      },
+      "xqzu29dr": {
+        "xqzu29dr-ffrf1760": [
+          "xqzu29dr-ffrf1760-1-i",
+          "xqzu29dr-ffrf1760-1L-i",
+          "xqzu29dr-ffrf1760-1LV-i",
+          "xqzu29dr-ffrf1760-1M-m",
+          "xqzu29dr-ffrf1760-2-i"
+        ]
+      },
+      "xqzu48dr": {
+        "xqzu48dr-ffre1156": [
+          "xqzu48dr-ffre1156-1-i",
+          "xqzu48dr-ffre1156-1LV-i",
+          "xqzu48dr-ffre1156-1M-m",
+          "xqzu48dr-ffre1156-2-i",
+          "xqzu48dr-ffre1156-2LVI-i"
+        ],
+        "xqzu48dr-fsrg1517": [
+          "xqzu48dr-fsrg1517-1-i",
+          "xqzu48dr-fsrg1517-1LV-i",
+          "xqzu48dr-fsrg1517-1M-m",
+          "xqzu48dr-fsrg1517-2-i",
+          "xqzu48dr-fsrg1517-2LVI-i"
+        ]
+      },
+      "xqzu49dr": {
+        "xqzu49dr-fsrf1760": [
+          "xqzu49dr-fsrf1760-1-i",
+          "xqzu49dr-fsrf1760-1LV-i",
+          "xqzu49dr-fsrf1760-1M-m",
+          "xqzu49dr-fsrf1760-2-i",
+          "xqzu49dr-fsrf1760-2LVI-i"
+        ]
+      }
+    },
+    "spartan7": {
+      "xc7s100": {
+        "xc7s100fgga484": [
+          "xc7s100fgga484-1",
+          "xc7s100fgga484-1IL",
+          "xc7s100fgga484-1Q",
+          "xc7s100fgga484-2"
+        ],
+        "xc7s100fgga676": [
+          "xc7s100fgga676-1",
+          "xc7s100fgga676-1IL",
+          "xc7s100fgga676-1Q",
+          "xc7s100fgga676-2"
+        ]
+      },
+      "xc7s15": {
+        "xc7s15cpga196": [
+          "xc7s15cpga196-1",
+          "xc7s15cpga196-1IL",
+          "xc7s15cpga196-1Q",
+          "xc7s15cpga196-2"
+        ],
+        "xc7s15csga225": [
+          "xc7s15csga225-1",
+          "xc7s15csga225-1IL",
+          "xc7s15csga225-1Q",
+          "xc7s15csga225-2"
+        ],
+        "xc7s15ftgb196": [
+          "xc7s15ftgb196-1",
+          "xc7s15ftgb196-1IL",
+          "xc7s15ftgb196-1Q",
+          "xc7s15ftgb196-2"
+        ]
+      },
+      "xc7s25": {
+        "xc7s25csga225": [
+          "xc7s25csga225-1",
+          "xc7s25csga225-1IL",
+          "xc7s25csga225-1Q",
+          "xc7s25csga225-2"
+        ],
+        "xc7s25csga324": [
+          "xc7s25csga324-1",
+          "xc7s25csga324-1IL",
+          "xc7s25csga324-1Q",
+          "xc7s25csga324-2"
+        ],
+        "xc7s25ftgb196": [
+          "xc7s25ftgb196-1",
+          "xc7s25ftgb196-1IL",
+          "xc7s25ftgb196-1Q",
+          "xc7s25ftgb196-2"
+        ]
+      },
+      "xc7s50": {
+        "xc7s50csga324": [
+          "xc7s50csga324-1",
+          "xc7s50csga324-1IL",
+          "xc7s50csga324-1Q",
+          "xc7s50csga324-2"
+        ],
+        "xc7s50fgga484": [
+          "xc7s50fgga484-1",
+          "xc7s50fgga484-1IL",
+          "xc7s50fgga484-1Q",
+          "xc7s50fgga484-2"
+        ],
+        "xc7s50ftgb196": [
+          "xc7s50ftgb196-1",
+          "xc7s50ftgb196-1IL",
+          "xc7s50ftgb196-1Q",
+          "xc7s50ftgb196-2"
+        ]
+      },
+      "xc7s6": {
+        "xc7s6cpga196": [
+          "xc7s6cpga196-1",
+          "xc7s6cpga196-1IL",
+          "xc7s6cpga196-1Q",
+          "xc7s6cpga196-2"
+        ],
+        "xc7s6csga225": [
+          "xc7s6csga225-1",
+          "xc7s6csga225-1IL",
+          "xc7s6csga225-1Q",
+          "xc7s6csga225-2"
+        ],
+        "xc7s6ftgb196": [
+          "xc7s6ftgb196-1",
+          "xc7s6ftgb196-1IL",
+          "xc7s6ftgb196-1Q",
+          "xc7s6ftgb196-2"
+        ]
+      },
+      "xc7s75": {
+        "xc7s75fgga484": [
+          "xc7s75fgga484-1",
+          "xc7s75fgga484-1IL",
+          "xc7s75fgga484-1Q",
+          "xc7s75fgga484-2"
+        ],
+        "xc7s75fgga676": [
+          "xc7s75fgga676-1",
+          "xc7s75fgga676-1IL",
+          "xc7s75fgga676-1Q",
+          "xc7s75fgga676-2"
+        ]
+      }
+    },
+    "versalaicore": {
+      "xcvc1502": {
+        "xcvc1502-nsvg1369": [
+          "xcvc1502-nsvg1369-1LHP-i-L",
+          "xcvc1502-nsvg1369-1LHP-i-S",
+          "xcvc1502-nsvg1369-1LP-e-S",
+          "xcvc1502-nsvg1369-1LP-i-L",
+          "xcvc1502-nsvg1369-1LP-i-S",
+          "xcvc1502-nsvg1369-1MP-e-S",
+          "xcvc1502-nsvg1369-1MP-i-L",
+          "xcvc1502-nsvg1369-1MP-i-S",
+          "xcvc1502-nsvg1369-2HP-i-S",
+          "xcvc1502-nsvg1369-2LP-e-L",
+          "xcvc1502-nsvg1369-2LP-e-S",
+          "xcvc1502-nsvg1369-2MP-e-L",
+          "xcvc1502-nsvg1369-2MP-e-S",
+          "xcvc1502-nsvg1369-2MP-i-L",
+          "xcvc1502-nsvg1369-2MP-i-S"
+        ],
+        "xcvc1502-vsva1596": [
+          "xcvc1502-vsva1596-1LHP-i-L",
+          "xcvc1502-vsva1596-1LHP-i-S",
+          "xcvc1502-vsva1596-1LP-e-S",
+          "xcvc1502-vsva1596-1LP-i-L",
+          "xcvc1502-vsva1596-1LP-i-S",
+          "xcvc1502-vsva1596-1MP-e-S",
+          "xcvc1502-vsva1596-1MP-i-L",
+          "xcvc1502-vsva1596-1MP-i-S",
+          "xcvc1502-vsva1596-2HP-i-S",
+          "xcvc1502-vsva1596-2LP-e-L",
+          "xcvc1502-vsva1596-2LP-e-S",
+          "xcvc1502-vsva1596-2MP-e-L",
+          "xcvc1502-vsva1596-2MP-e-S",
+          "xcvc1502-vsva1596-2MP-i-L",
+          "xcvc1502-vsva1596-2MP-i-S"
+        ],
+        "xcvc1502-vsva2197": [
+          "xcvc1502-vsva2197-1LHP-i-L",
+          "xcvc1502-vsva2197-1LHP-i-S",
+          "xcvc1502-vsva2197-1LP-e-S",
+          "xcvc1502-vsva2197-1LP-i-L",
+          "xcvc1502-vsva2197-1LP-i-S",
+          "xcvc1502-vsva2197-1MP-e-S",
+          "xcvc1502-vsva2197-1MP-i-L",
+          "xcvc1502-vsva2197-1MP-i-S",
+          "xcvc1502-vsva2197-2HP-i-S",
+          "xcvc1502-vsva2197-2LP-e-L",
+          "xcvc1502-vsva2197-2LP-e-S",
+          "xcvc1502-vsva2197-2MP-e-L",
+          "xcvc1502-vsva2197-2MP-e-S",
+          "xcvc1502-vsva2197-2MP-i-L",
+          "xcvc1502-vsva2197-2MP-i-S"
+        ]
+      },
+      "xcvc1702": {
+        "xcvc1702-nsvg1369": [
+          "xcvc1702-nsvg1369-1LHP-i-L",
+          "xcvc1702-nsvg1369-1LHP-i-S",
+          "xcvc1702-nsvg1369-1LP-e-S",
+          "xcvc1702-nsvg1369-1LP-i-L",
+          "xcvc1702-nsvg1369-1LP-i-S",
+          "xcvc1702-nsvg1369-1MP-e-S",
+          "xcvc1702-nsvg1369-1MP-i-L",
+          "xcvc1702-nsvg1369-1MP-i-S",
+          "xcvc1702-nsvg1369-2HP-i-S",
+          "xcvc1702-nsvg1369-2LP-e-L",
+          "xcvc1702-nsvg1369-2LP-e-S",
+          "xcvc1702-nsvg1369-2MP-e-L",
+          "xcvc1702-nsvg1369-2MP-e-S",
+          "xcvc1702-nsvg1369-2MP-i-L",
+          "xcvc1702-nsvg1369-2MP-i-S"
+        ],
+        "xcvc1702-vsva1596": [
+          "xcvc1702-vsva1596-1LHP-i-L",
+          "xcvc1702-vsva1596-1LHP-i-S",
+          "xcvc1702-vsva1596-1LP-e-S",
+          "xcvc1702-vsva1596-1LP-i-L",
+          "xcvc1702-vsva1596-1LP-i-S",
+          "xcvc1702-vsva1596-1MP-e-S",
+          "xcvc1702-vsva1596-1MP-i-L",
+          "xcvc1702-vsva1596-1MP-i-S",
+          "xcvc1702-vsva1596-2HP-i-S",
+          "xcvc1702-vsva1596-2LP-e-L",
+          "xcvc1702-vsva1596-2LP-e-S",
+          "xcvc1702-vsva1596-2MP-e-L",
+          "xcvc1702-vsva1596-2MP-e-S",
+          "xcvc1702-vsva1596-2MP-i-L",
+          "xcvc1702-vsva1596-2MP-i-S"
+        ],
+        "xcvc1702-vsva2197": [
+          "xcvc1702-vsva2197-1LHP-i-L",
+          "xcvc1702-vsva2197-1LHP-i-S",
+          "xcvc1702-vsva2197-1LP-e-S",
+          "xcvc1702-vsva2197-1LP-i-L",
+          "xcvc1702-vsva2197-1LP-i-S",
+          "xcvc1702-vsva2197-1MP-e-S",
+          "xcvc1702-vsva2197-1MP-i-L",
+          "xcvc1702-vsva2197-1MP-i-S",
+          "xcvc1702-vsva2197-2HP-i-S",
+          "xcvc1702-vsva2197-2LP-e-L",
+          "xcvc1702-vsva2197-2LP-e-S",
+          "xcvc1702-vsva2197-2MP-e-L",
+          "xcvc1702-vsva2197-2MP-e-S",
+          "xcvc1702-vsva2197-2MP-i-L",
+          "xcvc1702-vsva2197-2MP-i-S"
+        ]
+      },
+      "xcvc1802": {
+        "xcvc1802-viva1596": [
+          "xcvc1802-viva1596-1LHP-i-L",
+          "xcvc1802-viva1596-1LHP-i-S",
+          "xcvc1802-viva1596-1LP-e-S",
+          "xcvc1802-viva1596-1LP-i-L",
+          "xcvc1802-viva1596-1LP-i-S",
+          "xcvc1802-viva1596-1MP-e-S",
+          "xcvc1802-viva1596-1MP-i-L",
+          "xcvc1802-viva1596-1MP-i-S",
+          "xcvc1802-viva1596-2HP-i-S",
+          "xcvc1802-viva1596-2LP-e-L",
+          "xcvc1802-viva1596-2LP-e-S",
+          "xcvc1802-viva1596-2MP-e-L",
+          "xcvc1802-viva1596-2MP-e-S",
+          "xcvc1802-viva1596-2MP-i-L",
+          "xcvc1802-viva1596-2MP-i-S"
+        ],
+        "xcvc1802-vsva2197": [
+          "xcvc1802-vsva2197-1LHP-i-L",
+          "xcvc1802-vsva2197-1LHP-i-S",
+          "xcvc1802-vsva2197-1LP-e-S",
+          "xcvc1802-vsva2197-1LP-i-L",
+          "xcvc1802-vsva2197-1LP-i-S",
+          "xcvc1802-vsva2197-1MP-e-S",
+          "xcvc1802-vsva2197-1MP-i-L",
+          "xcvc1802-vsva2197-1MP-i-S",
+          "xcvc1802-vsva2197-2HP-i-S",
+          "xcvc1802-vsva2197-2LP-e-L",
+          "xcvc1802-vsva2197-2LP-e-S",
+          "xcvc1802-vsva2197-2MP-e-L",
+          "xcvc1802-vsva2197-2MP-e-S",
+          "xcvc1802-vsva2197-2MP-i-L",
+          "xcvc1802-vsva2197-2MP-i-S"
+        ],
+        "xcvc1802-vsvd1760": [
+          "xcvc1802-vsvd1760-1LHP-i-L",
+          "xcvc1802-vsvd1760-1LHP-i-S",
+          "xcvc1802-vsvd1760-1LP-e-S",
+          "xcvc1802-vsvd1760-1LP-i-L",
+          "xcvc1802-vsvd1760-1LP-i-S",
+          "xcvc1802-vsvd1760-1MP-e-S",
+          "xcvc1802-vsvd1760-1MP-i-L",
+          "xcvc1802-vsvd1760-1MP-i-S",
+          "xcvc1802-vsvd1760-2HP-i-S",
+          "xcvc1802-vsvd1760-2LP-e-L",
+          "xcvc1802-vsvd1760-2LP-e-S",
+          "xcvc1802-vsvd1760-2MP-e-L",
+          "xcvc1802-vsvd1760-2MP-e-S",
+          "xcvc1802-vsvd1760-2MP-i-L",
+          "xcvc1802-vsvd1760-2MP-i-S"
+        ]
+      },
+      "xcvc1902": {
+        "xcvc1902-viva1596": [
+          "xcvc1902-viva1596-1LHP-i-L",
+          "xcvc1902-viva1596-1LHP-i-S",
+          "xcvc1902-viva1596-1LP-e-S",
+          "xcvc1902-viva1596-1LP-i-L",
+          "xcvc1902-viva1596-1LP-i-S",
+          "xcvc1902-viva1596-1MP-e-S",
+          "xcvc1902-viva1596-1MP-i-L",
+          "xcvc1902-viva1596-1MP-i-S",
+          "xcvc1902-viva1596-2HP-i-S",
+          "xcvc1902-viva1596-2LP-e-L",
+          "xcvc1902-viva1596-2LP-e-S",
+          "xcvc1902-viva1596-2MP-e-L",
+          "xcvc1902-viva1596-2MP-e-S",
+          "xcvc1902-viva1596-2MP-i-L",
+          "xcvc1902-viva1596-2MP-i-S",
+          "xcvc1902-viva1596-3HP-e-S"
+        ],
+        "xcvc1902-vsva2197": [
+          "xcvc1902-vsva2197-1LHP-i-L",
+          "xcvc1902-vsva2197-1LHP-i-S",
+          "xcvc1902-vsva2197-1LP-e-S",
+          "xcvc1902-vsva2197-1LP-i-L",
+          "xcvc1902-vsva2197-1LP-i-S",
+          "xcvc1902-vsva2197-1MP-e-S",
+          "xcvc1902-vsva2197-1MP-i-L",
+          "xcvc1902-vsva2197-1MP-i-S",
+          "xcvc1902-vsva2197-2HP-i-S",
+          "xcvc1902-vsva2197-2LP-e-L",
+          "xcvc1902-vsva2197-2LP-e-S",
+          "xcvc1902-vsva2197-2MP-e-L",
+          "xcvc1902-vsva2197-2MP-e-S",
+          "xcvc1902-vsva2197-2MP-i-L",
+          "xcvc1902-vsva2197-2MP-i-S",
+          "xcvc1902-vsva2197-3HP-e-S"
+        ],
+        "xcvc1902-vsvd1760": [
+          "xcvc1902-vsvd1760-1LHP-i-L",
+          "xcvc1902-vsvd1760-1LHP-i-S",
+          "xcvc1902-vsvd1760-1LP-e-S",
+          "xcvc1902-vsvd1760-1LP-i-L",
+          "xcvc1902-vsvd1760-1LP-i-S",
+          "xcvc1902-vsvd1760-1MP-e-S",
+          "xcvc1902-vsvd1760-1MP-i-L",
+          "xcvc1902-vsvd1760-1MP-i-S",
+          "xcvc1902-vsvd1760-2HP-i-S",
+          "xcvc1902-vsvd1760-2LP-e-L",
+          "xcvc1902-vsvd1760-2LP-e-S",
+          "xcvc1902-vsvd1760-2MP-e-L",
+          "xcvc1902-vsvd1760-2MP-e-S",
+          "xcvc1902-vsvd1760-2MP-i-L",
+          "xcvc1902-vsvd1760-2MP-i-S",
+          "xcvc1902-vsvd1760-3HP-e-S"
+        ]
+      }
+    },
+    "versalaiedge": {
+      "xcve1752": {
+        "xcve1752-nsvg1369": [
+          "xcve1752-nsvg1369-1LHP-i-L",
+          "xcve1752-nsvg1369-1LHP-i-S",
+          "xcve1752-nsvg1369-1LP-e-S",
+          "xcve1752-nsvg1369-1LP-i-L",
+          "xcve1752-nsvg1369-1LP-i-S",
+          "xcve1752-nsvg1369-1MP-e-S",
+          "xcve1752-nsvg1369-1MP-i-L",
+          "xcve1752-nsvg1369-1MP-i-S",
+          "xcve1752-nsvg1369-2HP-i-S",
+          "xcve1752-nsvg1369-2LP-e-L",
+          "xcve1752-nsvg1369-2LP-e-S",
+          "xcve1752-nsvg1369-2MP-e-L",
+          "xcve1752-nsvg1369-2MP-e-S",
+          "xcve1752-nsvg1369-2MP-i-L",
+          "xcve1752-nsvg1369-2MP-i-S"
+        ],
+        "xcve1752-vsva1596": [
+          "xcve1752-vsva1596-1LHP-i-L",
+          "xcve1752-vsva1596-1LHP-i-S",
+          "xcve1752-vsva1596-1LP-e-S",
+          "xcve1752-vsva1596-1LP-i-L",
+          "xcve1752-vsva1596-1LP-i-S",
+          "xcve1752-vsva1596-1MP-e-S",
+          "xcve1752-vsva1596-1MP-i-L",
+          "xcve1752-vsva1596-1MP-i-S",
+          "xcve1752-vsva1596-2HP-i-S",
+          "xcve1752-vsva1596-2LP-e-L",
+          "xcve1752-vsva1596-2LP-e-S",
+          "xcve1752-vsva1596-2MP-e-L",
+          "xcve1752-vsva1596-2MP-e-S",
+          "xcve1752-vsva1596-2MP-i-L",
+          "xcve1752-vsva1596-2MP-i-S"
+        ],
+        "xcve1752-vsva2197": [
+          "xcve1752-vsva2197-1LHP-i-L",
+          "xcve1752-vsva2197-1LHP-i-S",
+          "xcve1752-vsva2197-1LP-e-S",
+          "xcve1752-vsva2197-1LP-i-L",
+          "xcve1752-vsva2197-1LP-i-S",
+          "xcve1752-vsva2197-1MP-e-S",
+          "xcve1752-vsva2197-1MP-i-L",
+          "xcve1752-vsva2197-1MP-i-S",
+          "xcve1752-vsva2197-2HP-i-S",
+          "xcve1752-vsva2197-2LP-e-L",
+          "xcve1752-vsva2197-2LP-e-S",
+          "xcve1752-vsva2197-2MP-e-L",
+          "xcve1752-vsva2197-2MP-e-S",
+          "xcve1752-vsva2197-2MP-i-L",
+          "xcve1752-vsva2197-2MP-i-S"
+        ]
+      }
+    },
+    "versalpremium": {
+      "xcvp1102": {
+        "xcvp1102-vsva2785": [
+          "xcvp1102-vsva2785-1LHP-i-L",
+          "xcvp1102-vsva2785-1LHP-i-S",
+          "xcvp1102-vsva2785-1LP-e-S",
+          "xcvp1102-vsva2785-1LP-i-L",
+          "xcvp1102-vsva2785-1LP-i-S",
+          "xcvp1102-vsva2785-1MP-e-S",
+          "xcvp1102-vsva2785-1MP-i-L",
+          "xcvp1102-vsva2785-1MP-i-S",
+          "xcvp1102-vsva2785-2LP-e-L",
+          "xcvp1102-vsva2785-2LP-e-S",
+          "xcvp1102-vsva2785-2MP-e-L",
+          "xcvp1102-vsva2785-2MP-e-S",
+          "xcvp1102-vsva2785-2MP-i-L",
+          "xcvp1102-vsva2785-2MP-i-S",
+          "xcvp1102-vsva2785-3HP-e-S"
+        ]
+      },
+      "xcvp1202": {
+        "xcvp1202-vsva2785": [
+          "xcvp1202-vsva2785-1LHP-i-L",
+          "xcvp1202-vsva2785-1LHP-i-S",
+          "xcvp1202-vsva2785-1LP-e-S",
+          "xcvp1202-vsva2785-1LP-i-L",
+          "xcvp1202-vsva2785-1LP-i-S",
+          "xcvp1202-vsva2785-1MP-e-S",
+          "xcvp1202-vsva2785-1MP-i-L",
+          "xcvp1202-vsva2785-1MP-i-S",
+          "xcvp1202-vsva2785-2LHP-e-L",
+          "xcvp1202-vsva2785-2LHP-e-S",
+          "xcvp1202-vsva2785-2LP-e-L",
+          "xcvp1202-vsva2785-2LP-e-S",
+          "xcvp1202-vsva2785-2MHP-e-L",
+          "xcvp1202-vsva2785-2MHP-e-S",
+          "xcvp1202-vsva2785-2MHP-i-L",
+          "xcvp1202-vsva2785-2MHP-i-S",
+          "xcvp1202-vsva2785-2MP-e-L",
+          "xcvp1202-vsva2785-2MP-e-S",
+          "xcvp1202-vsva2785-2MP-i-L",
+          "xcvp1202-vsva2785-2MP-i-S",
+          "xcvp1202-vsva2785-3HP-e-S"
+        ]
+      },
+      "xcvp1402": {
+        "xcvp1402-vsva2785": [
+          "xcvp1402-vsva2785-1LHP-i-L",
+          "xcvp1402-vsva2785-1LHP-i-S",
+          "xcvp1402-vsva2785-1LP-e-S",
+          "xcvp1402-vsva2785-1LP-i-L",
+          "xcvp1402-vsva2785-1LP-i-S",
+          "xcvp1402-vsva2785-1MP-e-S",
+          "xcvp1402-vsva2785-1MP-i-L",
+          "xcvp1402-vsva2785-1MP-i-S",
+          "xcvp1402-vsva2785-2LP-e-L",
+          "xcvp1402-vsva2785-2LP-e-S",
+          "xcvp1402-vsva2785-2MP-e-L",
+          "xcvp1402-vsva2785-2MP-e-S",
+          "xcvp1402-vsva2785-2MP-i-L",
+          "xcvp1402-vsva2785-2MP-i-S",
+          "xcvp1402-vsva2785-3HP-e-S"
+        ],
+        "xcvp1402-vsva3340": [
+          "xcvp1402-vsva3340-1LHP-i-L",
+          "xcvp1402-vsva3340-1LHP-i-S",
+          "xcvp1402-vsva3340-1LP-e-S",
+          "xcvp1402-vsva3340-1LP-i-L",
+          "xcvp1402-vsva3340-1LP-i-S",
+          "xcvp1402-vsva3340-1MP-e-S",
+          "xcvp1402-vsva3340-1MP-i-L",
+          "xcvp1402-vsva3340-1MP-i-S",
+          "xcvp1402-vsva3340-2LP-e-L",
+          "xcvp1402-vsva3340-2LP-e-S",
+          "xcvp1402-vsva3340-2MP-e-L",
+          "xcvp1402-vsva3340-2MP-e-S",
+          "xcvp1402-vsva3340-2MP-i-L",
+          "xcvp1402-vsva3340-2MP-i-S",
+          "xcvp1402-vsva3340-3HP-e-S"
+        ],
+        "xcvp1402-vsvd2197": [
+          "xcvp1402-vsvd2197-1LHP-i-L",
+          "xcvp1402-vsvd2197-1LHP-i-S",
+          "xcvp1402-vsvd2197-1LP-e-S",
+          "xcvp1402-vsvd2197-1LP-i-L",
+          "xcvp1402-vsvd2197-1LP-i-S",
+          "xcvp1402-vsvd2197-1MP-e-S",
+          "xcvp1402-vsvd2197-1MP-i-L",
+          "xcvp1402-vsvd2197-1MP-i-S",
+          "xcvp1402-vsvd2197-2LP-e-L",
+          "xcvp1402-vsvd2197-2LP-e-S",
+          "xcvp1402-vsvd2197-2MP-e-L",
+          "xcvp1402-vsvd2197-2MP-e-S",
+          "xcvp1402-vsvd2197-2MP-i-L",
+          "xcvp1402-vsvd2197-2MP-i-S",
+          "xcvp1402-vsvd2197-3HP-e-S"
+        ]
+      },
+      "xcvp1502": {
+        "xcvp1502-vsva2785": [
+          "xcvp1502-vsva2785-1LHP-i-L",
+          "xcvp1502-vsva2785-1LHP-i-S",
+          "xcvp1502-vsva2785-1LP-e-S",
+          "xcvp1502-vsva2785-1LP-i-L",
+          "xcvp1502-vsva2785-1LP-i-S",
+          "xcvp1502-vsva2785-1MP-e-S",
+          "xcvp1502-vsva2785-1MP-i-L",
+          "xcvp1502-vsva2785-1MP-i-S",
+          "xcvp1502-vsva2785-2LHP-e-L",
+          "xcvp1502-vsva2785-2LHP-e-S",
+          "xcvp1502-vsva2785-2LP-e-L",
+          "xcvp1502-vsva2785-2LP-e-S",
+          "xcvp1502-vsva2785-2MHP-e-L",
+          "xcvp1502-vsva2785-2MHP-e-S",
+          "xcvp1502-vsva2785-2MHP-i-L",
+          "xcvp1502-vsva2785-2MHP-i-S",
+          "xcvp1502-vsva2785-2MP-e-L",
+          "xcvp1502-vsva2785-2MP-e-S",
+          "xcvp1502-vsva2785-2MP-i-L",
+          "xcvp1502-vsva2785-2MP-i-S",
+          "xcvp1502-vsva2785-3HP-e-S"
+        ],
+        "xcvp1502-vsva3340": [
+          "xcvp1502-vsva3340-1LHP-i-L",
+          "xcvp1502-vsva3340-1LHP-i-S",
+          "xcvp1502-vsva3340-1LP-e-S",
+          "xcvp1502-vsva3340-1LP-i-L",
+          "xcvp1502-vsva3340-1LP-i-S",
+          "xcvp1502-vsva3340-1MP-e-S",
+          "xcvp1502-vsva3340-1MP-i-L",
+          "xcvp1502-vsva3340-1MP-i-S",
+          "xcvp1502-vsva3340-2LHP-e-L",
+          "xcvp1502-vsva3340-2LHP-e-S",
+          "xcvp1502-vsva3340-2LP-e-L",
+          "xcvp1502-vsva3340-2LP-e-S",
+          "xcvp1502-vsva3340-2MHP-e-L",
+          "xcvp1502-vsva3340-2MHP-e-S",
+          "xcvp1502-vsva3340-2MHP-i-L",
+          "xcvp1502-vsva3340-2MHP-i-S",
+          "xcvp1502-vsva3340-2MP-e-L",
+          "xcvp1502-vsva3340-2MP-e-S",
+          "xcvp1502-vsva3340-2MP-i-L",
+          "xcvp1502-vsva3340-2MP-i-S",
+          "xcvp1502-vsva3340-3HP-e-S"
+        ]
+      },
+      "xcvp1702": {
+        "xcvp1702-vsva3340": [
+          "xcvp1702-vsva3340-1LHP-i-L",
+          "xcvp1702-vsva3340-1LHP-i-S",
+          "xcvp1702-vsva3340-1LP-e-S",
+          "xcvp1702-vsva3340-1LP-i-L",
+          "xcvp1702-vsva3340-1LP-i-S",
+          "xcvp1702-vsva3340-1MP-e-S",
+          "xcvp1702-vsva3340-1MP-i-L",
+          "xcvp1702-vsva3340-1MP-i-S",
+          "xcvp1702-vsva3340-2LHP-e-L",
+          "xcvp1702-vsva3340-2LHP-e-S",
+          "xcvp1702-vsva3340-2LP-e-L",
+          "xcvp1702-vsva3340-2LP-e-S",
+          "xcvp1702-vsva3340-2MHP-e-L",
+          "xcvp1702-vsva3340-2MHP-e-S",
+          "xcvp1702-vsva3340-2MHP-i-L",
+          "xcvp1702-vsva3340-2MHP-i-S",
+          "xcvp1702-vsva3340-2MP-e-L",
+          "xcvp1702-vsva3340-2MP-e-S",
+          "xcvp1702-vsva3340-2MP-i-L",
+          "xcvp1702-vsva3340-2MP-i-S",
+          "xcvp1702-vsva3340-3HP-e-S"
+        ],
+        "xcvp1702-vsva5601": [
+          "xcvp1702-vsva5601-1LHP-i-L",
+          "xcvp1702-vsva5601-1LHP-i-S",
+          "xcvp1702-vsva5601-1LP-e-S",
+          "xcvp1702-vsva5601-1LP-i-L",
+          "xcvp1702-vsva5601-1LP-i-S",
+          "xcvp1702-vsva5601-1MP-e-S",
+          "xcvp1702-vsva5601-1MP-i-L",
+          "xcvp1702-vsva5601-1MP-i-S",
+          "xcvp1702-vsva5601-2LHP-e-L",
+          "xcvp1702-vsva5601-2LHP-e-S",
+          "xcvp1702-vsva5601-2LP-e-L",
+          "xcvp1702-vsva5601-2LP-e-S",
+          "xcvp1702-vsva5601-2MHP-e-L",
+          "xcvp1702-vsva5601-2MHP-e-S",
+          "xcvp1702-vsva5601-2MHP-i-L",
+          "xcvp1702-vsva5601-2MHP-i-S",
+          "xcvp1702-vsva5601-2MP-e-L",
+          "xcvp1702-vsva5601-2MP-e-S",
+          "xcvp1702-vsva5601-2MP-i-L",
+          "xcvp1702-vsva5601-2MP-i-S",
+          "xcvp1702-vsva5601-3HP-e-S"
+        ]
+      },
+      "xcvp1802": {
+        "xcvp1802-lsvc4072": [
+          "xcvp1802-lsvc4072-1LHP-i-L",
+          "xcvp1802-lsvc4072-1LHP-i-S",
+          "xcvp1802-lsvc4072-1LP-e-S",
+          "xcvp1802-lsvc4072-1LP-i-L",
+          "xcvp1802-lsvc4072-1LP-i-S",
+          "xcvp1802-lsvc4072-1MP-e-S",
+          "xcvp1802-lsvc4072-1MP-i-L",
+          "xcvp1802-lsvc4072-1MP-i-S",
+          "xcvp1802-lsvc4072-2LHP-e-L",
+          "xcvp1802-lsvc4072-2LHP-e-S",
+          "xcvp1802-lsvc4072-2LP-e-L",
+          "xcvp1802-lsvc4072-2LP-e-S",
+          "xcvp1802-lsvc4072-2MHP-e-L",
+          "xcvp1802-lsvc4072-2MHP-e-S",
+          "xcvp1802-lsvc4072-2MHP-i-L",
+          "xcvp1802-lsvc4072-2MHP-i-S",
+          "xcvp1802-lsvc4072-2MP-e-L",
+          "xcvp1802-lsvc4072-2MP-e-S",
+          "xcvp1802-lsvc4072-2MP-i-L",
+          "xcvp1802-lsvc4072-2MP-i-S",
+          "xcvp1802-lsvc4072-3HP-e-S"
+        ],
+        "xcvp1802-vsva5601": [
+          "xcvp1802-vsva5601-1LHP-i-L",
+          "xcvp1802-vsva5601-1LHP-i-S",
+          "xcvp1802-vsva5601-1LP-e-S",
+          "xcvp1802-vsva5601-1LP-i-L",
+          "xcvp1802-vsva5601-1LP-i-S",
+          "xcvp1802-vsva5601-1MP-e-S",
+          "xcvp1802-vsva5601-1MP-i-L",
+          "xcvp1802-vsva5601-1MP-i-S",
+          "xcvp1802-vsva5601-2LHP-e-L",
+          "xcvp1802-vsva5601-2LHP-e-S",
+          "xcvp1802-vsva5601-2LP-e-L",
+          "xcvp1802-vsva5601-2LP-e-S",
+          "xcvp1802-vsva5601-2MHP-e-L",
+          "xcvp1802-vsva5601-2MHP-e-S",
+          "xcvp1802-vsva5601-2MHP-i-L",
+          "xcvp1802-vsva5601-2MHP-i-S",
+          "xcvp1802-vsva5601-2MP-e-L",
+          "xcvp1802-vsva5601-2MP-e-S",
+          "xcvp1802-vsva5601-2MP-i-L",
+          "xcvp1802-vsva5601-2MP-i-S",
+          "xcvp1802-vsva5601-3HP-e-S"
+        ]
+      }
+    },
+    "versalprime": {
+      "xcvm1302": {
+        "xcvm1302-nbvb1024": [
+          "xcvm1302-nbvb1024-1LHP-i-L",
+          "xcvm1302-nbvb1024-1LHP-i-S",
+          "xcvm1302-nbvb1024-1LP-e-S",
+          "xcvm1302-nbvb1024-1LP-i-L",
+          "xcvm1302-nbvb1024-1LP-i-S",
+          "xcvm1302-nbvb1024-1MP-e-S",
+          "xcvm1302-nbvb1024-1MP-i-L",
+          "xcvm1302-nbvb1024-1MP-i-S",
+          "xcvm1302-nbvb1024-2HP-i-S",
+          "xcvm1302-nbvb1024-2LP-e-L",
+          "xcvm1302-nbvb1024-2LP-e-S",
+          "xcvm1302-nbvb1024-2MP-e-L",
+          "xcvm1302-nbvb1024-2MP-e-S",
+          "xcvm1302-nbvb1024-2MP-i-L",
+          "xcvm1302-nbvb1024-2MP-i-S"
+        ],
+        "xcvm1302-nsvf1369": [
+          "xcvm1302-nsvf1369-1LHP-i-L",
+          "xcvm1302-nsvf1369-1LHP-i-S",
+          "xcvm1302-nsvf1369-1LP-e-S",
+          "xcvm1302-nsvf1369-1LP-i-L",
+          "xcvm1302-nsvf1369-1LP-i-S",
+          "xcvm1302-nsvf1369-1MP-e-S",
+          "xcvm1302-nsvf1369-1MP-i-L",
+          "xcvm1302-nsvf1369-1MP-i-S",
+          "xcvm1302-nsvf1369-2HP-i-S",
+          "xcvm1302-nsvf1369-2LP-e-L",
+          "xcvm1302-nsvf1369-2LP-e-S",
+          "xcvm1302-nsvf1369-2MP-e-L",
+          "xcvm1302-nsvf1369-2MP-e-S",
+          "xcvm1302-nsvf1369-2MP-i-L",
+          "xcvm1302-nsvf1369-2MP-i-S"
+        ],
+        "xcvm1302-vfvc1596": [
+          "xcvm1302-vfvc1596-1LHP-i-L",
+          "xcvm1302-vfvc1596-1LHP-i-S",
+          "xcvm1302-vfvc1596-1LP-e-S",
+          "xcvm1302-vfvc1596-1LP-i-L",
+          "xcvm1302-vfvc1596-1LP-i-S",
+          "xcvm1302-vfvc1596-1MP-e-S",
+          "xcvm1302-vfvc1596-1MP-i-L",
+          "xcvm1302-vfvc1596-1MP-i-S",
+          "xcvm1302-vfvc1596-2HP-i-S",
+          "xcvm1302-vfvc1596-2LP-e-L",
+          "xcvm1302-vfvc1596-2LP-e-S",
+          "xcvm1302-vfvc1596-2MP-e-L",
+          "xcvm1302-vfvc1596-2MP-e-S",
+          "xcvm1302-vfvc1596-2MP-i-L",
+          "xcvm1302-vfvc1596-2MP-i-S"
+        ],
+        "xcvm1302-vsvd1760": [
+          "xcvm1302-vsvd1760-1LHP-i-L",
+          "xcvm1302-vsvd1760-1LHP-i-S",
+          "xcvm1302-vsvd1760-1LP-e-S",
+          "xcvm1302-vsvd1760-1LP-i-L",
+          "xcvm1302-vsvd1760-1LP-i-S",
+          "xcvm1302-vsvd1760-1MP-e-S",
+          "xcvm1302-vsvd1760-1MP-i-L",
+          "xcvm1302-vsvd1760-1MP-i-S",
+          "xcvm1302-vsvd1760-2HP-i-S",
+          "xcvm1302-vsvd1760-2LP-e-L",
+          "xcvm1302-vsvd1760-2LP-e-S",
+          "xcvm1302-vsvd1760-2MP-e-L",
+          "xcvm1302-vsvd1760-2MP-e-S",
+          "xcvm1302-vsvd1760-2MP-i-L",
+          "xcvm1302-vsvd1760-2MP-i-S"
+        ]
+      },
+      "xcvm1402": {
+        "xcvm1402-nbvb1024": [
+          "xcvm1402-nbvb1024-1LHP-i-L",
+          "xcvm1402-nbvb1024-1LHP-i-S",
+          "xcvm1402-nbvb1024-1LP-e-S",
+          "xcvm1402-nbvb1024-1LP-i-L",
+          "xcvm1402-nbvb1024-1LP-i-S",
+          "xcvm1402-nbvb1024-1MP-e-S",
+          "xcvm1402-nbvb1024-1MP-i-L",
+          "xcvm1402-nbvb1024-1MP-i-S",
+          "xcvm1402-nbvb1024-2HP-i-S",
+          "xcvm1402-nbvb1024-2LP-e-L",
+          "xcvm1402-nbvb1024-2LP-e-S",
+          "xcvm1402-nbvb1024-2MP-e-L",
+          "xcvm1402-nbvb1024-2MP-e-S",
+          "xcvm1402-nbvb1024-2MP-i-L",
+          "xcvm1402-nbvb1024-2MP-i-S"
+        ],
+        "xcvm1402-nsvf1369": [
+          "xcvm1402-nsvf1369-1LHP-i-L",
+          "xcvm1402-nsvf1369-1LHP-i-S",
+          "xcvm1402-nsvf1369-1LP-e-S",
+          "xcvm1402-nsvf1369-1LP-i-L",
+          "xcvm1402-nsvf1369-1LP-i-S",
+          "xcvm1402-nsvf1369-1MP-e-S",
+          "xcvm1402-nsvf1369-1MP-i-L",
+          "xcvm1402-nsvf1369-1MP-i-S",
+          "xcvm1402-nsvf1369-2HP-i-S",
+          "xcvm1402-nsvf1369-2LP-e-L",
+          "xcvm1402-nsvf1369-2LP-e-S",
+          "xcvm1402-nsvf1369-2MP-e-L",
+          "xcvm1402-nsvf1369-2MP-e-S",
+          "xcvm1402-nsvf1369-2MP-i-L",
+          "xcvm1402-nsvf1369-2MP-i-S"
+        ],
+        "xcvm1402-vfvc1596": [
+          "xcvm1402-vfvc1596-1LHP-i-L",
+          "xcvm1402-vfvc1596-1LHP-i-S",
+          "xcvm1402-vfvc1596-1LP-e-S",
+          "xcvm1402-vfvc1596-1LP-i-L",
+          "xcvm1402-vfvc1596-1LP-i-S",
+          "xcvm1402-vfvc1596-1MP-e-S",
+          "xcvm1402-vfvc1596-1MP-i-L",
+          "xcvm1402-vfvc1596-1MP-i-S",
+          "xcvm1402-vfvc1596-2HP-i-S",
+          "xcvm1402-vfvc1596-2LP-e-L",
+          "xcvm1402-vfvc1596-2LP-e-S",
+          "xcvm1402-vfvc1596-2MP-e-L",
+          "xcvm1402-vfvc1596-2MP-e-S",
+          "xcvm1402-vfvc1596-2MP-i-L",
+          "xcvm1402-vfvc1596-2MP-i-S"
+        ],
+        "xcvm1402-vsvd1760": [
+          "xcvm1402-vsvd1760-1LHP-i-L",
+          "xcvm1402-vsvd1760-1LHP-i-S",
+          "xcvm1402-vsvd1760-1LP-e-S",
+          "xcvm1402-vsvd1760-1LP-i-L",
+          "xcvm1402-vsvd1760-1LP-i-S",
+          "xcvm1402-vsvd1760-1MP-e-S",
+          "xcvm1402-vsvd1760-1MP-i-L",
+          "xcvm1402-vsvd1760-1MP-i-S",
+          "xcvm1402-vsvd1760-2HP-i-S",
+          "xcvm1402-vsvd1760-2LP-e-L",
+          "xcvm1402-vsvd1760-2LP-e-S",
+          "xcvm1402-vsvd1760-2MP-e-L",
+          "xcvm1402-vsvd1760-2MP-e-S",
+          "xcvm1402-vsvd1760-2MP-i-L",
+          "xcvm1402-vsvd1760-2MP-i-S"
+        ]
+      },
+      "xcvm1502": {
+        "xcvm1502-nfvb1369": [
+          "xcvm1502-nfvb1369-1LHP-i-L",
+          "xcvm1502-nfvb1369-1LHP-i-S",
+          "xcvm1502-nfvb1369-1LP-e-S",
+          "xcvm1502-nfvb1369-1LP-i-L",
+          "xcvm1502-nfvb1369-1LP-i-S",
+          "xcvm1502-nfvb1369-1MP-e-S",
+          "xcvm1502-nfvb1369-1MP-i-L",
+          "xcvm1502-nfvb1369-1MP-i-S",
+          "xcvm1502-nfvb1369-2HP-i-S",
+          "xcvm1502-nfvb1369-2LP-e-L",
+          "xcvm1502-nfvb1369-2LP-e-S",
+          "xcvm1502-nfvb1369-2MP-e-L",
+          "xcvm1502-nfvb1369-2MP-e-S",
+          "xcvm1502-nfvb1369-2MP-i-L",
+          "xcvm1502-nfvb1369-2MP-i-S"
+        ],
+        "xcvm1502-vfvc1760": [
+          "xcvm1502-vfvc1760-1LHP-i-L",
+          "xcvm1502-vfvc1760-1LHP-i-S",
+          "xcvm1502-vfvc1760-1LP-e-S",
+          "xcvm1502-vfvc1760-1LP-i-L",
+          "xcvm1502-vfvc1760-1LP-i-S",
+          "xcvm1502-vfvc1760-1MP-e-S",
+          "xcvm1502-vfvc1760-1MP-i-L",
+          "xcvm1502-vfvc1760-1MP-i-S",
+          "xcvm1502-vfvc1760-2HP-i-S",
+          "xcvm1502-vfvc1760-2LP-e-L",
+          "xcvm1502-vfvc1760-2LP-e-S",
+          "xcvm1502-vfvc1760-2MP-e-L",
+          "xcvm1502-vfvc1760-2MP-e-S",
+          "xcvm1502-vfvc1760-2MP-i-L",
+          "xcvm1502-vfvc1760-2MP-i-S"
+        ],
+        "xcvm1502-vsva2197": [
+          "xcvm1502-vsva2197-1LHP-i-L",
+          "xcvm1502-vsva2197-1LHP-i-S",
+          "xcvm1502-vsva2197-1LP-e-S",
+          "xcvm1502-vsva2197-1LP-i-L",
+          "xcvm1502-vsva2197-1LP-i-S",
+          "xcvm1502-vsva2197-1MP-e-S",
+          "xcvm1502-vsva2197-1MP-i-L",
+          "xcvm1502-vsva2197-1MP-i-S",
+          "xcvm1502-vsva2197-2HP-i-S",
+          "xcvm1502-vsva2197-2LP-e-L",
+          "xcvm1502-vsva2197-2LP-e-S",
+          "xcvm1502-vsva2197-2MP-e-L",
+          "xcvm1502-vsva2197-2MP-e-S",
+          "xcvm1502-vsva2197-2MP-i-L",
+          "xcvm1502-vsva2197-2MP-i-S"
+        ]
+      },
+      "xcvm1802": {
+        "xcvm1802-vfvc1760": [
+          "xcvm1802-vfvc1760-1LHP-i-L",
+          "xcvm1802-vfvc1760-1LHP-i-S",
+          "xcvm1802-vfvc1760-1LP-e-S",
+          "xcvm1802-vfvc1760-1LP-i-L",
+          "xcvm1802-vfvc1760-1LP-i-S",
+          "xcvm1802-vfvc1760-1MP-e-S",
+          "xcvm1802-vfvc1760-1MP-i-L",
+          "xcvm1802-vfvc1760-1MP-i-S",
+          "xcvm1802-vfvc1760-2HP-i-S",
+          "xcvm1802-vfvc1760-2LP-e-L",
+          "xcvm1802-vfvc1760-2LP-e-S",
+          "xcvm1802-vfvc1760-2MP-e-L",
+          "xcvm1802-vfvc1760-2MP-e-S",
+          "xcvm1802-vfvc1760-2MP-i-L",
+          "xcvm1802-vfvc1760-2MP-i-S",
+          "xcvm1802-vfvc1760-3HP-e-S"
+        ],
+        "xcvm1802-vsva2197": [
+          "xcvm1802-vsva2197-1LHP-i-L",
+          "xcvm1802-vsva2197-1LHP-i-S",
+          "xcvm1802-vsva2197-1LP-e-S",
+          "xcvm1802-vsva2197-1LP-i-L",
+          "xcvm1802-vsva2197-1LP-i-S",
+          "xcvm1802-vsva2197-1MP-e-S",
+          "xcvm1802-vsva2197-1MP-i-L",
+          "xcvm1802-vsva2197-1MP-i-S",
+          "xcvm1802-vsva2197-2HP-i-S",
+          "xcvm1802-vsva2197-2LP-e-L",
+          "xcvm1802-vsva2197-2LP-e-S",
+          "xcvm1802-vsva2197-2MP-e-L",
+          "xcvm1802-vsva2197-2MP-e-S",
+          "xcvm1802-vsva2197-2MP-i-L",
+          "xcvm1802-vsva2197-2MP-i-S",
+          "xcvm1802-vsva2197-3HP-e-S"
+        ],
+        "xcvm1802-vsvd1760": [
+          "xcvm1802-vsvd1760-1LHP-i-L",
+          "xcvm1802-vsvd1760-1LHP-i-S",
+          "xcvm1802-vsvd1760-1LP-e-S",
+          "xcvm1802-vsvd1760-1LP-i-L",
+          "xcvm1802-vsvd1760-1LP-i-S",
+          "xcvm1802-vsvd1760-1MP-e-S",
+          "xcvm1802-vsvd1760-1MP-i-L",
+          "xcvm1802-vsvd1760-1MP-i-S",
+          "xcvm1802-vsvd1760-2HP-i-S",
+          "xcvm1802-vsvd1760-2LP-e-L",
+          "xcvm1802-vsvd1760-2LP-e-S",
+          "xcvm1802-vsvd1760-2MP-e-L",
+          "xcvm1802-vsvd1760-2MP-e-S",
+          "xcvm1802-vsvd1760-2MP-i-L",
+          "xcvm1802-vsvd1760-2MP-i-S",
+          "xcvm1802-vsvd1760-3HP-e-S"
+        ]
+      }
+    },
+    "virtex7": {
+      "xc7v2000t": {
+        "xc7v2000tfhg1761": [
+          "xc7v2000tfhg1761-1",
+          "xc7v2000tfhg1761-2",
+          "xc7v2000tfhg1761-2G",
+          "xc7v2000tfhg1761-2L"
+        ],
+        "xc7v2000tflg1925": [
+          "xc7v2000tflg1925-1",
+          "xc7v2000tflg1925-2",
+          "xc7v2000tflg1925-2G",
+          "xc7v2000tflg1925-2L"
+        ]
+      },
+      "xc7v585t": {
+        "xc7v585tffg1157": [
+          "xc7v585tffg1157-1",
+          "xc7v585tffg1157-2",
+          "xc7v585tffg1157-2L",
+          "xc7v585tffg1157-3"
+        ],
+        "xc7v585tffg1761": [
+          "xc7v585tffg1761-1",
+          "xc7v585tffg1761-2",
+          "xc7v585tffg1761-2L",
+          "xc7v585tffg1761-3"
+        ]
+      },
+      "xc7vh580t": {
+        "xc7vh580tflg1155": [
+          "xc7vh580tflg1155-1",
+          "xc7vh580tflg1155-2",
+          "xc7vh580tflg1155-2G",
+          "xc7vh580tflg1155-2L"
+        ],
+        "xc7vh580tflg1931": [
+          "xc7vh580tflg1931-1",
+          "xc7vh580tflg1931-2",
+          "xc7vh580tflg1931-2G",
+          "xc7vh580tflg1931-2L"
+        ],
+        "xc7vh580thcg1155": [
+          "xc7vh580thcg1155-1",
+          "xc7vh580thcg1155-2",
+          "xc7vh580thcg1155-2G",
+          "xc7vh580thcg1155-2L"
+        ],
+        "xc7vh580thcg1931": [
+          "xc7vh580thcg1931-1",
+          "xc7vh580thcg1931-2",
+          "xc7vh580thcg1931-2G",
+          "xc7vh580thcg1931-2L"
+        ]
+      },
+      "xc7vh870t": {
+        "xc7vh870tflg1932": [
+          "xc7vh870tflg1932-1",
+          "xc7vh870tflg1932-2",
+          "xc7vh870tflg1932-2G",
+          "xc7vh870tflg1932-2L"
+        ],
+        "xc7vh870thcg1932": [
+          "xc7vh870thcg1932-1",
+          "xc7vh870thcg1932-2",
+          "xc7vh870thcg1932-2G",
+          "xc7vh870thcg1932-2L"
+        ]
+      },
+      "xc7vx1140t": {
+        "xc7vx1140tflg1926": [
+          "xc7vx1140tflg1926-1",
+          "xc7vx1140tflg1926-2",
+          "xc7vx1140tflg1926-2G",
+          "xc7vx1140tflg1926-2L"
+        ],
+        "xc7vx1140tflg1928": [
+          "xc7vx1140tflg1928-1",
+          "xc7vx1140tflg1928-2",
+          "xc7vx1140tflg1928-2G",
+          "xc7vx1140tflg1928-2L"
+        ],
+        "xc7vx1140tflg1930": [
+          "xc7vx1140tflg1930-1",
+          "xc7vx1140tflg1930-2",
+          "xc7vx1140tflg1930-2G",
+          "xc7vx1140tflg1930-2L"
+        ]
+      },
+      "xc7vx330t": {
+        "xc7vx330tffg1157": [
+          "xc7vx330tffg1157-1",
+          "xc7vx330tffg1157-2",
+          "xc7vx330tffg1157-2L",
+          "xc7vx330tffg1157-3"
+        ],
+        "xc7vx330tffg1761": [
+          "xc7vx330tffg1761-1",
+          "xc7vx330tffg1761-2",
+          "xc7vx330tffg1761-2L",
+          "xc7vx330tffg1761-3"
+        ],
+        "xc7vx330tffv1157": [
+          "xc7vx330tffv1157-1",
+          "xc7vx330tffv1157-2",
+          "xc7vx330tffv1157-2L",
+          "xc7vx330tffv1157-3"
+        ],
+        "xc7vx330tffv1761": [
+          "xc7vx330tffv1761-1",
+          "xc7vx330tffv1761-2",
+          "xc7vx330tffv1761-2L",
+          "xc7vx330tffv1761-3"
+        ]
+      },
+      "xc7vx415t": {
+        "xc7vx415tffg1157": [
+          "xc7vx415tffg1157-1",
+          "xc7vx415tffg1157-2",
+          "xc7vx415tffg1157-2L",
+          "xc7vx415tffg1157-3"
+        ],
+        "xc7vx415tffg1158": [
+          "xc7vx415tffg1158-1",
+          "xc7vx415tffg1158-2",
+          "xc7vx415tffg1158-2L",
+          "xc7vx415tffg1158-3"
+        ],
+        "xc7vx415tffg1927": [
+          "xc7vx415tffg1927-1",
+          "xc7vx415tffg1927-2",
+          "xc7vx415tffg1927-2L",
+          "xc7vx415tffg1927-3"
+        ],
+        "xc7vx415tffv1157": [
+          "xc7vx415tffv1157-1",
+          "xc7vx415tffv1157-2",
+          "xc7vx415tffv1157-2L",
+          "xc7vx415tffv1157-3"
+        ],
+        "xc7vx415tffv1158": [
+          "xc7vx415tffv1158-1",
+          "xc7vx415tffv1158-2",
+          "xc7vx415tffv1158-2L",
+          "xc7vx415tffv1158-3"
+        ],
+        "xc7vx415tffv1927": [
+          "xc7vx415tffv1927-1",
+          "xc7vx415tffv1927-2",
+          "xc7vx415tffv1927-2L",
+          "xc7vx415tffv1927-3"
+        ],
+        "xc7vx415t_CIVffg1157": [
+          "xc7vx415t_CIVffg1157-2",
+          "xc7vx415t_CIVffg1157-2L",
+          "xc7vx415t_CIVffg1157-3"
+        ],
+        "xc7vx415t_CIVffg1158": [
+          "xc7vx415t_CIVffg1158-2",
+          "xc7vx415t_CIVffg1158-2L",
+          "xc7vx415t_CIVffg1158-3"
+        ],
+        "xc7vx415t_CIVffg1927": [
+          "xc7vx415t_CIVffg1927-2",
+          "xc7vx415t_CIVffg1927-2L",
+          "xc7vx415t_CIVffg1927-3"
+        ],
+        "xc7vx415t_CIVffv1157": [
+          "xc7vx415t_CIVffv1157-2",
+          "xc7vx415t_CIVffv1157-2L",
+          "xc7vx415t_CIVffv1157-3"
+        ],
+        "xc7vx415t_CIVffv1158": [
+          "xc7vx415t_CIVffv1158-2",
+          "xc7vx415t_CIVffv1158-2L",
+          "xc7vx415t_CIVffv1158-3"
+        ],
+        "xc7vx415t_CIVffv1927": [
+          "xc7vx415t_CIVffv1927-2",
+          "xc7vx415t_CIVffv1927-2L",
+          "xc7vx415t_CIVffv1927-3"
+        ]
+      },
+      "xc7vx485t": {
+        "xc7vx485tffg1157": [
+          "xc7vx485tffg1157-1",
+          "xc7vx485tffg1157-2",
+          "xc7vx485tffg1157-2L",
+          "xc7vx485tffg1157-3"
+        ],
+        "xc7vx485tffg1158": [
+          "xc7vx485tffg1158-1",
+          "xc7vx485tffg1158-2",
+          "xc7vx485tffg1158-2L",
+          "xc7vx485tffg1158-3"
+        ],
+        "xc7vx485tffg1761": [
+          "xc7vx485tffg1761-1",
+          "xc7vx485tffg1761-2",
+          "xc7vx485tffg1761-2L",
+          "xc7vx485tffg1761-3"
+        ],
+        "xc7vx485tffg1927": [
+          "xc7vx485tffg1927-1",
+          "xc7vx485tffg1927-2",
+          "xc7vx485tffg1927-2L",
+          "xc7vx485tffg1927-3"
+        ],
+        "xc7vx485tffg1930": [
+          "xc7vx485tffg1930-1",
+          "xc7vx485tffg1930-2",
+          "xc7vx485tffg1930-2L",
+          "xc7vx485tffg1930-3"
+        ]
+      },
+      "xc7vx550t": {
+        "xc7vx550tffg1158": [
+          "xc7vx550tffg1158-1",
+          "xc7vx550tffg1158-2",
+          "xc7vx550tffg1158-2L",
+          "xc7vx550tffg1158-3"
+        ],
+        "xc7vx550tffg1927": [
+          "xc7vx550tffg1927-1",
+          "xc7vx550tffg1927-2",
+          "xc7vx550tffg1927-2L",
+          "xc7vx550tffg1927-3"
+        ],
+        "xc7vx550t_CIVffg1158": [
+          "xc7vx550t_CIVffg1158-1",
+          "xc7vx550t_CIVffg1158-2",
+          "xc7vx550t_CIVffg1158-2L",
+          "xc7vx550t_CIVffg1158-3"
+        ],
+        "xc7vx550t_CIVffg1927": [
+          "xc7vx550t_CIVffg1927-1",
+          "xc7vx550t_CIVffg1927-2",
+          "xc7vx550t_CIVffg1927-2L",
+          "xc7vx550t_CIVffg1927-3"
+        ]
+      },
+      "xc7vx690t": {
+        "xc7vx690tffg1157": [
+          "xc7vx690tffg1157-1",
+          "xc7vx690tffg1157-2",
+          "xc7vx690tffg1157-2L",
+          "xc7vx690tffg1157-3"
+        ],
+        "xc7vx690tffg1158": [
+          "xc7vx690tffg1158-1",
+          "xc7vx690tffg1158-2",
+          "xc7vx690tffg1158-2L",
+          "xc7vx690tffg1158-3"
+        ],
+        "xc7vx690tffg1761": [
+          "xc7vx690tffg1761-1",
+          "xc7vx690tffg1761-2",
+          "xc7vx690tffg1761-2L",
+          "xc7vx690tffg1761-3"
+        ],
+        "xc7vx690tffg1926": [
+          "xc7vx690tffg1926-1",
+          "xc7vx690tffg1926-2",
+          "xc7vx690tffg1926-2L",
+          "xc7vx690tffg1926-3"
+        ],
+        "xc7vx690tffg1927": [
+          "xc7vx690tffg1927-1",
+          "xc7vx690tffg1927-2",
+          "xc7vx690tffg1927-2L",
+          "xc7vx690tffg1927-3"
+        ],
+        "xc7vx690tffg1930": [
+          "xc7vx690tffg1930-1",
+          "xc7vx690tffg1930-2",
+          "xc7vx690tffg1930-2L",
+          "xc7vx690tffg1930-3"
+        ],
+        "xc7vx690t_CIVffg1157": [
+          "xc7vx690t_CIVffg1157-1",
+          "xc7vx690t_CIVffg1157-2",
+          "xc7vx690t_CIVffg1157-2L",
+          "xc7vx690t_CIVffg1157-3"
+        ],
+        "xc7vx690t_CIVffg1158": [
+          "xc7vx690t_CIVffg1158-1",
+          "xc7vx690t_CIVffg1158-2",
+          "xc7vx690t_CIVffg1158-2L",
+          "xc7vx690t_CIVffg1158-3"
+        ],
+        "xc7vx690t_CIVffg1761": [
+          "xc7vx690t_CIVffg1761-1",
+          "xc7vx690t_CIVffg1761-2",
+          "xc7vx690t_CIVffg1761-2L",
+          "xc7vx690t_CIVffg1761-3"
+        ],
+        "xc7vx690t_CIVffg1926": [
+          "xc7vx690t_CIVffg1926-1",
+          "xc7vx690t_CIVffg1926-2",
+          "xc7vx690t_CIVffg1926-2L",
+          "xc7vx690t_CIVffg1926-3"
+        ],
+        "xc7vx690t_CIVffg1927": [
+          "xc7vx690t_CIVffg1927-1",
+          "xc7vx690t_CIVffg1927-2",
+          "xc7vx690t_CIVffg1927-2L",
+          "xc7vx690t_CIVffg1927-3"
+        ],
+        "xc7vx690t_CIVffg1930": [
+          "xc7vx690t_CIVffg1930-1",
+          "xc7vx690t_CIVffg1930-2",
+          "xc7vx690t_CIVffg1930-2L",
+          "xc7vx690t_CIVffg1930-3"
+        ]
+      },
+      "xc7vx980t": {
+        "xc7vx980tffg1926": [
+          "xc7vx980tffg1926-1",
+          "xc7vx980tffg1926-2",
+          "xc7vx980tffg1926-2L"
+        ],
+        "xc7vx980tffg1928": [
+          "xc7vx980tffg1928-1",
+          "xc7vx980tffg1928-2",
+          "xc7vx980tffg1928-2L"
+        ],
+        "xc7vx980tffg1930": [
+          "xc7vx980tffg1930-1",
+          "xc7vx980tffg1930-2",
+          "xc7vx980tffg1930-2L"
+        ]
+      }
+    },
+    "virtexu": {
+      "xcvu065": {
+        "xcvu065-ffvc1517": [
+          "xcvu065-ffvc1517-1-i",
+          "xcvu065-ffvc1517-1H-e",
+          "xcvu065-ffvc1517-1HV-e",
+          "xcvu065-ffvc1517-2-e",
+          "xcvu065-ffvc1517-2-i",
+          "xcvu065-ffvc1517-3-e"
+        ],
+        "xcvu065_CIV-ffvc1517": [
+          "xcvu065_CIV-ffvc1517-1-i",
+          "xcvu065_CIV-ffvc1517-1H-e",
+          "xcvu065_CIV-ffvc1517-1HV-e",
+          "xcvu065_CIV-ffvc1517-2-e",
+          "xcvu065_CIV-ffvc1517-2-i",
+          "xcvu065_CIV-ffvc1517-3-e"
+        ]
+      },
+      "xcvu080": {
+        "xcvu080-ffva2104": [
+          "xcvu080-ffva2104-1-i",
+          "xcvu080-ffva2104-1H-e",
+          "xcvu080-ffva2104-1HV-e",
+          "xcvu080-ffva2104-2-e",
+          "xcvu080-ffva2104-2-i",
+          "xcvu080-ffva2104-3-e"
+        ],
+        "xcvu080-ffvb1760": [
+          "xcvu080-ffvb1760-1-i",
+          "xcvu080-ffvb1760-1H-e",
+          "xcvu080-ffvb1760-1HV-e",
+          "xcvu080-ffvb1760-2-e",
+          "xcvu080-ffvb1760-2-i",
+          "xcvu080-ffvb1760-3-e"
+        ],
+        "xcvu080-ffvb2104": [
+          "xcvu080-ffvb2104-1-i",
+          "xcvu080-ffvb2104-1H-e",
+          "xcvu080-ffvb2104-1HV-e",
+          "xcvu080-ffvb2104-2-e",
+          "xcvu080-ffvb2104-2-i",
+          "xcvu080-ffvb2104-3-e"
+        ],
+        "xcvu080-ffvc1517": [
+          "xcvu080-ffvc1517-1-i",
+          "xcvu080-ffvc1517-1H-e",
+          "xcvu080-ffvc1517-1HV-e",
+          "xcvu080-ffvc1517-2-e",
+          "xcvu080-ffvc1517-2-i",
+          "xcvu080-ffvc1517-3-e"
+        ],
+        "xcvu080-ffvd1517": [
+          "xcvu080-ffvd1517-1-i",
+          "xcvu080-ffvd1517-1H-e",
+          "xcvu080-ffvd1517-1HV-e",
+          "xcvu080-ffvd1517-2-e",
+          "xcvu080-ffvd1517-2-i",
+          "xcvu080-ffvd1517-3-e"
+        ],
+        "xcvu080_CIV-ffva2104": [
+          "xcvu080_CIV-ffva2104-1-i",
+          "xcvu080_CIV-ffva2104-1H-e",
+          "xcvu080_CIV-ffva2104-1HV-e",
+          "xcvu080_CIV-ffva2104-2-e",
+          "xcvu080_CIV-ffva2104-2-i",
+          "xcvu080_CIV-ffva2104-3-e"
+        ],
+        "xcvu080_CIV-ffvb1760": [
+          "xcvu080_CIV-ffvb1760-1-i",
+          "xcvu080_CIV-ffvb1760-1H-e",
+          "xcvu080_CIV-ffvb1760-1HV-e",
+          "xcvu080_CIV-ffvb1760-2-e",
+          "xcvu080_CIV-ffvb1760-2-i",
+          "xcvu080_CIV-ffvb1760-3-e"
+        ],
+        "xcvu080_CIV-ffvb2104": [
+          "xcvu080_CIV-ffvb2104-1-i",
+          "xcvu080_CIV-ffvb2104-1H-e",
+          "xcvu080_CIV-ffvb2104-1HV-e",
+          "xcvu080_CIV-ffvb2104-2-e",
+          "xcvu080_CIV-ffvb2104-2-i",
+          "xcvu080_CIV-ffvb2104-3-e"
+        ],
+        "xcvu080_CIV-ffvc1517": [
+          "xcvu080_CIV-ffvc1517-1-i",
+          "xcvu080_CIV-ffvc1517-1H-e",
+          "xcvu080_CIV-ffvc1517-1HV-e",
+          "xcvu080_CIV-ffvc1517-2-e",
+          "xcvu080_CIV-ffvc1517-2-i",
+          "xcvu080_CIV-ffvc1517-3-e"
+        ],
+        "xcvu080_CIV-ffvd1517": [
+          "xcvu080_CIV-ffvd1517-1-i",
+          "xcvu080_CIV-ffvd1517-1H-e",
+          "xcvu080_CIV-ffvd1517-1HV-e",
+          "xcvu080_CIV-ffvd1517-2-e",
+          "xcvu080_CIV-ffvd1517-2-i",
+          "xcvu080_CIV-ffvd1517-3-e"
+        ]
+      },
+      "xcvu095": {
+        "xcvu095-ffva2104": [
+          "xcvu095-ffva2104-1-i",
+          "xcvu095-ffva2104-1H-e",
+          "xcvu095-ffva2104-1HV-e",
+          "xcvu095-ffva2104-2-e",
+          "xcvu095-ffva2104-2-i",
+          "xcvu095-ffva2104-3-e"
+        ],
+        "xcvu095-ffvb1760": [
+          "xcvu095-ffvb1760-1-i",
+          "xcvu095-ffvb1760-1H-e",
+          "xcvu095-ffvb1760-1HV-e",
+          "xcvu095-ffvb1760-2-e",
+          "xcvu095-ffvb1760-2-i",
+          "xcvu095-ffvb1760-3-e"
+        ],
+        "xcvu095-ffvb2104": [
+          "xcvu095-ffvb2104-1-i",
+          "xcvu095-ffvb2104-1H-e",
+          "xcvu095-ffvb2104-1HV-e",
+          "xcvu095-ffvb2104-2-e",
+          "xcvu095-ffvb2104-2-i",
+          "xcvu095-ffvb2104-3-e"
+        ],
+        "xcvu095-ffvc1517": [
+          "xcvu095-ffvc1517-1-i",
+          "xcvu095-ffvc1517-1H-e",
+          "xcvu095-ffvc1517-1HV-e",
+          "xcvu095-ffvc1517-2-e",
+          "xcvu095-ffvc1517-2-i",
+          "xcvu095-ffvc1517-3-e"
+        ],
+        "xcvu095-ffvc2104": [
+          "xcvu095-ffvc2104-1-i",
+          "xcvu095-ffvc2104-1H-e",
+          "xcvu095-ffvc2104-1HV-e",
+          "xcvu095-ffvc2104-2-e",
+          "xcvu095-ffvc2104-2-i",
+          "xcvu095-ffvc2104-3-e"
+        ],
+        "xcvu095-ffvd1517": [
+          "xcvu095-ffvd1517-1-i",
+          "xcvu095-ffvd1517-1H-e",
+          "xcvu095-ffvd1517-1HV-e",
+          "xcvu095-ffvd1517-2-e",
+          "xcvu095-ffvd1517-2-i",
+          "xcvu095-ffvd1517-3-e"
+        ],
+        "xcvu095_CIV-ffva2104": [
+          "xcvu095_CIV-ffva2104-1-i",
+          "xcvu095_CIV-ffva2104-1H-e",
+          "xcvu095_CIV-ffva2104-1HV-e",
+          "xcvu095_CIV-ffva2104-2-e",
+          "xcvu095_CIV-ffva2104-2-i",
+          "xcvu095_CIV-ffva2104-3-e"
+        ],
+        "xcvu095_CIV-ffvb1760": [
+          "xcvu095_CIV-ffvb1760-1-i",
+          "xcvu095_CIV-ffvb1760-1H-e",
+          "xcvu095_CIV-ffvb1760-1HV-e",
+          "xcvu095_CIV-ffvb1760-2-e",
+          "xcvu095_CIV-ffvb1760-2-i",
+          "xcvu095_CIV-ffvb1760-3-e"
+        ],
+        "xcvu095_CIV-ffvb2104": [
+          "xcvu095_CIV-ffvb2104-1-i",
+          "xcvu095_CIV-ffvb2104-1H-e",
+          "xcvu095_CIV-ffvb2104-1HV-e",
+          "xcvu095_CIV-ffvb2104-2-e",
+          "xcvu095_CIV-ffvb2104-2-i",
+          "xcvu095_CIV-ffvb2104-3-e"
+        ],
+        "xcvu095_CIV-ffvc1517": [
+          "xcvu095_CIV-ffvc1517-1-i",
+          "xcvu095_CIV-ffvc1517-1H-e",
+          "xcvu095_CIV-ffvc1517-1HV-e",
+          "xcvu095_CIV-ffvc1517-2-e",
+          "xcvu095_CIV-ffvc1517-2-i",
+          "xcvu095_CIV-ffvc1517-3-e"
+        ],
+        "xcvu095_CIV-ffvc2104": [
+          "xcvu095_CIV-ffvc2104-1-i",
+          "xcvu095_CIV-ffvc2104-1H-e",
+          "xcvu095_CIV-ffvc2104-1HV-e",
+          "xcvu095_CIV-ffvc2104-2-e",
+          "xcvu095_CIV-ffvc2104-2-i",
+          "xcvu095_CIV-ffvc2104-3-e"
+        ],
+        "xcvu095_CIV-ffvd1517": [
+          "xcvu095_CIV-ffvd1517-1-i",
+          "xcvu095_CIV-ffvd1517-1H-e",
+          "xcvu095_CIV-ffvd1517-1HV-e",
+          "xcvu095_CIV-ffvd1517-2-e",
+          "xcvu095_CIV-ffvd1517-2-i",
+          "xcvu095_CIV-ffvd1517-3-e"
+        ]
+      },
+      "xcvu125": {
+        "xcvu125-flva2104": [
+          "xcvu125-flva2104-1-i",
+          "xcvu125-flva2104-1H-e",
+          "xcvu125-flva2104-1HV-e",
+          "xcvu125-flva2104-2-e",
+          "xcvu125-flva2104-2-i",
+          "xcvu125-flva2104-3-e"
+        ],
+        "xcvu125-flvb1760": [
+          "xcvu125-flvb1760-1-i",
+          "xcvu125-flvb1760-1H-e",
+          "xcvu125-flvb1760-1HV-e",
+          "xcvu125-flvb1760-2-e",
+          "xcvu125-flvb1760-2-i",
+          "xcvu125-flvb1760-3-e"
+        ],
+        "xcvu125-flvb2104": [
+          "xcvu125-flvb2104-1-i",
+          "xcvu125-flvb2104-1H-e",
+          "xcvu125-flvb2104-1HV-e",
+          "xcvu125-flvb2104-2-e",
+          "xcvu125-flvb2104-2-i",
+          "xcvu125-flvb2104-3-e"
+        ],
+        "xcvu125-flvc2104": [
+          "xcvu125-flvc2104-1-i",
+          "xcvu125-flvc2104-1H-e",
+          "xcvu125-flvc2104-1HV-e",
+          "xcvu125-flvc2104-2-e",
+          "xcvu125-flvc2104-2-i",
+          "xcvu125-flvc2104-3-e"
+        ],
+        "xcvu125-flvd1517": [
+          "xcvu125-flvd1517-1-i",
+          "xcvu125-flvd1517-1H-e",
+          "xcvu125-flvd1517-1HV-e",
+          "xcvu125-flvd1517-2-e",
+          "xcvu125-flvd1517-2-i",
+          "xcvu125-flvd1517-3-e"
+        ],
+        "xcvu125_CIV-flva2104": [
+          "xcvu125_CIV-flva2104-1-i",
+          "xcvu125_CIV-flva2104-1H-e",
+          "xcvu125_CIV-flva2104-1HV-e",
+          "xcvu125_CIV-flva2104-2-e",
+          "xcvu125_CIV-flva2104-2-i",
+          "xcvu125_CIV-flva2104-3-e"
+        ],
+        "xcvu125_CIV-flvb1760": [
+          "xcvu125_CIV-flvb1760-1-i",
+          "xcvu125_CIV-flvb1760-1H-e",
+          "xcvu125_CIV-flvb1760-1HV-e",
+          "xcvu125_CIV-flvb1760-2-e",
+          "xcvu125_CIV-flvb1760-2-i",
+          "xcvu125_CIV-flvb1760-3-e"
+        ],
+        "xcvu125_CIV-flvb2104": [
+          "xcvu125_CIV-flvb2104-1-i",
+          "xcvu125_CIV-flvb2104-1H-e",
+          "xcvu125_CIV-flvb2104-1HV-e",
+          "xcvu125_CIV-flvb2104-2-e",
+          "xcvu125_CIV-flvb2104-2-i",
+          "xcvu125_CIV-flvb2104-3-e"
+        ],
+        "xcvu125_CIV-flvc2104": [
+          "xcvu125_CIV-flvc2104-1-i",
+          "xcvu125_CIV-flvc2104-1H-e",
+          "xcvu125_CIV-flvc2104-1HV-e",
+          "xcvu125_CIV-flvc2104-2-e",
+          "xcvu125_CIV-flvc2104-2-i",
+          "xcvu125_CIV-flvc2104-3-e"
+        ],
+        "xcvu125_CIV-flvd1517": [
+          "xcvu125_CIV-flvd1517-1-i",
+          "xcvu125_CIV-flvd1517-1H-e",
+          "xcvu125_CIV-flvd1517-1HV-e",
+          "xcvu125_CIV-flvd1517-2-e",
+          "xcvu125_CIV-flvd1517-2-i",
+          "xcvu125_CIV-flvd1517-3-e"
+        ]
+      },
+      "xcvu160": {
+        "xcvu160-flgb2104": [
+          "xcvu160-flgb2104-1-i",
+          "xcvu160-flgb2104-1H-e",
+          "xcvu160-flgb2104-1HV-e",
+          "xcvu160-flgb2104-2-e",
+          "xcvu160-flgb2104-2-i",
+          "xcvu160-flgb2104-3-e"
+        ],
+        "xcvu160-flgc2104": [
+          "xcvu160-flgc2104-1-i",
+          "xcvu160-flgc2104-1H-e",
+          "xcvu160-flgc2104-1HV-e",
+          "xcvu160-flgc2104-2-e",
+          "xcvu160-flgc2104-2-i",
+          "xcvu160-flgc2104-3-e"
+        ],
+        "xcvu160_CIV-flgb2104": [
+          "xcvu160_CIV-flgb2104-1-i",
+          "xcvu160_CIV-flgb2104-1H-e",
+          "xcvu160_CIV-flgb2104-1HV-e",
+          "xcvu160_CIV-flgb2104-2-e",
+          "xcvu160_CIV-flgb2104-2-i",
+          "xcvu160_CIV-flgb2104-3-e"
+        ],
+        "xcvu160_CIV-flgc2104": [
+          "xcvu160_CIV-flgc2104-1-i",
+          "xcvu160_CIV-flgc2104-1H-e",
+          "xcvu160_CIV-flgc2104-1HV-e",
+          "xcvu160_CIV-flgc2104-2-e",
+          "xcvu160_CIV-flgc2104-2-i",
+          "xcvu160_CIV-flgc2104-3-e"
+        ]
+      },
+      "xcvu190": {
+        "xcvu190-flga2577": [
+          "xcvu190-flga2577-1-i",
+          "xcvu190-flga2577-1H-e",
+          "xcvu190-flga2577-1HV-e",
+          "xcvu190-flga2577-2-e",
+          "xcvu190-flga2577-2-i",
+          "xcvu190-flga2577-3-e"
+        ],
+        "xcvu190-flgb2104": [
+          "xcvu190-flgb2104-1-i",
+          "xcvu190-flgb2104-1H-e",
+          "xcvu190-flgb2104-1HV-e",
+          "xcvu190-flgb2104-2-e",
+          "xcvu190-flgb2104-2-i",
+          "xcvu190-flgb2104-3-e"
+        ],
+        "xcvu190-flgc2104": [
+          "xcvu190-flgc2104-1-i",
+          "xcvu190-flgc2104-1H-e",
+          "xcvu190-flgc2104-1HV-e",
+          "xcvu190-flgc2104-2-e",
+          "xcvu190-flgc2104-2-i",
+          "xcvu190-flgc2104-3-e"
+        ],
+        "xcvu190_CIV-flga2577": [
+          "xcvu190_CIV-flga2577-1-i",
+          "xcvu190_CIV-flga2577-1H-e",
+          "xcvu190_CIV-flga2577-1HV-e",
+          "xcvu190_CIV-flga2577-2-e",
+          "xcvu190_CIV-flga2577-2-i",
+          "xcvu190_CIV-flga2577-3-e"
+        ],
+        "xcvu190_CIV-flgb2104": [
+          "xcvu190_CIV-flgb2104-1-i",
+          "xcvu190_CIV-flgb2104-1H-e",
+          "xcvu190_CIV-flgb2104-1HV-e",
+          "xcvu190_CIV-flgb2104-2-e",
+          "xcvu190_CIV-flgb2104-2-i",
+          "xcvu190_CIV-flgb2104-3-e"
+        ],
+        "xcvu190_CIV-flgc2104": [
+          "xcvu190_CIV-flgc2104-1-i",
+          "xcvu190_CIV-flgc2104-1H-e",
+          "xcvu190_CIV-flgc2104-1HV-e",
+          "xcvu190_CIV-flgc2104-2-e",
+          "xcvu190_CIV-flgc2104-2-i",
+          "xcvu190_CIV-flgc2104-3-e"
+        ]
+      },
+      "xcvu440": {
+        "xcvu440-flga2892": [
+          "xcvu440-flga2892-1-c",
+          "xcvu440-flga2892-1-i",
+          "xcvu440-flga2892-2-e",
+          "xcvu440-flga2892-2-i",
+          "xcvu440-flga2892-3-e"
+        ],
+        "xcvu440-flgb2377": [
+          "xcvu440-flgb2377-1-c",
+          "xcvu440-flgb2377-1-i",
+          "xcvu440-flgb2377-2-e",
+          "xcvu440-flgb2377-2-i",
+          "xcvu440-flgb2377-3-e"
+        ],
+        "xcvu440_CIV-flga2892": [
+          "xcvu440_CIV-flga2892-1-c",
+          "xcvu440_CIV-flga2892-1-i",
+          "xcvu440_CIV-flga2892-2-e",
+          "xcvu440_CIV-flga2892-2-i",
+          "xcvu440_CIV-flga2892-3-e"
+        ],
+        "xcvu440_CIV-flgb2377": [
+          "xcvu440_CIV-flgb2377-1-c",
+          "xcvu440_CIV-flgb2377-1-i",
+          "xcvu440_CIV-flgb2377-2-e",
+          "xcvu440_CIV-flgb2377-2-i",
+          "xcvu440_CIV-flgb2377-3-e"
+        ]
+      }
+    },
+    "virtexuplus": {
+      "xcu200": {
+        "xcu200-fsgd2104": [
+          "xcu200-fsgd2104-2-e"
+        ]
+      },
+      "xcu250": {
+        "xcu250-figd2104": [
+          "xcu250-figd2104-2-e",
+          "xcu250-figd2104-2L-e",
+          "xcu250-figd2104-2LV-e"
+        ]
+      },
+      "xcvu11p": {
+        "xcvu11p-flga2577": [
+          "xcvu11p-flga2577-1-e",
+          "xcvu11p-flga2577-1-i",
+          "xcvu11p-flga2577-2-e",
+          "xcvu11p-flga2577-2-i",
+          "xcvu11p-flga2577-2L-e",
+          "xcvu11p-flga2577-2LV-e",
+          "xcvu11p-flga2577-3-e"
+        ],
+        "xcvu11p-flgb2104": [
+          "xcvu11p-flgb2104-1-e",
+          "xcvu11p-flgb2104-1-i",
+          "xcvu11p-flgb2104-2-e",
+          "xcvu11p-flgb2104-2-i",
+          "xcvu11p-flgb2104-2L-e",
+          "xcvu11p-flgb2104-2LV-e",
+          "xcvu11p-flgb2104-3-e"
+        ],
+        "xcvu11p-flgc2104": [
+          "xcvu11p-flgc2104-1-e",
+          "xcvu11p-flgc2104-1-i",
+          "xcvu11p-flgc2104-2-e",
+          "xcvu11p-flgc2104-2-i",
+          "xcvu11p-flgc2104-2L-e",
+          "xcvu11p-flgc2104-2LV-e",
+          "xcvu11p-flgc2104-3-e"
+        ],
+        "xcvu11p-flgf1924": [
+          "xcvu11p-flgf1924-1-e",
+          "xcvu11p-flgf1924-1-i",
+          "xcvu11p-flgf1924-2-e",
+          "xcvu11p-flgf1924-2-i",
+          "xcvu11p-flgf1924-2L-e",
+          "xcvu11p-flgf1924-2LV-e",
+          "xcvu11p-flgf1924-3-e"
+        ],
+        "xcvu11p-fsgd2104": [
+          "xcvu11p-fsgd2104-1-e",
+          "xcvu11p-fsgd2104-1-i",
+          "xcvu11p-fsgd2104-2-e",
+          "xcvu11p-fsgd2104-2-i",
+          "xcvu11p-fsgd2104-2L-e",
+          "xcvu11p-fsgd2104-2LV-e",
+          "xcvu11p-fsgd2104-3-e"
+        ],
+        "xcvu11p_CIV-flga2577": [
+          "xcvu11p_CIV-flga2577-1-e",
+          "xcvu11p_CIV-flga2577-1-i",
+          "xcvu11p_CIV-flga2577-2-e",
+          "xcvu11p_CIV-flga2577-2-i",
+          "xcvu11p_CIV-flga2577-2L-e",
+          "xcvu11p_CIV-flga2577-2LV-e",
+          "xcvu11p_CIV-flga2577-3-e"
+        ],
+        "xcvu11p_CIV-flgb2104": [
+          "xcvu11p_CIV-flgb2104-1-e",
+          "xcvu11p_CIV-flgb2104-1-i",
+          "xcvu11p_CIV-flgb2104-2-e",
+          "xcvu11p_CIV-flgb2104-2-i",
+          "xcvu11p_CIV-flgb2104-2L-e",
+          "xcvu11p_CIV-flgb2104-2LV-e",
+          "xcvu11p_CIV-flgb2104-3-e"
+        ],
+        "xcvu11p_CIV-flgc2104": [
+          "xcvu11p_CIV-flgc2104-1-e",
+          "xcvu11p_CIV-flgc2104-1-i",
+          "xcvu11p_CIV-flgc2104-2-e",
+          "xcvu11p_CIV-flgc2104-2-i",
+          "xcvu11p_CIV-flgc2104-2L-e",
+          "xcvu11p_CIV-flgc2104-2LV-e",
+          "xcvu11p_CIV-flgc2104-3-e"
+        ],
+        "xcvu11p_CIV-flgf1924": [
+          "xcvu11p_CIV-flgf1924-1-e",
+          "xcvu11p_CIV-flgf1924-1-i",
+          "xcvu11p_CIV-flgf1924-2-e",
+          "xcvu11p_CIV-flgf1924-2-i",
+          "xcvu11p_CIV-flgf1924-2L-e",
+          "xcvu11p_CIV-flgf1924-2LV-e",
+          "xcvu11p_CIV-flgf1924-3-e"
+        ],
+        "xcvu11p_CIV-fsgd2104": [
+          "xcvu11p_CIV-fsgd2104-1-e",
+          "xcvu11p_CIV-fsgd2104-1-i",
+          "xcvu11p_CIV-fsgd2104-2-e",
+          "xcvu11p_CIV-fsgd2104-2-i",
+          "xcvu11p_CIV-fsgd2104-2L-e",
+          "xcvu11p_CIV-fsgd2104-2LV-e",
+          "xcvu11p_CIV-fsgd2104-3-e"
+        ]
+      },
+      "xcvu13p": {
+        "xcvu13p-fhga2104": [
+          "xcvu13p-fhga2104-1-e",
+          "xcvu13p-fhga2104-1-i",
+          "xcvu13p-fhga2104-2-e",
+          "xcvu13p-fhga2104-2-i",
+          "xcvu13p-fhga2104-2L-e",
+          "xcvu13p-fhga2104-2LV-e",
+          "xcvu13p-fhga2104-3-e"
+        ],
+        "xcvu13p-fhgb2104": [
+          "xcvu13p-fhgb2104-1-e",
+          "xcvu13p-fhgb2104-1-i",
+          "xcvu13p-fhgb2104-2-e",
+          "xcvu13p-fhgb2104-2-i",
+          "xcvu13p-fhgb2104-2L-e",
+          "xcvu13p-fhgb2104-2LV-e",
+          "xcvu13p-fhgb2104-3-e"
+        ],
+        "xcvu13p-fhgc2104": [
+          "xcvu13p-fhgc2104-1-e",
+          "xcvu13p-fhgc2104-1-i",
+          "xcvu13p-fhgc2104-2-e",
+          "xcvu13p-fhgc2104-2-i",
+          "xcvu13p-fhgc2104-2L-e",
+          "xcvu13p-fhgc2104-2LV-e",
+          "xcvu13p-fhgc2104-3-e"
+        ],
+        "xcvu13p-figd2104": [
+          "xcvu13p-figd2104-1-e",
+          "xcvu13p-figd2104-1-i",
+          "xcvu13p-figd2104-2-e",
+          "xcvu13p-figd2104-2-i",
+          "xcvu13p-figd2104-2L-e",
+          "xcvu13p-figd2104-2LV-e",
+          "xcvu13p-figd2104-3-e"
+        ],
+        "xcvu13p-flga2577": [
+          "xcvu13p-flga2577-1-e",
+          "xcvu13p-flga2577-1-i",
+          "xcvu13p-flga2577-2-e",
+          "xcvu13p-flga2577-2-i",
+          "xcvu13p-flga2577-2L-e",
+          "xcvu13p-flga2577-2LV-e",
+          "xcvu13p-flga2577-3-e"
+        ],
+        "xcvu13p-fsga2577": [
+          "xcvu13p-fsga2577-1-e",
+          "xcvu13p-fsga2577-1-i",
+          "xcvu13p-fsga2577-2-e",
+          "xcvu13p-fsga2577-2-i",
+          "xcvu13p-fsga2577-2L-e",
+          "xcvu13p-fsga2577-2LV-e",
+          "xcvu13p-fsga2577-3-e"
+        ],
+        "xcvu13p_CIV-fhga2104": [
+          "xcvu13p_CIV-fhga2104-1-e",
+          "xcvu13p_CIV-fhga2104-1-i",
+          "xcvu13p_CIV-fhga2104-2-e",
+          "xcvu13p_CIV-fhga2104-2-i",
+          "xcvu13p_CIV-fhga2104-2L-e",
+          "xcvu13p_CIV-fhga2104-2LV-e",
+          "xcvu13p_CIV-fhga2104-3-e"
+        ],
+        "xcvu13p_CIV-fhgb2104": [
+          "xcvu13p_CIV-fhgb2104-1-e",
+          "xcvu13p_CIV-fhgb2104-1-i",
+          "xcvu13p_CIV-fhgb2104-2-e",
+          "xcvu13p_CIV-fhgb2104-2-i",
+          "xcvu13p_CIV-fhgb2104-2L-e",
+          "xcvu13p_CIV-fhgb2104-2LV-e",
+          "xcvu13p_CIV-fhgb2104-3-e"
+        ],
+        "xcvu13p_CIV-fhgc2104": [
+          "xcvu13p_CIV-fhgc2104-1-e",
+          "xcvu13p_CIV-fhgc2104-1-i",
+          "xcvu13p_CIV-fhgc2104-2-e",
+          "xcvu13p_CIV-fhgc2104-2-i",
+          "xcvu13p_CIV-fhgc2104-2L-e",
+          "xcvu13p_CIV-fhgc2104-2LV-e",
+          "xcvu13p_CIV-fhgc2104-3-e"
+        ],
+        "xcvu13p_CIV-figd2104": [
+          "xcvu13p_CIV-figd2104-1-e",
+          "xcvu13p_CIV-figd2104-1-i",
+          "xcvu13p_CIV-figd2104-2-e",
+          "xcvu13p_CIV-figd2104-2-i",
+          "xcvu13p_CIV-figd2104-2L-e",
+          "xcvu13p_CIV-figd2104-2LV-e",
+          "xcvu13p_CIV-figd2104-3-e"
+        ],
+        "xcvu13p_CIV-flga2577": [
+          "xcvu13p_CIV-flga2577-1-e",
+          "xcvu13p_CIV-flga2577-1-i",
+          "xcvu13p_CIV-flga2577-2-e",
+          "xcvu13p_CIV-flga2577-2-i",
+          "xcvu13p_CIV-flga2577-2L-e",
+          "xcvu13p_CIV-flga2577-2LV-e",
+          "xcvu13p_CIV-flga2577-3-e"
+        ],
+        "xcvu13p_CIV-fsga2577": [
+          "xcvu13p_CIV-fsga2577-1-e",
+          "xcvu13p_CIV-fsga2577-1-i",
+          "xcvu13p_CIV-fsga2577-2-e",
+          "xcvu13p_CIV-fsga2577-2-i",
+          "xcvu13p_CIV-fsga2577-2L-e",
+          "xcvu13p_CIV-fsga2577-2LV-e",
+          "xcvu13p_CIV-fsga2577-3-e"
+        ]
+      },
+      "xcvu19p": {
+        "xcvu19p-fsva3824": [
+          "xcvu19p-fsva3824-1-e",
+          "xcvu19p-fsva3824-2-e"
+        ],
+        "xcvu19p-fsvb3824": [
+          "xcvu19p-fsvb3824-1-e",
+          "xcvu19p-fsvb3824-2-e"
+        ],
+        "xcvu19p_CIV-fsva3824": [
+          "xcvu19p_CIV-fsva3824-1-e",
+          "xcvu19p_CIV-fsva3824-2-e"
+        ],
+        "xcvu19p_CIV-fsvb3824": [
+          "xcvu19p_CIV-fsvb3824-1-e",
+          "xcvu19p_CIV-fsvb3824-2-e"
+        ]
+      },
+      "xcvu3p": {
+        "xcvu3p-ffvc1517": [
+          "xcvu3p-ffvc1517-1-e",
+          "xcvu3p-ffvc1517-1-i",
+          "xcvu3p-ffvc1517-2-e",
+          "xcvu3p-ffvc1517-2-i",
+          "xcvu3p-ffvc1517-2L-e",
+          "xcvu3p-ffvc1517-2LV-e",
+          "xcvu3p-ffvc1517-3-e"
+        ],
+        "xcvu3p_CIV-ffvc1517": [
+          "xcvu3p_CIV-ffvc1517-1-e",
+          "xcvu3p_CIV-ffvc1517-1-i",
+          "xcvu3p_CIV-ffvc1517-2-e",
+          "xcvu3p_CIV-ffvc1517-2-i",
+          "xcvu3p_CIV-ffvc1517-2L-e",
+          "xcvu3p_CIV-ffvc1517-2LV-e",
+          "xcvu3p_CIV-ffvc1517-3-e"
+        ]
+      },
+      "xcvu5p": {
+        "xcvu5p-flva2104": [
+          "xcvu5p-flva2104-1-e",
+          "xcvu5p-flva2104-1-i",
+          "xcvu5p-flva2104-2-e",
+          "xcvu5p-flva2104-2-i",
+          "xcvu5p-flva2104-2L-e",
+          "xcvu5p-flva2104-2LV-e",
+          "xcvu5p-flva2104-3-e"
+        ],
+        "xcvu5p-flvb2104": [
+          "xcvu5p-flvb2104-1-e",
+          "xcvu5p-flvb2104-1-i",
+          "xcvu5p-flvb2104-2-e",
+          "xcvu5p-flvb2104-2-i",
+          "xcvu5p-flvb2104-2L-e",
+          "xcvu5p-flvb2104-2LV-e",
+          "xcvu5p-flvb2104-3-e"
+        ],
+        "xcvu5p-flvc2104": [
+          "xcvu5p-flvc2104-1-e",
+          "xcvu5p-flvc2104-1-i",
+          "xcvu5p-flvc2104-2-e",
+          "xcvu5p-flvc2104-2-i",
+          "xcvu5p-flvc2104-2L-e",
+          "xcvu5p-flvc2104-2LV-e",
+          "xcvu5p-flvc2104-3-e"
+        ],
+        "xcvu5p_CIV-flva2104": [
+          "xcvu5p_CIV-flva2104-1-e",
+          "xcvu5p_CIV-flva2104-1-i",
+          "xcvu5p_CIV-flva2104-2-e",
+          "xcvu5p_CIV-flva2104-2-i",
+          "xcvu5p_CIV-flva2104-2L-e",
+          "xcvu5p_CIV-flva2104-2LV-e",
+          "xcvu5p_CIV-flva2104-3-e"
+        ],
+        "xcvu5p_CIV-flvb2104": [
+          "xcvu5p_CIV-flvb2104-1-e",
+          "xcvu5p_CIV-flvb2104-1-i",
+          "xcvu5p_CIV-flvb2104-2-e",
+          "xcvu5p_CIV-flvb2104-2-i",
+          "xcvu5p_CIV-flvb2104-2L-e",
+          "xcvu5p_CIV-flvb2104-2LV-e",
+          "xcvu5p_CIV-flvb2104-3-e"
+        ],
+        "xcvu5p_CIV-flvc2104": [
+          "xcvu5p_CIV-flvc2104-1-e",
+          "xcvu5p_CIV-flvc2104-1-i",
+          "xcvu5p_CIV-flvc2104-2-e",
+          "xcvu5p_CIV-flvc2104-2-i",
+          "xcvu5p_CIV-flvc2104-2L-e",
+          "xcvu5p_CIV-flvc2104-2LV-e",
+          "xcvu5p_CIV-flvc2104-3-e"
+        ]
+      },
+      "xcvu7p": {
+        "xcvu7p-flva2104": [
+          "xcvu7p-flva2104-1-e",
+          "xcvu7p-flva2104-1-i",
+          "xcvu7p-flva2104-2-e",
+          "xcvu7p-flva2104-2-i",
+          "xcvu7p-flva2104-2L-e",
+          "xcvu7p-flva2104-2LV-e",
+          "xcvu7p-flva2104-3-e"
+        ],
+        "xcvu7p-flvb2104": [
+          "xcvu7p-flvb2104-1-e",
+          "xcvu7p-flvb2104-1-i",
+          "xcvu7p-flvb2104-2-e",
+          "xcvu7p-flvb2104-2-i",
+          "xcvu7p-flvb2104-2L-e",
+          "xcvu7p-flvb2104-2LV-e",
+          "xcvu7p-flvb2104-3-e"
+        ],
+        "xcvu7p-flvc2104": [
+          "xcvu7p-flvc2104-1-e",
+          "xcvu7p-flvc2104-1-i",
+          "xcvu7p-flvc2104-2-e",
+          "xcvu7p-flvc2104-2-i",
+          "xcvu7p-flvc2104-2L-e",
+          "xcvu7p-flvc2104-2LV-e",
+          "xcvu7p-flvc2104-3-e"
+        ],
+        "xcvu7p_CIV-flva2104": [
+          "xcvu7p_CIV-flva2104-1-e",
+          "xcvu7p_CIV-flva2104-1-i",
+          "xcvu7p_CIV-flva2104-2-e",
+          "xcvu7p_CIV-flva2104-2-i",
+          "xcvu7p_CIV-flva2104-2L-e",
+          "xcvu7p_CIV-flva2104-2LV-e",
+          "xcvu7p_CIV-flva2104-3-e"
+        ],
+        "xcvu7p_CIV-flvb2104": [
+          "xcvu7p_CIV-flvb2104-1-e",
+          "xcvu7p_CIV-flvb2104-1-i",
+          "xcvu7p_CIV-flvb2104-2-e",
+          "xcvu7p_CIV-flvb2104-2-i",
+          "xcvu7p_CIV-flvb2104-2L-e",
+          "xcvu7p_CIV-flvb2104-2LV-e",
+          "xcvu7p_CIV-flvb2104-3-e"
+        ],
+        "xcvu7p_CIV-flvc2104": [
+          "xcvu7p_CIV-flvc2104-1-e",
+          "xcvu7p_CIV-flvc2104-1-i",
+          "xcvu7p_CIV-flvc2104-2-e",
+          "xcvu7p_CIV-flvc2104-2-i",
+          "xcvu7p_CIV-flvc2104-2L-e",
+          "xcvu7p_CIV-flvc2104-2LV-e",
+          "xcvu7p_CIV-flvc2104-3-e"
+        ]
+      },
+      "xcvu9p": {
+        "xcvu9p-flga2104": [
+          "xcvu9p-flga2104-1-e",
+          "xcvu9p-flga2104-1-i",
+          "xcvu9p-flga2104-2-e",
+          "xcvu9p-flga2104-2-i",
+          "xcvu9p-flga2104-2L-e",
+          "xcvu9p-flga2104-2LV-e",
+          "xcvu9p-flga2104-3-e"
+        ],
+        "xcvu9p-flga2577": [
+          "xcvu9p-flga2577-1-e",
+          "xcvu9p-flga2577-1-i",
+          "xcvu9p-flga2577-2-e",
+          "xcvu9p-flga2577-2-i",
+          "xcvu9p-flga2577-2L-e",
+          "xcvu9p-flga2577-2LV-e",
+          "xcvu9p-flga2577-3-e"
+        ],
+        "xcvu9p-flgb2104": [
+          "xcvu9p-flgb2104-1-e",
+          "xcvu9p-flgb2104-1-i",
+          "xcvu9p-flgb2104-2-e",
+          "xcvu9p-flgb2104-2-i",
+          "xcvu9p-flgb2104-2L-e",
+          "xcvu9p-flgb2104-2LV-e",
+          "xcvu9p-flgb2104-3-e"
+        ],
+        "xcvu9p-flgc2104": [
+          "xcvu9p-flgc2104-1-e",
+          "xcvu9p-flgc2104-1-i",
+          "xcvu9p-flgc2104-2-e",
+          "xcvu9p-flgc2104-2-i",
+          "xcvu9p-flgc2104-2L-e",
+          "xcvu9p-flgc2104-2LV-e",
+          "xcvu9p-flgc2104-3-e"
+        ],
+        "xcvu9p-fsgd2104": [
+          "xcvu9p-fsgd2104-1-e",
+          "xcvu9p-fsgd2104-1-i",
+          "xcvu9p-fsgd2104-2-e",
+          "xcvu9p-fsgd2104-2-i",
+          "xcvu9p-fsgd2104-2L-e",
+          "xcvu9p-fsgd2104-2LV-e",
+          "xcvu9p-fsgd2104-3-e"
+        ],
+        "xcvu9p_CIV-flga2104": [
+          "xcvu9p_CIV-flga2104-1-e",
+          "xcvu9p_CIV-flga2104-1-i",
+          "xcvu9p_CIV-flga2104-2-e",
+          "xcvu9p_CIV-flga2104-2-i",
+          "xcvu9p_CIV-flga2104-2L-e",
+          "xcvu9p_CIV-flga2104-2LV-e",
+          "xcvu9p_CIV-flga2104-3-e"
+        ],
+        "xcvu9p_CIV-flga2577": [
+          "xcvu9p_CIV-flga2577-1-e",
+          "xcvu9p_CIV-flga2577-1-i",
+          "xcvu9p_CIV-flga2577-2-e",
+          "xcvu9p_CIV-flga2577-2-i",
+          "xcvu9p_CIV-flga2577-2L-e",
+          "xcvu9p_CIV-flga2577-2LV-e",
+          "xcvu9p_CIV-flga2577-3-e"
+        ],
+        "xcvu9p_CIV-flgb2104": [
+          "xcvu9p_CIV-flgb2104-1-e",
+          "xcvu9p_CIV-flgb2104-1-i",
+          "xcvu9p_CIV-flgb2104-2-e",
+          "xcvu9p_CIV-flgb2104-2-i",
+          "xcvu9p_CIV-flgb2104-2L-e",
+          "xcvu9p_CIV-flgb2104-2LV-e",
+          "xcvu9p_CIV-flgb2104-3-e"
+        ],
+        "xcvu9p_CIV-flgc2104": [
+          "xcvu9p_CIV-flgc2104-1-e",
+          "xcvu9p_CIV-flgc2104-1-i",
+          "xcvu9p_CIV-flgc2104-2-e",
+          "xcvu9p_CIV-flgc2104-2-i",
+          "xcvu9p_CIV-flgc2104-2L-e",
+          "xcvu9p_CIV-flgc2104-2LV-e",
+          "xcvu9p_CIV-flgc2104-3-e"
+        ],
+        "xcvu9p_CIV-fsgd2104": [
+          "xcvu9p_CIV-fsgd2104-1-e",
+          "xcvu9p_CIV-fsgd2104-1-i",
+          "xcvu9p_CIV-fsgd2104-2-e",
+          "xcvu9p_CIV-fsgd2104-2-i",
+          "xcvu9p_CIV-fsgd2104-2L-e",
+          "xcvu9p_CIV-fsgd2104-2LV-e",
+          "xcvu9p_CIV-fsgd2104-3-e"
+        ]
+      }
+    },
+    "virtexuplus58g": {
+      "xcu26": {
+        "xcu26-vsva1365": [
+          "xcu26-vsva1365-2L-e",
+          "xcu26-vsva1365-2LV-e"
+        ]
+      },
+      "xcux35": {
+        "xcux35-vsva1365": [
+          "xcux35-vsva1365-2-e",
+          "xcux35-vsva1365-2LV-e",
+          "xcux35-vsva1365-3-e"
+        ]
+      },
+      "xcvu23p": {
+        "xcvu23p-fsvj1760": [
+          "xcvu23p-fsvj1760-1-e",
+          "xcvu23p-fsvj1760-1-i",
+          "xcvu23p-fsvj1760-2-e",
+          "xcvu23p-fsvj1760-2-i",
+          "xcvu23p-fsvj1760-2L-e",
+          "xcvu23p-fsvj1760-2LV-e",
+          "xcvu23p-fsvj1760-3-e"
+        ],
+        "xcvu23p-vsva1365": [
+          "xcvu23p-vsva1365-1-e",
+          "xcvu23p-vsva1365-1-i",
+          "xcvu23p-vsva1365-2-e",
+          "xcvu23p-vsva1365-2-i",
+          "xcvu23p-vsva1365-2L-e",
+          "xcvu23p-vsva1365-2LV-e",
+          "xcvu23p-vsva1365-3-e"
+        ],
+        "xcvu23p_CIV-fsvj1760": [
+          "xcvu23p_CIV-fsvj1760-1-e",
+          "xcvu23p_CIV-fsvj1760-1-i",
+          "xcvu23p_CIV-fsvj1760-2-e",
+          "xcvu23p_CIV-fsvj1760-2-i",
+          "xcvu23p_CIV-fsvj1760-2L-e",
+          "xcvu23p_CIV-fsvj1760-2LV-e",
+          "xcvu23p_CIV-fsvj1760-3-e"
+        ],
+        "xcvu23p_CIV-vsva1365": [
+          "xcvu23p_CIV-vsva1365-1-e",
+          "xcvu23p_CIV-vsva1365-1-i",
+          "xcvu23p_CIV-vsva1365-2-e",
+          "xcvu23p_CIV-vsva1365-2-i",
+          "xcvu23p_CIV-vsva1365-2L-e",
+          "xcvu23p_CIV-vsva1365-2LV-e",
+          "xcvu23p_CIV-vsva1365-3-e"
+        ]
+      },
+      "xcvu27p": {
+        "xcvu27p-figd2104": [
+          "xcvu27p-figd2104-1-e",
+          "xcvu27p-figd2104-1-i",
+          "xcvu27p-figd2104-2-e",
+          "xcvu27p-figd2104-2-i",
+          "xcvu27p-figd2104-2L-e",
+          "xcvu27p-figd2104-2LV-e",
+          "xcvu27p-figd2104-3-e"
+        ],
+        "xcvu27p-fsga2577": [
+          "xcvu27p-fsga2577-1-e",
+          "xcvu27p-fsga2577-1-i",
+          "xcvu27p-fsga2577-2-e",
+          "xcvu27p-fsga2577-2-i",
+          "xcvu27p-fsga2577-2L-e",
+          "xcvu27p-fsga2577-2LV-e",
+          "xcvu27p-fsga2577-3-e"
+        ]
+      },
+      "xcvu29p": {
+        "xcvu29p-figd2104": [
+          "xcvu29p-figd2104-1-e",
+          "xcvu29p-figd2104-1-i",
+          "xcvu29p-figd2104-2-e",
+          "xcvu29p-figd2104-2-i",
+          "xcvu29p-figd2104-2L-e",
+          "xcvu29p-figd2104-2LV-e",
+          "xcvu29p-figd2104-3-e"
+        ],
+        "xcvu29p-fsga2577": [
+          "xcvu29p-fsga2577-1-e",
+          "xcvu29p-fsga2577-1-i",
+          "xcvu29p-fsga2577-2-e",
+          "xcvu29p-fsga2577-2-i",
+          "xcvu29p-fsga2577-2L-e",
+          "xcvu29p-fsga2577-2LV-e",
+          "xcvu29p-fsga2577-3-e"
+        ],
+        "xcvu29p_CIV-figd2104": [
+          "xcvu29p_CIV-figd2104-1-e",
+          "xcvu29p_CIV-figd2104-1-i",
+          "xcvu29p_CIV-figd2104-2-e",
+          "xcvu29p_CIV-figd2104-2-i",
+          "xcvu29p_CIV-figd2104-2L-e",
+          "xcvu29p_CIV-figd2104-2LV-e",
+          "xcvu29p_CIV-figd2104-3-e"
+        ],
+        "xcvu29p_CIV-fsga2577": [
+          "xcvu29p_CIV-fsga2577-1-e",
+          "xcvu29p_CIV-fsga2577-1-i",
+          "xcvu29p_CIV-fsga2577-2-e",
+          "xcvu29p_CIV-fsga2577-2-i",
+          "xcvu29p_CIV-fsga2577-2L-e",
+          "xcvu29p_CIV-fsga2577-2LV-e",
+          "xcvu29p_CIV-fsga2577-3-e"
+        ]
+      }
+    },
+    "virtexuplusHBM": {
+      "xcu280": {
+        "xcu280-fsvh2892": [
+          "xcu280-fsvh2892-2L-e",
+          "xcu280-fsvh2892-2LV-e"
+        ]
+      },
+      "xcu50": {
+        "xcu50-fsvh2104": [
+          "xcu50-fsvh2104-2-e",
+          "xcu50-fsvh2104-2L-e",
+          "xcu50-fsvh2104-2LV-e",
+          "xcu50-fsvh2104-3-e"
+        ]
+      },
+      "xcu55c": {
+        "xcu55c-fsvh2892": [
+          "xcu55c-fsvh2892-2L-e",
+          "xcu55c-fsvh2892-2LV-e"
+        ]
+      },
+      "xcu55n": {
+        "xcu55n-fsvh2892": [
+          "xcu55n-fsvh2892-2L-e",
+          "xcu55n-fsvh2892-2LV-e"
+        ]
+      },
+      "xcvu31p": {
+        "xcvu31p-fsvh1924": [
+          "xcvu31p-fsvh1924-1-e",
+          "xcvu31p-fsvh1924-2-e",
+          "xcvu31p-fsvh1924-2L-e",
+          "xcvu31p-fsvh1924-2LV-e",
+          "xcvu31p-fsvh1924-3-e"
+        ],
+        "xcvu31p_CIV-fsvh1924": [
+          "xcvu31p_CIV-fsvh1924-1-e",
+          "xcvu31p_CIV-fsvh1924-2-e",
+          "xcvu31p_CIV-fsvh1924-2L-e",
+          "xcvu31p_CIV-fsvh1924-2LV-e",
+          "xcvu31p_CIV-fsvh1924-3-e"
+        ]
+      },
+      "xcvu33p": {
+        "xcvu33p-fsvh2104": [
+          "xcvu33p-fsvh2104-1-e",
+          "xcvu33p-fsvh2104-2-e",
+          "xcvu33p-fsvh2104-2L-e",
+          "xcvu33p-fsvh2104-2LV-e",
+          "xcvu33p-fsvh2104-3-e"
+        ],
+        "xcvu33p_CIV-fsvh2104": [
+          "xcvu33p_CIV-fsvh2104-1-e",
+          "xcvu33p_CIV-fsvh2104-2-e",
+          "xcvu33p_CIV-fsvh2104-2L-e",
+          "xcvu33p_CIV-fsvh2104-2LV-e",
+          "xcvu33p_CIV-fsvh2104-3-e"
+        ]
+      },
+      "xcvu35p": {
+        "xcvu35p-fsvh2104": [
+          "xcvu35p-fsvh2104-1-e",
+          "xcvu35p-fsvh2104-2-e",
+          "xcvu35p-fsvh2104-2L-e",
+          "xcvu35p-fsvh2104-2LV-e",
+          "xcvu35p-fsvh2104-3-e"
+        ],
+        "xcvu35p-fsvh2892": [
+          "xcvu35p-fsvh2892-1-e",
+          "xcvu35p-fsvh2892-2-e",
+          "xcvu35p-fsvh2892-2L-e",
+          "xcvu35p-fsvh2892-2LV-e",
+          "xcvu35p-fsvh2892-3-e"
+        ],
+        "xcvu35p_CIV-fsvh2104": [
+          "xcvu35p_CIV-fsvh2104-1-e",
+          "xcvu35p_CIV-fsvh2104-2-e",
+          "xcvu35p_CIV-fsvh2104-2L-e",
+          "xcvu35p_CIV-fsvh2104-2LV-e",
+          "xcvu35p_CIV-fsvh2104-3-e"
+        ],
+        "xcvu35p_CIV-fsvh2892": [
+          "xcvu35p_CIV-fsvh2892-1-e",
+          "xcvu35p_CIV-fsvh2892-2-e",
+          "xcvu35p_CIV-fsvh2892-2L-e",
+          "xcvu35p_CIV-fsvh2892-2LV-e",
+          "xcvu35p_CIV-fsvh2892-3-e"
+        ]
+      },
+      "xcvu37p": {
+        "xcvu37p-fsvh2892": [
+          "xcvu37p-fsvh2892-1-e",
+          "xcvu37p-fsvh2892-2-e",
+          "xcvu37p-fsvh2892-2L-e",
+          "xcvu37p-fsvh2892-2LV-e",
+          "xcvu37p-fsvh2892-3-e"
+        ],
+        "xcvu37p_CIV-fsvh2892": [
+          "xcvu37p_CIV-fsvh2892-1-e",
+          "xcvu37p_CIV-fsvh2892-2-e",
+          "xcvu37p_CIV-fsvh2892-2L-e",
+          "xcvu37p_CIV-fsvh2892-2LV-e",
+          "xcvu37p_CIV-fsvh2892-3-e"
+        ]
+      },
+      "xcvu45p": {
+        "xcvu45p-fsvh2104": [
+          "xcvu45p-fsvh2104-1-e",
+          "xcvu45p-fsvh2104-2-e",
+          "xcvu45p-fsvh2104-2L-e",
+          "xcvu45p-fsvh2104-2LV-e",
+          "xcvu45p-fsvh2104-3-e"
+        ],
+        "xcvu45p-fsvh2892": [
+          "xcvu45p-fsvh2892-1-e",
+          "xcvu45p-fsvh2892-2-e",
+          "xcvu45p-fsvh2892-2L-e",
+          "xcvu45p-fsvh2892-2LV-e",
+          "xcvu45p-fsvh2892-3-e"
+        ],
+        "xcvu45p_CIV-fsvh2104": [
+          "xcvu45p_CIV-fsvh2104-1-e",
+          "xcvu45p_CIV-fsvh2104-2-e",
+          "xcvu45p_CIV-fsvh2104-2L-e",
+          "xcvu45p_CIV-fsvh2104-2LV-e",
+          "xcvu45p_CIV-fsvh2104-3-e"
+        ],
+        "xcvu45p_CIV-fsvh2892": [
+          "xcvu45p_CIV-fsvh2892-1-e",
+          "xcvu45p_CIV-fsvh2892-2-e",
+          "xcvu45p_CIV-fsvh2892-2L-e",
+          "xcvu45p_CIV-fsvh2892-2LV-e",
+          "xcvu45p_CIV-fsvh2892-3-e"
+        ]
+      },
+      "xcvu47p": {
+        "xcvu47p-fsvh2892": [
+          "xcvu47p-fsvh2892-1-e",
+          "xcvu47p-fsvh2892-2-e",
+          "xcvu47p-fsvh2892-2L-e",
+          "xcvu47p-fsvh2892-2LV-e",
+          "xcvu47p-fsvh2892-3-e"
+        ],
+        "xcvu47p_CIV-fsvh2892": [
+          "xcvu47p_CIV-fsvh2892-1-e",
+          "xcvu47p_CIV-fsvh2892-2-e",
+          "xcvu47p_CIV-fsvh2892-2L-e",
+          "xcvu47p_CIV-fsvh2892-2LV-e",
+          "xcvu47p_CIV-fsvh2892-3-e"
+        ]
+      },
+      "xcvu57p": {
+        "xcvu57p-fsvk2892": [
+          "xcvu57p-fsvk2892-1-e",
+          "xcvu57p-fsvk2892-2-e",
+          "xcvu57p-fsvk2892-2L-e",
+          "xcvu57p-fsvk2892-2LV-e",
+          "xcvu57p-fsvk2892-3-e"
+        ],
+        "xcvu57p_CIV-fsvk2892": [
+          "xcvu57p_CIV-fsvk2892-1-e",
+          "xcvu57p_CIV-fsvk2892-2-e",
+          "xcvu57p_CIV-fsvk2892-2L-e",
+          "xcvu57p_CIV-fsvk2892-2LV-e",
+          "xcvu57p_CIV-fsvk2892-3-e"
+        ]
+      }
+    },
+    "virtexuplusHBMes1": {
+      "xcu280": {
+        "xcu280-fsvh2892": [
+          "xcu280-fsvh2892-2L-e-es1",
+          "xcu280-fsvh2892-2LV-e-es1"
+        ]
+      }
+    },
+    "zynq": {
+      "xc7z007s": {
+        "xc7z007sclg225": [
+          "xc7z007sclg225-1",
+          "xc7z007sclg225-2"
+        ],
+        "xc7z007sclg400": [
+          "xc7z007sclg400-1",
+          "xc7z007sclg400-2"
+        ]
+      },
+      "xc7z010": {
+        "xc7z010clg225": [
+          "xc7z010clg225-1",
+          "xc7z010clg225-2",
+          "xc7z010clg225-3"
+        ],
+        "xc7z010clg400": [
+          "xc7z010clg400-1",
+          "xc7z010clg400-2",
+          "xc7z010clg400-3"
+        ]
+      },
+      "xc7z010i": {
+        "xc7z010iclg225": [
+          "xc7z010iclg225-1L"
+        ],
+        "xc7z010iclg400": [
+          "xc7z010iclg400-1L"
+        ]
+      },
+      "xc7z012s": {
+        "xc7z012sclg485": [
+          "xc7z012sclg485-1",
+          "xc7z012sclg485-2"
+        ]
+      },
+      "xc7z014s": {
+        "xc7z014sclg400": [
+          "xc7z014sclg400-1",
+          "xc7z014sclg400-2"
+        ],
+        "xc7z014sclg484": [
+          "xc7z014sclg484-1",
+          "xc7z014sclg484-2"
+        ]
+      },
+      "xc7z015": {
+        "xc7z015clg485": [
+          "xc7z015clg485-1",
+          "xc7z015clg485-2",
+          "xc7z015clg485-3"
+        ]
+      },
+      "xc7z015i": {
+        "xc7z015iclg485": [
+          "xc7z015iclg485-1L"
+        ]
+      },
+      "xc7z020": {
+        "xc7z020clg400": [
+          "xc7z020clg400-1",
+          "xc7z020clg400-2",
+          "xc7z020clg400-3"
+        ],
+        "xc7z020clg484": [
+          "xc7z020clg484-1",
+          "xc7z020clg484-2",
+          "xc7z020clg484-3"
+        ]
+      },
+      "xc7z020i": {
+        "xc7z020iclg400": [
+          "xc7z020iclg400-1L"
+        ],
+        "xc7z020iclg484": [
+          "xc7z020iclg484-1L"
+        ]
+      },
+      "xc7z030": {
+        "xc7z030fbg484": [
+          "xc7z030fbg484-1",
+          "xc7z030fbg484-2",
+          "xc7z030fbg484-3"
+        ],
+        "xc7z030fbg676": [
+          "xc7z030fbg676-1",
+          "xc7z030fbg676-2",
+          "xc7z030fbg676-3"
+        ],
+        "xc7z030fbv484": [
+          "xc7z030fbv484-1",
+          "xc7z030fbv484-2",
+          "xc7z030fbv484-3"
+        ],
+        "xc7z030fbv676": [
+          "xc7z030fbv676-1",
+          "xc7z030fbv676-2",
+          "xc7z030fbv676-3"
+        ],
+        "xc7z030ffg676": [
+          "xc7z030ffg676-1",
+          "xc7z030ffg676-2",
+          "xc7z030ffg676-3"
+        ],
+        "xc7z030ffv676": [
+          "xc7z030ffv676-1",
+          "xc7z030ffv676-2",
+          "xc7z030ffv676-3"
+        ],
+        "xc7z030sbg485": [
+          "xc7z030sbg485-1",
+          "xc7z030sbg485-2",
+          "xc7z030sbg485-3"
+        ],
+        "xc7z030sbv485": [
+          "xc7z030sbv485-1",
+          "xc7z030sbv485-2",
+          "xc7z030sbv485-3"
+        ]
+      },
+      "xc7z030i": {
+        "xc7z030ifbg484": [
+          "xc7z030ifbg484-2L"
+        ],
+        "xc7z030ifbg676": [
+          "xc7z030ifbg676-2L"
+        ],
+        "xc7z030ifbv484": [
+          "xc7z030ifbv484-2L"
+        ],
+        "xc7z030ifbv676": [
+          "xc7z030ifbv676-2L"
+        ],
+        "xc7z030iffg676": [
+          "xc7z030iffg676-2L"
+        ],
+        "xc7z030iffv676": [
+          "xc7z030iffv676-2L"
+        ],
+        "xc7z030isbg485": [
+          "xc7z030isbg485-2L"
+        ],
+        "xc7z030isbv485": [
+          "xc7z030isbv485-2L"
+        ]
+      },
+      "xc7z035": {
+        "xc7z035fbg676": [
+          "xc7z035fbg676-1",
+          "xc7z035fbg676-2",
+          "xc7z035fbg676-3"
+        ],
+        "xc7z035fbv676": [
+          "xc7z035fbv676-1",
+          "xc7z035fbv676-2",
+          "xc7z035fbv676-3"
+        ],
+        "xc7z035ffg676": [
+          "xc7z035ffg676-1",
+          "xc7z035ffg676-2",
+          "xc7z035ffg676-3"
+        ],
+        "xc7z035ffg900": [
+          "xc7z035ffg900-1",
+          "xc7z035ffg900-2",
+          "xc7z035ffg900-3"
+        ],
+        "xc7z035ffv676": [
+          "xc7z035ffv676-1",
+          "xc7z035ffv676-2",
+          "xc7z035ffv676-3"
+        ],
+        "xc7z035ffv900": [
+          "xc7z035ffv900-1",
+          "xc7z035ffv900-2",
+          "xc7z035ffv900-3"
+        ]
+      },
+      "xc7z035i": {
+        "xc7z035ifbg676": [
+          "xc7z035ifbg676-2L"
+        ],
+        "xc7z035ifbv676": [
+          "xc7z035ifbv676-2L"
+        ],
+        "xc7z035iffg676": [
+          "xc7z035iffg676-2L"
+        ],
+        "xc7z035iffg900": [
+          "xc7z035iffg900-2L"
+        ],
+        "xc7z035iffv676": [
+          "xc7z035iffv676-2L"
+        ],
+        "xc7z035iffv900": [
+          "xc7z035iffv900-2L"
+        ]
+      },
+      "xc7z045": {
+        "xc7z045fbg676": [
+          "xc7z045fbg676-1",
+          "xc7z045fbg676-2",
+          "xc7z045fbg676-3"
+        ],
+        "xc7z045fbv676": [
+          "xc7z045fbv676-1",
+          "xc7z045fbv676-2",
+          "xc7z045fbv676-3"
+        ],
+        "xc7z045ffg676": [
+          "xc7z045ffg676-1",
+          "xc7z045ffg676-2",
+          "xc7z045ffg676-3"
+        ],
+        "xc7z045ffg900": [
+          "xc7z045ffg900-1",
+          "xc7z045ffg900-2",
+          "xc7z045ffg900-3"
+        ],
+        "xc7z045ffv676": [
+          "xc7z045ffv676-1",
+          "xc7z045ffv676-2",
+          "xc7z045ffv676-3"
+        ],
+        "xc7z045ffv900": [
+          "xc7z045ffv900-1",
+          "xc7z045ffv900-2",
+          "xc7z045ffv900-3"
+        ]
+      },
+      "xc7z045i": {
+        "xc7z045ifbg676": [
+          "xc7z045ifbg676-2L"
+        ],
+        "xc7z045ifbv676": [
+          "xc7z045ifbv676-2L"
+        ],
+        "xc7z045iffg676": [
+          "xc7z045iffg676-2L"
+        ],
+        "xc7z045iffg900": [
+          "xc7z045iffg900-2L"
+        ],
+        "xc7z045iffv676": [
+          "xc7z045iffv676-2L"
+        ],
+        "xc7z045iffv900": [
+          "xc7z045iffv900-2L"
+        ]
+      },
+      "xc7z100": {
+        "xc7z100ffg1156": [
+          "xc7z100ffg1156-1",
+          "xc7z100ffg1156-2"
+        ],
+        "xc7z100ffg900": [
+          "xc7z100ffg900-1",
+          "xc7z100ffg900-2"
+        ],
+        "xc7z100ffv1156": [
+          "xc7z100ffv1156-1",
+          "xc7z100ffv1156-2"
+        ],
+        "xc7z100ffv900": [
+          "xc7z100ffv900-1",
+          "xc7z100ffv900-2"
+        ]
+      },
+      "xc7z100i": {
+        "xc7z100iffg1156": [
+          "xc7z100iffg1156-2L"
+        ],
+        "xc7z100iffg900": [
+          "xc7z100iffg900-2L"
+        ],
+        "xc7z100iffv1156": [
+          "xc7z100iffv1156-2L"
+        ],
+        "xc7z100iffv900": [
+          "xc7z100iffv900-2L"
+        ]
+      }
+    },
+    "zynquplus": {
+      "xck24": {
+        "xck24-ubva530": [
+          "xck24-ubva530-2LV-c",
+          "xck24-ubva530-2LVI-i"
+        ]
+      },
+      "xck26": {
+        "xck26-sfvc784": [
+          "xck26-sfvc784-2LV-c",
+          "xck26-sfvc784-2LVI-i"
+        ]
+      },
+      "xcu25": {
+        "xcu25-ffvc1760": [
+          "xcu25-ffvc1760-2L-e",
+          "xcu25-ffvc1760-2LV-e"
+        ]
+      },
+      "xcu30": {
+        "xcu30-fbvb900": [
+          "xcu30-fbvb900-2-e"
+        ]
+      },
+      "xczu11eg": {
+        "xczu11eg-ffvb1517": [
+          "xczu11eg-ffvb1517-1-e",
+          "xczu11eg-ffvb1517-1-i",
+          "xczu11eg-ffvb1517-1L-i",
+          "xczu11eg-ffvb1517-1LV-i",
+          "xczu11eg-ffvb1517-2-e",
+          "xczu11eg-ffvb1517-2-i",
+          "xczu11eg-ffvb1517-2L-e",
+          "xczu11eg-ffvb1517-2LV-e",
+          "xczu11eg-ffvb1517-3-e"
+        ],
+        "xczu11eg-ffvc1156": [
+          "xczu11eg-ffvc1156-1-e",
+          "xczu11eg-ffvc1156-1-i",
+          "xczu11eg-ffvc1156-1L-i",
+          "xczu11eg-ffvc1156-1LV-i",
+          "xczu11eg-ffvc1156-2-e",
+          "xczu11eg-ffvc1156-2-i",
+          "xczu11eg-ffvc1156-2L-e",
+          "xczu11eg-ffvc1156-2LV-e",
+          "xczu11eg-ffvc1156-3-e"
+        ],
+        "xczu11eg-ffvc1760": [
+          "xczu11eg-ffvc1760-1-e",
+          "xczu11eg-ffvc1760-1-i",
+          "xczu11eg-ffvc1760-1L-i",
+          "xczu11eg-ffvc1760-1LV-i",
+          "xczu11eg-ffvc1760-2-e",
+          "xczu11eg-ffvc1760-2-i",
+          "xczu11eg-ffvc1760-2L-e",
+          "xczu11eg-ffvc1760-2LV-e",
+          "xczu11eg-ffvc1760-3-e"
+        ],
+        "xczu11eg-ffvf1517": [
+          "xczu11eg-ffvf1517-1-e",
+          "xczu11eg-ffvf1517-1-i",
+          "xczu11eg-ffvf1517-1L-i",
+          "xczu11eg-ffvf1517-1LV-i",
+          "xczu11eg-ffvf1517-2-e",
+          "xczu11eg-ffvf1517-2-i",
+          "xczu11eg-ffvf1517-2L-e",
+          "xczu11eg-ffvf1517-2LV-e",
+          "xczu11eg-ffvf1517-3-e"
+        ]
+      },
+      "xczu15eg": {
+        "xczu15eg-ffvb1156": [
+          "xczu15eg-ffvb1156-1-e",
+          "xczu15eg-ffvb1156-1-i",
+          "xczu15eg-ffvb1156-1L-i",
+          "xczu15eg-ffvb1156-1LV-i",
+          "xczu15eg-ffvb1156-2-e",
+          "xczu15eg-ffvb1156-2-i",
+          "xczu15eg-ffvb1156-2L-e",
+          "xczu15eg-ffvb1156-2LV-e",
+          "xczu15eg-ffvb1156-3-e"
+        ],
+        "xczu15eg-ffvc900": [
+          "xczu15eg-ffvc900-1-e",
+          "xczu15eg-ffvc900-1-i",
+          "xczu15eg-ffvc900-1L-i",
+          "xczu15eg-ffvc900-1LV-i",
+          "xczu15eg-ffvc900-2-e",
+          "xczu15eg-ffvc900-2-i",
+          "xczu15eg-ffvc900-2L-e",
+          "xczu15eg-ffvc900-2LV-e",
+          "xczu15eg-ffvc900-3-e"
+        ]
+      },
+      "xczu17eg": {
+        "xczu17eg-ffvb1517": [
+          "xczu17eg-ffvb1517-1-e",
+          "xczu17eg-ffvb1517-1-i",
+          "xczu17eg-ffvb1517-1L-i",
+          "xczu17eg-ffvb1517-1LV-i",
+          "xczu17eg-ffvb1517-2-e",
+          "xczu17eg-ffvb1517-2-i",
+          "xczu17eg-ffvb1517-2L-e",
+          "xczu17eg-ffvb1517-2LV-e",
+          "xczu17eg-ffvb1517-3-e"
+        ],
+        "xczu17eg-ffvc1760": [
+          "xczu17eg-ffvc1760-1-e",
+          "xczu17eg-ffvc1760-1-i",
+          "xczu17eg-ffvc1760-1L-i",
+          "xczu17eg-ffvc1760-1LV-i",
+          "xczu17eg-ffvc1760-2-e",
+          "xczu17eg-ffvc1760-2-i",
+          "xczu17eg-ffvc1760-2L-e",
+          "xczu17eg-ffvc1760-2LV-e",
+          "xczu17eg-ffvc1760-3-e"
+        ],
+        "xczu17eg-ffvd1760": [
+          "xczu17eg-ffvd1760-1-e",
+          "xczu17eg-ffvd1760-1-i",
+          "xczu17eg-ffvd1760-1L-i",
+          "xczu17eg-ffvd1760-1LV-i",
+          "xczu17eg-ffvd1760-2-e",
+          "xczu17eg-ffvd1760-2-i",
+          "xczu17eg-ffvd1760-2L-e",
+          "xczu17eg-ffvd1760-2LV-e",
+          "xczu17eg-ffvd1760-3-e"
+        ],
+        "xczu17eg-ffve1924": [
+          "xczu17eg-ffve1924-1-e",
+          "xczu17eg-ffve1924-1-i",
+          "xczu17eg-ffve1924-1L-i",
+          "xczu17eg-ffve1924-1LV-i",
+          "xczu17eg-ffve1924-2-e",
+          "xczu17eg-ffve1924-2-i",
+          "xczu17eg-ffve1924-2L-e",
+          "xczu17eg-ffve1924-2LV-e",
+          "xczu17eg-ffve1924-3-e"
+        ]
+      },
+      "xczu19eg": {
+        "xczu19eg-ffvb1517": [
+          "xczu19eg-ffvb1517-1-e",
+          "xczu19eg-ffvb1517-1-i",
+          "xczu19eg-ffvb1517-1L-i",
+          "xczu19eg-ffvb1517-1LV-i",
+          "xczu19eg-ffvb1517-2-e",
+          "xczu19eg-ffvb1517-2-i",
+          "xczu19eg-ffvb1517-2L-e",
+          "xczu19eg-ffvb1517-2LV-e",
+          "xczu19eg-ffvb1517-3-e"
+        ],
+        "xczu19eg-ffvc1760": [
+          "xczu19eg-ffvc1760-1-e",
+          "xczu19eg-ffvc1760-1-i",
+          "xczu19eg-ffvc1760-1L-i",
+          "xczu19eg-ffvc1760-1LV-i",
+          "xczu19eg-ffvc1760-2-e",
+          "xczu19eg-ffvc1760-2-i",
+          "xczu19eg-ffvc1760-2L-e",
+          "xczu19eg-ffvc1760-2LV-e",
+          "xczu19eg-ffvc1760-3-e"
+        ],
+        "xczu19eg-ffvd1760": [
+          "xczu19eg-ffvd1760-1-e",
+          "xczu19eg-ffvd1760-1-i",
+          "xczu19eg-ffvd1760-1L-i",
+          "xczu19eg-ffvd1760-1LV-i",
+          "xczu19eg-ffvd1760-2-e",
+          "xczu19eg-ffvd1760-2-i",
+          "xczu19eg-ffvd1760-2L-e",
+          "xczu19eg-ffvd1760-2LV-e",
+          "xczu19eg-ffvd1760-3-e"
+        ],
+        "xczu19eg-ffve1924": [
+          "xczu19eg-ffve1924-1-e",
+          "xczu19eg-ffve1924-1-i",
+          "xczu19eg-ffve1924-1L-i",
+          "xczu19eg-ffve1924-1LV-i",
+          "xczu19eg-ffve1924-2-e",
+          "xczu19eg-ffve1924-2-i",
+          "xczu19eg-ffve1924-2L-e",
+          "xczu19eg-ffve1924-2LV-e",
+          "xczu19eg-ffve1924-3-e"
+        ]
+      },
+      "xczu1cg": {
+        "xczu1cg-sbva484": [
+          "xczu1cg-sbva484-1-e",
+          "xczu1cg-sbva484-1-i",
+          "xczu1cg-sbva484-1L-i",
+          "xczu1cg-sbva484-1LV-i",
+          "xczu1cg-sbva484-2-e",
+          "xczu1cg-sbva484-2-i",
+          "xczu1cg-sbva484-2L-e",
+          "xczu1cg-sbva484-2LV-e"
+        ],
+        "xczu1cg-sfva625": [
+          "xczu1cg-sfva625-1-e",
+          "xczu1cg-sfva625-1-i",
+          "xczu1cg-sfva625-1L-i",
+          "xczu1cg-sfva625-1LV-i",
+          "xczu1cg-sfva625-2-e",
+          "xczu1cg-sfva625-2-i",
+          "xczu1cg-sfva625-2L-e",
+          "xczu1cg-sfva625-2LV-e"
+        ],
+        "xczu1cg-sfvc784": [
+          "xczu1cg-sfvc784-1-e",
+          "xczu1cg-sfvc784-1-i",
+          "xczu1cg-sfvc784-1L-i",
+          "xczu1cg-sfvc784-1LV-i",
+          "xczu1cg-sfvc784-2-e",
+          "xczu1cg-sfvc784-2-i",
+          "xczu1cg-sfvc784-2L-e",
+          "xczu1cg-sfvc784-2LV-e"
+        ],
+        "xczu1cg-ubva494": [
+          "xczu1cg-ubva494-1-e",
+          "xczu1cg-ubva494-1-i",
+          "xczu1cg-ubva494-1L-i",
+          "xczu1cg-ubva494-1LV-i",
+          "xczu1cg-ubva494-2-e",
+          "xczu1cg-ubva494-2-i",
+          "xczu1cg-ubva494-2L-e",
+          "xczu1cg-ubva494-2LV-e"
+        ]
+      },
+      "xczu1eg": {
+        "xczu1eg-sbva484": [
+          "xczu1eg-sbva484-1-e",
+          "xczu1eg-sbva484-1-i",
+          "xczu1eg-sbva484-1L-i",
+          "xczu1eg-sbva484-1LV-i",
+          "xczu1eg-sbva484-2-e",
+          "xczu1eg-sbva484-2-i",
+          "xczu1eg-sbva484-2L-e",
+          "xczu1eg-sbva484-2LV-e"
+        ],
+        "xczu1eg-sfva625": [
+          "xczu1eg-sfva625-1-e",
+          "xczu1eg-sfva625-1-i",
+          "xczu1eg-sfva625-1L-i",
+          "xczu1eg-sfva625-1LV-i",
+          "xczu1eg-sfva625-2-e",
+          "xczu1eg-sfva625-2-i",
+          "xczu1eg-sfva625-2L-e",
+          "xczu1eg-sfva625-2LV-e"
+        ],
+        "xczu1eg-sfvc784": [
+          "xczu1eg-sfvc784-1-e",
+          "xczu1eg-sfvc784-1-i",
+          "xczu1eg-sfvc784-1L-i",
+          "xczu1eg-sfvc784-1LV-i",
+          "xczu1eg-sfvc784-2-e",
+          "xczu1eg-sfvc784-2-i",
+          "xczu1eg-sfvc784-2L-e",
+          "xczu1eg-sfvc784-2LV-e"
+        ],
+        "xczu1eg-ubva494": [
+          "xczu1eg-ubva494-1-e",
+          "xczu1eg-ubva494-1-i",
+          "xczu1eg-ubva494-1L-i",
+          "xczu1eg-ubva494-1LV-i",
+          "xczu1eg-ubva494-2-e",
+          "xczu1eg-ubva494-2-i",
+          "xczu1eg-ubva494-2L-e",
+          "xczu1eg-ubva494-2LV-e"
+        ]
+      },
+      "xczu2cg": {
+        "xczu2cg-sbva484": [
+          "xczu2cg-sbva484-1-e",
+          "xczu2cg-sbva484-1-i",
+          "xczu2cg-sbva484-1L-i",
+          "xczu2cg-sbva484-1LV-i",
+          "xczu2cg-sbva484-2-e",
+          "xczu2cg-sbva484-2-i",
+          "xczu2cg-sbva484-2L-e",
+          "xczu2cg-sbva484-2LV-e"
+        ],
+        "xczu2cg-sfva625": [
+          "xczu2cg-sfva625-1-e",
+          "xczu2cg-sfva625-1-i",
+          "xczu2cg-sfva625-1L-i",
+          "xczu2cg-sfva625-1LV-i",
+          "xczu2cg-sfva625-2-e",
+          "xczu2cg-sfva625-2-i",
+          "xczu2cg-sfva625-2L-e",
+          "xczu2cg-sfva625-2LV-e"
+        ],
+        "xczu2cg-sfvc784": [
+          "xczu2cg-sfvc784-1-e",
+          "xczu2cg-sfvc784-1-i",
+          "xczu2cg-sfvc784-1L-i",
+          "xczu2cg-sfvc784-1LV-i",
+          "xczu2cg-sfvc784-2-e",
+          "xczu2cg-sfvc784-2-i",
+          "xczu2cg-sfvc784-2L-e",
+          "xczu2cg-sfvc784-2LV-e"
+        ],
+        "xczu2cg-ubva530": [
+          "xczu2cg-ubva530-1-e",
+          "xczu2cg-ubva530-1-i",
+          "xczu2cg-ubva530-1L-i",
+          "xczu2cg-ubva530-1LV-i",
+          "xczu2cg-ubva530-2-e",
+          "xczu2cg-ubva530-2-i",
+          "xczu2cg-ubva530-2L-e",
+          "xczu2cg-ubva530-2LV-e"
+        ]
+      },
+      "xczu2eg": {
+        "xczu2eg-sbva484": [
+          "xczu2eg-sbva484-1-e",
+          "xczu2eg-sbva484-1-i",
+          "xczu2eg-sbva484-1L-i",
+          "xczu2eg-sbva484-1LV-i",
+          "xczu2eg-sbva484-2-e",
+          "xczu2eg-sbva484-2-i",
+          "xczu2eg-sbva484-2L-e",
+          "xczu2eg-sbva484-2LV-e"
+        ],
+        "xczu2eg-sfva625": [
+          "xczu2eg-sfva625-1-e",
+          "xczu2eg-sfva625-1-i",
+          "xczu2eg-sfva625-1L-i",
+          "xczu2eg-sfva625-1LV-i",
+          "xczu2eg-sfva625-2-e",
+          "xczu2eg-sfva625-2-i",
+          "xczu2eg-sfva625-2L-e",
+          "xczu2eg-sfva625-2LV-e"
+        ],
+        "xczu2eg-sfvc784": [
+          "xczu2eg-sfvc784-1-e",
+          "xczu2eg-sfvc784-1-i",
+          "xczu2eg-sfvc784-1L-i",
+          "xczu2eg-sfvc784-1LV-i",
+          "xczu2eg-sfvc784-2-e",
+          "xczu2eg-sfvc784-2-i",
+          "xczu2eg-sfvc784-2L-e",
+          "xczu2eg-sfvc784-2LV-e"
+        ],
+        "xczu2eg-ubva530": [
+          "xczu2eg-ubva530-1-e",
+          "xczu2eg-ubva530-1-i",
+          "xczu2eg-ubva530-1L-i",
+          "xczu2eg-ubva530-1LV-i",
+          "xczu2eg-ubva530-2-e",
+          "xczu2eg-ubva530-2-i",
+          "xczu2eg-ubva530-2L-e",
+          "xczu2eg-ubva530-2LV-e"
+        ]
+      },
+      "xczu3cg": {
+        "xczu3cg-sbva484": [
+          "xczu3cg-sbva484-1-e",
+          "xczu3cg-sbva484-1-i",
+          "xczu3cg-sbva484-1L-i",
+          "xczu3cg-sbva484-1LV-i",
+          "xczu3cg-sbva484-2-e",
+          "xczu3cg-sbva484-2-i",
+          "xczu3cg-sbva484-2L-e",
+          "xczu3cg-sbva484-2LV-e"
+        ],
+        "xczu3cg-sfva625": [
+          "xczu3cg-sfva625-1-e",
+          "xczu3cg-sfva625-1-i",
+          "xczu3cg-sfva625-1L-i",
+          "xczu3cg-sfva625-1LV-i",
+          "xczu3cg-sfva625-2-e",
+          "xczu3cg-sfva625-2-i",
+          "xczu3cg-sfva625-2L-e",
+          "xczu3cg-sfva625-2LV-e"
+        ],
+        "xczu3cg-sfvc784": [
+          "xczu3cg-sfvc784-1-e",
+          "xczu3cg-sfvc784-1-i",
+          "xczu3cg-sfvc784-1L-i",
+          "xczu3cg-sfvc784-1LV-i",
+          "xczu3cg-sfvc784-2-e",
+          "xczu3cg-sfvc784-2-i",
+          "xczu3cg-sfvc784-2L-e",
+          "xczu3cg-sfvc784-2LV-e"
+        ],
+        "xczu3cg-ubva530": [
+          "xczu3cg-ubva530-1-e",
+          "xczu3cg-ubva530-1-i",
+          "xczu3cg-ubva530-1L-i",
+          "xczu3cg-ubva530-1LV-i",
+          "xczu3cg-ubva530-2-e",
+          "xczu3cg-ubva530-2-i",
+          "xczu3cg-ubva530-2L-e",
+          "xczu3cg-ubva530-2LV-e"
+        ]
+      },
+      "xczu3eg": {
+        "xczu3eg-sbva484": [
+          "xczu3eg-sbva484-1-e",
+          "xczu3eg-sbva484-1-i",
+          "xczu3eg-sbva484-1L-i",
+          "xczu3eg-sbva484-1LV-i",
+          "xczu3eg-sbva484-2-e",
+          "xczu3eg-sbva484-2-i",
+          "xczu3eg-sbva484-2L-e",
+          "xczu3eg-sbva484-2LV-e"
+        ],
+        "xczu3eg-sfva625": [
+          "xczu3eg-sfva625-1-e",
+          "xczu3eg-sfva625-1-i",
+          "xczu3eg-sfva625-1L-i",
+          "xczu3eg-sfva625-1LV-i",
+          "xczu3eg-sfva625-2-e",
+          "xczu3eg-sfva625-2-i",
+          "xczu3eg-sfva625-2L-e",
+          "xczu3eg-sfva625-2LV-e"
+        ],
+        "xczu3eg-sfvc784": [
+          "xczu3eg-sfvc784-1-e",
+          "xczu3eg-sfvc784-1-i",
+          "xczu3eg-sfvc784-1L-i",
+          "xczu3eg-sfvc784-1LV-i",
+          "xczu3eg-sfvc784-2-e",
+          "xczu3eg-sfvc784-2-i",
+          "xczu3eg-sfvc784-2L-e",
+          "xczu3eg-sfvc784-2LV-e"
+        ],
+        "xczu3eg-ubva530": [
+          "xczu3eg-ubva530-1-e",
+          "xczu3eg-ubva530-1-i",
+          "xczu3eg-ubva530-1L-i",
+          "xczu3eg-ubva530-1LV-i",
+          "xczu3eg-ubva530-2-e",
+          "xczu3eg-ubva530-2-i",
+          "xczu3eg-ubva530-2L-e",
+          "xczu3eg-ubva530-2LV-e"
+        ]
+      },
+      "xczu4cg": {
+        "xczu4cg-fbvb900": [
+          "xczu4cg-fbvb900-1-e",
+          "xczu4cg-fbvb900-1-i",
+          "xczu4cg-fbvb900-1L-i",
+          "xczu4cg-fbvb900-1LV-i",
+          "xczu4cg-fbvb900-2-e",
+          "xczu4cg-fbvb900-2-i",
+          "xczu4cg-fbvb900-2L-e",
+          "xczu4cg-fbvb900-2LV-e"
+        ],
+        "xczu4cg-sfvc784": [
+          "xczu4cg-sfvc784-1-e",
+          "xczu4cg-sfvc784-1-i",
+          "xczu4cg-sfvc784-1L-i",
+          "xczu4cg-sfvc784-1LV-i",
+          "xczu4cg-sfvc784-2-e",
+          "xczu4cg-sfvc784-2-i",
+          "xczu4cg-sfvc784-2L-e",
+          "xczu4cg-sfvc784-2LV-e"
+        ]
+      },
+      "xczu4eg": {
+        "xczu4eg-fbvb900": [
+          "xczu4eg-fbvb900-1-e",
+          "xczu4eg-fbvb900-1-i",
+          "xczu4eg-fbvb900-1L-i",
+          "xczu4eg-fbvb900-1LV-i",
+          "xczu4eg-fbvb900-2-e",
+          "xczu4eg-fbvb900-2-i",
+          "xczu4eg-fbvb900-2L-e",
+          "xczu4eg-fbvb900-2LV-e",
+          "xczu4eg-fbvb900-3-e"
+        ],
+        "xczu4eg-sfvc784": [
+          "xczu4eg-sfvc784-1-e",
+          "xczu4eg-sfvc784-1-i",
+          "xczu4eg-sfvc784-1L-i",
+          "xczu4eg-sfvc784-1LV-i",
+          "xczu4eg-sfvc784-2-e",
+          "xczu4eg-sfvc784-2-i",
+          "xczu4eg-sfvc784-2L-e",
+          "xczu4eg-sfvc784-2LV-e",
+          "xczu4eg-sfvc784-3-e"
+        ]
+      },
+      "xczu4ev": {
+        "xczu4ev-fbvb900": [
+          "xczu4ev-fbvb900-1-e",
+          "xczu4ev-fbvb900-1-i",
+          "xczu4ev-fbvb900-1L-i",
+          "xczu4ev-fbvb900-1LV-i",
+          "xczu4ev-fbvb900-2-e",
+          "xczu4ev-fbvb900-2-i",
+          "xczu4ev-fbvb900-2L-e",
+          "xczu4ev-fbvb900-2LV-e",
+          "xczu4ev-fbvb900-3-e"
+        ],
+        "xczu4ev-sfvc784": [
+          "xczu4ev-sfvc784-1-e",
+          "xczu4ev-sfvc784-1-i",
+          "xczu4ev-sfvc784-1L-i",
+          "xczu4ev-sfvc784-1LV-i",
+          "xczu4ev-sfvc784-2-e",
+          "xczu4ev-sfvc784-2-i",
+          "xczu4ev-sfvc784-2L-e",
+          "xczu4ev-sfvc784-2LV-e",
+          "xczu4ev-sfvc784-3-e"
+        ]
+      },
+      "xczu5cg": {
+        "xczu5cg-fbvb900": [
+          "xczu5cg-fbvb900-1-e",
+          "xczu5cg-fbvb900-1-i",
+          "xczu5cg-fbvb900-1L-i",
+          "xczu5cg-fbvb900-1LV-i",
+          "xczu5cg-fbvb900-2-e",
+          "xczu5cg-fbvb900-2-i",
+          "xczu5cg-fbvb900-2L-e",
+          "xczu5cg-fbvb900-2LV-e"
+        ],
+        "xczu5cg-sfvc784": [
+          "xczu5cg-sfvc784-1-e",
+          "xczu5cg-sfvc784-1-i",
+          "xczu5cg-sfvc784-1L-i",
+          "xczu5cg-sfvc784-1LV-i",
+          "xczu5cg-sfvc784-2-e",
+          "xczu5cg-sfvc784-2-i",
+          "xczu5cg-sfvc784-2L-e",
+          "xczu5cg-sfvc784-2LV-e"
+        ]
+      },
+      "xczu5eg": {
+        "xczu5eg-fbvb900": [
+          "xczu5eg-fbvb900-1-e",
+          "xczu5eg-fbvb900-1-i",
+          "xczu5eg-fbvb900-1L-i",
+          "xczu5eg-fbvb900-1LV-i",
+          "xczu5eg-fbvb900-2-e",
+          "xczu5eg-fbvb900-2-i",
+          "xczu5eg-fbvb900-2L-e",
+          "xczu5eg-fbvb900-2LV-e",
+          "xczu5eg-fbvb900-3-e"
+        ],
+        "xczu5eg-sfvc784": [
+          "xczu5eg-sfvc784-1-e",
+          "xczu5eg-sfvc784-1-i",
+          "xczu5eg-sfvc784-1L-i",
+          "xczu5eg-sfvc784-1LV-i",
+          "xczu5eg-sfvc784-2-e",
+          "xczu5eg-sfvc784-2-i",
+          "xczu5eg-sfvc784-2L-e",
+          "xczu5eg-sfvc784-2LV-e",
+          "xczu5eg-sfvc784-3-e"
+        ]
+      },
+      "xczu5ev": {
+        "xczu5ev-fbvb900": [
+          "xczu5ev-fbvb900-1-e",
+          "xczu5ev-fbvb900-1-i",
+          "xczu5ev-fbvb900-1L-i",
+          "xczu5ev-fbvb900-1LV-i",
+          "xczu5ev-fbvb900-2-e",
+          "xczu5ev-fbvb900-2-i",
+          "xczu5ev-fbvb900-2L-e",
+          "xczu5ev-fbvb900-2LV-e",
+          "xczu5ev-fbvb900-3-e"
+        ],
+        "xczu5ev-sfvc784": [
+          "xczu5ev-sfvc784-1-e",
+          "xczu5ev-sfvc784-1-i",
+          "xczu5ev-sfvc784-1L-i",
+          "xczu5ev-sfvc784-1LV-i",
+          "xczu5ev-sfvc784-2-e",
+          "xczu5ev-sfvc784-2-i",
+          "xczu5ev-sfvc784-2L-e",
+          "xczu5ev-sfvc784-2LV-e",
+          "xczu5ev-sfvc784-3-e"
+        ]
+      },
+      "xczu6cg": {
+        "xczu6cg-ffvb1156": [
+          "xczu6cg-ffvb1156-1-e",
+          "xczu6cg-ffvb1156-1-i",
+          "xczu6cg-ffvb1156-1L-i",
+          "xczu6cg-ffvb1156-1LV-i",
+          "xczu6cg-ffvb1156-2-e",
+          "xczu6cg-ffvb1156-2-i",
+          "xczu6cg-ffvb1156-2L-e",
+          "xczu6cg-ffvb1156-2LV-e"
+        ],
+        "xczu6cg-ffvc900": [
+          "xczu6cg-ffvc900-1-e",
+          "xczu6cg-ffvc900-1-i",
+          "xczu6cg-ffvc900-1L-i",
+          "xczu6cg-ffvc900-1LV-i",
+          "xczu6cg-ffvc900-2-e",
+          "xczu6cg-ffvc900-2-i",
+          "xczu6cg-ffvc900-2L-e",
+          "xczu6cg-ffvc900-2LV-e"
+        ]
+      },
+      "xczu6eg": {
+        "xczu6eg-ffvb1156": [
+          "xczu6eg-ffvb1156-1-e",
+          "xczu6eg-ffvb1156-1-i",
+          "xczu6eg-ffvb1156-1L-i",
+          "xczu6eg-ffvb1156-1LV-i",
+          "xczu6eg-ffvb1156-2-e",
+          "xczu6eg-ffvb1156-2-i",
+          "xczu6eg-ffvb1156-2L-e",
+          "xczu6eg-ffvb1156-2LV-e",
+          "xczu6eg-ffvb1156-3-e"
+        ],
+        "xczu6eg-ffvc900": [
+          "xczu6eg-ffvc900-1-e",
+          "xczu6eg-ffvc900-1-i",
+          "xczu6eg-ffvc900-1L-i",
+          "xczu6eg-ffvc900-1LV-i",
+          "xczu6eg-ffvc900-2-e",
+          "xczu6eg-ffvc900-2-i",
+          "xczu6eg-ffvc900-2L-e",
+          "xczu6eg-ffvc900-2LV-e",
+          "xczu6eg-ffvc900-3-e"
+        ]
+      },
+      "xczu7cg": {
+        "xczu7cg-fbvb900": [
+          "xczu7cg-fbvb900-1-e",
+          "xczu7cg-fbvb900-1-i",
+          "xczu7cg-fbvb900-1L-i",
+          "xczu7cg-fbvb900-1LV-i",
+          "xczu7cg-fbvb900-2-e",
+          "xczu7cg-fbvb900-2-i",
+          "xczu7cg-fbvb900-2L-e",
+          "xczu7cg-fbvb900-2LV-e"
+        ],
+        "xczu7cg-ffvc1156": [
+          "xczu7cg-ffvc1156-1-e",
+          "xczu7cg-ffvc1156-1-i",
+          "xczu7cg-ffvc1156-1L-i",
+          "xczu7cg-ffvc1156-1LV-i",
+          "xczu7cg-ffvc1156-2-e",
+          "xczu7cg-ffvc1156-2-i",
+          "xczu7cg-ffvc1156-2L-e",
+          "xczu7cg-ffvc1156-2LV-e"
+        ],
+        "xczu7cg-ffvf1517": [
+          "xczu7cg-ffvf1517-1-e",
+          "xczu7cg-ffvf1517-1-i",
+          "xczu7cg-ffvf1517-1L-i",
+          "xczu7cg-ffvf1517-1LV-i",
+          "xczu7cg-ffvf1517-2-e",
+          "xczu7cg-ffvf1517-2-i",
+          "xczu7cg-ffvf1517-2L-e",
+          "xczu7cg-ffvf1517-2LV-e"
+        ]
+      },
+      "xczu7eg": {
+        "xczu7eg-fbvb900": [
+          "xczu7eg-fbvb900-1-e",
+          "xczu7eg-fbvb900-1-i",
+          "xczu7eg-fbvb900-1L-i",
+          "xczu7eg-fbvb900-1LV-i",
+          "xczu7eg-fbvb900-2-e",
+          "xczu7eg-fbvb900-2-i",
+          "xczu7eg-fbvb900-2L-e",
+          "xczu7eg-fbvb900-2LV-e",
+          "xczu7eg-fbvb900-3-e"
+        ],
+        "xczu7eg-ffvc1156": [
+          "xczu7eg-ffvc1156-1-e",
+          "xczu7eg-ffvc1156-1-i",
+          "xczu7eg-ffvc1156-1L-i",
+          "xczu7eg-ffvc1156-1LV-i",
+          "xczu7eg-ffvc1156-2-e",
+          "xczu7eg-ffvc1156-2-i",
+          "xczu7eg-ffvc1156-2L-e",
+          "xczu7eg-ffvc1156-2LV-e",
+          "xczu7eg-ffvc1156-3-e"
+        ],
+        "xczu7eg-ffvf1517": [
+          "xczu7eg-ffvf1517-1-e",
+          "xczu7eg-ffvf1517-1-i",
+          "xczu7eg-ffvf1517-1L-i",
+          "xczu7eg-ffvf1517-1LV-i",
+          "xczu7eg-ffvf1517-2-e",
+          "xczu7eg-ffvf1517-2-i",
+          "xczu7eg-ffvf1517-2L-e",
+          "xczu7eg-ffvf1517-2LV-e",
+          "xczu7eg-ffvf1517-3-e"
+        ]
+      },
+      "xczu7ev": {
+        "xczu7ev-fbvb900": [
+          "xczu7ev-fbvb900-1-e",
+          "xczu7ev-fbvb900-1-i",
+          "xczu7ev-fbvb900-1L-i",
+          "xczu7ev-fbvb900-1LV-i",
+          "xczu7ev-fbvb900-2-e",
+          "xczu7ev-fbvb900-2-i",
+          "xczu7ev-fbvb900-2L-e",
+          "xczu7ev-fbvb900-2LV-e",
+          "xczu7ev-fbvb900-3-e"
+        ],
+        "xczu7ev-ffvc1156": [
+          "xczu7ev-ffvc1156-1-e",
+          "xczu7ev-ffvc1156-1-i",
+          "xczu7ev-ffvc1156-1L-i",
+          "xczu7ev-ffvc1156-1LV-i",
+          "xczu7ev-ffvc1156-2-e",
+          "xczu7ev-ffvc1156-2-i",
+          "xczu7ev-ffvc1156-2L-e",
+          "xczu7ev-ffvc1156-2LV-e",
+          "xczu7ev-ffvc1156-3-e"
+        ],
+        "xczu7ev-ffvf1517": [
+          "xczu7ev-ffvf1517-1-e",
+          "xczu7ev-ffvf1517-1-i",
+          "xczu7ev-ffvf1517-1L-i",
+          "xczu7ev-ffvf1517-1LV-i",
+          "xczu7ev-ffvf1517-2-e",
+          "xczu7ev-ffvf1517-2-i",
+          "xczu7ev-ffvf1517-2L-e",
+          "xczu7ev-ffvf1517-2LV-e",
+          "xczu7ev-ffvf1517-3-e"
+        ]
+      },
+      "xczu9cg": {
+        "xczu9cg-ffvb1156": [
+          "xczu9cg-ffvb1156-1-e",
+          "xczu9cg-ffvb1156-1-i",
+          "xczu9cg-ffvb1156-1L-i",
+          "xczu9cg-ffvb1156-1LV-i",
+          "xczu9cg-ffvb1156-2-e",
+          "xczu9cg-ffvb1156-2-i",
+          "xczu9cg-ffvb1156-2L-e",
+          "xczu9cg-ffvb1156-2LV-e"
+        ],
+        "xczu9cg-ffvc900": [
+          "xczu9cg-ffvc900-1-e",
+          "xczu9cg-ffvc900-1-i",
+          "xczu9cg-ffvc900-1L-i",
+          "xczu9cg-ffvc900-1LV-i",
+          "xczu9cg-ffvc900-2-e",
+          "xczu9cg-ffvc900-2-i",
+          "xczu9cg-ffvc900-2L-e",
+          "xczu9cg-ffvc900-2LV-e"
+        ]
+      },
+      "xczu9eg": {
+        "xczu9eg-ffvb1156": [
+          "xczu9eg-ffvb1156-1-e",
+          "xczu9eg-ffvb1156-1-i",
+          "xczu9eg-ffvb1156-1L-i",
+          "xczu9eg-ffvb1156-1LV-i",
+          "xczu9eg-ffvb1156-2-e",
+          "xczu9eg-ffvb1156-2-i",
+          "xczu9eg-ffvb1156-2L-e",
+          "xczu9eg-ffvb1156-2LV-e",
+          "xczu9eg-ffvb1156-3-e"
+        ],
+        "xczu9eg-ffvc900": [
+          "xczu9eg-ffvc900-1-e",
+          "xczu9eg-ffvc900-1-i",
+          "xczu9eg-ffvc900-1L-i",
+          "xczu9eg-ffvc900-1LV-i",
+          "xczu9eg-ffvc900-2-e",
+          "xczu9eg-ffvc900-2-i",
+          "xczu9eg-ffvc900-2L-e",
+          "xczu9eg-ffvc900-2LV-e",
+          "xczu9eg-ffvc900-3-e"
+        ]
+      }
+    },
+    "zynquplusRFSOC": {
+      "xczu21dr": {
+        "xczu21dr-ffvd1156": [
+          "xczu21dr-ffvd1156-1-e",
+          "xczu21dr-ffvd1156-1-i",
+          "xczu21dr-ffvd1156-1L-i",
+          "xczu21dr-ffvd1156-1LV-i",
+          "xczu21dr-ffvd1156-2-e",
+          "xczu21dr-ffvd1156-2-i",
+          "xczu21dr-ffvd1156-2L-e",
+          "xczu21dr-ffvd1156-2LV-e",
+          "xczu21dr-ffvd1156-2LVI-i"
+        ]
+      },
+      "xczu25dr": {
+        "xczu25dr-ffve1156": [
+          "xczu25dr-ffve1156-1-e",
+          "xczu25dr-ffve1156-1-i",
+          "xczu25dr-ffve1156-1L-i",
+          "xczu25dr-ffve1156-1LV-i",
+          "xczu25dr-ffve1156-2-e",
+          "xczu25dr-ffve1156-2-i",
+          "xczu25dr-ffve1156-2L-e",
+          "xczu25dr-ffve1156-2LV-e",
+          "xczu25dr-ffve1156-2LVI-i"
+        ],
+        "xczu25dr-ffvg1517": [
+          "xczu25dr-ffvg1517-1-e",
+          "xczu25dr-ffvg1517-1-i",
+          "xczu25dr-ffvg1517-1L-i",
+          "xczu25dr-ffvg1517-1LV-i",
+          "xczu25dr-ffvg1517-2-e",
+          "xczu25dr-ffvg1517-2-i",
+          "xczu25dr-ffvg1517-2L-e",
+          "xczu25dr-ffvg1517-2LV-e",
+          "xczu25dr-ffvg1517-2LVI-i"
+        ],
+        "xczu25dr-fsve1156": [
+          "xczu25dr-fsve1156-1-e",
+          "xczu25dr-fsve1156-1-i",
+          "xczu25dr-fsve1156-1L-i",
+          "xczu25dr-fsve1156-1LV-i",
+          "xczu25dr-fsve1156-2-e",
+          "xczu25dr-fsve1156-2-i",
+          "xczu25dr-fsve1156-2L-e",
+          "xczu25dr-fsve1156-2LV-e",
+          "xczu25dr-fsve1156-2LVI-i"
+        ],
+        "xczu25dr-fsvg1517": [
+          "xczu25dr-fsvg1517-1-e",
+          "xczu25dr-fsvg1517-1-i",
+          "xczu25dr-fsvg1517-1L-i",
+          "xczu25dr-fsvg1517-1LV-i",
+          "xczu25dr-fsvg1517-2-e",
+          "xczu25dr-fsvg1517-2-i",
+          "xczu25dr-fsvg1517-2L-e",
+          "xczu25dr-fsvg1517-2LV-e",
+          "xczu25dr-fsvg1517-2LVI-i"
+        ]
+      },
+      "xczu27dr": {
+        "xczu27dr-ffve1156": [
+          "xczu27dr-ffve1156-1-e",
+          "xczu27dr-ffve1156-1-i",
+          "xczu27dr-ffve1156-1L-i",
+          "xczu27dr-ffve1156-1LV-i",
+          "xczu27dr-ffve1156-2-e",
+          "xczu27dr-ffve1156-2-i",
+          "xczu27dr-ffve1156-2L-e",
+          "xczu27dr-ffve1156-2LV-e",
+          "xczu27dr-ffve1156-2LVI-i"
+        ],
+        "xczu27dr-ffvg1517": [
+          "xczu27dr-ffvg1517-1-e",
+          "xczu27dr-ffvg1517-1-i",
+          "xczu27dr-ffvg1517-1L-i",
+          "xczu27dr-ffvg1517-1LV-i",
+          "xczu27dr-ffvg1517-2-e",
+          "xczu27dr-ffvg1517-2-i",
+          "xczu27dr-ffvg1517-2L-e",
+          "xczu27dr-ffvg1517-2LV-e",
+          "xczu27dr-ffvg1517-2LVI-i"
+        ],
+        "xczu27dr-fsve1156": [
+          "xczu27dr-fsve1156-1-e",
+          "xczu27dr-fsve1156-1-i",
+          "xczu27dr-fsve1156-1L-i",
+          "xczu27dr-fsve1156-1LV-i",
+          "xczu27dr-fsve1156-2-e",
+          "xczu27dr-fsve1156-2-i",
+          "xczu27dr-fsve1156-2L-e",
+          "xczu27dr-fsve1156-2LV-e",
+          "xczu27dr-fsve1156-2LVI-i"
+        ],
+        "xczu27dr-fsvg1517": [
+          "xczu27dr-fsvg1517-1-e",
+          "xczu27dr-fsvg1517-1-i",
+          "xczu27dr-fsvg1517-1L-i",
+          "xczu27dr-fsvg1517-1LV-i",
+          "xczu27dr-fsvg1517-2-e",
+          "xczu27dr-fsvg1517-2-i",
+          "xczu27dr-fsvg1517-2L-e",
+          "xczu27dr-fsvg1517-2LV-e",
+          "xczu27dr-fsvg1517-2LVI-i"
+        ]
+      },
+      "xczu28dr": {
+        "xczu28dr-ffve1156": [
+          "xczu28dr-ffve1156-1-e",
+          "xczu28dr-ffve1156-1-i",
+          "xczu28dr-ffve1156-1L-i",
+          "xczu28dr-ffve1156-1LV-i",
+          "xczu28dr-ffve1156-2-e",
+          "xczu28dr-ffve1156-2-i",
+          "xczu28dr-ffve1156-2L-e",
+          "xczu28dr-ffve1156-2LV-e",
+          "xczu28dr-ffve1156-2LVI-i"
+        ],
+        "xczu28dr-ffvg1517": [
+          "xczu28dr-ffvg1517-1-e",
+          "xczu28dr-ffvg1517-1-i",
+          "xczu28dr-ffvg1517-1L-i",
+          "xczu28dr-ffvg1517-1LV-i",
+          "xczu28dr-ffvg1517-2-e",
+          "xczu28dr-ffvg1517-2-i",
+          "xczu28dr-ffvg1517-2L-e",
+          "xczu28dr-ffvg1517-2LV-e",
+          "xczu28dr-ffvg1517-2LVI-i"
+        ],
+        "xczu28dr-fsve1156": [
+          "xczu28dr-fsve1156-1-e",
+          "xczu28dr-fsve1156-1-i",
+          "xczu28dr-fsve1156-1L-i",
+          "xczu28dr-fsve1156-1LV-i",
+          "xczu28dr-fsve1156-2-e",
+          "xczu28dr-fsve1156-2-i",
+          "xczu28dr-fsve1156-2L-e",
+          "xczu28dr-fsve1156-2LV-e",
+          "xczu28dr-fsve1156-2LVI-i"
+        ],
+        "xczu28dr-fsvg1517": [
+          "xczu28dr-fsvg1517-1-e",
+          "xczu28dr-fsvg1517-1-i",
+          "xczu28dr-fsvg1517-1L-i",
+          "xczu28dr-fsvg1517-1LV-i",
+          "xczu28dr-fsvg1517-2-e",
+          "xczu28dr-fsvg1517-2-i",
+          "xczu28dr-fsvg1517-2L-e",
+          "xczu28dr-fsvg1517-2LV-e",
+          "xczu28dr-fsvg1517-2LVI-i"
+        ]
+      },
+      "xczu29dr": {
+        "xczu29dr-ffvf1760": [
+          "xczu29dr-ffvf1760-1-e",
+          "xczu29dr-ffvf1760-1-i",
+          "xczu29dr-ffvf1760-1L-i",
+          "xczu29dr-ffvf1760-1LV-i",
+          "xczu29dr-ffvf1760-2-e",
+          "xczu29dr-ffvf1760-2-i",
+          "xczu29dr-ffvf1760-2L-e",
+          "xczu29dr-ffvf1760-2LV-e",
+          "xczu29dr-ffvf1760-2LVI-i"
+        ],
+        "xczu29dr-fsvf1760": [
+          "xczu29dr-fsvf1760-1-e",
+          "xczu29dr-fsvf1760-1-i",
+          "xczu29dr-fsvf1760-1L-i",
+          "xczu29dr-fsvf1760-1LV-i",
+          "xczu29dr-fsvf1760-2-e",
+          "xczu29dr-fsvf1760-2-i",
+          "xczu29dr-fsvf1760-2L-e",
+          "xczu29dr-fsvf1760-2LV-e",
+          "xczu29dr-fsvf1760-2LVI-i"
+        ]
+      },
+      "xczu39dr": {
+        "xczu39dr-ffvf1760": [
+          "xczu39dr-ffvf1760-2-i",
+          "xczu39dr-ffvf1760-2LVI-i"
+        ],
+        "xczu39dr-fsvf1760": [
+          "xczu39dr-fsvf1760-2-i",
+          "xczu39dr-fsvf1760-2LVI-i"
+        ]
+      },
+      "xczu42dr": {
+        "xczu42dr-ffve1156": [
+          "xczu42dr-ffve1156-1-e",
+          "xczu42dr-ffve1156-1-i",
+          "xczu42dr-ffve1156-1LV-i",
+          "xczu42dr-ffve1156-2-e",
+          "xczu42dr-ffve1156-2-i",
+          "xczu42dr-ffve1156-2LVI-i"
+        ],
+        "xczu42dr-fsve1156": [
+          "xczu42dr-fsve1156-1-e",
+          "xczu42dr-fsve1156-1-i",
+          "xczu42dr-fsve1156-1LV-i",
+          "xczu42dr-fsve1156-2-e",
+          "xczu42dr-fsve1156-2-i",
+          "xczu42dr-fsve1156-2LVI-i"
+        ]
+      },
+      "xczu43dr": {
+        "xczu43dr-ffve1156": [
+          "xczu43dr-ffve1156-1-e",
+          "xczu43dr-ffve1156-1-i",
+          "xczu43dr-ffve1156-1LV-i",
+          "xczu43dr-ffve1156-2-e",
+          "xczu43dr-ffve1156-2-i",
+          "xczu43dr-ffve1156-2LVI-i"
+        ],
+        "xczu43dr-ffvg1517": [
+          "xczu43dr-ffvg1517-1-e",
+          "xczu43dr-ffvg1517-1-i",
+          "xczu43dr-ffvg1517-1LV-i",
+          "xczu43dr-ffvg1517-2-e",
+          "xczu43dr-ffvg1517-2-i",
+          "xczu43dr-ffvg1517-2LVI-i"
+        ],
+        "xczu43dr-fsve1156": [
+          "xczu43dr-fsve1156-1-e",
+          "xczu43dr-fsve1156-1-i",
+          "xczu43dr-fsve1156-1LV-i",
+          "xczu43dr-fsve1156-2-e",
+          "xczu43dr-fsve1156-2-i",
+          "xczu43dr-fsve1156-2LVI-i"
+        ],
+        "xczu43dr-fsvg1517": [
+          "xczu43dr-fsvg1517-1-e",
+          "xczu43dr-fsvg1517-1-i",
+          "xczu43dr-fsvg1517-1LV-i",
+          "xczu43dr-fsvg1517-2-e",
+          "xczu43dr-fsvg1517-2-i",
+          "xczu43dr-fsvg1517-2LVI-i"
+        ]
+      },
+      "xczu46dr": {
+        "xczu46dr-ffvh1760": [
+          "xczu46dr-ffvh1760-1-e",
+          "xczu46dr-ffvh1760-1-i",
+          "xczu46dr-ffvh1760-1LV-i",
+          "xczu46dr-ffvh1760-2-e",
+          "xczu46dr-ffvh1760-2-i",
+          "xczu46dr-ffvh1760-2LVI-i"
+        ],
+        "xczu46dr-fsvh1760": [
+          "xczu46dr-fsvh1760-1-e",
+          "xczu46dr-fsvh1760-1-i",
+          "xczu46dr-fsvh1760-1LV-i",
+          "xczu46dr-fsvh1760-2-e",
+          "xczu46dr-fsvh1760-2-i",
+          "xczu46dr-fsvh1760-2LVI-i"
+        ]
+      },
+      "xczu47dr": {
+        "xczu47dr-ffve1156": [
+          "xczu47dr-ffve1156-1-e",
+          "xczu47dr-ffve1156-1-i",
+          "xczu47dr-ffve1156-1LV-i",
+          "xczu47dr-ffve1156-2-e",
+          "xczu47dr-ffve1156-2-i",
+          "xczu47dr-ffve1156-2LVI-i"
+        ],
+        "xczu47dr-ffvg1517": [
+          "xczu47dr-ffvg1517-1-e",
+          "xczu47dr-ffvg1517-1-i",
+          "xczu47dr-ffvg1517-1LV-i",
+          "xczu47dr-ffvg1517-2-e",
+          "xczu47dr-ffvg1517-2-i",
+          "xczu47dr-ffvg1517-2LVI-i"
+        ],
+        "xczu47dr-fsve1156": [
+          "xczu47dr-fsve1156-1-e",
+          "xczu47dr-fsve1156-1-i",
+          "xczu47dr-fsve1156-1LV-i",
+          "xczu47dr-fsve1156-2-e",
+          "xczu47dr-fsve1156-2-i",
+          "xczu47dr-fsve1156-2LVI-i"
+        ],
+        "xczu47dr-fsvg1517": [
+          "xczu47dr-fsvg1517-1-e",
+          "xczu47dr-fsvg1517-1-i",
+          "xczu47dr-fsvg1517-1LV-i",
+          "xczu47dr-fsvg1517-2-e",
+          "xczu47dr-fsvg1517-2-i",
+          "xczu47dr-fsvg1517-2LVI-i"
+        ]
+      },
+      "xczu48dr": {
+        "xczu48dr-ffve1156": [
+          "xczu48dr-ffve1156-1-e",
+          "xczu48dr-ffve1156-1-i",
+          "xczu48dr-ffve1156-1LV-i",
+          "xczu48dr-ffve1156-2-e",
+          "xczu48dr-ffve1156-2-i",
+          "xczu48dr-ffve1156-2LVI-i"
+        ],
+        "xczu48dr-ffvg1517": [
+          "xczu48dr-ffvg1517-1-e",
+          "xczu48dr-ffvg1517-1-i",
+          "xczu48dr-ffvg1517-1LV-i",
+          "xczu48dr-ffvg1517-2-e",
+          "xczu48dr-ffvg1517-2-i",
+          "xczu48dr-ffvg1517-2LVI-i"
+        ],
+        "xczu48dr-fsve1156": [
+          "xczu48dr-fsve1156-1-e",
+          "xczu48dr-fsve1156-1-i",
+          "xczu48dr-fsve1156-1LV-i",
+          "xczu48dr-fsve1156-2-e",
+          "xczu48dr-fsve1156-2-i",
+          "xczu48dr-fsve1156-2LVI-i"
+        ],
+        "xczu48dr-fsvg1517": [
+          "xczu48dr-fsvg1517-1-e",
+          "xczu48dr-fsvg1517-1-i",
+          "xczu48dr-fsvg1517-1LV-i",
+          "xczu48dr-fsvg1517-2-e",
+          "xczu48dr-fsvg1517-2-i",
+          "xczu48dr-fsvg1517-2LVI-i"
+        ]
+      },
+      "xczu49dr": {
+        "xczu49dr-ffvf1760": [
+          "xczu49dr-ffvf1760-1-e",
+          "xczu49dr-ffvf1760-1-i",
+          "xczu49dr-ffvf1760-1LV-i",
+          "xczu49dr-ffvf1760-2-e",
+          "xczu49dr-ffvf1760-2-i",
+          "xczu49dr-ffvf1760-2LVI-i"
+        ],
+        "xczu49dr-fsvf1760": [
+          "xczu49dr-fsvf1760-1-e",
+          "xczu49dr-fsvf1760-1-i",
+          "xczu49dr-fsvf1760-1LV-i",
+          "xczu49dr-fsvf1760-2-e",
+          "xczu49dr-fsvf1760-2-i",
+          "xczu49dr-fsvf1760-2LVI-i"
+        ]
+      }
+    }
+  }
+}

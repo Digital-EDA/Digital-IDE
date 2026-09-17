@@ -6,6 +6,7 @@ import { LanguageClient } from 'vscode-languageclient/node';
 import { MainOutput, ReportType } from '../global/outputs';
 import { t } from '../i18n';
 import { normalizeWindowsPath } from '../utils/paths';
+import { createNetlistHandshake } from './handshake';
 
 type NetlistMode = 'before' | 'after' | 'RTL';
 
@@ -90,13 +91,6 @@ interface ArchitectureSelection {
     path?: unknown;
     name?: unknown;
     file?: unknown;
-}
-
-interface NetlistHostMessage {
-    protocolVersion?: unknown;
-    sessionId?: unknown;
-    type?: unknown;
-    message?: unknown;
 }
 
 interface NetlistResources {
@@ -313,56 +307,34 @@ async function attachNetlistWebview(
     input: NetlistWebviewInput,
 ): Promise<void> {
     const sessionId = crypto.randomBytes(24).toString('hex');
-    const ready = new Promise<void>((resolve, reject) => {
-        let settled = false;
-        let timer: ReturnType<typeof setTimeout>;
-        let messageSubscription: vscode.Disposable;
-        let disposeSubscription: vscode.Disposable;
-        const finish = (error?: Error): void => {
-            if (settled) {
-                return;
-            }
-            settled = true;
-            clearTimeout(timer);
-            messageSubscription.dispose();
-            disposeSubscription.dispose();
-            if (error) {
-                reject(error);
-            } else {
-                resolve();
-            }
-        };
-        messageSubscription = panel.webview.onDidReceiveMessage((raw: NetlistHostMessage) => {
-            if (raw.protocolVersion !== 2 || raw.sessionId !== sessionId) {
-                return;
-            }
-            if (raw.type === 'netlist.ready') {
-                finish();
-            }
-            if (raw.type === 'netlist.error') {
-                const detail = typeof raw.message === 'string' ? raw.message : 'unknown error';
-                finish(new Error(`Netlist Webview initialization failed: ${detail}`));
-            }
-        });
-        disposeSubscription = panel.onDidDispose(() => {
-            finish(new Error('Netlist Webview was closed before initialization completed'));
-        });
-        timer = setTimeout(() => {
-            finish(new Error('Netlist Webview did not complete its ready handshake'));
-        }, 30_000);
+    const handshake = createNetlistHandshake(sessionId, stage => {
+        MainOutput.report(`Netlist ${moduleName}: ${stage}`, { level: ReportType.Run });
     });
-    panel.webview.html = netlistHtml(panel.webview, resources.webuiRoot, resources.indexUri, {
-        protocolVersion: 2,
-        sessionId,
-        assetBaseUri: `${panel.webview.asWebviewUri(resources.webuiRoot).toString().replace(/\/$/, '')}/`,
-        moduleName,
-        yosysJson: input.yosysJson,
-        sourceDigest: input.sourceDigest,
-        sourceLabel: input.sourceLabel,
-        constraints: input.constraints,
+    const messages = panel.webview.onDidReceiveMessage(handshake.receive);
+    const disposal = panel.onDidDispose(() => {
+        handshake.cancel(new Error('Netlist Webview was closed before initialization completed'));
     });
-    MainOutput.report('Waiting for netlist Webview ready handshake.', { level: ReportType.Run });
-    await ready;
+    try {
+        panel.webview.html = netlistHtml(panel.webview, resources.webuiRoot, resources.indexUri, {
+            protocolVersion: 2,
+            sessionId,
+            assetBaseUri: `${panel.webview.asWebviewUri(resources.webuiRoot).toString().replace(/\/$/, '')}/`,
+            moduleName,
+            yosysJson: input.yosysJson,
+            sourceDigest: input.sourceDigest,
+            sourceLabel: input.sourceLabel,
+            constraints: input.constraints,
+        });
+        MainOutput.report('Waiting for netlist Webview initialization.', { level: ReportType.Run });
+        await handshake.ready;
+    } catch (error) {
+        handshake.cancel(error instanceof Error ? error : new Error(String(error)));
+        await handshake.ready.catch(() => undefined);
+        throw error;
+    } finally {
+        messages.dispose();
+        disposal.dispose();
+    }
 }
 
 export function netlistHtml(

@@ -3,12 +3,15 @@
 From the repository root, run:
 
 ```bash
-tools/digital-server/tests/0.5.x/scripts/debug-digital-ide.sh
+./extension/scripts/debug-digital-ide.sh
 ```
 
 The script compiles the extension, builds the debug backend, installs or updates its small
-remote controller, asks the current VS Code window to open the Xilinx temp workspace in an
+remote controller, asks the current VS Code window to open `tests/project/temp` in an
 Extension Development Host, and waits until the backend is running.
+
+The controller window must have this repository root open as a workspace folder. If the
+current VS Code window has a different folder open, pass that folder with `--controller`.
 
 If an earlier Digital IDE debug host or backend for the same workspace is still running, the
 script stops it before launching the replacement. It returns only after verifying exactly one
@@ -19,13 +22,13 @@ remain open while testing.
 To reuse existing build output:
 
 ```bash
-tools/digital-server/tests/0.5.x/scripts/debug-digital-ide.sh --no-build
+./extension/scripts/debug-digital-ide.sh --no-build
 ```
 
 To select another workspace, controller workspace, or initial HDL file:
 
 ```bash
-tools/digital-server/tests/0.5.x/scripts/debug-digital-ide.sh \
+./extension/scripts/debug-digital-ide.sh \
   --controller /absolute/path/open/in/the/current/vscode \
   --workspace /absolute/path/to/workspace \
   --file relative/path/to/top.sv
@@ -34,11 +37,31 @@ tools/digital-server/tests/0.5.x/scripts/debug-digital-ide.sh \
 To open an accepted backend netlist directly in the debug host, add the module name:
 
 ```bash
-tools/digital-server/tests/0.5.x/scripts/debug-digital-ide.sh \
+./extension/scripts/debug-digital-ide.sh \
   --workspace /absolute/path/to/workspace \
   --file relative/path/to/top.sv \
   --netlist top
 ```
 
 Generated controller packages and logs are written below
-`tools/digital-server/target/digital-ide-debug-launcher`.
+`target/digital-ide-debug-launcher`.
+
+## Missing icons in Remote SSH
+
+If the activity-bar and tree icons are blank, check the development window's
+`Developer: Toggle Developer Tools` console. Errors such as
+`vscode-managed-remote-resource://window:.../images/svg/...: net::ERR_FAILED`
+can indicate a failure in VS Code's managed remote resource transport, even when
+the SVG files exist and the extension can read them.
+
+For this failure, set the following in the **local VS Code user settings** on the
+SSH client, then reopen the remote development window:
+
+```json
+"remote.SSH.useExecServer": false
+```
+
+This uses the regular SSH/WebSocket connection instead of the managed connection.
+It applies to Remote SSH connections from that client. No icon replacement or
+WebUI rebuild is needed; `./extension/scripts/debug-digital-ide.sh --no-build`
+can reopen the development window with the existing build output.

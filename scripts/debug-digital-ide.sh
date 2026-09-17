@@ -5,8 +5,7 @@ set -euo pipefail
 SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 EXTENSION_ROOT="$(CDPATH= cd -- "$SCRIPT_DIR/.." && pwd)"
 SERVER_ROOT="$(CDPATH= cd -- "$EXTENSION_ROOT/.." && pwd)"
-REPOSITORY_ROOT="$(CDPATH= cd -- "$SERVER_ROOT/../.." && pwd)"
-DEFAULT_WORKSPACE="$REPOSITORY_ROOT/fpga/temp"
+DEFAULT_WORKSPACE="$SERVER_ROOT/tests/project/temp"
 CONTROLLER_SOURCE="$SCRIPT_DIR/debug-launcher"
 CONTROLLER_ID="codex.digital-ide-current-window-controller"
 CONTROLLER_VERSION="1.0.0"
@@ -16,7 +15,7 @@ BACKEND_PATH="$SERVER_ROOT/target/debug/digital-server"
 VHDL_LIBRARY_PATH="$SERVER_ROOT/tests/vhdl/vhdl_libraries"
 
 workspace="$DEFAULT_WORKSPACE"
-controller_workspace="$REPOSITORY_ROOT"
+controller_workspace="$SERVER_ROOT"
 activation_file=""
 netlist_module=""
 build=true
@@ -32,7 +31,7 @@ Ask the current VS Code window to open Digital IDE in one Extension Development 
 Options:
   --workspace PATH   Workspace to open (default: $DEFAULT_WORKSPACE)
   --controller PATH  Workspace open in the current controller window
-                     (default: $REPOSITORY_ROOT)
+                     (default: $SERVER_ROOT)
   --file PATH        HDL file to open; relative paths use the target workspace
   --netlist MODULE   Open MODULE in the netlist Webview after startup
   --no-build         Reuse the current WebUI, TypeScript output, and debug backends
@@ -48,6 +47,38 @@ fail() {
 
 require_command() {
     command -v "$1" >/dev/null 2>&1 || fail "required command not found: $1"
+}
+
+supports_webui_build() {
+    "$1" -e '
+        const [major, minor] = process.versions.node.split(".").map(Number);
+        process.exit((major === 20 && minor >= 19) ||
+            (major === 22 && minor >= 12) || major > 22 ? 0 : 1);
+    ' >/dev/null 2>&1
+}
+
+select_build_node() {
+    supports_webui_build node && return 0
+
+    local previous_version candidate
+    local -a candidate_dirs
+    previous_version="$(node --version 2>/dev/null || printf 'not installed')"
+    IFS=: read -r -a candidate_dirs <<<"$PATH"
+    candidate_dirs+=("$HOME/.local/bin" "${NVM_DIR:-$HOME/.nvm}"/versions/node/*/bin)
+    for candidate in "${candidate_dirs[@]}"; do
+        [[ -n "$candidate" ]] || candidate=.
+        [[ -x "$candidate/node" && -x "$candidate/npm" ]] || continue
+        if supports_webui_build "$candidate/node"; then
+            # npm and its nested build scripts must resolve the same Node runtime.
+            export PATH="$candidate:$PATH"
+            hash -r
+            printf 'Using Node.js %s from %s (previous: %s).\n' \
+                "$(node --version)" "$candidate" "$previous_version"
+            return 0
+        fi
+    done
+
+    fail "WebUI builds require Node.js 20.19+ (20.x) or 22.12+; current: $previous_version. Install a supported Node.js version and add its bin directory to PATH."
 }
 
 cleanup() {
@@ -102,6 +133,9 @@ done
 [[ "$timeout_seconds" =~ ^[1-9][0-9]*$ ]] || fail "--timeout must be a positive integer"
 
 require_command code
+if $build; then
+    select_build_node
+fi
 require_command node
 require_command npm
 require_command cargo
@@ -302,6 +336,7 @@ fs.renameSync(temporaryPath, requestPath);
 NODE
 
 printf '[4/5] Asking the current VS Code window to start debugging...\n'
+printf '  Controller workspace: %s\n' "$controller_workspace"
 deadline=$((SECONDS + timeout_seconds))
 debug_host_pid=""
 while ((SECONDS < deadline)); do
@@ -321,6 +356,8 @@ done
 
 if [[ -z "$debug_host_pid" ]]; then
     [[ -f "$status_path" ]] && cat "$status_path" >&2
+    printf 'Expected a VS Code window with this workspace open: %s\n' "$controller_workspace" >&2
+    printf 'Use --controller PATH to select a different open workspace.\n' >&2
     fail "the current VS Code window did not consume the debug request within ${timeout_seconds}s"
 fi
 

@@ -7,6 +7,8 @@ suite('Project feature surface', () => {
     test('registers every project, PL, architecture, library, and generation command', async () => {
         await activateExtension();
         const registered = new Set(await vscode.commands.getCommands(true));
+        assert.ok(!registered.has('digital-ide.pl.addDevice'));
+        assert.ok(!registered.has('digital-ide.pl.delDevice'));
         const expected = [
             'digital-ide.property-json.generate',
             'digital-ide.property-json.overwrite',
@@ -15,8 +17,6 @@ suite('Project feature surface', () => {
             'digital-ide.structure.from-xilinx-to-standard',
             'digital-ide.pl.setSrcTop',
             'digital-ide.pl.setSimTop',
-            'digital-ide.pl.addDevice',
-            'digital-ide.pl.delDevice',
             'digital-ide.pl.addFile',
             'digital-ide.pl.delFile',
             'digital-ide.pickLibrary',

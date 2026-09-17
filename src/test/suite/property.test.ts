@@ -40,7 +40,9 @@ suite('Project creation and configuration maintenance', () => {
         }
     });
 
-    test('atomically overwrites and canonicalizes property.json', async () => {
+    test('updates only supplied property fields and preserves formatting', async () => {
+        const original = '{\n    "device": "old-part",\n    "prjName": { "PL": "old-demo", "PS": "keep" },\n    "custom": [ 3, 2, 1 ]\n}\n';
+        fs.writeFileSync(propertyPath(), original);
         const response = await vscode.commands.executeCommand<{
             success: boolean;
             changes: string[];
@@ -54,7 +56,11 @@ suite('Project creation and configuration maintenance', () => {
         assert.ok(response.changes.some(change => change.includes('atomically')));
         const property = JSON.parse(fs.readFileSync(propertyPath(), 'utf8'));
         assert.strictEqual(property.prjName.PL, 'overwritten-demo');
-        assert.deepStrictEqual(property.files, { src: [], sim: [], exclude: [] });
+        assert.strictEqual(fs.readFileSync(propertyPath(), 'utf8'), original
+            .replace('old-part', 'xc7z020clg400-2')
+            .replace('old-demo', 'overwritten-demo'));
+        assert.strictEqual(property.files, undefined);
+        assert.strictEqual(property.prjName.PS, 'keep');
     });
 
     test('migrates the legacy property shape', async () => {

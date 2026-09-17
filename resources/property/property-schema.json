@@ -308,16 +308,7 @@
         },
         "device": {
             "type": "string",
-            "description": "The device type",
-            "enum": [
-                "none",
-                "xc7z020clg400-2",
-                "xc7a35tftg256-1",
-                "xc7a35tcsg324-1",
-                "xc7z035ffg676-2",
-                "xc7z020clg484-1",
-                "Ti60F100S3F2-C4"
-            ]
+            "description": "Target FPGA device. Free-form value; suggestions follow toolChain."
         }
     },
     "required": [

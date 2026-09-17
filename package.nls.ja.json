@@ -1,6 +1,6 @@
 {
     "digital-ide.property-json.generate.title": "property.json 設定ファイルを生成",
-    "digital-ide.property-json.overwrite.title": "デフォルトの property.json テンプレートファイルを変更",
+    "digital-ide.property-json.overwrite.title": "property.json のフィールドを更新",
     "digital-ide.tool.instance.title": "選択したモジュールのインスタンス化テンプレートを生成",
     "digital-ide.tool.simulateFile.title": "現在のモジュールをシミュレート",
     "digital-ide.tool.icarus.simulateFile.title": "現在のファイルをシミュレーション",
@@ -38,8 +38,6 @@
     "digital-ide.pickLibrary.title": "ライブラリファイルを選択",
     "digital-ide.pl.setSrcTop.title": "src のトップファイルとして設定",
     "digital-ide.pl.setSimTop.title": "sim のトップファイルとして設定",
-    "digital-ide.pl.addDevice.title": "デバイスを追加",
-    "digital-ide.pl.delDevice.title": "デバイスを削除",
     "digital-ide.pl.addFile.title": "ファイルを追加",
     "digital-ide.pl.delFile.title": "ファイルを削除",
     "digital-ide.netlist.title": "ネットリスト",

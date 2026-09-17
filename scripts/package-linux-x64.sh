@@ -9,12 +9,15 @@ extension_root="$(cd "$script_dir/.." && pwd)"
 server_root="$(cd "$extension_root/.." && pwd)"
 dist_dir="$extension_root/dist"
 server_resource="$extension_root/resources/server/linux/x64/digital-server"
+wave_mcp_source="$server_root/tools/wave-mcp/fsdb2fst"
+wave_mcp_source_resource="$extension_root/resources/server/linux/x64/wave-mcp-fsdb2fst"
 windows_server_resource="$extension_root/resources/server/win32/x64/digital-server.exe"
 windows_symbols_resource="$extension_root/resources/server/win32/x64/digital_server.pdb"
 vhdl_library_source="$server_root/tests/vhdl/vhdl_libraries"
 vhdl_library_resource="$extension_root/resources/vhdl_libraries"
 primitive_source="$server_root/tests/factory/xilinx/primitive"
 primitive_resource="$extension_root/resources/primitive/xilinx"
+kernel_resource="$extension_root/resources/kernel"
 workspace="$extension_root/test-fixtures/workspace"
 
 log() {
@@ -52,18 +55,28 @@ validate_vsix() {
     local release_version="$2"
     local validation_dir
     validation_dir="$(mktemp -d "$extension_root/.vsix-validation.XXXXXX")"
+    trap 'rm -rf "$validation_dir"' EXIT
 
     unzip -tqq "$vsix"
     unzip -q "$vsix" -d "$validation_dir"
 
     local packaged_server="$validation_dir/extension/resources/server/linux/x64/digital-server"
+    local packaged_wave_mcp_source="$validation_dir/extension/resources/server/linux/x64/wave-mcp-fsdb2fst"
     local packaged_windows_server="$validation_dir/extension/resources/server/win32/x64/digital-server.exe"
     local packaged_windows_symbols="$validation_dir/extension/resources/server/win32/x64/digital_server.pdb"
     [[ -f "$validation_dir/extension/out/extension.js" ]] \
         || fail "VSIX does not contain extension/out/extension.js"
     [[ -f "$packaged_server" ]] || fail "VSIX does not contain the Linux x64 server"
     [[ -x "$packaged_server" ]] || fail "packaged Linux server is not executable"
+    [[ ! -e "$validation_dir/extension/resources/server/linux/x64/wave-mcp" ]] \
+        || fail "VSIX must not contain a standalone Linux wave-mcp executable"
+    [[ -f "$packaged_wave_mcp_source/fsdb2fst.cpp" \
+       && -f "$packaged_wave_mcp_source/fst/fstapi.c" \
+       && -f "$packaged_wave_mcp_source/LICENSE.wave-mcp" ]] \
+        || fail "VSIX does not contain the Linux fsdb2fst source bundle"
     [[ -f "$packaged_windows_server" ]] || fail "VSIX does not contain the Windows x64 server"
+    [[ ! -e "$validation_dir/extension/resources/server/win32/x64/wave-mcp.exe" ]] \
+        || fail "VSIX must not contain a standalone Windows wave-mcp executable"
     [[ -f "$packaged_windows_symbols" ]] || fail "VSIX does not contain Windows server symbols"
     [[ -f "$validation_dir/extension/resources/crash/windows-server-monitor.ps1" ]] \
         || fail "VSIX does not contain the Windows crash monitor"
@@ -139,6 +152,7 @@ NODE
     done
 
     rm -rf "$validation_dir"
+    trap - EXIT
 }
 
 [[ "$(uname -s)" == "Linux" ]] || fail "this packaging script must run on Linux"
@@ -166,6 +180,13 @@ file "$built_server" | grep -Eq 'ELF 64-bit.*x86-64' \
     || fail "built server is not a Linux x86-64 executable"
 mkdir -p "$(dirname "$server_resource")"
 install -m 0755 "$built_server" "$server_resource"
+rm -f "$extension_root/resources/server/linux/x64/wave-mcp"
+rm -f "$extension_root/resources/server/win32/x64/wave-mcp.exe"
+rm -rf "$wave_mcp_source_resource"
+mkdir -p "$wave_mcp_source_resource"
+cp -a "$wave_mcp_source/." "$wave_mcp_source_resource/"
+install -m 0644 "$server_root/tools/wave-mcp/LICENSE" \
+    "$wave_mcp_source_resource/LICENSE.wave-mcp"
 rm -f "$extension_root/resources/server/linux/x64/wave-server"
 
 log "Testing the Linux LSP backend"
@@ -191,6 +212,13 @@ log "Publishing VHDL standard libraries"
 rm -rf "$vhdl_library_resource"
 mkdir -p "$vhdl_library_resource"
 cp -a "$vhdl_library_source/." "$vhdl_library_resource/"
+
+log "Publishing WebUI kernel backends"
+mkdir -p "$kernel_resource"
+for asset in yosys.wasm place.wasm route.wasm; do
+    [[ -f "$server_root/$asset" ]] || fail "required kernel backend is missing: $server_root/$asset"
+    install -m 0644 "$server_root/$asset" "$kernel_resource/$asset"
+done
 
 vsix="$dist_dir/fpga-support-$release_version.vsix"
 sha_file="$vsix.sha256"

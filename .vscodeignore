@@ -2,6 +2,7 @@
 .gitignore
 **/.gitignore
 .git
+.vsix-validation.*
 .github
 doc
 **/*.map

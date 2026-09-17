@@ -1,6 +1,6 @@
 {
     "digital-ide.property-json.generate.title": "property.json-Konfigurationsdatei generieren",
-    "digital-ide.property-json.overwrite.title": "Standard-property.json-Vorlagendatei ändern",
+    "digital-ide.property-json.overwrite.title": "Felder in property.json aktualisieren",
     "digital-ide.tool.instance.title": "Instanziierungsvorlage für ausgewähltes Modul generieren",
     "digital-ide.tool.simulateFile.title": "Aktuelles Modul simulieren",
     "digital-ide.tool.icarus.simulateFile.title": "Aktuelle Datei simulieren",
@@ -38,8 +38,6 @@
     "digital-ide.pickLibrary.title": "Bibliotheksdatei auswählen",
     "digital-ide.pl.setSrcTop.title": "Als Top-Datei für src festlegen",
     "digital-ide.pl.setSimTop.title": "Als Top-Datei für sim festlegen",
-    "digital-ide.pl.addDevice.title": "Gerät hinzufügen",
-    "digital-ide.pl.delDevice.title": "Gerät löschen",
     "digital-ide.pl.addFile.title": "Datei hinzufügen",
     "digital-ide.pl.delFile.title": "Datei löschen",
     "digital-ide.netlist.title": "Netzliste",

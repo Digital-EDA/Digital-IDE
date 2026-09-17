@@ -685,16 +685,6 @@
                 "title": "%digital-ide.pl.setSimTop.title%"
             },
             {
-                "command": "digital-ide.pl.addDevice",
-                "category": "Digital-IDE",
-                "title": "%digital-ide.pl.addDevice.title%"
-            },
-            {
-                "command": "digital-ide.pl.delDevice",
-                "category": "Digital-IDE",
-                "title": "%digital-ide.pl.delDevice.title%"
-            },
-            {
                 "command": "digital-ide.pl.addFile",
                 "category": "Digital-IDE",
                 "title": "%digital-ide.pl.addFile.title%"
@@ -1337,6 +1327,7 @@
         "build:server": "cargo build --manifest-path ../Cargo.toml --bin digital-server",
         "test:protocol": "cargo test --manifest-path ../Cargo.toml --test lspprotocol --test syncprotocol --test syncsoak",
         "test:server": "cargo test --manifest-path ../Cargo.toml --bin digital-server server::",
+        "test:device-completion": "npm run compile && node --test scripts/device-completion.test.js",
         "test:webui": "npm run build:waveform && npm run build:netlist && npm run compile && npm run build:server && node ./out/test/runTest.js --grep \"Webview integration\"",
         "test:netlist-webui": "npm run check:netlist-fixtures && npm run build:netlist && npm run compile && npm run build:server && node ./out/test/runTest.js --grep \"Netlist Webview integration\"",
         "test:scale": "cargo test --release --manifest-path ../Cargo.toml --test syncstress -- --ignored --nocapture",
@@ -1361,6 +1352,7 @@
     },
     "dependencies": {
         "chokidar": "^4.0.1",
+        "jsonc-parser": "^3.3.1",
         "minimatch": "^10.0.1",
         "puppeteer-core": "^19.4.1",
         "vscode-jsonrpc": "^8.2.1",

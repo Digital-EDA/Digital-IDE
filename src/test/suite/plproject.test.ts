@@ -10,7 +10,7 @@ interface HdlParamElement {
 }
 
 suite('PL project content management', () => {
-    test('maintains tops, device, and explicit project file membership through LSP', async () => {
+    test('maintains tops and explicit project file membership through LSP', async () => {
         const api = await activateExtension();
         const propertyFile = workspaceUri('.vscode/property.json').fsPath;
         const original = JSON.parse(fs.readFileSync(propertyFile, 'utf8'));
@@ -27,10 +27,6 @@ suite('PL project content management', () => {
                 { top: 'top', silent: true },
             );
             assert.ok(simTop.configGeneration >= srcTop.configGeneration);
-            await vscode.commands.executeCommand('digital-ide.pl.addDevice', {
-                device: 'xc7z020clg400-2',
-                silent: true,
-            });
             await vscode.commands.executeCommand('digital-ide.pl.addFile', {
                 path: managed,
                 kind: 'src',
@@ -47,7 +43,7 @@ suite('PL project content management', () => {
             const property = JSON.parse(fs.readFileSync(propertyFile, 'utf8'));
             assert.strictEqual(property.srcTop, 'top');
             assert.strictEqual(property.simTop, 'top');
-            assert.strictEqual(property.device, 'xc7z020clg400-2');
+            assert.strictEqual(property.device, original.device);
             assert.ok(property.files.src.includes('extra/managed.sv'));
 
             await vscode.commands.executeCommand('digital-ide.pl.delFile', {
@@ -60,9 +56,8 @@ suite('PL project content management', () => {
                 () => api.client.sendRequest<HdlParamElement[]>('hdlparams/request'),
                 values => !values.some(value => value.path === managed),
             );
-            await vscode.commands.executeCommand('digital-ide.pl.delDevice', { silent: true });
             const removed = JSON.parse(fs.readFileSync(propertyFile, 'utf8'));
-            assert.strictEqual(removed.device, 'none');
+            assert.strictEqual(removed.device, original.device);
             assert.ok(removed.files.exclude.includes('extra/managed.sv'));
         } finally {
             await vscode.commands.executeCommand('digital-ide.property-json.overwrite', {

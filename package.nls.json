@@ -1,6 +1,6 @@
 {
     "digital-ide.property-json.generate.title": "Generate property.json",
-    "digital-ide.property-json.overwrite.title": "Overwrite property.json template",
+    "digital-ide.property-json.overwrite.title": "Update property.json fields",
     "digital-ide.tool.instance.title": "Generate instance template from selected module",
     "digital-ide.tool.simulateFile.title": "Simulate current module",
     "digital-ide.tool.icarus.simulateFile.title": "Do simulation for current module",
@@ -38,8 +38,6 @@
     "digital-ide.pickLibrary.title": "Select lib from custom & common",
     "digital-ide.pl.setSrcTop.title": "Set as top file of src",
     "digital-ide.pl.setSimTop.title": "Set as top file of sim",
-    "digital-ide.pl.addDevice.title": "Add device",
-    "digital-ide.pl.delDevice.title": "Del device",
     "digital-ide.pl.addFile.title": "Add file",
     "digital-ide.pl.delFile.title": "Del file",
     "digital-ide.netlist.title": "Netlist",
